@@ -1,7 +1,7 @@
 {
   "name": "wildgrid",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "野格 · 原创露营逻辑益智游戏",
   "author": "Wildgrid",
@@ -11,6 +11,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "test": "tsx --test tests/*.test.ts",
+    "levels:check": "tsx scripts/check-levels.ts",
     "test:desktop": "electron tests/desktop-smoke.cjs",
     "icons": "node scripts/build-icons.mjs",
     "desktop": "node node_modules/electron/install.js && npm run build && electron .",

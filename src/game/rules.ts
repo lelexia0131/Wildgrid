@@ -44,9 +44,9 @@ export function evaluate(level: Level, placements: Placement[]) {
     const block = placementBlock(level, placements, e.at);
     if (block) reasons.push(block);
     const nearTerrain = (kind: string, diagonal = false) => e.cells.some(p => level.terrain.some(t => t.kind === kind && adjacent(p, t, diagonal)));
-    if (e.piece.kind === 'camp' && !nearTerrain('water')) reasons.push('营地至少有一格需要正交邻水');
-    if (e.piece.kind === 'fire') {
-      if (nearTerrain('forest', true)) reasons.push('篝火不能邻近森林，包括斜角');
+    if (e.piece.kind === 'camp' && !nearTerrain('water')) reasons.push('营地至少有一格需要上下左右挨着水');
+    if (e.piece.kind === 'fire' || e.piece.kind === 'picnic') {
+      if (e.piece.kind === 'fire' && nearTerrain('forest', true)) reasons.push('篝火不能邻近森林，包括斜角');
       if (!cells.some(other => other.piece.kind === 'camp' && other.cells.some(p => e.cells.some(q => adjacent(p, q))))) {
         const remainingCamps = level.pieces.filter(p => p.kind === 'camp' && !placements.some(at => at.id === p.id));
         const canAddCamp = remainingCamps.some(camp => {
@@ -57,15 +57,23 @@ export function evaluate(level: Level, placements: Placement[]) {
           return false;
         });
         if (canAddCamp) pending = true;
-        else reasons.push('篝火需要正交相邻营地');
+        else reasons.push(`${e.piece.kind === 'fire' ? '篝火' : '野餐桌'}需要上下左右挨着营地`);
       }
     }
+    if (e.piece.kind === 'picnic' || e.piece.kind === 'fire') {
+      const otherKind = e.piece.kind === 'picnic' ? 'fire' : 'picnic';
+      if (cells.some(other => other.piece.kind === otherKind && e.cells.some(p => other.cells.some(q => adjacent(p, q, true))))) reasons.push('野餐桌不能邻近篝火，包括斜角');
+    }
+    if (e.piece.kind === 'cabin') {
+      if (!nearTerrain('forest')) reasons.push('林间木屋至少有一格需要上下左右挨着森林');
+      if (nearTerrain('water')) reasons.push('林间木屋不能上下左右挨着水');
+    }
     if (e.piece.kind === 'tower') {
-      if (!nearTerrain('mountain')) reasons.push('瞭望塔需要正交相邻山地');
+      if (!nearTerrain('mountain')) reasons.push('瞭望塔需要上下左右挨着山地');
       if (cells.some(other => other.piece.kind === 'tower' && other.at.id !== e.at.id && e.cells.some(p => other.cells.some(q => adjacent(p, q, true))))) reasons.push('瞭望塔之间不能相邻，包括斜角');
     }
     if (e.cells.some(p => rows[p.r] > level.rows[p.r] || cols[p.c] > level.cols[p.c])) reasons.push('所在行或列的占格数超出提示');
-    issues[e.at.id] = { status: reasons.length ? 'INVALID' : pending ? 'INCOMPLETE' : 'VALID', reasons: reasons.length ? reasons : pending ? ['等待正交相邻的营地'] : [] };
+    issues[e.at.id] = { status: reasons.length ? 'INVALID' : pending ? 'INCOMPLETE' : 'VALID', reasons: reasons.length ? reasons : pending ? ['等待上下左右挨着的营地'] : [] };
   }
   const allPlaced = placements.length === level.pieces.length && new Set(placements.map(p => p.id)).size === level.pieces.length && entries.length === placements.length;
   const won = allPlaced && Object.values(issues).every(i => i.status === 'VALID') && rows.every((n, i) => n === level.rows[i]) && cols.every((n, i) => n === level.cols[i]);

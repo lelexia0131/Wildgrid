@@ -26,3 +26,53 @@
 .facility-controls{display:flex;gap:5px;justify-content:flex-end;margin-top:5px}.facility-controls .rotate-button{flex:1;justify-content:center}.facility-controls .cancel-selection{height:30px}.facility-controls .rotate-button:disabled{opacity:.35}@media(max-width:760px){.facility-controls{margin-top:4px;gap:4px}.facility-controls .cancel-selection{height:25px}}
 
 .column-clue{display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:center;align-items:center;gap:3px;padding:0;min-height:0;max-height:none}.column-clue i{flex:0 1 12px;min-width:0;width:12px}@media(max-width:760px){.column-clue{gap:2px}.column-clue i{flex-basis:8px;width:8px}}
+/* Illustrated handbook, reusing the board and facility artwork. */
+.modal.manual-modal { width: min(900px, calc(100vw - 24px)); max-width: 900px; max-height: calc(100dvh - 28px); padding: 0; overflow: hidden; }
+.manual-modal .modal-close { position: absolute; top: 12px; right: 12px; z-index: 2; background: #faf9ef; }
+.manual-content { padding: 32px; max-height: calc(100dvh - 30px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #b2c09c transparent; line-height: 1.8; font-size: 13px; }
+.manual-content section { margin-top: 28px; }
+.manual-content h3 { font-size: 18px; color: #365d47; margin: 0 0 12px; }
+.manual-content h4 { font-size: 15px; margin: 0; }
+.manual-content p { color: #6f7d62; }
+.manual-intro { display: flex; gap: 18px; padding-right: 20px; }
+.manual-intro > .art { width: 88px; height: 88px; }
+.manual-intro h2 { margin-bottom: 8px; }
+.manual-intro strong { display: block; margin-top: 8px; }
+.manual-cards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.manual-cards article, .manual-complete, .manual-settings { padding: 16px; border: 1px solid #dce1ce; border-radius: 16px; background: #f6f7eb; }
+.manual-cards article header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.manual-cards article header .art { width: 52px; height: 52px; }
+.manual-examples { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.manual-example { flex: 1; min-width: 118px; padding: 10px; border: 1px solid; border-radius: 12px; font-size: 11px; }
+.manual-example.good { border-color: #8cab7c; background: #edf3e4; }
+.manual-example.bad { border-color: #ce9987; background: #f8eee4; }
+.manual-example strong { display: block; margin-top: 8px; }
+.manual-example.good strong { color: #4f7648; }
+.manual-example.bad strong { color: #a8604d; }
+.manual-board { display: inline-grid; gap: 3px; padding: 4px; border-radius: 8px; background: #baca9f; vertical-align: middle; }
+.manual-cell { width: 38px; height: 38px; background: #dce5bf; border-radius: 4px; }
+.manual-cell .art { width: 100%; height: 100%; }
+.manual-cell.camp, .manual-cell.picnic, .manual-cell.cabin { background: #eee0b7; }
+.manual-clue-demo { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; padding: 15px 0; }
+.manual-clue-demo > span { display: inline-flex; gap: 5px; align-items: center; }
+.manual-clue-demo i { width: 15px; height: 5px; background: #dfb748; border-radius: 3px; }
+.manual-shapes, .manual-rotation { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin: 12px 0; }
+.manual-shape { display: inline-grid; gap: 2px; vertical-align: middle; }
+.manual-shape i { width: 12px; height: 12px; border-radius: 2px; background: #c9a35d; }
+.manual-rotation > .art { width: 90px; height: 70px; }
+.manual-finished-cols { margin-left: 25px; color: #648450; }
+.manual-finished-row { display: flex; align-items: center; gap: 10px; color: #648450; }
+.manual-content ol { padding-left: 22px; }
+@media(max-width:600px) { .manual-content { padding: 24px 16px; } .manual-cards { grid-template-columns: 1fr; } .manual-intro > .art { width: 52px; height: 52px; } .manual-intro { gap: 8px; padding-right: 12px; } }
+.manual-cell { width: 32px; height: 32px; }
+.manual-example { min-width: 170px; }
+.manual-row-checks { line-height: 35px; }
+.manual-column-demo { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.manual-column-dashes { display: flex; flex-direction: column; gap: 4px; }
+.manual-column-dashes i { display: block; width: 15px; height: 5px; border-radius: 3px; background: #dfb748; }
+.manual-intro { display: block; padding: 0 24px; text-align: center; }
+.manual-intro h2 { font-size: 30px; letter-spacing: 5px; margin: 0 0 12px; }
+.manual-camp-art { min-width: 0; height: 32px; z-index: 1; }
+.manual-camp-art .art { width: 100%; height: 100%; }
+.manual-finished-cols { display: grid; grid-template-columns: repeat(3, 32px); gap: 3px; width: 110px; padding: 0 4px; margin-left: 24px; text-align: center; }
+.manual-row-checks { flex: 0 0 14px; text-align: center; }

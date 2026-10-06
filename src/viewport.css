@@ -201,3 +201,91 @@ input[type=range] { height: 22px; }
   .wide-operation { font-size: 9px; padding: 8px 2px; }
   .history-buttons > button { font-size: 9px; gap: 3px; padding: 6px 2px; }
 }
+/* Stable panel geometry: only the viewport determines the board size. */
+.tools-panel { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 2fr) minmax(0, 1fr); gap: 10px; align-self: center; }
+.facility-panel { overflow: hidden; }
+.facility-list { flex: 1 1 0; grid-template-columns: minmax(0, 1fr); grid-auto-rows: 52px; align-content: start; overscroll-behavior: contain; touch-action: pan-y; }
+.facility-card { height: 52px; min-height: 52px; flex-basis: 52px; }
+.rule-dock { flex: 0 0 98px; min-height: 0; overflow: auto; margin-top: 8px; padding: 8px; border-radius: 10px; border: 1px solid #dce3cc; background: #eef1e3; font-size: 10px; line-height: 1.6; scrollbar-width: thin; }
+.rule-dock strong { display: block; color: #44624b; }
+.rule-dock > span { display: flex; gap: 7px; }
+.rule-dock b { flex: none; color: #819066; }
+.operations { min-height: 0; overflow-y: auto; align-self: stretch; scrollbar-width: thin; }
+.operations button:disabled { opacity: .4; }
+.guide-strip { height: 56px; min-height: 56px; overflow: auto; }
+.game-title h1 { white-space: nowrap; }
+.level-grid { grid-template-rows: none; grid-auto-rows: minmax(138px, auto); overflow-y: auto; padding: 3px 3px 8px; align-content: start; scrollbar-width: thin; }
+.menu-buttons { flex-wrap: wrap; }
+.progress-dots { max-width: 180px; flex-wrap: wrap; }
+.tile .terrain-label { position: absolute; left: 50%; top: 0; transform: translate(-50%, -65%); z-index: 9; display: flex; align-items: center; gap: 3px; width: max-content; padding: 3px 7px; border-radius: 20px; box-shadow: 0 2px 6px #304a4020; font-size: 10px; line-height: 16px; pointer-events: none; opacity: 0; transition: opacity .12s; }
+.tile:has(.terrain-label):hover, .tile:has(.terrain-label):focus-visible { z-index: 5; }
+.tile:hover .terrain-label, .tile:focus-visible .terrain-label { opacity: 1; }
+.tile .terrain-label .art { width: 17px; height: 17px; }
+.label-water { background: #d4eceb; color: #3a737b; }
+.label-forest { background: #dce9d2; color: #4c7052; }
+.label-mountain { background: #e6e0d1; color: #75654e; }
+.placed-picnic { background: #e9dfbd; }
+.placed-cabin { background: #d6dfbc; }
+@media (max-width: 600px) and (min-height: 501px) {
+  .screen-game { overflow-y: auto; }
+  .game-page { flex: none; gap: 12px; padding-bottom: 20px; }
+  .play-layout { display: flex; flex-direction: column; flex: none; container-type: normal; gap: 12px; }
+  .board-section { width: 100%; padding: 10px; }
+  .tools-panel { width: 100%; max-height: none; }
+  .facility-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .facility-art { width: 46px; height: 38px; }
+  .facility-info strong { font-size: 12px; }
+  .quantity { font-size: 10px; }
+  .rule-dock { flex-basis: 80px; }
+  .operations { padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; align-content: start; }
+  .operations h2 { grid-column: 1 / -1; margin-bottom: 0; }
+  .operations button { min-height: 34px; }
+  .history-buttons { margin: 0; }
+  .history-buttons > button { flex-direction: row; }
+  .level-grid { grid-template-rows: none; }
+  .menu-buttons { gap: 8px; }
+  .menu-buttons button { padding: 0 14px; min-width: 0; }
+}
+@media (max-height: 500px) {
+  .play-layout { --tools-width: 260px; }
+  .tools-panel { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(0,2fr) minmax(0,1fr); }
+  .facility-panel { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto minmax(0,1fr); gap: 4px; }
+  .panel-heading { grid-column: 1 / -1; margin-bottom: 0; }
+  .facility-list { grid-template-columns: 1fr; }
+  .rule-dock { margin: 0; padding: 4px; font-size: 9px; }
+  .operations { display: grid; grid-template-columns: 1fr 1fr; align-content: start; gap: 0 6px; padding: 5px; }
+  .operations h2 { display: none; }
+  .operations .wide-operation { padding: 5px 2px; }
+  .history-buttons { margin: 0; }
+}
+.game-heading { position: relative; justify-content: center; min-height: 56px; }
+.game-title { justify-content: center; width: 100%; text-align: center; }
+.game-title > .icon-button { position: absolute; left: 0; }
+.game-title h1 { font-size: 34px; margin: 0; letter-spacing: 3px; }
+.game-heading .status-pill { position: absolute; right: 0; }
+@media(max-width:600px) { .game-title h1 { font-size: 28px; } .game-heading .status-pill { font-size: 8px; padding: 5px; } }
+@media(max-height:500px) { .game-heading { min-height: 38px; } .game-title h1 { font-size: 26px; } }
+.level-art-cluster { display: flex; justify-content: center; align-items: center; height: 55px; margin: 0 auto; }
+.level-art-cluster .art { width: 42px; height: 48px; margin: 0 -6px; }
+.level-card.locked .level-art-cluster { opacity: .27; filter: grayscale(.6); }
+@media(max-width:560px) { .level-art-cluster .art { width: 32px; height: 42px; } }
+.operations { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-content: start; gap: 5px 8px; }
+.operations h2 { grid-column: 1 / -1; margin-bottom: 4px; }
+.operations .history-buttons { margin: 0; }
+.operations .wide-operation { padding: 8px 3px; min-height: 34px; }
+.operations .history-buttons > button { padding: 6px 2px; gap: 3px; }
+.operations .wide-operation span, .operations .history-buttons span { white-space: nowrap; }
+@media (min-width:601px) and (max-width:760px) {
+  .operations { padding: 10px 7px; gap: 5px; }
+  .operations .wide-operation { font-size: 9px; gap: 3px; padding: 5px 0; }
+  .operations .wide-operation svg { width: 12px; height: 12px; }
+  .operations .wide-operation > svg:last-child:not(:first-child) { display: none; }
+  .operations .history-buttons > button { flex-direction: column; font-size: 9px; padding: 3px 0; gap: 1px; }
+}
+/* Clues always form one vertical stack, including the board's left edge. */
+.row-clues .clue { flex-direction: column; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 3px; padding: 0; }
+.row-clues .clue i { width: 12px; height: 3px; flex: 0 0 3px; }
+@media(max-width:760px) {
+  .row-clues .clue, .column-clue { gap: 2px; }
+  .row-clues .clue i, .column-clue i { width: 9px; height: 2px; flex: 0 0 2px; }
+}

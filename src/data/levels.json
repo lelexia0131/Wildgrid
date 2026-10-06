@@ -1,9 +1,9 @@
 [
   {
     "id": 1,
-    "name": "初见溪流",
-    "chapter": "溪畔初遇",
-    "tip": "选中营地，再点草地。营地至少有一格正交邻水。",
+    "name": "第1关",
+    "chapter": "",
+    "tip": "选中营地，再点草地。营地至少有一格上下左右挨着水。",
     "size": 6,
     "terrain": [
       {
@@ -38,8 +38,8 @@
   },
   {
     "id": 2,
-    "name": "两处好风景",
-    "chapter": "溪畔初遇",
+    "name": "第2关",
+    "chapter": "",
     "tip": "每一处营地，都要找到属于自己的水源。",
     "size": 6,
     "terrain": [
@@ -85,8 +85,8 @@
   },
   {
     "id": 3,
-    "name": "草地的线索",
-    "chapter": "溪畔初遇",
+    "name": "第3关",
+    "chapter": "",
     "tip": "黄色短杠代表还需占用的格子；行与列都清空，规划才完成。",
     "size": 6,
     "terrain": [
@@ -137,8 +137,8 @@
   },
   {
     "id": 4,
-    "name": "松林来信",
-    "chapter": "林间烟火",
+    "name": "第4关",
+    "chapter": "",
     "tip": "森林是固定地形。绕过松树，寻找溪流旁的空地。",
     "size": 6,
     "terrain": [
@@ -209,9 +209,9 @@
   },
   {
     "id": 5,
-    "name": "第一缕炊烟",
-    "chapter": "林间烟火",
-    "tip": "篝火要正交邻营地。先放篝火也可以，再为它安排营地。",
+    "name": "第5关",
+    "chapter": "",
+    "tip": "篝火要上下左右挨着营地。先放篝火也可以，再为它安排营地。",
     "size": 6,
     "terrain": [
       {
@@ -261,8 +261,8 @@
   },
   {
     "id": 6,
-    "name": "与森林留白",
-    "chapter": "林间烟火",
+    "name": "第6关",
+    "chapter": "",
     "tip": "篝火与森林之间要留出距离，斜角相邻也不可以。",
     "size": 6,
     "terrain": [
@@ -333,8 +333,8 @@
   },
   {
     "id": 7,
-    "name": "山那边",
-    "chapter": "山野远眺",
+    "name": "第7关",
+    "chapter": "",
     "tip": "山地也不能覆盖。沿着山脚，继续寻找邻水的营地。",
     "size": 6,
     "terrain": [
@@ -400,9 +400,9 @@
   },
   {
     "id": 8,
-    "name": "登高望远",
-    "chapter": "山野远眺",
-    "tip": "瞭望塔必须正交邻山地；这次只需安放两座塔。",
+    "name": "第8关",
+    "chapter": "",
+    "tip": "瞭望塔必须上下左右挨着山地；这次只需安放两座塔。",
     "size": 6,
     "terrain": [
       {
@@ -457,8 +457,8 @@
   },
   {
     "id": 9,
-    "name": "各自的天际线",
-    "chapter": "山野远眺",
+    "name": "第9关",
+    "chapter": "",
     "tip": "两座瞭望塔不能相邻，斜角也要保持距离。",
     "size": 6,
     "terrain": [
@@ -519,9 +519,9 @@
   },
   {
     "id": 10,
-    "name": "双人假日",
-    "chapter": "把营地展开",
-    "tip": "这座营地占用两格。点旋转或按 R；任意一格邻水即可。",
+    "name": "第10关",
+    "chapter": "",
+    "tip": "这座营地占用两格。点击旋转；任意一格邻水即可。",
     "size": 6,
     "terrain": [
       {
@@ -566,9 +566,9 @@
   },
   {
     "id": 11,
-    "name": "沿溪而居",
-    "chapter": "把营地展开",
-    "tip": "再点一次已选设施也能旋转。黄色短杠统计格子，不是建筑。",
+    "name": "第11关",
+    "chapter": "",
+    "tip": "点击旋转。黄色短杠统计格子，不是建筑。",
     "size": 6,
     "terrain": [
       {
@@ -628,8 +628,8 @@
   },
   {
     "id": 12,
-    "name": "长长的周末",
-    "chapter": "把营地展开",
+    "name": "第12关",
+    "chapter": "",
     "tip": "这座营地需要更多空地，先看哪一行或列留下了足够的短杠。",
     "size": 6,
     "terrain": [
@@ -690,8 +690,8 @@
   },
   {
     "id": 13,
-    "name": "转角的风景",
-    "chapter": "把营地展开",
+    "name": "第13关",
+    "chapter": "",
     "tip": "L 形营地占三格。旋转四个方向，试试贴合这片草地。",
     "size": 6,
     "terrain": [
@@ -752,8 +752,8 @@
   },
   {
     "id": 14,
-    "name": "林野协奏",
-    "chapter": "荒野成章",
+    "name": "第14关",
+    "chapter": "",
     "tip": "把学到的规则串起来。点已放设施可拿起，再放到新的位置。",
     "size": 6,
     "terrain": [
@@ -834,9 +834,9 @@
   },
   {
     "id": 15,
-    "name": "我们的旷野",
-    "chapter": "荒野成章",
-    "tip": "最后一张营地图。所有设施放完后，仍然可以自由调整。",
+    "name": "第15关",
+    "chapter": "",
+    "tip": "这片熟悉的营地图。所有设施放完后，仍然可以自由调整。",
     "size": 6,
     "terrain": [
       {
@@ -922,6 +922,2576 @@
       5,
       2,
       0
+    ]
+  },
+  {
+    "id": 16,
+    "name": "第16关",
+    "chapter": "",
+    "tip": "从分散的水源出发，让行和列的占格数同时吻合。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "r": 3,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 4,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-11",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      5,
+      1,
+      1,
+      0,
+      0,
+      1,
+      2,
+      1
+    ],
+    "cols": [
+      4,
+      0,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "id": 17,
+    "name": "第17关",
+    "chapter": "",
+    "tip": "多个营地共享水源，先比较每种方向占用的行与列。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 4
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 3
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 7,
+        "kind": "mountain"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      4,
+      1,
+      1,
+      2,
+      1,
+      0,
+      2,
+      2
+    ],
+    "cols": [
+      1,
+      1,
+      0,
+      1,
+      0,
+      5,
+      2,
+      3
+    ]
+  },
+  {
+    "id": 18,
+    "name": "第18关",
+    "chapter": "",
+    "tip": "森林限制篝火，山地限制塔；把两侧线索连接起来。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 3,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "r": 5,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 6,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-11",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      1,
+      2,
+      1,
+      1,
+      1,
+      3,
+      0,
+      4
+    ],
+    "cols": [
+      3,
+      0,
+      3,
+      2,
+      1,
+      1,
+      2,
+      1
+    ]
+  },
+  {
+    "id": 19,
+    "name": "第19关",
+    "chapter": "",
+    "tip": "野餐桌至少一格邻营地，所有格子都要远离篝火（含斜角）。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 3
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 4
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 1,
+        "c": 0,
+        "kind": "mountain"
+      },
+      {
+        "r": 3,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 1,
+        "c": 5,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      }
+    ],
+    "rows": [
+      2,
+      3,
+      1,
+      1,
+      2,
+      2,
+      1,
+      3
+    ],
+    "cols": [
+      3,
+      2,
+      5,
+      2,
+      1,
+      0,
+      1,
+      1
+    ]
+  },
+  {
+    "id": 20,
+    "name": "第20关",
+    "chapter": "",
+    "tip": "先比较双格设施的方向，再看篝火与野餐桌的距离。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 3,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 4,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 0,
+        "kind": "mountain"
+      },
+      {
+        "r": 0,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 0,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      }
+    ],
+    "rows": [
+      3,
+      2,
+      5,
+      3,
+      1,
+      0,
+      1,
+      1
+    ],
+    "cols": [
+      3,
+      1,
+      3,
+      2,
+      1,
+      1,
+      3,
+      2
+    ]
+  },
+  {
+    "id": 21,
+    "name": "第21关",
+    "chapter": "",
+    "tip": "同类设施要竞争位置，留意另一端的列提示。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 4
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 1
+      },
+      {
+        "r": 3,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 4,
+        "kind": "mountain"
+      },
+      {
+        "r": 7,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-14",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      }
+    ],
+    "rows": [
+      4,
+      2,
+      1,
+      1,
+      2,
+      3,
+      1,
+      3
+    ],
+    "cols": [
+      0,
+      2,
+      1,
+      0,
+      3,
+      5,
+      2,
+      4
+    ]
+  },
+  {
+    "id": 22,
+    "name": "第22关",
+    "chapter": "",
+    "tip": "水源与山地分散，局部正确还需要全局占格数支持。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 3,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 1,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 4,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-11",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      }
+    ],
+    "rows": [
+      3,
+      2,
+      1,
+      1,
+      1,
+      4,
+      2,
+      3
+    ],
+    "cols": [
+      2,
+      2,
+      0,
+      1,
+      3,
+      4,
+      0,
+      5
+    ]
+  },
+  {
+    "id": 23,
+    "name": "第23关",
+    "chapter": "",
+    "tip": "两张野餐桌与篝火互相限制，注意跨行的剩余空间。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 3
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 0
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 6
+      },
+      {
+        "r": 3,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 6,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 3,
+        "kind": "mountain"
+      },
+      {
+        "r": 7,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 5,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-14",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      }
+    ],
+    "rows": [
+      4,
+      2,
+      1,
+      1,
+      3,
+      4,
+      1,
+      3
+    ],
+    "cols": [
+      4,
+      2,
+      5,
+      3,
+      0,
+      1,
+      2,
+      2
+    ]
+  },
+  {
+    "id": 24,
+    "name": "第24关",
+    "chapter": "",
+    "tip": "林间木屋占 L 形三格：至少一格邻森林，所有格子不能上下左右挨着水。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 3,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 4,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "kind": "forest",
+        "r": 6,
+        "c": 2
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 7,
+        "kind": "mountain"
+      },
+      {
+        "r": 0,
+        "c": 7,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-18",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      3,
+      2,
+      5,
+      3,
+      1,
+      2,
+      3,
+      1
+    ],
+    "cols": [
+      2,
+      3,
+      2,
+      3,
+      2,
+      3,
+      1,
+      4
+    ]
+  },
+  {
+    "id": 25,
+    "name": "第25关",
+    "chapter": "",
+    "tip": "木屋与野餐桌都需要邻居，但各自避开的地形和设施不同。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 4
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 3
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "kind": "forest",
+        "r": 5,
+        "c": 1
+      },
+      {
+        "r": 0,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 5,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 4,
+        "kind": "mountain"
+      },
+      {
+        "r": 4,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 1,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 7,
+        "kind": "water"
+      },
+      {
+        "r": 5,
+        "c": 7,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-18",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      4,
+      1,
+      4,
+      3,
+      3,
+      2,
+      3,
+      2
+    ],
+    "cols": [
+      3,
+      3,
+      2,
+      1,
+      3,
+      5,
+      2,
+      3
+    ]
+  },
+  {
+    "id": 26,
+    "name": "第26关",
+    "chapter": "",
+    "tip": "从剩余格数较少的行列开始，将每一次排除传到另一侧。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 3,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "kind": "forest",
+        "r": 1,
+        "c": 2
+      },
+      {
+        "r": 7,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 5,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 5,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 7,
+        "kind": "mountain"
+      },
+      {
+        "r": 1,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 4,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-18",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      3,
+      3,
+      2,
+      1,
+      3,
+      5,
+      2,
+      4
+    ],
+    "cols": [
+      3,
+      3,
+      2,
+      3,
+      3,
+      4,
+      1,
+      4
+    ]
+  },
+  {
+    "id": 27,
+    "name": "第27关",
+    "chapter": "",
+    "tip": "不同形状会争夺相同空地，先保留多种合理方向。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 3
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 0
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 4
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "kind": "forest",
+        "r": 5,
+        "c": 6
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 5,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 1,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "kind": "mountain"
+      },
+      {
+        "r": 0,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-18",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      4,
+      1,
+      4,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "cols": [
+      5,
+      2,
+      5,
+      3,
+      1,
+      2,
+      3,
+      3
+    ]
+  },
+  {
+    "id": 28,
+    "name": "第28关",
+    "chapter": "",
+    "tip": "让营地、篝火、野餐桌的关系与塔的位置共同确定空格。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 3,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 4,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "kind": "forest",
+        "r": 6,
+        "c": 5
+      },
+      {
+        "r": 3,
+        "c": 1,
+        "kind": "mountain"
+      },
+      {
+        "r": 2,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 0,
+        "kind": "mountain"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-14",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-18",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      5,
+      2,
+      5,
+      3,
+      1,
+      3,
+      3,
+      3
+    ],
+    "cols": [
+      4,
+      1,
+      4,
+      3,
+      3,
+      3,
+      3,
+      4
+    ]
+  },
+  {
+    "id": 29,
+    "name": "第29关",
+    "chapter": "",
+    "tip": "逐步核对跨区域约束：局部满足不能代替整盘满足。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 4
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 3
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "kind": "forest",
+        "r": 5,
+        "c": 1
+      },
+      {
+        "r": 5,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 6,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 4,
+        "kind": "mountain"
+      },
+      {
+        "r": 3,
+        "c": 1,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 3,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-11",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-14",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-18",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      5,
+      1,
+      4,
+      3,
+      3,
+      3,
+      3,
+      4
+    ],
+    "cols": [
+      3,
+      3,
+      4,
+      1,
+      3,
+      5,
+      2,
+      5
+    ]
+  },
+  {
+    "id": 30,
+    "name": "第30关",
+    "chapter": "",
+    "tip": "每种形状都有多种候选；把行列、邻接和安全距离一起推理。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 3,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "kind": "forest",
+        "r": 1,
+        "c": 5
+      },
+      {
+        "r": 7,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 7,
+        "kind": "water"
+      },
+      {
+        "r": 2,
+        "c": 6,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "kind": "forest"
+      },
+      {
+        "r": 5,
+        "c": 5,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-11",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-14",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-18",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      2,
+      4,
+      4,
+      2,
+      6,
+      3,
+      2,
+      5
+    ],
+    "cols": [
+      5,
+      0,
+      5,
+      3,
+      4,
+      3,
+      4,
+      4
     ]
   }
 ]

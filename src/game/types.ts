@@ -1,5 +1,5 @@
 export type TerrainKind = 'water' | 'forest' | 'mountain';
-export type FacilityKind = 'camp' | 'fire' | 'tower';
+export type FacilityKind = 'camp' | 'fire' | 'tower' | 'picnic' | 'cabin';
 export type Shape = 'single' | 'domino' | 'long' | 'el';
 export type Status = 'VALID' | 'INCOMPLETE' | 'INVALID';
 export type Cell = { r: number; c: number };

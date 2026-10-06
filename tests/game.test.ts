@@ -1,3 +1,4 @@
+import { countSolutions } from '../src/game/solver';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import data from '../src/data/levels.json';
@@ -31,8 +32,8 @@ test('facility tip setting preserves disabled state and defaults on for old save
     else Reflect.deleteProperty(globalThis, 'localStorage');
   }
 });
-test('all 15 authored levels have valid complete solutions and exact cell clues', () => {
-  assert.equal(levels.length, 15);
+test('all 30 authored levels have valid complete solutions and exact cell clues', () => {
+  assert.equal(levels.length, 30);
   for (const level of levels) {
     const answer = solutions[level.id];
     const result = evaluate(level, answer);
@@ -124,4 +125,23 @@ test('towers may not touch diagonally', () => {
   assert.equal(result.issues.t1.status, 'INVALID');
   assert.equal(result.issues.t2.status, 'INVALID');
   assert.ok(result.issues.t1.reasons.some(r => r.includes('瞭望塔之间')));
+});
+
+test('solver counts layouts, ignoring identical IDs and equivalent rotations', () => {
+  const level: Level = { id: 99, name: '', chapter: '', tip: '', size: 4, terrain: [1,2].flatMap(c => [0,3].map(r => ({kind: 'water' as const,r,c}))), pieces: ['a','b'].map(id => ({id,kind:'camp',shape:'single'})), rows:[0,2,0,0], cols:[0,1,1,0] };
+  assert.equal(countSolutions(level), 1);
+  assert.equal(countSolutions({...level,rows:[0,1,1,0]}), 2);
+  assert.equal(countSolutions({...level,terrain:[]}), 0);
+  assert.equal(countSolutions({...level,pieces:[{id:'a',kind:'camp',shape:'domino'}]}), 1);
+});
+test('picnic and cabin enforce their new adjacency rules, including pending camps', () => {
+  const level: Level = { id:99,name:'',chapter:'',tip:'',size:5,terrain:[{kind:'water',r:0,c:0},{kind:'forest',r:4,c:3}],pieces:[{id:'c',kind:'camp',shape:'single'},{id:'p',kind:'picnic',shape:'domino'},{id:'h',kind:'cabin',shape:'el'}],rows:[3,0,0,2,1],cols:[0,1,3,2,0] };
+  const answer = [{id:'c',r:0,c:1,rotation:0},{id:'p',r:0,c:2,rotation:0},{id:'h',r:3,c:2,rotation:1}];
+  assert.equal(evaluate(level,answer).won,true);
+  assert.equal(evaluate(level,answer.slice(1)).issues.p.status,'INCOMPLETE');
+  const fireLevel:Level={...level,pieces:[...level.pieces,{id:'f',kind:'fire',shape:'single'}]};
+  const nearFire=evaluate(fireLevel,[...answer,{id:'f',r:1,c:4,rotation:0}]);
+  assert.ok(nearFire.issues.p.reasons.some(r=>r.includes('篝火')));
+  assert.equal(evaluate({...level,terrain:[...level.terrain,{kind:'water',r:3,c:1}]},answer).issues.h.status,'INVALID');
+  assert.equal(evaluate({...level,terrain:level.terrain.filter(t=>t.kind!=='forest')},answer).issues.h.status,'INVALID');
 });
