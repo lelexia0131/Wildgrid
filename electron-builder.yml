@@ -1,0 +1,35 @@
+appId: com.wildgrid.game
+productName: 野格
+copyright: Copyright © 2026 野格
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/**/*
+  - electron/main.cjs
+  - build/icon.ico
+  - package.json
+asar: true
+npmRebuild: false
+electronDist: node_modules/electron/dist
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.ico
+  artifactName: Wildgrid-Setup-${version}-${arch}.${ext}
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  allowElevation: true
+  perMachine: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 野格
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerLanguages: [zh_CN, en_US]
+  language: 2052
+  displayLanguageSelector: false
+  runAfterFinish: false
+  include: build/installer.nsh

@@ -1,0 +1,11 @@
+export type TerrainKind = 'water' | 'forest' | 'mountain';
+export type FacilityKind = 'camp' | 'fire' | 'tower';
+export type Shape = 'single' | 'domino' | 'long' | 'el';
+export type Status = 'VALID' | 'INCOMPLETE' | 'INVALID';
+export type Cell = { r: number; c: number };
+export type Terrain = Cell & { kind: TerrainKind };
+export type Piece = { id: string; kind: FacilityKind; shape: Shape };
+export type Placement = Cell & { id: string; rotation: number };
+export type Level = { id: number; name: string; chapter: string; tip: string; size: number; terrain: Terrain[]; pieces: Piece[]; rows: number[]; cols: number[] };
+export type Issue = { status: Status; reasons: string[] };
+export type Settings = { music: number; effects: number; muted: boolean; facilityTips: boolean };

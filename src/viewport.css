@@ -1,0 +1,203 @@
+/* Each screen uses the available viewport; the board also fits its height. */
+html, body, #root { width: 100%; height: 100%; overflow: clip; }
+body { min-width: 0; }
+.app { height: 100dvh; min-height: 0; overflow: clip; }
+.header, .screen-game .header, .screen-menu .header {
+  height: 48px; min-height: 48px; flex: none; margin: 0 auto; padding: 6px 24px;
+}
+.header .icon-button { width: 32px; height: 32px; }
+.menu-page {
+  flex: 1; min-height: 0; width: calc(100% - 32px); padding: 0 0 20px;
+  justify-content: center; gap: 8px;
+}
+.menu-art { width: min(680px, 100%, calc((100dvh - 175px) * 1.29)); margin: 0; }
+.menu-copy { padding: 0; flex: none; }
+.menu-progress { margin-top: 18px; }
+.menu-buttons button { height: 46px; }
+
+.game-page {
+  flex: 1; min-height: 0; max-width: 1100px; width: calc(100% - 32px);
+  margin: 0 auto; padding: 0 0 14px; display: flex; flex-direction: column; gap: 12px;
+}
+.game-heading { margin: 0; flex: none; min-height: 46px; }
+.game-title { gap: 12px; }
+.game-title h1 { margin-top: 4px; font-size: 23px; line-height: 1.4; }
+.game-title .eyebrow { font-size: 10px; }
+.play-layout {
+  --tools-width: 220px; --play-gap: 20px;
+  flex: 1; min-height: 0; width: 100%; container-type: size;
+  display: flex; gap: var(--play-gap); align-items: center; justify-content: center;
+}
+.board-section {
+  flex: none; min-width: 0;
+  width: min(calc(100cqw - var(--tools-width) - var(--play-gap)), calc(100cqh - 52px));
+  padding: 12px; border-radius: 16px;
+}
+.board-topline { height: 16px; letter-spacing: .6px; font-size: 10px; }
+.board-topline > span:first-child { font-size: inherit; }
+.board-with-clues {
+  grid-template-columns: 32px minmax(0, 1fr); grid-template-rows: 32px minmax(0, 1fr);
+  margin: 8px 0 0;
+}
+.board-legend { margin-top: 14px; gap: 12px; font-size: 9px; line-height: 12px; }
+.column-clue {
+  display: flex; flex-direction: column; flex-wrap: nowrap; align-items: center;
+  justify-content: center; gap: 3px; padding: 0; min-height: 0; max-height: none;
+}
+.column-clue i { width: 12px; height: 3px; flex: 0 0 3px; }
+.tools-panel { flex: none; width: var(--tools-width); max-height: 100%; min-height: 0; gap: 10px; }
+.facility-panel { display: flex; flex-direction: column; position: relative; flex: 1 1 auto; min-height: 0; padding: 12px; }
+.panel-heading { margin-bottom: 10px; flex: none; }
+.tools-panel h2 { font-size: 12px; }
+.facility-list { --max-facility-card-height: 48px; flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-auto-rows: max-content; gap: 6px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: #b2c09c transparent; }
+.facility-list::-webkit-scrollbar { width: 5px; }
+.facility-list::-webkit-scrollbar-thumb { background: #b2c09c; border-radius: 5px; }
+.facility-wrapper { display: flex; flex-direction: column; min-height: 0; position: static; }
+.facility-card { flex: 0 0 var(--max-facility-card-height); height: var(--max-facility-card-height); min-height: 0; padding: 5px; gap: 7px; flex-wrap: nowrap; overflow: hidden; }
+.facility-art { width: 52px; height: 36px; max-height: 100%; }
+.facility-info strong { font-size: 12px; line-height: 1.3; }
+.quantity { font-size: 10px; padding: 4px; min-width: 25px; }
+.facility-controls { flex: none; margin-top: 4px; gap: 4px; }
+.facility-rotate-hint { margin-right: auto; align-self: center; color: #96a086; font-size: 10px; line-height: 16px; }
+.facility-controls .cancel-selection { width: 25px; height: 25px; }
+.rule-tooltip { position: absolute; inset: auto 8px 8px; margin: 0; z-index: 10; padding: 10px; box-shadow: 0 4px 16px #344e421a; }
+.rule-tooltip > span { gap: 6px; line-height: 1.7; }
+.operations { flex: none; padding: 12px 10px 6px; }
+.operations h2 { margin-bottom: 10px; }
+.history-buttons { margin-bottom: 5px; }
+.history-buttons > button { flex-direction: row; font-size: 11px; padding: 8px 4px; gap: 6px; }
+.wide-operation { padding: 9px 6px; font-size: 11px; }
+.guide-strip { flex: none; margin: 0; min-height: 0; padding: 10px 12px; gap: 10px; }
+.guide-icon { width: 26px; height: 26px; }
+.guide-strip p { font-size: 11px; line-height: 1.7; margin: 0; }
+.guide-strip > div { min-width: 0; }
+.save-error { flex: none; margin: 0; }
+
+.levels-page {
+  flex: 1; min-height: 0; max-width: 960px; width: calc(100% - 32px);
+  margin: 0 auto; padding: 0 0 16px; display: flex; flex-direction: column; gap: 12px;
+}
+.back-link { margin: 0; height: 24px; flex: none; align-self: flex-start; }
+.page-heading { margin: 0; height: 42px; flex: none; }
+.page-heading h1 { margin: 0; font-size: 24px; }
+.completion-count strong { font-size: 24px; }
+.level-grid { flex: 1; min-height: 0; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.level-card { min-height: 0; min-width: 0; padding: 10px; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+.level-card-top { flex: none; width: 100%; font-size: 11px; }
+.level-card > .art { width: 55px; height: 55px; max-height: 55px; min-height: 0; flex: 1 1 55px; margin: 0 auto; }
+.level-card h2 { flex: none; font-size: 11px; line-height: 1.4; letter-spacing: .3px; }
+.level-chapter { flex: none; margin: 0; font-size: 9px; line-height: 1.4; }
+
+.modal { width: min(380px, calc(100% - 24px)); max-height: calc(100dvh - 24px); padding: 28px 24px 24px; overflow: hidden; }
+.modal h2 { margin: 0 0 12px; font-size: 24px; }
+.volume-control { margin-top: 16px; }
+.volume-control label { margin-bottom: 8px; }
+input[type=range] { height: 22px; }
+.mute-setting { margin-top: 12px; padding: 12px 0; }
+.win-emblem { width: 90px; height: 90px; margin-bottom: 18px; }
+.win-level { margin-bottom: 22px; }
+.win-content .primary { height: 46px; }
+.win-content .text-button { margin-top: 18px; }
+
+@media (max-width: 760px) {
+  .header, .screen-game .header, .screen-menu .header { height: 42px; min-height: 42px; padding: 4px 16px; }
+  .game-page { width: calc(100% - 24px); gap: 10px; padding-bottom: 12px; }
+  .game-heading { min-height: 40px; }
+  .game-title h1 { font-size: 20px; }
+  .game-title .eyebrow { font-size: 9px; }
+  .play-layout { --tools-width: 145px; --play-gap: 12px; }
+  .board-section { padding: 9px; width: min(calc(100cqw - var(--tools-width) - var(--play-gap)), calc(100cqh - 44px)); }
+  .board-with-clues { grid-template-columns: 26px minmax(0, 1fr); grid-template-rows: 28px minmax(0, 1fr); margin-top: 6px; }
+  .board-topline { height: 14px; font-size: 8px; }
+  .board-legend { margin-top: 12px; font-size: 8px; }
+  .column-clue { gap: 2px; }
+  .column-clue i { width: 10px; height: 2px; flex-basis: 2px; }
+  .tools-panel { gap: 8px; }
+  .facility-panel { padding: 9px; }
+  .facility-list { --max-facility-card-height: 40px; }
+  .facility-card { padding: 4px 3px; gap: 4px; }
+  .facility-art { width: 38px; height: 30px; }
+  .facility-info strong, .tools-panel h2 { font-size: 10px; }
+  .quantity { min-width: 20px; padding: 3px; font-size: 9px; }
+  .operations { padding: 9px 7px 4px; }
+  .operations h2 { margin-bottom: 8px; }
+  .history-buttons > button { font-size: 9px; padding: 7px 2px; gap: 4px; }
+  .wide-operation { font-size: 9px; padding: 8px 2px; }
+  .facility-rotate-hint { font-size: 9px; line-height: 14px; }
+  .facility-controls .cancel-selection { width: 23px; height: 23px; }
+  .rule-tooltip { inset: auto 5px 5px; padding: 8px; }
+  .rule-tooltip > span { font-size: 9px; }
+  .guide-strip { padding: 8px 10px; gap: 8px; }
+  .guide-strip p { font-size: 10px; }
+  .menu-page { padding-bottom: 16px; }
+  .menu-art { width: min(520px, 100%, calc((100dvh - 160px) * 1.29)); }
+  .menu-progress { margin-top: 16px; }
+  .menu-buttons button { height: 44px; min-width: 0; }
+  .levels-page { width: calc(100% - 24px); gap: 10px; padding-bottom: 12px; }
+  .level-grid { gap: 8px; }
+  .level-card { padding: 8px; gap: 4px; }
+  .level-card h2 { font-size: 10px; }
+  .level-chapter { font-size: 8px; }
+}
+@media (max-width: 560px) {
+  .play-layout { --tools-width: 105px; --play-gap: 8px; }
+  .board-section { padding: 7px 5px; width: min(calc(100cqw - var(--tools-width) - var(--play-gap)), calc(100cqh - 44px)); }
+  .board-with-clues { grid-template-columns: 20px minmax(0, 1fr); grid-template-rows: 26px minmax(0, 1fr); }
+  .board-topline { font-size: 7px; }
+  .board-legend { font-size: 7px; }
+  .facility-art { width: 32px; height: 26px; }
+  .facility-panel { padding: 7px; }
+  .facility-list { --max-facility-card-height: 36px; }
+  .facility-info strong { font-size: 9px; }
+  .facility-card { gap: 3px; padding: 4px 1px; }
+  .quantity { position: static; min-width: 16px; font-size: 8px; padding: 2px; }
+  .history-buttons > button { flex-direction: column; gap: 2px; padding: 6px 1px; }
+  .facility-rotate-hint { font-size: 8px; }
+  .facility-controls .cancel-selection { width: 19px; height: 22px; }
+  .guide-strip p { font-size: 9px; }
+  .level-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(0, 1fr)); }
+  .page-heading h1 { font-size: 21px; }
+  .level-card > .art { max-height: 45px; flex-basis: 45px; }
+}
+@media (max-height: 500px) {
+  .header, .screen-game .header, .screen-menu .header { height: 36px; min-height: 36px; }
+  .game-page { gap: 8px; padding-bottom: 8px; }
+  .game-heading { min-height: 32px; }
+  .game-title h1 { font-size: 18px; }
+  .game-title .eyebrow { font-size: 8px; }
+  .board-section { padding: 7px; width: min(calc(100cqw - var(--tools-width) - var(--play-gap)), calc(100cqh - 28px)); }
+  .board-with-clues { grid-template-columns: 24px minmax(0, 1fr); grid-template-rows: 24px minmax(0, 1fr); margin-top: 4px; }
+  .board-topline { height: 12px; font-size: 8px; }
+  .board-legend { display: none; }
+  .guide-strip { padding: 6px 9px; }
+  .guide-strip p { font-size: 9px; line-height: 1.5; }
+  .guide-icon { width: 22px; height: 22px; }
+  .levels-page { gap: 8px; padding-bottom: 8px; }
+  .page-heading { height: 32px; }
+  .page-heading h1 { font-size: 20px; }
+  .level-card > .art { display: none; }
+  .level-card { padding: 7px; gap: 4px; }
+  .modal { padding: 20px; }
+  .modal h2 { font-size: 20px; margin-bottom: 8px; }
+  .volume-control { margin-top: 8px; }
+  .volume-control label { margin-bottom: 5px; }
+  .mute-setting { margin-top: 8px; padding: 8px 0; }
+  .win-emblem { width: 60px; height: 60px; margin-bottom: 10px; }
+  .win-content .win-level { margin-bottom: 16px; }
+}
+@media (max-height: 500px) and (min-width: 640px) {
+  .play-layout { --tools-width: 360px; --play-gap: 16px; }
+  .tools-panel { display: grid; grid-template-columns: minmax(0, 1fr) 112px; height: 100%; gap: 8px; }
+  .facility-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .facility-list { --max-facility-card-height: 36px; }
+  .facility-panel { padding: 8px; }
+  .facility-art { width: 32px; height: 26px; }
+  .facility-info strong { font-size: 9px; }
+  .facility-card { padding: 3px; gap: 3px; }
+  .facility-rotate-hint { font-size: 8px; }
+  .facility-controls .cancel-selection { height: 21px; width: 20px; }
+  .operations { align-self: center; padding: 9px 6px 4px; }
+  .operations h2 { font-size: 10px; }
+  .wide-operation { font-size: 9px; padding: 8px 2px; }
+  .history-buttons > button { font-size: 9px; gap: 3px; padding: 6px 2px; }
+}
