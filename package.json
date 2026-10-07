@@ -1,7 +1,7 @@
 {
   "name": "wildgrid",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "description": "野格 · 原创露营逻辑益智游戏",
   "author": "Wildgrid",
@@ -13,16 +13,24 @@
     "test": "tsx --test tests/*.test.ts",
     "levels:check": "tsx scripts/check-levels.ts",
     "test:desktop": "electron tests/desktop-smoke.cjs",
+    "test:ui": "electron tests/ui-smoke.cjs",
     "icons": "node scripts/build-icons.mjs",
+    "android:icons": "node scripts/build-android-icons.mjs",
+    "android:sync": "npm run build && npm run android:icons && cap sync android",
+    "android:open": "cap open android",
+    "android:apk": "npm run android:sync && node scripts/build-android.mjs",
     "desktop": "node node_modules/electron/install.js && npm run build && electron .",
     "package:win": "node node_modules/electron/install.js && npm run icons && npm run build && electron-builder --win nsis --x64 --publish never"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
     "lucide-react": "^0.468.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.2",
     "@types/node": "^22.10.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",

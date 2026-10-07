@@ -1,8 +1,150 @@
+import { useId } from 'react';
+import { offsets } from '../game/rules';
 import type { FacilityKind, Shape, TerrainKind } from '../game/types';
+
+export function FootprintSurface({ shape, rotation }: { shape: Shape; rotation: number }) {
+  const cells = offsets(shape, rotation);
+  const width = (Math.max(...cells.map(p => p.c)) + 1) * 100, height = (Math.max(...cells.map(p => p.r)) + 1) * 100;
+  const has = (r: number, c: number) => cells.some(p => p.r === r && p.c === c);
+  const fill = cells.map(p => `M${p.c * 100} ${p.r * 100}h100v100h-100Z`).join('');
+  const outline = cells.map(({r,c}) => [
+    !has(r-1,c) ? `M${c*100} ${r*100}h100` : '', !has(r+1,c) ? `M${c*100} ${(r+1)*100}h100` : '',
+    !has(r,c-1) ? `M${c*100} ${r*100}v100` : '', !has(r,c+1) ? `M${(c+1)*100} ${r*100}v100` : '',
+  ].join('')).join('');
+  return <svg className="facility-footprint" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><path className="footprint-fill" d={fill}/><path className="footprint-outline" d={outline} fill="none" strokeWidth="1.5" vectorEffect="non-scaling-stroke"/></svg>;
+}
+
+function FootprintArt({ shape, rotation, children }: { shape: Shape; rotation: number; children: React.ReactNode }) {
+  const clip = useId(), cells = offsets(shape, rotation);
+  const width = (Math.max(...cells.map(p => p.c)) + 1) * 100, height = (Math.max(...cells.map(p => p.r)) + 1) * 100;
+  return <svg className="art footprint-art" viewBox={`0 0 ${width} ${height}`} fill="none" aria-hidden="true">
+    <defs><clipPath id={clip}>{cells.map(p => <rect key={`${p.r},${p.c}`} x={p.c * 100} y={p.r * 100} width="100" height="100"/>)}</clipPath></defs>
+    <g clipPath={`url(#${clip})`}>{children}</g>
+  </svg>;
+}
+
+type Point = { x: number; y: number };
+// Trace the occupied outline, then inset the roof for a fixed view from above.
+function roofOutline(shape: Shape, rotation: number): Point[] {
+  const cells = offsets(shape, rotation), edges: [Point, Point][] = [];
+  const has = (r: number, c: number) => cells.some(p => p.r === r && p.c === c);
+  for (const {r,c} of cells) {
+    const x = c * 100, y = r * 100;
+    if (!has(r-1,c)) edges.push([{x,y},{x:x+100,y}]);
+    if (!has(r,c+1)) edges.push([{x:x+100,y},{x:x+100,y:y+100}]);
+    if (!has(r+1,c)) edges.push([{x:x+100,y:y+100},{x,y:y+100}]);
+    if (!has(r,c-1)) edges.push([{x,y:y+100},{x,y}]);
+  }
+  const points = [edges[0][0]];
+  let end = edges[0][1];
+  while (end.x !== points[0].x || end.y !== points[0].y) {
+    points.push(end);
+    end = edges.find(([start]) => start.x === end.x && start.y === end.y)![1];
+  }
+  const corners = points.filter((p,i) => {
+    const prev = points[(i+points.length-1)%points.length], next = points[(i+1)%points.length];
+    return (p.x-prev.x)*(next.y-p.y) !== (p.y-prev.y)*(next.x-p.x);
+  });
+  const inset = (a: Point, b: Point) => {
+    const x = Math.sign(a.y-b.y), y = Math.sign(b.x-a.x), distance = y > 0 ? 16 : y < 0 ? 30 : 10;
+    return {x:x*distance,y:y*distance};
+  };
+  return corners.map((p,i) => {
+    const a = inset(corners[(i+corners.length-1)%corners.length],p), b = inset(p,corners[(i+1)%corners.length]);
+    return {x:p.x+a.x+b.x,y:p.y+a.y+b.y};
+  });
+}
+
+function BuildingArt({ kind, shape, rotation }: { kind: 'camp' | 'cabin'; shape: Shape; rotation: number }) {
+  const gradient = useId(), points = roofOutline(shape, rotation), cells = offsets(shape, rotation);
+  const roof = `M${points.map(p=>`${p.x} ${p.y}`).join('L')}Z`;
+  const edges = points.map((p,i)=>({p,q:points[(i+1)%points.length]}));
+  const fronts = edges.filter(({p,q})=>q.x<p.x).map(({p,q})=>({x:q.x,y:q.y,width:p.x-q.x}));
+  const front = [...fronts].sort((a,b)=>b.y-a.y || b.width-a.width)[0];
+  const doorX = front.x + (front.width > 120 ? 40 : front.width / 2), doorY = front.y;
+  const camp = kind === 'camp';
+  const ridge = cells.flatMap(p=>cells.filter(q=>q.r===p.r && q.c===p.c+1 || q.c===p.c && q.r===p.r+1).map(q=>`M${p.c*100+50} ${p.r*100+42}L${q.c*100+50} ${q.r*100+42}`)).join('');
+  const chimney = [...cells].sort((a,b)=>a.r-b.r || a.c-b.c)[0];
+  return <FootprintArt shape={shape} rotation={rotation}>
+    <defs><linearGradient id={gradient} x1="0" y1="0" x2="1" y2="1"><stop stopColor={camp ? '#ffdc8d' : '#7e9b78'}/><stop offset="1" stopColor={camp ? '#e2ab50' : '#456e56'}/></linearGradient></defs>
+    <path d={`M${points.map(p=>`${p.x+4} ${p.y+21}`).join('L')}Z`} fill="#624c2420"/>
+    {edges.filter(({p,q})=>q.y>p.y).map(({p,q},i)=><path key={i} d={`M${p.x} ${p.y}L${q.x} ${q.y}l8 12L${p.x+8} ${p.y+12}Z`} fill={camp ? '#bf8b45' : '#9f754f'}/>)}
+    {fronts.map((f,i)=><g key={i}><rect x={f.x} y={f.y} width={f.width} height="20" fill={camp ? '#d2a05a' : '#c59865'}/>{!camp && <path d={`M${f.x+4} ${f.y+7}h${f.width-8}m-${f.width-8} 7h${f.width-8}`} stroke="#af804e" strokeWidth="2"/>}</g>)}
+    <path className="roof-plane" d={roof} fill={`url(#${gradient})`} stroke={camp ? '#b58a4b' : '#42654e'} strokeWidth="3" strokeLinejoin="round"/>
+    <path d={ridge} stroke={camp ? '#ffe6aa' : '#a4b891'} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+    {camp ? <>
+      <path d={`M${doorX} ${doorY-28}l-34 48h68Z`} fill="#e9b25b"/>
+      <path className="building-door" d={`M${doorX} ${doorY-7}l-15 27h30Z`} fill="#49604d"/>
+      <path d={`M${doorX} ${doorY-7}v27h-15Z`} fill="#b17a3d"/>
+      <path d={`M${doorX-32} ${doorY+21}l-5 6m69-6 5 6`} stroke="#9f7f51" strokeWidth="3" strokeLinecap="round"/>
+    </> : <>
+      <rect className="building-door" x={doorX-10} y={doorY-6} width="20" height="26" rx="2" fill="#53654e"/>
+      <circle cx={doorX+6} cy={doorY+9} r="2" fill="#e8c783"/>
+      {front.width>120 && <><rect x={front.x+front.width-55} y={doorY+3} width="25" height="13" fill="#f5d795"/><path d={`M${front.x+front.width-43} ${doorY+3}v13`} stroke="#ead3a6" strokeWidth="2"/></>}
+      <rect x={chimney.c*100+60} y={chimney.r*100+27} width="12" height="24" fill="#9b9382"/><path d={`M${chimney.c*100+58} ${chimney.r*100+27}h16v6h-16Z`} fill="#b6af9c"/>
+      <path d={`M${doorX-16} ${doorY+24}h32`} stroke="#d6b789" strokeWidth="4" strokeLinecap="round"/>
+    </>}
+  </FootprintArt>;
+}
+
+function PicnicArt({ shape, rotation }: { shape: Shape; rotation: number }) {
+  const cells = offsets(shape, rotation), horizontal = Math.max(...cells.map(p=>p.c))>0;
+  const table = horizontal ? {x:13,y:22,w:174,h:23} : {x:32,y:20,w:36,h:146};
+  const benches = horizontal ? [{x:20,y:12,w:160,h:9},{x:8,y:64,w:184,h:9}] : [{x:7,y:26,w:17,h:141},{x:76,y:26,w:17,h:141}];
+  const supports = horizontal ? [46,153].flatMap(x=>[{x,y:39},{x:x+12,y:39}]) : [44,154].flatMap(y=>[{x:38,y},{x:62,y}]);
+  const cup = {x:table.x+table.w*.3,y:table.y+table.h*.3};
+  const plate = {x:table.x+table.w*.7,y:table.y+table.h*.7};
+  return <FootprintArt shape={shape} rotation={rotation}>
+    <ellipse cx={horizontal ? 100 : 50} cy={horizontal ? 87 : 191} rx={horizontal ? 91 : 43} ry="7" fill="#624c2420"/>
+    <path className="picnic-legs" d={supports.map((p,i)=>`M${p.x} ${p.y}l${i%2 ? 8 : -8} ${horizontal ? 44 : 34}`).join('')} stroke="#836547" strokeWidth="6" strokeLinecap="round"/>
+    {benches.map((b,i)=><g key={i}><path d={horizontal ? `M${b.x+20} ${b.y+5}v20m${b.w-40}-20v20` : `M${b.x+8} ${b.y+20}v20m0 ${b.h-52}v20`} stroke="#836547" strokeWidth="5" strokeLinecap="round"/><rect x={b.x} y={b.y+6} width={b.w} height={b.h} rx="2" fill="#b48a53"/><rect x={b.x} y={b.y} width={b.w} height={b.h} rx="2" fill="#e3bd7e"/></g>)}
+    <rect x={table.x} y={table.y+8} width={table.w} height={table.h} rx="2" fill="#bd9057"/>
+    <path className="roof-plane" d={`M${table.x} ${table.y+8}l8-8h${table.w-16}l8 8v${table.h-8}h-${table.w}Z`} fill="#ebc78d"/>
+    <path d={horizontal ? `M${table.x+12} ${table.y+12}h${table.w-24}` : `M${table.x+12} ${table.y+12}v${table.h-22}`} stroke="#f4dba7" strokeWidth="3" strokeLinecap="round"/>
+    <rect x={cup.x-4} y={cup.y-7} width="8" height="10" rx="1" fill="#7b9f88"/><ellipse cx={plate.x} cy={plate.y} rx="7" ry="4" fill="#f4e6c4"/><circle cx={plate.x} cy={plate.y-2} r="4" fill="#d38d60"/>
+  </FootprintArt>;
+}
+
+function TentArt({ shape, rotation }: { shape: Shape; rotation: number }) {
+  if (shape === 'el') return <BuildingArt kind="camp" shape={shape} rotation={rotation}/>;
+  const cells = offsets(shape, rotation), width = (Math.max(...cells.map(p=>p.c))+1)*100, height = (Math.max(...cells.map(p=>p.r))+1)*100;
+  const horizontal = width > height;
+  return <FootprintArt shape={shape} rotation={rotation}>
+    {horizontal ? <>
+      <ellipse cx={width/2} cy="83" rx={width/2-9} ry="8" fill="#806844" opacity=".18"/>
+      <rect x="9" y="26" width={width-18} height="56" rx="8" fill="#cbb279"/>
+      <path className="roof-plane" d={`M12 74 34 24H${width-34}L${width-12} 74Z`} fill="#d8a04a"/>
+      <path d={`M34 24H${width-34}L${width-42} 74H42Z`} fill="#f4c66f"/><path d={`M34 24H${width-34}L${width-38} 47H38Z`} fill="#ffdc8d"/>
+      <path d="m12 74 22-50 8 50Z" fill="#e9b25b"/>
+      <path className="building-door" d="M22 74V58q0-12 10-12t10 12v16Z" fill="#49604d"/><path d="M22 74V58q0-12 10-12v28Z" fill="#aa773b"/>
+      <path d="M32 51v20" stroke="#e8c487" strokeWidth="2" strokeLinecap="round"/>
+      <path d={`m${width-34} 24 22 50h-30Z`} fill="#c99041"/>
+      <path d={`M34 24H${width-34}M9 79H${width-9}`} stroke="#a9834d" strokeWidth="3" strokeLinecap="round"/>
+      <path d={`m12 74-7 9m${width-17}-9 7 9M34 24l-3-9m${width-65} 9 3-9`} stroke="#9f7f51" strokeWidth="3" strokeLinecap="round"/>
+    </> : <>
+      <ellipse cx="50" cy={height-10} rx="43" ry="7" fill="#806844" opacity=".18"/>
+      <path className="roof-plane" d={`M32 18h36l22 ${height-46}H10Z`} fill="#f4c66f"/>
+      <path d={`M50 18h18l22 ${height-46}H50Z`} fill="#d8a04a"/>
+      <path d={`M50 18v${height-72}`} stroke="#ffdf96" strokeWidth="3"/>
+      <path d={`M50 ${height-56} 10 ${height-14}h80Z`} fill="#e9b25b"/>
+      <path className="building-door" d={`M50 ${height-39} 33 ${height-14}h34Z`} fill="#49604d"/>
+      <path d={`M50 ${height-39}v25H33Z`} fill="#aa773b"/>
+      <path d={`M10 ${height-14}l-5 7m85-7 5 7M32 18l-3-8m39 8 3-8`} stroke="#9f7f51" strokeWidth="3" strokeLinecap="round"/>
+    </>}
+  </FootprintArt>;
+}
+
+export function FacilityArt({ kind, shape, rotation = 0 }: { kind: FacilityKind; shape: Shape; rotation?: number }) {
+  if (shape === 'single') return <Art kind={kind}/>;
+  if (kind === 'picnic') return <PicnicArt shape={shape} rotation={rotation}/>;
+  if (kind === 'camp') return <TentArt shape={shape} rotation={rotation}/>;
+  return <BuildingArt kind="cabin" shape={shape} rotation={rotation}/>;
+}
+
 
 export function Art({ kind, className = '' }: { kind: FacilityKind | TerrainKind; className?: string }) {
   return <svg className={`art ${className}`} viewBox="0 0 100 100" fill="none" aria-hidden="true">
-    {kind === 'picnic' && <><ellipse cx="50" cy="85" rx="39" ry="7" fill="#624c2420"/><path d="m34 42-12 43m43-43 13 43M28 71h46" stroke="#836547" strokeWidth="7" strokeLinecap="round"/><path d="M14 35h72v17H14Z" fill="#c49a60"/><path d="m14 35 13-9h48l11 9Z" fill="#ebc78d"/><path d="M9 63h28v10H9Zm55 0h28v10H64Z" fill="#c49a60"/><path d="M21 34h56M20 46h60" stroke="#f4dba7" strokeWidth="3" strokeLinecap="round"/><path d="M43 27h19v22H43Z" fill="#efeee0"/><path d="M43 33h19m-19 9h19M49 27v22m7-22v22" stroke="#a8b68e" strokeWidth="2"/><path d="M31 25h8v10h-8Z" fill="#7b9f88"/><circle cx="69" cy="34" r="5" fill="#d38d60"/></>}
+    {kind === 'picnic' && <><ellipse cx="50" cy="85" rx="39" ry="7" fill="#624c2420"/><path d="m34 42-12 43m43-43 13 43M28 71h46" stroke="#836547" strokeWidth="7" strokeLinecap="round"/><path d="M14 35h72v17H14Z" fill="#c49a60"/><path d="m14 35 13-9h48l11 9Z" fill="#ebc78d"/><path d="M9 63h28v10H9Zm55 0h28v10H64Z" fill="#c49a60"/><path d="M21 34h56M20 46h60" stroke="#f4dba7" strokeWidth="3" strokeLinecap="round"/><path d="M31 25h8v10h-8Z" fill="#7b9f88"/><circle cx="69" cy="34" r="5" fill="#d38d60"/></>}
     {kind === 'cabin' && <><ellipse cx="51" cy="86" rx="39" ry="7" fill="#624c2420"/><path d="M19 42h60v40H19Z" fill="#c59865"/><path d="M58 42h21v40H58Z" fill="#9f754f"/><path d="M67 18h10v23H67Z" fill="#9b9382"/><path d="m10 44 38-31 42 31Z" fill="#63846a"/><path d="m48 13 42 31H48Z" fill="#3e6653"/><path d="M22 53h53m-53 11h53m-53 10h53" stroke="#af804e" strokeWidth="3"/><path d="M39 58h19v25H39Z" fill="#53654e"/><path d="M25 49h12v13H25Zm39 0h10v13H64Z" fill="#f5d795"/><path d="M31 49v13m38-13v13" stroke="#ead3a6" strokeWidth="2"/><circle cx="53" cy="71" r="2" fill="#e8c783"/><path d="M15 84h69" stroke="#d6b789" strokeWidth="5" strokeLinecap="round"/></>}
     {kind === 'water' && <><path d="M14 34C22 19 38 26 47 21C64 12 84 27 83 42C98 54 87 75 73 78C62 89 35 83 27 77C6 78 2 53 14 34Z" fill="#699d9f"/><path d="M15 32C28 20 37 30 48 24C65 17 84 30 81 43C92 57 78 74 65 72C50 83 38 73 26 74C10 70 7 46 15 32Z" fill="#98c7c5"/><path d="M26 42q9 5 18 0m8 17q10 5 21-1M26 62l7 1m23-29 10 2" stroke="#e1eece" strokeWidth="3" strokeLinecap="round"/><ellipse cx="14" cy="73" rx="7" ry="4" fill="#c8c5a5"/><path d="m83 67 1-12m0 7 5-5" stroke="#72916a" strokeWidth="3" strokeLinecap="round"/></>}
     {kind === 'forest' && <><ellipse cx="50" cy="83" rx="35" ry="7" fill="#315a4620"/><path d="M30 60v22m41-25v23M50 54v33" stroke="#947c54" strokeWidth="7" strokeLinecap="round"/><path d="M29 22 10 54h9L9 69q21 7 41 0L40 54h8Z" fill="#638867"/><path d="M72 18 55 47h8L52 65q20 7 39 0L81 47h7Z" fill="#719775"/><path d="M49 8 28 44h9L21 72q29 9 56 0L62 44h10Z" fill="#396e54"/><path d="m49 8-1 67q14 2 29-3L62 44h10Z" fill="#2f604b"/><path d="m39 42 8 2m-14 18 14 3" stroke="#87a278" strokeWidth="3" strokeLinecap="round"/></>}
@@ -14,44 +156,7 @@ export function Art({ kind, className = '' }: { kind: FacilityKind | TerrainKind
 }
 
 export function CampArt({ shape, rotation = 0 }: { shape: Shape; rotation?: number }) {
-  if (shape === 'single') return <Art kind="camp"/>;
-  const width = shape === 'long' ? 300 : 200, height = shape === 'el' ? 200 : 100;
-  const turn = ((rotation % 4) + 4) % 4;
-  const transforms = ['', `translate(${height} 0) rotate(90)`, `translate(${width} ${height}) rotate(180)`, `translate(0 ${width}) rotate(270)`];
-  return <svg className="art camp-art" viewBox={`0 0 ${turn % 2 ? height : width} ${turn % 2 ? width : height}`} fill="none" aria-hidden="true">
-    <g transform={transforms[turn]}>
-      {shape === 'el' ? <>
-        <path d="M18 16h64q10 0 10 10v85h89q11 0 11 11v56q0 11-11 11H18q-10 0-10-11V27q0-11 10-11Z" fill="#9b815e" opacity=".19"/>
-        <path d="M20 20h60q7 0 7 8v91h93q7 0 7 8v50H14V28q0-8 6-8Z" fill="#d0b780"/>
-        <path d="M25 29h50l7 94h92l12 47H23Z" fill="#e9b251"/>
-        <path d="M50 29h25l7 94h92v25H50Z" fill="#f7d080"/>
-        <path d="M23 170h163v10H23Z" fill="#bf8b45"/>
-        <path d="M25 29h25v119h124l12 22H23Z" fill="#edba62"/>
-        <path d="M50 29v119h124" stroke="#ffe2a0" strokeWidth="4" strokeLinejoin="round"/>
-        <path d="M35 178V158q0-14 13-14t13 14v20Z" fill="#4c6351"/>
-        <path d="M35 178V158q0-14 13-14v34Z" fill="#b17a3d"/>
-        <path d="M48 149v26" stroke="#e6bf79" strokeWidth="2" strokeLinecap="round"/>
-        <path d="m25 99 25 3 29-3m31 24-3 24 6 23" stroke="#ca963f" strokeWidth="2"/>
-        <path d="M27 184h152M11 26l-5-5m80 7 6-6m-78 155-7 8m180-8 7 8" stroke="#9e7d4d" strokeWidth="3" strokeLinecap="round"/>
-        <path d="m28 40-4 108m61 9h77" stroke="#f8d98e" strokeWidth="2" strokeLinecap="round"/>
-      </> : <>
-        <ellipse cx={width / 2} cy="83" rx={width / 2 - 9} ry="8" fill="#806844" opacity=".18"/>
-        <rect x="9" y="26" width={width - 18} height="56" rx="8" fill="#cbb279"/>
-        <path d={`M12 74 34 24H${width - 34}L${width - 12} 74Z`} fill="#d8a04a"/>
-        <path d={`M34 24H${width - 34}L${width - 42} 74H42Z`} fill="#f4c66f"/>
-        <path d={`M34 24H${width - 34}L${width - 38} 47H38Z`} fill="#ffdc8d"/>
-        <path d="m12 74 22-50 8 50Z" fill="#e9b25b"/>
-        <path d="M22 74V58q0-12 10-12t10 12v16Z" fill="#49604d"/>
-        <path d="M22 74V58q0-12 10-12v28Z" fill="#aa773b"/>
-        <path d="M32 51v20" stroke="#e8c487" strokeWidth="2" strokeLinecap="round"/>
-        <path d={`m${width - 34} 24 22 50h-30Z`} fill="#c99041"/>
-        {Array.from({ length: width / 100 - 1 }, (_, i) => <path key={i} d={`M${(i + 1) * 100} 25v22l4 27`} stroke="#d4a04a" strokeWidth="2.5"/>)}
-        <path d={`M34 24H${width - 34}M9 79H${width - 9}`} stroke="#a9834d" strokeWidth="3" strokeLinecap="round"/>
-        <path d={`M38 46H${width - 38}`} stroke="#f9db92" strokeWidth="2"/>
-        <path d={`m12 74-7 9m${width - 17} -9 7 9M34 24l-3-9m${width - 65} 9 3-9`} stroke="#9f7f51" strokeWidth="3" strokeLinecap="round"/>
-      </>}
-    </g>
-  </svg>;
+  return <FacilityArt kind="camp" shape={shape} rotation={rotation}/>;
 }
 
 export function Landscape({ miniature = false }: { miniature?: boolean }) {

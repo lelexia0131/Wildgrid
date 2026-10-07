@@ -17,7 +17,7 @@
 @media(max-width:760px){.menu-page{justify-content:center;padding-bottom:30px}.menu-art{width:min(540px,100%);margin:0}.menu-copy{padding:0}.menu-buttons{gap:12px}.menu-progress{margin-top:24px}}
 @media(max-height:760px) and (min-width:761px){.menu-art{width:min(570px,100%)}.screen-menu .header{height:75px}.menu-page{padding-bottom:32px}}
 
-.board{position:relative;--board-padding:7px;--board-gap:4px;padding:var(--board-padding);gap:var(--board-gap)}.camp-art-layer{position:absolute;inset:var(--board-padding);display:grid;grid-template-columns:repeat(var(--size),minmax(0,1fr));grid-template-rows:repeat(var(--size),minmax(0,1fr));gap:var(--board-gap);pointer-events:none;z-index:2}.placed-camp-art{min-width:0;min-height:0;pointer-events:none}.placed-camp-art .art{width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 2px 1px #775b341a)}.tile .error-mark,.tile .pending-mark{z-index:3}.facility-art{width:64px;height:48px}.facility-info{padding-top:0}
+.board{position:relative;--board-padding:7px;--board-gap:4px;padding:var(--board-padding);gap:var(--board-gap)}.facility-art-layer{position:absolute;inset:var(--board-padding);display:grid;grid-template-columns:repeat(var(--size),minmax(0,1fr));grid-template-rows:repeat(var(--size),minmax(0,1fr));gap:var(--board-gap);pointer-events:none;z-index:2}.placed-facility-art{min-width:0;min-height:0;pointer-events:none}.placed-facility-art .art{width:100%;height:100%;pointer-events:none;filter:drop-shadow(0 2px 1px #775b341a)}.tile .error-mark,.tile .pending-mark{z-index:3}.facility-art{width:64px;height:48px}.facility-info{padding-top:0}
 @media(min-width:1500px){.facility-art{width:70px;height:54px}}
 @media(max-width:1050px){.facility-art{width:52px;height:40px}}
 @media(max-width:760px){.board{--board-padding:5px;--board-gap:3px}.facility-art{width:42px;height:34px}}
@@ -72,7 +72,8 @@
 .manual-column-dashes i { display: block; width: 15px; height: 5px; border-radius: 3px; background: #dfb748; }
 .manual-intro { display: block; padding: 0 24px; text-align: center; }
 .manual-intro h2 { font-size: 30px; letter-spacing: 5px; margin: 0 0 12px; }
-.manual-camp-art { min-width: 0; height: 32px; z-index: 1; }
-.manual-camp-art .art { width: 100%; height: 100%; }
+.manual-cell.manual-multi { background: transparent; }
+.manual-facility-art { min-width: 0; min-height: 0; z-index: 1; position: relative; --footprint-color: #eee0b7; --footprint-border: #b6a16b; }
+.manual-facility-art .art { width: 100%; height: 100%; position: relative; }
 .manual-finished-cols { display: grid; grid-template-columns: repeat(3, 32px); gap: 3px; width: 110px; padding: 0 4px; margin-left: 24px; text-align: center; }
 .manual-row-checks { flex: 0 0 14px; text-align: center; }

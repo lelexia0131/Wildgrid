@@ -1,7 +1,14 @@
 /* Each screen uses the available viewport; the board also fits its height. */
 html, body, #root { width: 100%; height: 100%; overflow: clip; }
 body { min-width: 0; }
-.app { height: 100dvh; min-height: 0; overflow: clip; }
+.app {
+  --safe-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  --safe-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+  --safe-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+  height: 100dvh; min-height: 0; overflow: clip;
+  padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+}
 .header, .screen-game .header, .screen-menu .header {
   height: 48px; min-height: 48px; flex: none; margin: 0 auto; padding: 6px 24px;
 }
@@ -88,7 +95,7 @@ body { min-width: 0; }
 .level-card h2 { flex: none; font-size: 11px; line-height: 1.4; letter-spacing: .3px; }
 .level-chapter { flex: none; margin: 0; font-size: 9px; line-height: 1.4; }
 
-.modal { width: min(380px, calc(100% - 24px)); max-height: calc(100dvh - 24px); padding: 28px 24px 24px; overflow: hidden; }
+.modal { width: min(380px, calc(100% - var(--safe-left) - var(--safe-right) - 24px)); max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px); padding: 28px 24px 24px; overflow-y: auto; }
 .modal h2 { margin: 0 0 12px; font-size: 24px; }
 .volume-control { margin-top: 16px; }
 .volume-control label { margin-bottom: 8px; }
@@ -226,6 +233,18 @@ input[type=range] { height: 22px; }
 .label-mountain { background: #e6e0d1; color: #75654e; }
 .placed-picnic { background: #e9dfbd; }
 .placed-cabin { background: #d6dfbc; }
+.tile.placed.placed-multi, .tile.placed.placed-multi:hover { background: transparent; border-color: transparent; box-shadow: none; }
+.tile.placed-multi::before, .tile.placed-multi::after { display: none; }
+.placed-facility-art { position: relative; --footprint-color: #e7dab0; --footprint-border: #b6a16b; }
+.placed-facility-art[data-kind="picnic"] { --footprint-color: #e9dfbd; }
+.placed-facility-art[data-kind="cabin"] { --footprint-color: #d6dfbc; }
+.placed-facility-art.hovered { --footprint-color: #e1e8c9; }
+.placed-facility-art.invalid { --footprint-color: #ead2b1; --footprint-border: #cb8570; }
+.placed-facility-art.incomplete { --footprint-border: #c5ad65; }
+.facility-footprint { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 5px; }
+.footprint-fill { fill: var(--footprint-color); }
+.footprint-outline { stroke: var(--footprint-border); }
+.placed-facility-art > .art { position: relative; }
 @media (max-width: 600px) and (min-height: 501px) {
   .screen-game { overflow-y: auto; }
   .game-page { flex: none; gap: 12px; padding-bottom: 20px; }
@@ -250,6 +269,7 @@ input[type=range] { height: 22px; }
   .play-layout { --tools-width: 260px; }
   .tools-panel { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(0,2fr) minmax(0,1fr); }
   .facility-panel { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto minmax(0,1fr); gap: 4px; }
+  .facility-panel.tips-hidden { grid-template-columns: minmax(0, 1fr); }
   .panel-heading { grid-column: 1 / -1; margin-bottom: 0; }
   .facility-list { grid-template-columns: 1fr; }
   .rule-dock { margin: 0; padding: 4px; font-size: 9px; }
@@ -283,9 +303,40 @@ input[type=range] { height: 22px; }
   .operations .history-buttons > button { flex-direction: column; font-size: 9px; padding: 3px 0; gap: 1px; }
 }
 /* Clues always form one vertical stack, including the board's left edge. */
-.row-clues .clue { flex-direction: column; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 3px; padding: 0; }
+.row-clues { contain: size; min-height: 0; grid-template-rows: repeat(var(--size), minmax(0, 1fr)); }
+.row-clues .clue { flex-direction: column; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 3px; padding: 0; min-height: 0; }
 .row-clues .clue i { width: 12px; height: 3px; flex: 0 0 3px; }
 @media(max-width:760px) {
   .row-clues .clue, .column-clue { gap: 2px; }
   .row-clues .clue i, .column-clue i { width: 9px; height: 2px; flex: 0 0 2px; }
+}
+
+.modal.manual-modal { width: min(900px, calc(100% - var(--safe-left) - var(--safe-right) - 24px)); max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 28px); }
+.manual-content { max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 30px); overscroll-behavior: contain; touch-action: pan-y; }
+.level-grid { overscroll-behavior: contain; touch-action: pan-y; }
+
+@media (pointer: coarse) {
+  input[type=range] { height: 40px; touch-action: pan-x; }
+  .header .icon-button { width: 44px; height: 44px; }
+  .header, .screen-game .header, .screen-menu .header { height: 52px; min-height: 52px; }
+}
+@media (pointer: coarse) and (max-width: 600px) and (min-height: 501px) {
+  .operations button, .operations .wide-operation { min-height: 44px; }
+  .facility-panel .rule-dock { font-size: 11px; }
+  .board-topline { font-size: 10px; }
+  .guide-strip p { font-size: 11px; }
+}
+@media (pointer: coarse) and (max-height: 500px) and (min-width: 601px) {
+  .screen-game .header { position: absolute; top: var(--safe-top); right: var(--safe-right); width: auto; padding: 0 12px; height: 44px; min-height: 44px; }
+  .screen-game .game-page { padding-top: 4px; gap: 6px; }
+  .screen-game .game-heading { min-height: 40px; padding-right: 110px; }
+  .screen-game .play-layout { --tools-width: 280px; --play-gap: 12px; }
+  .screen-game .board-section { width: min(calc(100cqw - var(--tools-width) - var(--play-gap)), calc(100cqh - 24px)); }
+  .screen-game .board { --board-padding: 4px; --board-gap: 2px; }
+  .screen-game .row-clues { padding: 4px 0; }
+  .screen-game .column-clues { padding: 0 4px; }
+  .screen-game .row-clues .clue, .screen-game .column-clue { gap: 1px; }
+  .screen-game .row-clues .clue i, .screen-game .column-clue i { width: 9px; height: 2px; flex: 0 0 2px; }
+  .screen-game .guide-strip { height: 40px; min-height: 40px; }
+  .screen-game .operations .wide-operation, .screen-game .operations .history-buttons > button { min-height: 36px; padding: 4px; }
 }

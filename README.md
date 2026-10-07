@@ -1,6 +1,6 @@
 # 野格
 
-原创露营主题逻辑益智游戏。React + TypeScript + Vite，无后端、无账户、无外部媒体请求。15 个手工设计的 6×6 固定关卡，支持电脑鼠标/键盘和手机点击。
+原创露营主题逻辑益智游戏。React + TypeScript + Vite，无后端、无账户、无外部媒体请求。30 个固定关卡，1–15 关为 6×6，16–30 关为 8×8，支持电脑鼠标和手机点击。
 
 ## 运行
 
@@ -17,13 +17,15 @@ npm run dev
 npm test          # 关键规则及全部固定关卡解法验证
 npm run build    # TypeScript 检查及生产构建，输出 dist/
 npm run preview  # 本地预览生产版（默认 4173 端口）
+npm run levels:check # Solver 验证 16–30 关唯一解
+npm run test:ui  # 多格插画、实时提示开关和手机触摸回归
 ```
 
 ## 操作
 
 - 选择右侧设施，再点草地放置。多格设施以所点格作为外接矩形的左上角；绿色预览显示实际占格。
 - 点击已放设施可拿起。点新位置移动；点待放区的 × 结束选择，设施已回到库存。
-- 多格营地使用完整的连体帐篷图案，设施栏直接用造型表示占格形状。每张可旋转设施卡片下方都有独立旋转按钮；也可以按 R，或再次点所选设施图标旋转。
+- 多格营地、野餐桌和林间木屋使用完整的连体图案，内部不画格线。选中设施后点击营地工具中的“旋转”，或再次点击所选设施卡片旋转；插画按当前占格重绘，门窗、入口和桌腿保持正向。手机无需键盘或右键。
 - 已放置的多格营地可右键顺时针旋转，以当前鼠标所在占用格为支点。遇到地形或其他设施时保留原位置并显示“已经被占用”；旋转支持撤销、重做。
 - Ctrl/Cmd+Z 撤销；Ctrl/Cmd+Shift+Z 或 Ctrl/Cmd+Y 重做。Esc 取消选择。
 - 行、列黄色短杠表示尚需占用的格数。完成显示勾；超出显示红色差额。
@@ -38,7 +40,7 @@ src/game/types.ts       数据类型
 src/game/rules.ts       纯规则计算、旋转、占格、三态判定
 src/game/storage.ts     版本化本地存档与读取校验
 src/game/audio.ts       原创 Web Audio 音乐及交互音效
-src/data/levels.json    15 个固定关卡，无运行时随机生成
+src/data/levels.json    30 个固定关卡，无运行时随机生成
 src/components/Art.tsx  原创 SVG 地形、设施与菜单插画
 src/App.tsx             页面、操作历史、棋盘与设置
 src/styles.css          桌面与手机布局
@@ -47,24 +49,36 @@ scripts/author-levels.mjs  手工关卡编辑源，生成固定 JSON 与测试�
 tests/solutions.json    仅用于开发验证，不包含在应用构建中
 ```
 
-关卡 JSON 包含地形、设施清单、行列目标。编辑关卡时可修改 author-levels.mjs 中的固定布局及参考解，再执行 `node scripts/author-levels.mjs` 和 `npm test`。允许任何满足规则的解法，未承诺每关唯一解。
+关卡 JSON 包含地形、设施清单、行列目标。编辑关卡时可修改 author-levels.mjs 中的固定布局及参考解，再执行 `node scripts/author-levels.mjs`、`npm test` 和 `npm run levels:check`。16–30 关由 Solver 验证唯一解，等价的设施编号和旋转不重复计数。
 
 ## 音频与存档
 
 旋律、和声及音效均由项目代码原创合成，无商业采样或旧项目素材。菜单与关卡共享主题旋律，节奏不同。浏览器需要首次用户操作才能启用声音。后台标签页暂停音频。
 
-存档位于当前站点 localStorage 的 `wildgrid-save-v1`，包括已完成/解锁进度、各关棋盘、当前关卡、音量及“设施提示”开关。该开关控制设施栏的悬停规则卡，旧存档默认开启。不同域名和端口不共享存档。清除站点数据会删除存档；存储被禁用时会显示提示。
+存档位于当前站点 localStorage 的 `wildgrid-save-v1`，包括已完成/解锁进度、各关棋盘、当前关卡、音量及“设施提示”开关。该开关实时控制游玩界面的动态规则卡，关闭时完全移除并把空间还给设施列表；首页说明书不受影响，旧存档默认开启。不同域名和端口不共享存档。清除站点数据会删除存档；存储被禁用时会显示提示。
 
 ## PWA 与后续平台
 
 生产构建生成 manifest 和 Service Worker，首次成功加载并缓存后可离线启动。PWA 需要 HTTPS 或 localhost，开发服务器不注册 Service Worker；安装入口由浏览器提供。首次安装后刷新一次即可由 Service Worker 控制。更新在旧标签页关闭后启用，避免游玩中切换版本。
 
-Windows 桌面版使用 Electron 加载本地 `wildgrid://game` 资源，无需启动 Web 服务。执行 `npm run package:win` 生成 `release/Wildgrid-Setup-0.1.0-x64.exe`；向导支持选择安装目录，并在快捷方式页面勾选或取消桌面快捷方式。开始菜单入口会保留。安装包未配置代码签名证书。
+Windows 桌面版使用 Electron 加载本地 `wildgrid://game` 资源，无需启动 Web 服务。执行 `npm run package:win` 生成 `release/Wildgrid-Setup-0.2.1-x64.exe`；向导支持选择安装目录，并在快捷方式页面勾选或取消桌面快捷方式。开始菜单入口会保留。安装包未配置代码签名证书。
 
 `npm run desktop` 可启动桌面开发构建；`npm run icons` 从 `public/icon.svg` 导出暖色 PNG 与包含 16–256px 尺寸的 `build/icon.ico`。桌面存档保存在 Electron 的用户数据目录，与浏览器存档分别保存。安装位置改变不影响桌面存档。
 
-Capacitor 可使用 `dist` 作为 webDir。规则层不依赖 DOM；本次未生成 macOS、Android 或 iOS 安装包。
+## Android 测试 APK
+
+Android 使用 Capacitor 8 封装同一份 `dist`，应用名“野格”，包名 `com.wildgrid.game`，versionName `0.2.0`、versionCode `1`。需要 Node.js 22+、JDK 21 和 Android SDK 36；设置 `ANDROID_HOME` / `ANDROID_SDK_ROOT`，`JAVA_HOME` 指向 JDK 21。Windows 构建脚本也会查找 SDK 同级 AndroidStudio 或标准安装目录中的 JDK。
+
+```sh
+npm run android:sync # 构建 Web、生成游戏图标、同步 Android
+npm run android:open # 在 Android Studio 打开原生容器
+npm run android:apk  # 使用 Gradle wrapper 生成签名的 debug APK
+```
+
+APK 输出：`android/app/build/outputs/apk/debug/app-debug.apk`。可以直接安装测试，或执行 `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`。Android 源码保留在仓库，APK、Gradle 缓存和同步的 Web 构建产物均忽略。
+
+手机竖屏采用大棋盘与下方固定高度设施区，横屏采用棋盘与工具并排；列表、关卡选择和说明书各自可滚动。安全区使用 `env(safe-area-inset-*)` 和 Capacitor 的 inset 变量兼容旧 WebView。沿用 localStorage 保存进度和设置，强制退出再启动仍可恢复；清除应用数据或卸载会删除存档。音频仅在第一次用户交互时启动，后台暂停。Android 使用本地打包资源，不注册 Web Service Worker，避免旧缓存覆盖新版 APK。
 
 ## 验证范围
 
-核心自动验证覆盖：15 关参考解法、旋转面积、取回后未完成状态、防火斜角距离、塔间斜角距离、边界/地形/重叠、多格行列计数，以及已通关布局重新进入时重置、未完成进度继续恢复。浏览器人工验证覆盖错误摆法可继续操作、撤销重做、移动通关、刷新恢复，以及手机宽度布局。棋盘上的规则错误持续显示，修正后恢复关卡提示。
+核心自动验证覆盖：30 关参考解法、旋转面积、取回后未完成状态、防火斜角距离、塔间斜角距离、边界/地形/重叠、多格行列计数、新设施规则，以及已通关布局重新进入时重置、未完成进度继续恢复。`levels:check` 检查 16–30 关唯一解；`test:ui` 在隔离存档中检查桌面与手机横竖屏、多格四向图案、提示即时关闭与恢复、固定棋盘/工具尺寸及触摸拿起/放置。棋盘上的规则错误持续显示，修正后恢复关卡提示。

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, Compass, Flag, Grid2X2, Leaf, LockKeyhole, Map, MousePointer2, Redo2, RotateCcw, Settings2, Sparkles, Undo2, Volume2, VolumeX, X } from 'lucide-react';
-import { Art, CampArt, Landscape } from './components/Art';
+import { Art, FacilityArt, FootprintSurface, Landscape } from './components/Art';
 import data from './data/levels.json';
 import { Manual } from './components/Manual';
-import { evaluate, key, occupied, offsets, placementBlock, rotateAround } from './game/rules';
+import { evaluate, key, occupied, placementBlock, rotateAround } from './game/rules';
 import { progressForPlay, readSave, writeSave } from './game/storage';
 import { audio } from './game/audio';
 import type { Cell, FacilityKind, Level, Placement, Shape, TerrainKind } from './game/types';
@@ -104,13 +104,12 @@ export default function App() {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (screen !== 'game' || settingsOpen || winOpen || manualOpen || (event.target instanceof HTMLElement && ['INPUT', 'TEXTAREA'].includes(event.target.tagName))) return;
-      if (event.key.toLowerCase() === 'r' && !event.ctrlKey && !event.metaKey) { event.preventDefault(); rotate(); }
       if (event.key === 'Escape') { setSelected(null); setNotice(''); }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); event.shiftKey ? redo() : undo(); }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); redo(); }
     };
     window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey);
-  }, [screen, settingsOpen, winOpen, manualOpen, rotate, undo, redo]);
+  }, [screen, settingsOpen, winOpen, manualOpen, undo, redo]);
 
   function start(id: number, reset = false) {
     sound(); setSelected(null); setRotations({}); setHover(null); setNotice(''); setWinOpen(false);
@@ -187,35 +186,37 @@ export default function App() {
             const isGhost = ghost.some(p => key(p) === key(cell));
             const hasNeighbor = (dr: number, dc: number) => footprint.some(p => p.r === cell.r + dr && p.c === cell.c + dc);
             const label = terrain ? names[terrain.kind] : piece ? `${names[piece.kind]}${issue?.reasons.length ? `：${issue.reasons.join('；')}` : '，点击拿起'}` : '空地';
-            return <button key={index} className={`tile ${terrain ? `terrain-${terrain.kind}` : ''} ${piece ? `placed placed-${piece.kind}` : ''} ${issue?.status === 'INVALID' ? 'invalid' : ''} ${issue?.status === 'INCOMPLETE' ? 'pending' : ''} ${isGhost ? `ghost ${ghostBlocked ? 'blocked' : ''}` : ''} ${hasNeighbor(-1, 0) ? 'join-top' : ''} ${hasNeighbor(1, 0) ? 'join-bottom' : ''} ${hasNeighbor(0, -1) ? 'join-left' : ''} ${hasNeighbor(0, 1) ? 'join-right' : ''}`} aria-label={`第 ${cell.r + 1} 行第 ${cell.c + 1} 列，${label}`} title={terrain ? undefined : label} onPointerEnter={e => { if (e.pointerType !== 'touch') setHover(cell); }} onFocus={() => setHover(cell)} onClick={() => clickCell(cell)} onContextMenu={event => { if (at && piece && piece.shape !== 'single') { event.preventDefault(); rotatePlaced(at, cell); } }}>
-              {terrain ? <><Art kind={terrain.kind}/><span className={`terrain-label label-${terrain.kind}`} role="tooltip"><Art kind={terrain.kind}/>{names[terrain.kind]}</span></> : piece ? piece.shape === 'single' || piece.kind !== 'camp' && isAnchor ? <Art kind={piece.kind}/> : null : <span className={`grass grass-${index % 5}`}><i/><i/></span>}
+            return <button key={index} className={`tile ${terrain ? `terrain-${terrain.kind}` : ''} ${piece ? `placed placed-${piece.kind} ${piece.shape !== 'single' ? 'placed-multi' : ''}` : ''} ${issue?.status === 'INVALID' ? 'invalid' : ''} ${issue?.status === 'INCOMPLETE' ? 'pending' : ''} ${isGhost ? `ghost ${ghostBlocked ? 'blocked' : ''}` : ''} ${hasNeighbor(-1, 0) ? 'join-top' : ''} ${hasNeighbor(1, 0) ? 'join-bottom' : ''} ${hasNeighbor(0, -1) ? 'join-left' : ''} ${hasNeighbor(0, 1) ? 'join-right' : ''}`} aria-label={`第 ${cell.r + 1} 行第 ${cell.c + 1} 列，${label}`} title={terrain ? undefined : label} onPointerEnter={e => { if (e.pointerType !== 'touch') setHover(cell); }} onFocus={() => setHover(cell)} onClick={() => clickCell(cell)} onContextMenu={event => { if (at && piece && piece.shape !== 'single') { event.preventDefault(); rotatePlaced(at, cell); } }}>
+              {terrain ? <><Art kind={terrain.kind}/><span className={`terrain-label label-${terrain.kind}`} role="tooltip"><Art kind={terrain.kind}/>{names[terrain.kind]}</span></> : piece ? piece.shape === 'single' ? <Art kind={piece.kind}/> : null : <span className={`grass grass-${index % 5}`}><i/><i/></span>}
               {issue?.status === 'INVALID' && isAnchor && <span className="error-mark">!</span>}
               {issue?.status === 'INCOMPLETE' && isAnchor && <span className="pending-mark">·</span>}
               {isGhost && !terrain && !piece && <span className="ghost-dot"/>}
             </button>;
-          })}<div className="camp-art-layer">{placements.map(at => {
+          })}<div className="facility-art-layer">{placements.map(at => {
             const piece = level.pieces.find(p => p.id === at.id)!;
-            if (piece.kind !== 'camp' || piece.shape === 'single') return null;
-            const cells = offsets(piece.shape, at.rotation);
-            const width = Math.max(...cells.map(p => p.c)) + 1, height = Math.max(...cells.map(p => p.r)) + 1;
-            return <div className="placed-camp-art" key={at.id} style={{ gridRow: `${at.r + 1} / span ${height}`, gridColumn: `${at.c + 1} / span ${width}` }}><CampArt shape={piece.shape} rotation={at.rotation}/></div>;
+            if (piece.shape === 'single') return null;
+            const cells = occupied(piece, at);
+            const row = Math.min(...cells.map(p => p.r)), column = Math.min(...cells.map(p => p.c));
+            const width = Math.max(...cells.map(p => p.c)) - column + 1, height = Math.max(...cells.map(p => p.r)) - row + 1;
+            const issue = result.issues[at.id];
+            return <div className={`placed-facility-art ${issue.status.toLowerCase()} ${hover && cells.some(p => key(p) === key(hover)) ? 'hovered' : ''}`} key={at.id} data-kind={piece.kind} data-rotation={at.rotation} style={{ gridRow: `${row + 1} / span ${height}`, gridColumn: `${column + 1} / span ${width}` }}><FootprintSurface shape={piece.shape} rotation={at.rotation}/><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at.rotation}/></div>;
           })}</div></div>
         </div>
         <div className="board-legend"><span><i className="yellow-dash"/> 待占格数</span><span><span className="legend-dot"/> 固定地形不可移动</span><span><MousePointer2 size={13}/> 点击放置 / 拿起</span></div>
       </section>
-      <aside ref={toolsRef} className="tools-panel"><section className="facility-panel"><div className="panel-heading"><h2>待放设施</h2><span>{level.pieces.length - placements.length} <small>/ {level.pieces.length}</small></span></div><div className="facility-list">{groups.map(group => {
+      <aside ref={toolsRef} className="tools-panel"><section className={`facility-panel ${save.settings.facilityTips ? '' : 'tips-hidden'}`}><div className="panel-heading"><h2>待放设施</h2><span>{level.pieces.length - placements.length} <small>/ {level.pieces.length}</small></span></div><div className="facility-list">{groups.map(group => {
         const total = level.pieces.filter(p => p.kind === group.kind && p.shape === group.shape);
         const remaining = total.filter(p => !placements.some(at => at.id === p.id)).length;
         const active = selectedPiece?.kind === group.kind && selectedPiece.shape === group.shape;
         return <div className="facility-wrapper" key={`${group.kind}-${group.shape}`} onPointerEnter={() => { setTipGroup(group.kind); setTipShape(group.shape); }} onFocus={() => { setTipGroup(group.kind); setTipShape(group.shape); }}>
           <button className={`facility-card ${active ? 'active' : ''} ${remaining === 0 ? 'empty' : ''}`} aria-label={`选择${shapeNames[group.shape]}${names[group.kind]}，剩余 ${remaining}`} aria-pressed={active} disabled={!remaining} onClick={() => choose(group.kind, group.shape)}>
-            <div className="facility-art">{group.kind === 'camp' ? <CampArt shape={group.shape} rotation={rotations[group.shape] || 0}/> : <Art kind={group.kind}/>}</div>
+            <div className="facility-art"><FacilityArt kind={group.kind} shape={group.shape} rotation={rotations[group.shape] || 0}/></div>
             <div className="facility-info"><strong>{names[group.kind]}</strong></div>
             <span className="quantity">{remaining === 0 ? <Check size={14}/> : `×${remaining}`}</span>
           </button>
         </div>;
       })}</div>
-      <div className="rule-dock" aria-live="polite">{save.settings.facilityTips && shownKind ? <><strong>{names[shownKind]}</strong><span><b>要求</b>{rules[shownKind][0]}</span><span><b>禁止</b>{rules[shownKind][1]}</span>{shownShape !== 'single' && <span><b>提示</b>点击旋转</span>}</> : <p>{save.settings.facilityTips ? '选择或悬停设施，查看要求与禁止事项。' : '设施提示已关闭'}</p>}</div>
+      {save.settings.facilityTips && <div className="rule-dock" aria-live="polite">{shownKind ? <><strong>{names[shownKind]}</strong><span><b>要求</b>{rules[shownKind][0]}</span><span><b>禁止</b>{rules[shownKind][1]}</span>{shownShape !== 'single' && <span><b>提示</b>点击旋转</span>}</> : <p>选择或悬停设施，查看要求与禁止事项。</p>}</div>}
       </section>
       <section className="operations"><h2>营地工具</h2><button className="wide-operation" disabled={!selectedPiece || selectedPiece.shape === 'single'} onClick={rotate}><RotateCcw size={17}/><span>旋转</span></button><div className="history-buttons"><button disabled={!history.past.length} onClick={undo}><Undo2 size={18}/><span>撤销</span></button><button disabled={!history.future.length} onClick={redo}><Redo2 size={18}/><span>重做</span></button></div><button className="wide-operation" onClick={restart}><RotateCcw size={17}/><span>重新游玩</span></button><button className="wide-operation" onClick={() => { sound(); setScreen('levels'); }}><Grid2X2 size={17}/><span>选择关卡</span><ChevronRight size={15}/></button></section>
       </aside></div>

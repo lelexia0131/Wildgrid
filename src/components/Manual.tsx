@@ -1,4 +1,4 @@
-import { Art, CampArt } from './Art';
+import { Art, CampArt, FacilityArt, FootprintSurface } from './Art';
 import { offsets } from '../game/rules';
 import type { FacilityKind, Shape, TerrainKind } from '../game/types';
 
@@ -6,11 +6,15 @@ type Kind = FacilityKind | TerrainKind;
 const symbols: Record<string, Kind> = { W:'water', F:'forest', M:'mountain', C:'camp', B:'fire', T:'tower', P:'picnic', H:'cabin' };
 function Board({ map }: { map: string[] }) {
   const cells = map.join('').split(''), width = map[0].length;
-  const campCells = cells.flatMap((s, i) => s === 'C' ? [{ r: Math.floor(i / width), c: i % width }] : []);
-  const multiCamp = campCells.length > 1;
-  const start = campCells[0];
-  const shape = campCells.length === 3 ? 'long' : 'domino';
-  return <div className="manual-board" style={{ gridTemplateColumns:`repeat(${width}, 32px)` }}>{cells.map((s,i)=><span key={i} style={{gridRow:Math.floor(i/width)+1,gridColumn:i%width+1}} className={`manual-cell ${symbols[s] || ''}`}>{symbols[s] && !(s === 'C' && multiCamp) && (!['P','H'].includes(s) || cells.indexOf(s) === i) && <Art kind={symbols[s]}/>}</span>)}{multiCamp && <span className="manual-camp-art" style={{gridRow:start.r+1,gridColumn:`${start.c+1} / span ${campCells.length}`}}><CampArt shape={shape}/></span>}</div>;
+  const facilities = ['C','P','H'].flatMap(symbol => {
+    const points = cells.flatMap((s,i) => s === symbol ? [{r:Math.floor(i/width),c:i%width}] : []);
+    if (points.length < 2) return [];
+    const r = Math.min(...points.map(p=>p.r)), c = Math.min(...points.map(p=>p.c));
+    const shape: Shape = symbol === 'H' ? 'el' : points.length === 3 ? 'long' : 'domino';
+    const rotation = [0,1,2,3].find(turn => offsets(shape,turn).every(p=>points.some(q=>q.r===p.r+r && q.c===p.c+c)))!;
+    return [{symbol,kind:symbols[symbol] as FacilityKind,shape,rotation,r,c,width:Math.max(...points.map(p=>p.c))-c+1,height:Math.max(...points.map(p=>p.r))-r+1}];
+  });
+  return <div className="manual-board" style={{ gridTemplateColumns:`repeat(${width}, 32px)` }}>{cells.map((s,i)=><span key={i} style={{gridRow:Math.floor(i/width)+1,gridColumn:i%width+1}} className={`manual-cell ${symbols[s] || ''} ${facilities.some(f=>f.symbol===s) ? 'manual-multi' : ''}`}>{symbols[s] && !facilities.some(f=>f.symbol===s) && <Art kind={symbols[s]}/>}</span>)}{facilities.map(f=><span key={f.symbol} className="manual-facility-art" style={{gridRow:`${f.r+1} / span ${f.height}`,gridColumn:`${f.c+1} / span ${f.width}`}}><FootprintSurface shape={f.shape} rotation={f.rotation}/><FacilityArt kind={f.kind} shape={f.shape} rotation={f.rotation}/></span>)}</div>;
 }
 function Example({ map, good = false, children }: { map: string[]; good?: boolean; children: React.ReactNode }) {
   return <div className={`manual-example ${good ? 'good' : 'bad'}`}><Board map={map}/><strong>{good ? '✓ 可以这样放' : '× 不能这样放'}</strong><p>{children}</p></div>;
