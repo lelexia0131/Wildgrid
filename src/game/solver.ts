@@ -1,4 +1,4 @@
-import { adjacent, occupied, offsets } from './rules';
+import { adjacent, evaluate, occupied, offsets } from './rules';
 import type { Cell, Level, Piece, Placement } from './types';
 
 type Candidate = { at: Placement; cells: Cell[]; mask: bigint; near: bigint; around: bigint; rows: number[]; cols: number[] };
@@ -23,9 +23,9 @@ export function solveLevel(level: Level, limit = 2): SolverResult {
       seen.add(signature);
       for (const origin of board) {
         const at = { ...origin, id: piece.id, rotation }, cells = occupied(piece, at);
-        if (cells.some(p => p.r >= n || p.c >= n || level.terrain.some(t => t.r === p.r && t.c === p.c))) continue;
-        const near = (kind: string, diagonal = false) => cells.some(p => level.terrain.some(t => t.kind === kind && adjacent(p, t, diagonal)));
-        if (piece.kind === 'camp' && !near('water') || piece.kind === 'tower' && !near('mountain') || piece.kind === 'fire' && near('forest', true) || piece.kind === 'cabin' && (!near('forest') || near('water'))) continue;
+        // The gameplay evaluator owns terrain and footprint rules. Relationships
+        // to other facilities are checked while searching and on complete layouts.
+        if (evaluate({ ...level, pieces: [piece] }, [at], { staticOnly: true }).status === 'INVALID') continue;
         const rows = Array<number>(n).fill(0), cols = Array<number>(n).fill(0);
         for (const p of cells) { rows[p.r]++; cols[p.c]++; }
         if (rows.some((v, i) => v > level.rows[i]) || cols.some((v, i) => v > level.cols[i])) continue;
@@ -47,7 +47,9 @@ export function solveLevel(level: Level, limit = 2): SolverResult {
       if (rows.some((v, i) => v !== level.rows[i]) || cols.some((v, i) => v !== level.cols[i])) return;
       if (chosen.some(({ g, p }) => ['fire', 'picnic'].includes(groups[g].piece.kind) && !(p.near & camps))) return;
       const indices = groups.map(() => 0);
-      stats.solutions.push(chosen.map(({ g, p }) => ({ ...p.at, id: groups[g].ids[indices[g]++] })));
+      const solution = chosen.map(({ g, p }) => ({ ...p.at, id: groups[g].ids[indices[g]++] }));
+      if (!evaluate(level, solution).won) return;
+      stats.solutions.push(solution);
       stats.count++;
       return;
     }

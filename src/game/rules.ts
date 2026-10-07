@@ -30,7 +30,7 @@ export function placementBlock(level: Level, placements: Placement[], candidate:
   if (cells.some(p => used.some(t => key(p) === key(t)))) return '设施不能重叠';
   return null;
 }
-export function evaluate(level: Level, placements: Placement[]) {
+export function evaluate(level: Level, placements: Placement[], options: { staticOnly?: boolean } = {}) {
   const rows = Array<number>(level.size).fill(0), cols = Array<number>(level.size).fill(0);
   const issues: Record<string, Issue> = {};
   const entries = placements.map(at => ({ at, piece: level.pieces.find(p => p.id === at.id)! })).filter(e => e.piece);
@@ -47,7 +47,7 @@ export function evaluate(level: Level, placements: Placement[]) {
     if (e.piece.kind === 'camp' && !nearTerrain('water')) reasons.push('营地至少有一格需要上下左右挨着水');
     if (e.piece.kind === 'fire' || e.piece.kind === 'picnic') {
       if (e.piece.kind === 'fire' && nearTerrain('forest', true)) reasons.push('篝火不能邻近森林，包括斜角');
-      if (!cells.some(other => other.piece.kind === 'camp' && other.cells.some(p => e.cells.some(q => adjacent(p, q))))) {
+      if (!options.staticOnly && !cells.some(other => other.piece.kind === 'camp' && other.cells.some(p => e.cells.some(q => adjacent(p, q))))) {
         const remainingCamps = level.pieces.filter(p => p.kind === 'camp' && !placements.some(at => at.id === p.id));
         const canAddCamp = remainingCamps.some(camp => {
           for (let rotation = 0; rotation < 4; rotation++) for (let r = 0; r < level.size; r++) for (let c = 0; c < level.size; c++) {
@@ -60,7 +60,7 @@ export function evaluate(level: Level, placements: Placement[]) {
         else reasons.push(`${e.piece.kind === 'fire' ? '篝火' : '野餐桌'}需要上下左右挨着营地`);
       }
     }
-    if (e.piece.kind === 'picnic' || e.piece.kind === 'fire') {
+    if (!options.staticOnly && (e.piece.kind === 'picnic' || e.piece.kind === 'fire')) {
       const otherKind = e.piece.kind === 'picnic' ? 'fire' : 'picnic';
       if (cells.some(other => other.piece.kind === otherKind && e.cells.some(p => other.cells.some(q => adjacent(p, q, true))))) reasons.push('野餐桌不能邻近篝火，包括斜角');
     }
@@ -70,7 +70,7 @@ export function evaluate(level: Level, placements: Placement[]) {
     }
     if (e.piece.kind === 'tower') {
       if (!nearTerrain('mountain')) reasons.push('瞭望塔需要上下左右挨着山地');
-      if (cells.some(other => other.piece.kind === 'tower' && other.at.id !== e.at.id && e.cells.some(p => other.cells.some(q => adjacent(p, q, true))))) reasons.push('瞭望塔之间不能相邻，包括斜角');
+      if (!options.staticOnly && cells.some(other => other.piece.kind === 'tower' && other.at.id !== e.at.id && e.cells.some(p => other.cells.some(q => adjacent(p, q, true))))) reasons.push('瞭望塔之间不能相邻，包括斜角');
     }
     if (e.cells.some(p => rows[p.r] > level.rows[p.r] || cols[p.c] > level.cols[p.c])) reasons.push('所在行或列的占格数超出提示');
     issues[e.at.id] = { status: reasons.length ? 'INVALID' : pending ? 'INCOMPLETE' : 'VALID', reasons: reasons.length ? reasons : pending ? ['等待上下左右挨着的营地'] : [] };

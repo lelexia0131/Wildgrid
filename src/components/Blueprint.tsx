@@ -2,14 +2,14 @@ import { Art, FacilityArt, FootprintSurface } from './Art';
 import { key, occupied } from '../game/rules';
 import type { Level, Placement } from '../game/types';
 
-export function Blueprint({ level, placements }: { level: Level; placements: Placement[] }) {
+export function Blueprint({ level, placements, name = `day ${level.id}` }: { level: Level; placements: Placement[]; name?: string }) {
   const facilities = placements.map(at => {
     const piece = level.pieces.find(p => p.id === at.id)!;
     return { at, piece, cells: occupied(piece, at) };
   });
   return <section className="blueprint-content">
-    <h2>day {level.id} · 图纸</h2>
-    <div className="blueprint-sheet" role="img" aria-label={`day ${level.id} 的完整营地答案，全部 ${level.pieces.length} 个设施已放置`} style={{ '--size': level.size } as React.CSSProperties}>
+    <h2>{name} · 图纸</h2>
+    <div className="blueprint-sheet" role="img" aria-label={`${name} 的完整营地答案，全部 ${level.pieces.length} 个设施已放置`} style={{ '--size': level.size } as React.CSSProperties}>
       <div className="blueprint-corner"/>
       <div className="blueprint-columns">{level.cols.map((count, i) => <span key={i}>{count}</span>)}</div>
       <div className="blueprint-rows">{level.rows.map((count, i) => <span key={i}>{count}</span>)}</div>

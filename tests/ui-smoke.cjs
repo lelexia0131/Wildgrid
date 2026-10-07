@@ -41,6 +41,7 @@ app.whenReady().then(async () => {
       await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     } else await js(`document.querySelector(${JSON.stringify(selector)}).click()`);
     await settle();
+    if (selector === '.menu-buttons .primary') await click('.sandbox-choice:first-child', touch);
   }
   const geometry = () => js(`(() => {
     const rect = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return {width:r.width,height:r.height}; };
@@ -67,7 +68,7 @@ app.whenReady().then(async () => {
       await contents.debugger.sendCommand('Emulation.setTouchEmulationEnabled', {enabled:viewport.touch});
       await load();
       console.log('UI viewport:', JSON.stringify(viewport));
-      assert.equal(await js(`document.querySelector('.menu-buttons .primary').textContent`), '继续冒险');
+      assert.equal(await js(`document.querySelector('.menu-buttons .primary').textContent`), '开始冒险');
       assert.equal(await js(`document.querySelector('.menu-buttons button:last-child').textContent.trim()`), '野外手册');
       assert.equal(await js(`Boolean(window.__audioContext)`), false);
       await click('.menu-buttons .primary', viewport.touch);
