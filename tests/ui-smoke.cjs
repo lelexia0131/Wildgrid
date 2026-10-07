@@ -29,8 +29,8 @@ app.whenReady().then(async () => {
     };
     void 0;
   `;
-  const js = async code => {
-    try { return await contents.executeJavaScript(code); }
+  const js = async (code, userGesture = false) => {
+    try { return await contents.executeJavaScript(code, userGesture); }
     catch (error) { throw new Error(`Renderer check failed: ${code.slice(0,240)} (${error.message})`); }
   };
   const settle = () => new Promise(resolve => setTimeout(resolve, 60));
@@ -39,7 +39,7 @@ app.whenReady().then(async () => {
       const point = await js(`(() => { const el = document.querySelector(${JSON.stringify(selector)}); el.scrollIntoView({block:'nearest'}); const r = el.getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2}; })()`);
       await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
       await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-    } else await js(`document.querySelector(${JSON.stringify(selector)}).click()`);
+    } else await js(`document.querySelector(${JSON.stringify(selector)}).click()`, true);
     await settle();
     if (selector === '.menu-buttons .primary') await click('.sandbox-choice:first-child', touch);
   }
@@ -113,6 +113,35 @@ app.whenReady().then(async () => {
         assert.ok(await js(`window.__audioGains[0].gain.value<.01 && window.__audioGains[1].gain.value<.01`));
         await click('.modal-close', true);
       }
+      // Game information opens from settings and returns without closing the dialog.
+      await click('.header [aria-label="设置"]', viewport.touch);
+      assert.equal(await js(`document.querySelector('.settings-note').textContent`), 'v0.3.0');
+      assert.equal(await js(`document.querySelector('.settings-about').nextElementSibling === document.querySelector('.settings-note')`), true);
+      await click('.settings-about', viewport.touch);
+      const about = await js(`(() => {
+        const content=document.querySelector('.game-about'), dialog=document.querySelector('dialog'), r=dialog.getBoundingClientRect();
+        const details=Array.from(content.querySelectorAll('dd')).map(el=>el.textContent);
+        return {open:dialog.open,heading:content.querySelector('h2').textContent,author:details[0],date:details[1],project:content.querySelector('a').href,copyright:content.textContent.includes('© 2026 lelexia') && content.textContent.includes('原创插画'),thanks:content.textContent.includes('感谢'),fits:r.left>=0 && r.right<=innerWidth && dialog.scrollWidth<=dialog.clientWidth+1 && document.documentElement.scrollWidth<=innerWidth};
+      })()`);
+      assert.equal(about.open, true);
+      assert.equal(about.heading, '游戏说明');
+      assert.equal(about.author, 'lelexia');
+      assert.equal(about.date, '2026-10-07');
+      assert.equal(about.project, 'https://github.com/lelexia0131/Wildgrid');
+      assert.ok(about.copyright && about.thanks);
+      assert.ok(about.fits, JSON.stringify(about));
+      writeFileSync(path.join(output, `about-${viewport.width}.png`), (await contents.capturePage()).toPNG());
+      await click('.game-about .secondary', viewport.touch);
+      assert.equal(await js(`document.querySelector('dialog').open && document.querySelector('dialog h2').textContent === '设置'`), true);
+      await click('.settings-about', viewport.touch);
+      await js(`document.querySelector('.modal-close').focus()`);
+      contents.sendInputEvent({type:'keyDown',keyCode:'Escape'});
+      contents.sendInputEvent({type:'keyUp',keyCode:'Escape'});
+      await settle();
+      const afterEscape = await js(`({open:document.querySelector('dialog').open,heading:document.querySelector('dialog h2').textContent})`);
+      assert.ok(afterEscape.open && afterEscape.heading==='设置', JSON.stringify(afterEscape));
+      await click('.modal-close', viewport.touch);
+      assert.equal(await js(`document.querySelector('dialog').open`), false);
       // Loaded partial placements remain after a page reload; take up and re-place using taps.
       const picnic = solutions[30].find(at=>at.id.startsWith('picnic'));
       await load([picnic], false);

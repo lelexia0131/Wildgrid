@@ -50,12 +50,14 @@
 .local-map-card-art { width: 21px; height: 21px; flex: none; }
 .local-map-card > svg:last-child { margin-left: auto; }
 .local-map-card > span { display: flex; flex-direction: column; gap: 7px; }
-.local-map-card strong { font-size: 14px; }
+.local-map-card > span:nth-child(2) { min-width: 0; flex: 1; }
+.local-map-card strong { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .local-map-card small { color: #869677; font-size: 10px; }
 .local-map-detail { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding: 20px; border: 1px solid #dce3cf; border-radius: 17px; background: #fafbf0; box-shadow: 0 4px 0 #e3e8d8; }
 .local-map-heading { display: flex; flex: none; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-.local-map-heading h2 { font-size: 20px; letter-spacing: 1px; }
-.local-map-heading > span { color: #819371; font-size: 12px; }
+.local-map-heading h2 { min-width: 0; font-size: 20px; letter-spacing: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.local-map-rename { flex: none; width: 32px; height: 32px; }
+.local-map-heading > span { flex: none; margin-left: auto; color: #819371; font-size: 12px; }
 .local-map-content { --preview-heading-space: 36px; display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 1fr) minmax(230px, .8fr); gap: 20px; }
 .local-map-content h3 { flex: none; margin: 0 0 10px; color: #728866; font-size: 12px; line-height: 18px; font-weight: 600; letter-spacing: 1px; }
 .local-map-view { display: flex; flex-direction: column; align-items: center; min-width: 0; min-height: 0; container-type: size; }
@@ -70,7 +72,17 @@
 .local-map-items strong { font-size: 11px; line-height: 14px; font-weight: 600; white-space: nowrap; }
 .local-map-items small { color: #8d997c; font-size: 9px; line-height: 12px; white-space: nowrap; }
 .local-map-items b { margin-left: auto; color: #7e916d; font-size: 10px; font-weight: 600; white-space: nowrap; }
-.local-map-enter { flex: none; width: 100%; margin-top: 16px; height: 44px; font-size: 13px; }
+.local-map-actions { display: grid; flex: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+.local-map-actions > button { width: 100%; height: 44px; padding: 0 8px; gap: 8px; font-size: 13px; }
+.local-map-delete { background: #b96558; box-shadow: 0 4px 0 #944e43; }
+.local-map-delete:hover { background: #ab5c50; }
+.local-map-modal input { width: 100%; min-width: 0; height: 44px; margin-top: 12px; padding: 10px 12px; border: 1px solid #ccd5bd; border-radius: 9px; background: #f4f5e9; color: #617451; font: inherit; }
+.local-map-modal p { overflow-wrap: anywhere; }
+.local-map-modal .sandbox-import-error { color: #ae7259; }
+.game-page:has(.sandbox-save) .game-title { min-width: 0; padding: 0 42px; }
+.game-page:has(.sandbox-save) .game-title > div { min-width: 0; }
+.game-page:has(.sandbox-save) .game-title h1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.blueprint-content h2, .win-level, .game-page:has(.sandbox-save) .guide-strip p { overflow-wrap: anywhere; }
 .local-map-empty { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 20px; text-align: center; border: 1px dashed #c8d3b7; border-radius: 17px; background: #fafbf0; }
 .local-map-empty-art { width: 38px; height: 38px; }
 .local-map-empty h2 { font-size: 19px; }
@@ -118,7 +130,8 @@
   .local-map-items li { padding: 4px 5px; gap: 5px; }
   .local-map-items strong { font-size: 10px; line-height: 12px; }
   .local-map-items small { font-size: 8px; line-height: 10px; }
-  .local-map-enter { height: 42px; margin-top: 12px; }
+  .local-map-actions { margin-top: 12px; }
+  .local-map-actions > button { height: 42px; }
   .sandbox-editor-tools .terrain-tools { gap: 3px; margin-bottom: 7px; }
   .sandbox-editor-tools .terrain-tools button { min-height: 38px; font-size: 8px; }
   .sandbox-editor-tools .terrain-tools .art { width: 21px; height: 20px; }
@@ -162,7 +175,8 @@
   .local-map-items strong { font-size: 9px; line-height: 11px; }
   .local-map-items small { font-size: 8px; line-height: 10px; }
   .local-map-items b { font-size: 9px; }
-  .local-map-enter { height: 36px; margin-top: 10px; font-size: 12px; }
+  .local-map-actions { margin-top: 10px; }
+  .local-map-actions > button { height: 36px; font-size: 12px; }
   .sandbox-size-card { padding: 11px 8px; }
   .sandbox-size-preview { width: 64px; height: 64px; margin-bottom: 9px; gap: 2px; }
   .sandbox-import-card { padding: 12px; }

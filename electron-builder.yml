@@ -10,6 +10,7 @@ files:
   - electron/preload.cjs
   - build/icon.ico
   - package.json
+  - '!node_modules/**/*'
 asar: true
 npmRebuild: false
 electronDist: node_modules/electron/dist

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, clipboard, ipcMain, net, protocol, screen, session } = require('electron');
+const { app, BrowserWindow, Menu, clipboard, ipcMain, net, protocol, screen, session, shell } = require('electron');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 
@@ -22,7 +22,10 @@ function createWindow() {
     show: false, autoHideMenuBar: true,
     webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true, preload: path.join(app.getAppPath(), 'electron/preload.cjs') },
   });
-  window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    if (url === 'https://github.com/lelexia0131/Wildgrid') void shell.openExternal(url);
+    return { action: 'deny' };
+  });
   window.webContents.on('will-navigate', event => event.preventDefault());
   window.on('page-title-updated', event => event.preventDefault());
   window.once('ready-to-show', () => window.show());

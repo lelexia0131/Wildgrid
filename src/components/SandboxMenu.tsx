@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, ClipboardPaste, Map, PencilRuler } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ClipboardPaste, Map, Pencil, PencilRuler, Trash2, X } from 'lucide-react';
 import { Art, FacilityArt } from './Art';
 import { SandboxArt } from './SandboxArt';
 import { readClipboard } from '../game/clipboard';
 import { key } from '../game/rules';
 import type { LocalMap } from '../game/localMaps';
+import { deleteLocalMap, renameLocalMap } from '../game/localMaps';
 import type { FacilityKind, Shape } from '../game/types';
 
 type SandboxScreen = 'adventure' | 'sandbox' | 'sandbox-size' | 'sandbox-import' | 'local-maps';
@@ -17,6 +18,7 @@ type Props = {
   onImport: (code: string) => void;
   localMaps: LocalMap[];
   onOpenLocalMap: (map: LocalMap) => void;
+  onLocalMapsChange: () => void;
   onSound?: () => void;
 };
 
@@ -36,18 +38,42 @@ function LocalMapPreview({ map }: { map: LocalMap }) {
   </div>;
 }
 
-export function SandboxMenu({ screen, onBack, onContinue, onNavigate, onCreate, onImport, localMaps, onOpenLocalMap, onSound }: Props) {
+export function SandboxMenu({ screen, onBack, onContinue, onNavigate, onCreate, onImport, localMaps, onOpenLocalMap, onLocalMapsChange, onSound }: Props) {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [pasting, setPasting] = useState(false);
   const [selectedMapId, setSelectedMapId] = useState<number | null>(null);
+  const [mapAction, setMapAction] = useState<'delete' | 'rename' | null>(null);
+  const [mapName, setMapName] = useState('');
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const cancelRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => { setError(''); }, [screen]);
+  useEffect(() => {
+    if (!mapAction) return;
+    dialogRef.current?.showModal();
+    if (mapAction === 'rename') { nameRef.current?.focus(); nameRef.current?.select(); }
+    else cancelRef.current?.focus();
+  }, [mapAction]);
 
   const act = (action: () => void) => { onSound?.(); action(); };
   const title = screen === 'sandbox' ? '沙盒模式' : screen === 'sandbox-size' ? '选择地图尺寸' : screen === 'sandbox-import' ? '导入地图' : screen === 'local-maps' ? '本地地图' : '模式选择';
   const selectedMap = localMaps.find(map => map.id === selectedMapId) ?? localMaps[0];
   const items = selectedMap?.draft.level.pieces.filter((piece, index, all) => all.findIndex(item => item.kind === piece.kind && item.shape === piece.shape) === index) ?? [];
+
+  function closeMapDialog() { setMapAction(null); setError(''); }
+  function editMap(action: 'delete' | 'rename') {
+    onSound?.(); setError(''); setMapName(selectedMap.customName || ''); setMapAction(action);
+  }
+  function confirmMapAction() {
+    onSound?.(); setError('');
+    try {
+      if (mapAction === 'delete') { deleteLocalMap(selectedMap.id); setSelectedMapId(null); }
+      else renameLocalMap(selectedMap.id, mapName);
+      onLocalMapsChange(); closeMapDialog();
+    } catch (cause) { setError(cause instanceof Error ? cause.message : '本地地图保存失败，请重试'); }
+  }
 
   async function paste() {
     onSound?.(); setError(''); setPasting(true);
@@ -99,16 +125,29 @@ export function SandboxMenu({ screen, onBack, onContinue, onNavigate, onCreate, 
             </button>)}
           </div>
           <section className="local-map-detail" aria-label={selectedMap.name}>
-            <div className="local-map-heading"><h2>{selectedMap.name}</h2><span>{selectedMap.draft.level.size}×{selectedMap.draft.level.size}</span></div>
+            <div className="local-map-heading"><h2 title={selectedMap.name}>{selectedMap.name}</h2><button className="icon-button local-map-rename" aria-label="编辑地图名称" title="编辑地图名称" onClick={() => editMap('rename')}><Pencil size={16}/></button><span>{selectedMap.draft.level.size}×{selectedMap.draft.level.size}</span></div>
             <div className="local-map-content">
               <div className="local-map-view"><h3>地图样貌</h3><LocalMapPreview map={selectedMap}/></div>
               <div className="local-map-items"><h3>地图放置物品</h3><ul>{items.map(piece => <li key={`${piece.kind}_${piece.shape}`}><span className="local-map-item-art"><FacilityArt kind={piece.kind} shape={piece.shape}/></span><span><strong>{facilityNames[piece.kind]}</strong><small>{shapeNames[piece.shape]}</small></span><b>×{selectedMap.draft.level.pieces.filter(item => item.kind === piece.kind && item.shape === piece.shape).length}</b></li>)}</ul></div>
             </div>
-            <button className="primary local-map-enter" onClick={() => act(() => onOpenLocalMap(selectedMap))}>进入地图<ArrowRight size={18}/></button>
+            <div className="local-map-actions"><button className="primary local-map-enter" onClick={() => act(() => onOpenLocalMap(selectedMap))}>进入地图<ArrowRight size={18}/></button><button className="primary local-map-delete" onClick={() => editMap('delete')}>删除地图<Trash2 size={16}/></button></div>
           </section>
         </div> : <div className="local-map-empty"><span className="local-map-empty-art"><Art kind="fire"/></span><h2>还没有本地地图</h2><p>创造或导入地图后，点击保存，就能在这里找到本地存档。</p></div>)}
       </div>
       {screen !== 'local-maps' && <div className="sandbox-menu-art" aria-hidden="true"><SandboxArt variant={screen === 'adventure' ? 'adventure' : 'sandbox'}/></div>}
     </div>
+    {mapAction && <dialog ref={dialogRef} className="modal local-map-modal" aria-labelledby="local-map-dialog-title" onCancel={event => { event.preventDefault(); closeMapDialog(); }} onClick={event => {
+      if (event.target !== event.currentTarget) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeMapDialog();
+    }}>
+      <button className="modal-close icon-button" aria-label="关闭" onClick={closeMapDialog}><X size={19}/></button>
+      <h2 id="local-map-dialog-title">{mapAction === 'delete' ? '删除地图' : '编辑地图名称'}</h2>
+      <form onSubmit={event => { event.preventDefault(); confirmMapAction(); }}>
+        {mapAction === 'delete' ? <p>确定删除“{selectedMap.name}”吗？地图及游玩进度将被删除，剩余地图会顺次编号。</p> : <input ref={nameRef} id="local-map-name" aria-label="地图名称" value={mapName} placeholder={selectedMap.name} onChange={event => { setMapName(event.target.value); setError(''); }} />}
+        {error && <p className="sandbox-import-error" role="alert">{error}</p>}
+        <div className="sandbox-modal-actions"><button ref={cancelRef} type="button" className="secondary" onClick={closeMapDialog}>取消</button><button type="submit" className={`primary ${mapAction === 'delete' ? 'local-map-delete' : ''}`}>{mapAction === 'delete' ? '删除地图' : '保存名称'}</button></div>
+      </form>
+    </dialog>}
   </main>;
 }

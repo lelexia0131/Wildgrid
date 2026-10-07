@@ -82,6 +82,10 @@ app.whenReady().then(async () => {
     await settle(); await click('.sandbox-import-start');
     assert.equal(await js(`Boolean(document.querySelector('.game-page'))`), true);
   }
+  async function setMapName(name) {
+    await js(`(() => { const el = document.querySelector('#local-map-name'); Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(el, ${JSON.stringify(name)}); el.dispatchEvent(new Event('input', {bubbles:true})); })()`);
+    await settle();
+  }
   async function checkAction(selector, status) {
     await click(selector);
     await waitFor(`!document.querySelector('.sandbox-save').disabled && document.querySelector('.guide-strip').textContent.includes(${JSON.stringify(status)})`, status);
@@ -93,14 +97,18 @@ app.whenReady().then(async () => {
       const el = document.querySelector(selector); return {selector,height:el.clientHeight,content:el.scrollHeight,scroll:el.scrollTop};
     });
     return {width:innerWidth,height:innerHeight,overflowX:document.documentElement.scrollWidth>innerWidth,documentHeight:document.documentElement.scrollHeight,
-      list:rect(document.querySelector('.local-map-list')),detail:rect(document.querySelector('.local-map-detail')),preview:board,enter:rect(document.querySelector('.local-map-enter')),regions,
+      list:rect(document.querySelector('.local-map-list')),detail:rect(document.querySelector('.local-map-detail')),preview:board,enter:rect(document.querySelector('.local-map-enter')),delete:rect(document.querySelector('.local-map-delete')),regions,
+      actionColors:['.local-map-enter','.local-map-delete'].map(selector => getComputedStyle(document.querySelector(selector)).backgroundColor.match(/[0-9.]+/g).map(Number)),
       artFits:Array.from(preview.querySelectorAll('.placed-facility-art')).every(el => { const r=rect(el); return r.left>=board.left-1 && r.top>=board.top-1 && r.right<=board.right+1 && r.bottom<=board.bottom+1; })};
   })()`);
   function assertFits(state) {
     assert.equal(state.overflowX, false, JSON.stringify(state));
     assert.ok(state.documentHeight <= state.height + 1, JSON.stringify(state));
     for (const region of state.regions) assert.ok(region.content <= region.height + 1 && region.scroll === 0, JSON.stringify(state));
-    for (const rect of [state.preview, state.enter]) assert.ok(rect.width > 0 && rect.height > 0 && rect.left >= -1 && rect.top >= -1 && rect.right <= state.width + 1 && rect.bottom <= state.height + 1, JSON.stringify(state));
+    for (const rect of [state.preview, state.enter, state.delete]) assert.ok(rect.width > 0 && rect.height > 0 && rect.left >= -1 && rect.top >= -1 && rect.right <= state.width + 1 && rect.bottom <= state.height + 1, JSON.stringify(state));
+    assert.ok(state.enter.right <= state.delete.left && Math.abs(state.enter.top - state.delete.top) < 1 && Math.abs(state.enter.width - state.delete.width) < 1, JSON.stringify(state));
+    const [green, red] = state.actionColors;
+    assert.ok(green[1] > green[0] && green[1] > green[2] && red[0] > red[1] && red[0] > red[2], JSON.stringify(state));
     assert.ok(Math.abs(state.preview.width - state.preview.height) < 1, JSON.stringify(state));
     assert.equal(state.artFits, true, JSON.stringify(state));
   }
@@ -169,6 +177,50 @@ app.whenReady().then(async () => {
     assert.deepEqual((await entries()).map(map => map.id), [1, 2, 3]);
     log('Local map create, play, import, reload and update PASS.');
 
+    // Name edits and deletion are explicit, and stable ids keep each remaining map attached to its save.
+    const beforeEditing = await stored();
+    await localPage(); await click('.local-map-card:nth-child(2)'); await click('.local-map-rename');
+    assert.equal(await js(`document.querySelector('dialog[open] h2').textContent`), '编辑地图名称');
+    await setMapName('取消的名字'); await clickText('取消', 'dialog[open] button');
+    assert.equal(await stored(), beforeEditing);
+    await click('.local-map-rename'); await setMapName('  林间营地  '); await clickText('保存名称', 'dialog[open] button');
+    assert.equal(await js(`document.querySelector('.local-map-detail h2').textContent`), '林间营地');
+    assert.equal((await entries()).find(map => map.id === 2).customName, '林间营地');
+    await localPage(); await click('.local-map-card:nth-child(2)'); await click('.local-map-enter');
+    assert.equal(await js(`document.querySelector('.game-title h1').textContent`), '林间营地');
+    await checkAction('.sandbox-save', '已保存到林间营地');
+    assert.equal((await entries()).find(map => map.id === 2).customName, '林间营地');
+    await localPage(); await click('.local-map-card:nth-child(2)'); await click('.local-map-rename');
+    await setMapName('   '); await clickText('保存名称', 'dialog[open] button');
+    assert.equal(await js(`document.querySelector('.local-map-detail h2').textContent`), '本地地图2');
+    assert.equal((await entries()).find(map => map.id === 2).customName, undefined);
+    const beforeDeleting = await stored();
+    await click('.local-map-delete');
+    assert.equal(await js(`document.querySelector('dialog[open] h2').textContent`), '删除地图');
+    assert.ok(await js(`document.querySelector('dialog[open]').textContent.includes('本地地图2')`));
+    await clickText('取消', 'dialog[open] button');
+    assert.equal(await stored(), beforeDeleting);
+    await click('.local-map-delete'); await clickText('删除地图', 'dialog[open] button');
+    assert.deepEqual((await entries()).map(map => map.id), [1, 3]);
+    assert.deepEqual(await js(`Array.from(document.querySelectorAll('.local-map-card strong')).map(el => el.textContent)`), ['本地地图1', '本地地图2']);
+    await localPage(); await click('.local-map-card:nth-child(2)');
+    assert.equal(await js(`document.querySelector('.local-map-detail h2').textContent`), '本地地图2');
+    assert.equal(await js(`document.querySelectorAll('.local-map-preview > .tile').length`), 64);
+    await click('.local-map-enter');
+    assert.equal(await js(`document.querySelector('.game-title h1').textContent`), '本地地图2');
+    await checkAction('.sandbox-save', '已保存到本地地图2');
+    assert.deepEqual((await entries()).map(map => map.id), [1, 3]);
+    await importMap(camps); await checkAction('.sandbox-save', '已保存到本地地图3');
+    assert.deepEqual((await entries()).map(map => map.id), [1, 3, 4]);
+    await localPage();
+    for (let remaining = 3; remaining > 0; remaining--) {
+      await click('.local-map-delete'); await clickText('删除地图', 'dialog[open] button');
+      assert.equal((await entries()).length, remaining - 1);
+    }
+    assert.equal(await js(`document.querySelector('.local-map-empty h2').textContent`), '还没有本地地图');
+    await js(`localStorage.setItem(${JSON.stringify(storageKey)}, ${JSON.stringify(beforeEditing)}); void 0;`);
+    log('Local map naming, deletion cancellation, renumbering and persistence PASS.');
+
     // Rejected saves/exports have no storage or clipboard effects.
     await editor();
     const baseline = await stored();
@@ -229,6 +281,17 @@ app.whenReady().then(async () => {
       assert.ok(await js(`document.querySelector('.local-map-items').textContent.includes('双格')`));
       const normal = await geometry();
       try { assertFits(normal); } catch (error) { layoutFailures.push({ viewport, scenario: 'three saves', message: error.message }); }
+      await click('.local-map-delete');
+      assert.equal(await js(`document.querySelector('dialog[open] h2').textContent`), '删除地图');
+      assert.ok(await js(`(() => { const r=document.querySelector('dialog[open]').getBoundingClientRect(); return r.left>=0 && r.top>=0 && r.right<=innerWidth+1 && r.bottom<=innerHeight+1; })()`));
+      await clickText('取消', 'dialog[open] button');
+      assert.equal(await stored(), baseline);
+      await click('.local-map-rename');
+      assert.equal(await js(`document.querySelector('#local-map-name').value`), '');
+      assert.equal(await js(`document.querySelector('#local-map-name').placeholder`), '本地地图3');
+      assert.ok(await js(`(() => { const r=document.querySelector('#local-map-name').getBoundingClientRect(); return r.width>0 && r.left>=0 && r.right<=innerWidth+1; })()`));
+      await setMapName('移动端临时名称'); await clickText('取消', 'dialog[open] button');
+      assert.equal(await stored(), baseline);
       if (viewport.width === 1280) assert.ok(normal.detail.left >= normal.list.right, JSON.stringify(normal));
       writeFileSync(path.join(output, `local-maps-${viewport.width}.png`), (await contents.capturePage()).toPNG());
       const beforeAnswer = await stored();
@@ -243,6 +306,16 @@ app.whenReady().then(async () => {
       await click('.modal-close');
       assert.equal(await js(`document.querySelectorAll('.board > .tile.placed').length`), 0);
       assert.equal(await stored(), beforeAnswer);
+      await localPage(); await click('.local-map-card:nth-child(3)'); await click('.local-map-rename');
+      const longName = 'WildgridForestCamp'.repeat(12);
+      await setMapName(longName); await clickText('保存名称', 'dialog[open] button');
+      assert.equal(await js(`document.querySelector('.local-map-detail h2').textContent`), longName);
+      assertFits(await geometry());
+      await click('.local-map-enter');
+      assert.equal(await js(`document.querySelector('.game-title h1').textContent`), longName);
+      const namedGame = await js(`(() => { const title=document.querySelector('.game-title h1').getBoundingClientRect(), back=document.querySelector('.game-title .icon-button').getBoundingClientRect(); return {width:innerWidth,overflowX:document.documentElement.scrollWidth>innerWidth,title:{left:title.left,right:title.right},back:{left:back.left,right:back.right}}; })()`);
+      assert.equal(namedGame.overflowX, false, JSON.stringify(namedGame));
+      assert.ok(namedGame.title.left >= namedGame.back.right && namedGame.title.right <= namedGame.width + 1 && namedGame.back.left >= 0 && namedGame.back.right <= namedGame.width + 1, JSON.stringify(namedGame));
       await js(`localStorage.setItem(${JSON.stringify(storageKey)}, ${JSON.stringify(crowdedMaps)}); void 0;`);
       await localPage();
       assert.equal(await js(`document.querySelectorAll('.local-map-card').length`), 24);
