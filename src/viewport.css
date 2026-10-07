@@ -209,7 +209,7 @@ input[type=range] { height: 22px; }
   .history-buttons > button { font-size: 9px; gap: 3px; padding: 6px 2px; }
 }
 /* Stable panel geometry: only the viewport determines the board size. */
-.tools-panel { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 2fr) minmax(0, 1fr); gap: 10px; align-self: center; }
+.tools-panel { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 5fr) minmax(0, 2fr); gap: 10px; align-self: center; }
 .facility-panel { overflow: hidden; }
 .facility-list { flex: 1 1 0; grid-template-columns: minmax(0, 1fr); grid-auto-rows: 52px; align-content: start; overscroll-behavior: contain; touch-action: pan-y; }
 .facility-card { height: 52px; min-height: 52px; flex-basis: 52px; }
@@ -267,7 +267,7 @@ input[type=range] { height: 22px; }
 }
 @media (max-height: 500px) {
   .play-layout { --tools-width: 260px; }
-  .tools-panel { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(0,2fr) minmax(0,1fr); }
+  .tools-panel { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(0,5fr) minmax(0,2fr); }
   .facility-panel { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto minmax(0,1fr); gap: 4px; }
   .facility-panel.tips-hidden { grid-template-columns: minmax(0, 1fr); }
   .panel-heading { grid-column: 1 / -1; margin-bottom: 0; }
@@ -314,6 +314,16 @@ input[type=range] { height: 22px; }
 .modal.manual-modal { width: min(900px, calc(100% - var(--safe-left) - var(--safe-right) - 24px)); max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 28px); }
 .manual-content { max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 30px); overscroll-behavior: contain; touch-action: pan-y; }
 .level-grid { overscroll-behavior: contain; touch-action: pan-y; }
+
+.modal.blueprint-modal { width: min(620px, calc(100% - var(--safe-left) - var(--safe-right) - 24px)); padding: 28px 24px 24px; }
+.blueprint-content h2 { padding-right: 32px; font-size: 22px; }
+.blueprint-sheet { width: min(100%, calc(100dvh - var(--safe-top) - var(--safe-bottom) - 150px)); margin: 0 auto; display: grid; grid-template-columns: 24px minmax(0,1fr); grid-template-rows: 24px minmax(0,1fr); padding: 12px; border: 1px solid #cbd5bb; border-radius: 8px; background: #f2f0df; }
+.blueprint-columns, .blueprint-rows { display: grid; font-size: 11px; color: #718568; }
+.blueprint-columns { grid-template-columns: repeat(var(--size), minmax(0,1fr)); padding: 0 6px; }
+.blueprint-rows { grid-template-rows: repeat(var(--size), minmax(0,1fr)); padding: 6px 0; }
+.blueprint-columns span, .blueprint-rows span { display: flex; align-items: center; justify-content: center; }
+.blueprint-board { --board-padding: 6px; --board-gap: 3px; padding: 6px; gap: 3px; }
+.blueprint-board .tile { pointer-events: none; }
 
 @media (pointer: coarse) {
   input[type=range] { height: 40px; touch-action: pan-x; }

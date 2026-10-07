@@ -31,12 +31,11 @@ level('转角的风景', '把营地展开', 'L 形营地占三格。旋转四个
 level('林野协奏', '荒野成章', '把学到的规则串起来。点已放设施可拿起，再放到新的位置。', [['water',1,1],['water',4,5],['mountain',0,4],['mountain',5,1],['forest',3,0],['forest',0,0]], [['camp','domino',1,2],['camp','el',3,3],['fire','single',2,2],['tower','single',1,4],['tower','single',5,2]]);
 level('我们的旷野', '荒野成章', '这片熟悉的营地图。所有设施放完后，仍然可以自由调整。', [['water',1,1],['water',4,5],['mountain',0,4],['mountain',5,1],['forest',0,0],['forest',5,5]], [['camp','long',1,2],['camp','el',3,3],['camp','single',2,1],['fire','single',2,3],['fire','single',4,2],['tower','single',0,3],['tower','single',5,2]]);
 mkdirSync('src/data', { recursive: true });
-mkdirSync('tests', { recursive: true });
 const expansion = JSON.parse(readFileSync('src/data/levels.json', 'utf8')).filter(l => l.id > 15);
-const expansionAnswers = Object.fromEntries(Object.entries(JSON.parse(readFileSync('tests/solutions.json', 'utf8'))).filter(([id]) => Number(id) > 15));
+const expansionAnswers = Object.fromEntries(Object.entries(JSON.parse(readFileSync('src/data/solutions.json', 'utf8'))).filter(([id]) => Number(id) > 15));
 levels.push(...expansion);
 for (const l of levels) { l.name = `第${l.id}关`; l.chapter = ''; }
 Object.assign(solutions, expansionAnswers);
 writeFileSync('src/data/levels.json', JSON.stringify(levels, null, 2) + '\n');
-writeFileSync('tests/solutions.json', JSON.stringify(solutions, null, 2) + '\n');
+writeFileSync('src/data/solutions.json', JSON.stringify(solutions, null, 2) + '\n');
 console.log(`Authored ${levels.length} fixed levels.`);

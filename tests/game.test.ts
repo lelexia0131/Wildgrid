@@ -2,7 +2,7 @@ import { countSolutions } from '../src/game/solver';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import data from '../src/data/levels.json';
-import answers from './solutions.json';
+import answers from '../src/data/solutions.json';
 import { evaluate, occupied, offsets, placementBlock, rotateAround } from '../src/game/rules';
 import type { Level, Placement } from '../src/game/types';
 import { progressForPlay, readSave, writeSave } from '../src/game/storage';

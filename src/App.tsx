@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, Compass, Flag, Grid2X2, Leaf, LockKeyhole, Map, MousePointer2, Redo2, RotateCcw, Settings2, Sparkles, Undo2, Volume2, VolumeX, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, Compass, Flag, Grid2X2, Leaf, LockKeyhole, Map, MousePointer2, RotateCcw, ScrollText, Settings2, Sparkles, Undo2, Volume2, VolumeX, X } from 'lucide-react';
 import { Art, FacilityArt, FootprintSurface, Landscape } from './components/Art';
+import { version } from '../package.json';
 import data from './data/levels.json';
+import answers from './data/solutions.json';
+import { Blueprint } from './components/Blueprint';
 import { Manual } from './components/Manual';
 import { evaluate, key, occupied, placementBlock, rotateAround } from './game/rules';
 import { progressForPlay, readSave, writeSave } from './game/storage';
@@ -9,8 +12,9 @@ import { audio } from './game/audio';
 import type { Cell, FacilityKind, Level, Placement, Shape, TerrainKind } from './game/types';
 
 const levels = data as Level[];
+const solutions = answers as Record<string, Placement[]>;
 const advancedArt: (FacilityKind | TerrainKind)[] = ['tower', 'water', 'forest', 'picnic', 'picnic', 'camp', 'tower', 'picnic', 'cabin', 'picnic', 'cabin', 'fire', 'tower', 'cabin', 'cabin'];
-const levelLabel = (id: number) => `第 ${id} 关`;
+const levelLabel = (id: number) => `day ${id}`;
 const names: Record<FacilityKind | TerrainKind, string> = { camp: '营地', fire: '篝火', tower: '瞭望塔', picnic: '野餐桌', cabin: '林间木屋', water: '水源', forest: '森林', mountain: '山地' };
 const shapeNames: Record<Shape, string> = { single: '单格', domino: '双格', long: '三格', el: 'L 形' };
 const rules: Record<FacilityKind, [string, string]> = { camp: ['至少一格挨着水源（上下左右）', '覆盖地形、重叠设施'], fire: ['上下左右挨着营地', '邻森林（含斜角）'], tower: ['上下左右挨着山地', '邻其他塔（含斜角）'], picnic: ['至少一格挨着营地（上下左右）', '邻篝火（含斜角）'], cabin: ['至少一格挨着森林（上下左右）', '任意一格上下左右挨着水'] };
@@ -39,11 +43,13 @@ export default function App() {
   const toolsRef = useRef<HTMLElement>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [winOpen, setWinOpen] = useState(false);
+  const [blueprintOpen, setBlueprintOpen] = useState(false);
   const [saved, setSaved] = useState(true);
   const wonRef = useRef(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const level = levels[levelId - 1];
+  const blueprintUnlocked = save.completed.includes(levelId);
   const placements = history.present;
   const result = useMemo(() => evaluate(level, placements), [level, placements]);
   const selectedPiece = level.pieces.find(p => p.id === selected);
@@ -72,10 +78,13 @@ export default function App() {
   }, [levelId, placements, screen]);
   useEffect(() => {
     if (screen === 'game' && result.won && !wonRef.current) {
-      wonRef.current = true; setWinOpen(true); setSelected(null); audio.play('win');
-      setSave(s => ({ ...s, completed: [...new Set([...s.completed, levelId])] }));
+      wonRef.current = true; setSelected(null); audio.play('win');
+      if (!save.completed.includes(levelId)) {
+        setWinOpen(true);
+        setSave(s => ({ ...s, completed: [...new Set([...s.completed, levelId])] }));
+      }
     } else if (!result.won) wonRef.current = false;
-  }, [result.won, levelId, screen]);
+  }, [result.won, levelId, screen, save.completed]);
   useEffect(() => {
     if (!notice) return;
     const id = window.setTimeout(() => setNotice(''), 4200);
@@ -83,9 +92,9 @@ export default function App() {
   }, [notice]);
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (settingsOpen || winOpen || manualOpen) { dialog?.showModal(); closeRef.current?.focus(); }
+    if (settingsOpen || winOpen || manualOpen || blueprintOpen) { dialog?.showModal(); closeRef.current?.focus(); }
     else dialog?.close();
-  }, [settingsOpen, winOpen, manualOpen]);
+  }, [settingsOpen, winOpen, manualOpen, blueprintOpen]);
 
   const sound = (name: Parameters<typeof audio.play>[0] = 'click') => { void audio.start().then(() => audio.play(name)); };
   const commit = useCallback((next: Placement[]) => { setHistory(h => ({ past: [...h.past.slice(-79), h.present], present: next, future: [] })); }, []);
@@ -103,13 +112,13 @@ export default function App() {
   }, []);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (screen !== 'game' || settingsOpen || winOpen || manualOpen || (event.target instanceof HTMLElement && ['INPUT', 'TEXTAREA'].includes(event.target.tagName))) return;
+      if (screen !== 'game' || settingsOpen || winOpen || manualOpen || blueprintOpen || (event.target instanceof HTMLElement && ['INPUT', 'TEXTAREA'].includes(event.target.tagName))) return;
       if (event.key === 'Escape') { setSelected(null); setNotice(''); }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); event.shiftKey ? redo() : undo(); }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); redo(); }
     };
     window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey);
-  }, [screen, settingsOpen, winOpen, manualOpen, undo, redo]);
+  }, [screen, settingsOpen, winOpen, manualOpen, blueprintOpen, undo, redo]);
 
   function start(id: number, reset = false) {
     sound(); setSelected(null); setRotations({}); setHover(null); setNotice(''); setWinOpen(false);
@@ -160,16 +169,16 @@ export default function App() {
 
     {screen === 'menu' && <main className="menu-page">
       <div className="menu-art"><Landscape/></div>
-      <div className="menu-copy"><div className="menu-buttons"><button className="primary" onClick={() => start(Math.min(save.current, unlocked))}>{save.progress[save.current]?.length ? '继续旅程' : '开始游戏'}<ArrowRight size={19}/></button><button className="secondary" onClick={() => { sound(); setScreen('levels'); }}><Map size={18}/> 选择关卡</button><button className="secondary" onClick={() => { sound(); setManualOpen(true); }}><BookOpen size={18}/> 说明书</button></div><div className="menu-progress"><span className="progress-dots">{Array.from({ length: levels.length }, (_, i) => <i key={i} className={save.completed.includes(i + 1) ? 'complete' : ''}/>)}</span><span>已完成 {save.completed.length} / {levels.length}</span></div></div>
+      <div className="menu-copy"><div className="menu-buttons"><button className="primary" onClick={() => start(Math.min(save.current, unlocked))}>继续冒险<ArrowRight size={19}/></button><button className="secondary" onClick={() => { sound(); setScreen('levels'); }}><Map size={18}/> 营地日记</button><button className="secondary" onClick={() => { sound(); setManualOpen(true); }}><BookOpen size={18}/> 野外手册</button></div><div className="menu-progress"><span className="progress-dots">{Array.from({ length: levels.length }, (_, i) => <i key={i} className={save.completed.includes(i + 1) ? 'complete' : ''}/>)}</span><span>已完成 {save.completed.length} / {levels.length}</span></div></div>
     </main>}
 
-    {screen === 'levels' && <main className="levels-page"><button className="back-link" onClick={() => { sound(); setScreen('menu'); }}><ArrowLeft size={16}/> 返回营地</button><div className="page-heading"><div><h1>选择关卡</h1></div><div className="completion-count"><Flag size={21}/><strong>{save.completed.length}</strong><span>/ {levels.length} 已完成</span></div></div><div className="level-grid">{levels.map(l => {
+    {screen === 'levels' && <main className="levels-page"><button className="back-link" onClick={() => { sound(); setScreen('menu'); }}><ArrowLeft size={16}/> 返回营地</button><div className="page-heading"><div><h1>营地日记</h1></div><div className="completion-count"><Flag size={21}/><strong>{save.completed.length}</strong><span>/ {levels.length} 已完成</span></div></div><div className="level-grid">{levels.map(l => {
       const locked = l.id > unlocked, complete = save.completed.includes(l.id);
-      return <button key={l.id} className={`level-card ${complete ? 'completed' : ''} ${locked ? 'locked' : ''}`} disabled={locked} onClick={() => start(l.id)}><div className="level-card-top"><span>{String(l.id).padStart(2, '0')}</span>{locked ? <LockKeyhole size={16}/> : complete ? <Check size={18}/> : <ArrowRight size={18}/>}</div>{l.id === 30 ? <div className="level-art-cluster"><Art kind="camp"/><Art kind="cabin"/><Art kind="picnic"/></div> : <Art kind={advancedArt[l.id - 16] || (l.id < 5 ? 'water' : l.id < 8 ? 'fire' : l.id < 10 ? 'tower' : 'camp')}/>}<h2>{levelLabel(l.id)}</h2><span className="level-chapter">{locked ? `完成第 ${l.id - 1} 关解锁` : `${l.size} × ${l.size}`}</span></button>;
+      return <button key={l.id} className={`level-card ${complete ? 'completed' : ''} ${locked ? 'locked' : ''}`} disabled={locked} onClick={() => start(l.id)}><div className="level-card-top"><span>{String(l.id).padStart(2, '0')}</span>{locked ? <LockKeyhole size={16}/> : complete ? <Check size={18}/> : <ArrowRight size={18}/>}</div>{l.id === 30 ? <div className="level-art-cluster"><Art kind="camp"/><Art kind="cabin"/><Art kind="picnic"/></div> : <Art kind={advancedArt[l.id - 16] || (l.id < 5 ? 'water' : l.id < 8 ? 'fire' : l.id < 10 ? 'tower' : 'camp')}/>}<h2>{levelLabel(l.id)}</h2><span className="level-chapter">{locked ? `完成 ${levelLabel(l.id - 1)} 解锁` : `${l.size} × ${l.size}`}</span></button>;
     })}</div></main>}
 
     {screen === 'game' && <main className="game-page">
-      <div className="game-heading"><div className="game-title"><button className="icon-button" aria-label="返回关卡选择" onClick={() => { sound(); setScreen('levels'); }}><ArrowLeft size={20}/></button><div><h1>{levelLabel(level.id)}</h1></div></div>{result.won && <div className="status-pill finished"><span/>规划完成</div>}</div>
+      <div className="game-heading"><div className="game-title"><button className="icon-button" aria-label="返回营地日记" onClick={() => { sound(); setScreen('levels'); }}><ArrowLeft size={20}/></button><div><h1>{levelLabel(level.id)}</h1></div></div>{result.won && <div className="status-pill finished"><span/>规划完成</div>}</div>
       <div className="play-layout"><section ref={boardRef} className="board-section" aria-label="营地棋盘"><div className="board-topline"><span><Compass size={16}/> 营地规划图</span></div>
         <div className="board-with-clues" style={{ '--size': level.size } as React.CSSProperties}>
           <div className="clue-corner"><Leaf size={17}/></div><div className="column-clues">{level.cols.map((target, i) => <Dashes key={i} target={target} used={result.cols[i]} column/>)}</div>
@@ -218,15 +227,15 @@ export default function App() {
       })}</div>
       {save.settings.facilityTips && <div className="rule-dock" aria-live="polite">{shownKind ? <><strong>{names[shownKind]}</strong><span><b>要求</b>{rules[shownKind][0]}</span><span><b>禁止</b>{rules[shownKind][1]}</span>{shownShape !== 'single' && <span><b>提示</b>点击旋转</span>}</> : <p>选择或悬停设施，查看要求与禁止事项。</p>}</div>}
       </section>
-      <section className="operations"><h2>营地工具</h2><button className="wide-operation" disabled={!selectedPiece || selectedPiece.shape === 'single'} onClick={rotate}><RotateCcw size={17}/><span>旋转</span></button><div className="history-buttons"><button disabled={!history.past.length} onClick={undo}><Undo2 size={18}/><span>撤销</span></button><button disabled={!history.future.length} onClick={redo}><Redo2 size={18}/><span>重做</span></button></div><button className="wide-operation" onClick={restart}><RotateCcw size={17}/><span>重新游玩</span></button><button className="wide-operation" onClick={() => { sound(); setScreen('levels'); }}><Grid2X2 size={17}/><span>选择关卡</span><ChevronRight size={15}/></button></section>
+      <section className="operations"><h2>营地工具</h2><button className="wide-operation" disabled={!selectedPiece || selectedPiece.shape === 'single'} onClick={rotate}><RotateCcw size={17}/><span>旋转</span></button><div className="history-buttons"><button disabled={!history.past.length} onClick={undo}><Undo2 size={18}/><span>撤销</span></button><button className="blueprint-button" disabled={!blueprintUnlocked} title={blueprintUnlocked ? '查看图纸' : '通关后解锁'} onClick={() => { sound(); setBlueprintOpen(true); }}><ScrollText size={18}/><span>图纸</span></button></div><button className="wide-operation" onClick={restart}><RotateCcw size={17}/><span>重新游玩</span></button><button className="wide-operation" onClick={() => { sound(); setScreen('levels'); }}><Grid2X2 size={17}/><span>营地日记</span><ChevronRight size={15}/></button></section>
       </aside></div>
       <div className={`guide-strip ${invalidCount ? 'warning' : ''}`} role="status" aria-live="polite"><span className="guide-icon">{invalidCount ? '!' : <Sparkles size={18}/>}</span><div><p>{notice === '已经被占用' ? notice : errors.join('；') || notice || level.tip}</p></div>{invalidCount > 0 && <span className="issue-count">{invalidCount} 处待调整</span>}</div>
       {!saved && <div className="save-error" role="status">浏览器存储不可用，进度暂未保存</div>}
     </main>}
 
-    <dialog ref={dialogRef} className={`modal ${manualOpen ? 'manual-modal' : ''}`} onCancel={() => { setSettingsOpen(false); setWinOpen(false); setManualOpen(false); }} onClick={e => { if (e.target === e.currentTarget) { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) { setSettingsOpen(false); setWinOpen(false); setManualOpen(false); } } }}>
-      <button ref={closeRef} className="modal-close icon-button" aria-label="关闭" onClick={() => { setSettingsOpen(false); setWinOpen(false); setManualOpen(false); }}><X size={19}/></button>
-      {manualOpen ? <Manual/> : settingsOpen ? <><h2>设置</h2><div className="volume-control"><label htmlFor="music-volume"><span>背景音乐</span><output>{Math.round(save.settings.music * 100)}%</output></label><input id="music-volume" type="range" min="0" max="100" value={Math.round(save.settings.music * 100)} onChange={e => setSave(s => ({ ...s, settings: { ...s.settings, music: Number(e.target.value) / 100 } }))}/></div><div className="volume-control"><label htmlFor="effects-volume"><span>交互音效</span><output>{Math.round(save.settings.effects * 100)}%</output></label><input id="effects-volume" type="range" min="0" max="100" value={Math.round(save.settings.effects * 100)} onChange={e => setSave(s => ({ ...s, settings: { ...s.settings, effects: Number(e.target.value) / 100 } }))} onPointerUp={() => sound('place')}/></div><button className={`mute-setting ${save.settings.muted ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.muted} onClick={() => setSave(s => ({ ...s, settings: { ...s.settings, muted: !s.settings.muted } }))}><span>{save.settings.muted ? <VolumeX size={18}/> : <Volume2 size={18}/>} 静音模式</span><i/></button><button className={`mute-setting ${save.settings.facilityTips ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.facilityTips} onClick={() => setSave(s => ({ ...s, settings: { ...s.settings, facilityTips: !s.settings.facilityTips } }))}><span><MousePointer2 size={18}/> 设施提示</span><i/></button></> : <div className="win-content"><div className="win-emblem"><Art kind="camp"/><span><Check size={18}/></span></div><h2>规划完成</h2><div className="win-level">{levelLabel(levelId)}</div><button className="primary" onClick={() => levelId < levels.length ? start(levelId + 1) : (setWinOpen(false), setScreen('levels'))}>{levelId < levels.length ? '下一关' : '回看旅程'}<ArrowRight size={18}/></button><button className="text-button" onClick={restart}><RotateCcw size={15}/> 重新游玩</button></div>}
+    <dialog ref={dialogRef} className={`modal ${blueprintOpen ? 'blueprint-modal' : manualOpen ? 'manual-modal' : ''}`} onCancel={() => { setSettingsOpen(false); setWinOpen(false); setManualOpen(false); setBlueprintOpen(false); }} onClick={e => { if (e.target === e.currentTarget) { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) { setSettingsOpen(false); setWinOpen(false); setManualOpen(false); setBlueprintOpen(false); } } }}>
+      <button ref={closeRef} className="modal-close icon-button" aria-label="关闭" onClick={() => { setSettingsOpen(false); setWinOpen(false); setManualOpen(false); setBlueprintOpen(false); }}><X size={19}/></button>
+      {blueprintOpen ? <Blueprint level={level} placements={solutions[levelId]}/> : manualOpen ? <Manual/> : settingsOpen ? <><h2>设置</h2><div className="volume-control"><label htmlFor="music-volume"><span>背景音乐</span><output>{Math.round(save.settings.music * 100)}%</output></label><input id="music-volume" type="range" min="0" max="100" value={Math.round(save.settings.music * 100)} onChange={e => setSave(s => ({ ...s, settings: { ...s.settings, music: Number(e.target.value) / 100 } }))}/></div><div className="volume-control"><label htmlFor="effects-volume"><span>交互音效</span><output>{Math.round(save.settings.effects * 100)}%</output></label><input id="effects-volume" type="range" min="0" max="100" value={Math.round(save.settings.effects * 100)} onChange={e => setSave(s => ({ ...s, settings: { ...s.settings, effects: Number(e.target.value) / 100 } }))} onPointerUp={() => sound('place')}/></div><button className={`mute-setting ${save.settings.muted ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.muted} onClick={() => setSave(s => ({ ...s, settings: { ...s.settings, muted: !s.settings.muted } }))}><span>{save.settings.muted ? <VolumeX size={18}/> : <Volume2 size={18}/>} 静音模式</span><i/></button><button className={`mute-setting ${save.settings.facilityTips ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.facilityTips} onClick={() => setSave(s => ({ ...s, settings: { ...s.settings, facilityTips: !s.settings.facilityTips } }))}><span><MousePointer2 size={18}/> 设施提示</span><i/></button><p className="settings-note">v{version}</p></> : <div className="win-content"><div className="win-emblem"><Art kind="camp"/><span><Check size={18}/></span></div><h2>规划完成</h2><div className="win-level">{levelLabel(levelId)}</div><button className="primary" onClick={() => levelId < levels.length ? start(levelId + 1) : (setWinOpen(false), setScreen('levels'))}>{levelId < levels.length ? '下一关' : '回看旅程'}<ArrowRight size={18}/></button><button className="text-button" onClick={restart}><RotateCcw size={15}/> 重新游玩</button></div>}
     </dialog>
   </div>;
 }

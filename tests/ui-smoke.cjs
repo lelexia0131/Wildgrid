@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { mkdirSync, writeFileSync } = require('node:fs');
 const path = require('node:path');
 const levels = require('../src/data/levels.json');
-const solutions = require('./solutions.json');
+const solutions = require('../src/data/solutions.json');
 
 const root = path.resolve(__dirname, '..');
 app.disableHardwareAcceleration();
@@ -46,9 +46,9 @@ app.whenReady().then(async () => {
     const rect = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return {width:r.width,height:r.height}; };
     return {board:rect('.board-section'),tools:rect('.tools-panel'),list:rect('.facility-list'),operations:rect('.operations'),dock:!!document.querySelector('.rule-dock'),overflow:document.documentElement.scrollWidth>innerWidth};
   })()`);
-  async function load(progress = [], tips = true) {
+  async function load(progress = [], tips = true, current = 30, completed = Array.from({length:29},(_,i)=>i+1)) {
     await win.loadFile(path.join(root, 'dist', 'index.html'));
-    await js(`localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({ version: 1, completed: Array.from({length:29},(_,i)=>i+1), current:30, progress:{30:progress}, settings:{music:.35,effects:.65,muted:false,facilityTips:tips} }))})`);
+    await js(`localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({ version: 1, completed, current, progress:{[current]:progress}, settings:{music:.35,effects:.65,muted:false,facilityTips:tips} }))})`);
     await win.loadFile(path.join(root, 'dist', 'index.html'));
     await settle();
     await js(audioProbe);
@@ -67,11 +67,18 @@ app.whenReady().then(async () => {
       await contents.debugger.sendCommand('Emulation.setTouchEmulationEnabled', {enabled:viewport.touch});
       await load();
       console.log('UI viewport:', JSON.stringify(viewport));
+      assert.equal(await js(`document.querySelector('.menu-buttons .primary').textContent`), '继续冒险');
+      assert.equal(await js(`document.querySelector('.menu-buttons button:last-child').textContent.trim()`), '野外手册');
       assert.equal(await js(`Boolean(window.__audioContext)`), false);
       await click('.menu-buttons .primary', viewport.touch);
       const before = await geometry();
       assert.equal(before.overflow, false);
       assert.ok(Math.abs(before.board.height-before.tools.height)<1, JSON.stringify(before));
+      assert.ok(before.operations.height<before.tools.height*.3, JSON.stringify(before));
+      assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), true);
+      assert.equal(await js(`document.querySelector('.operations').textContent.includes('重做')`), false);
+      await click('.blueprint-button');
+      assert.equal(await js(`document.querySelector('dialog').open`), false);
       assert.ok(await js(`document.querySelectorAll('.board > .tile').length === 64`));
       await click('[aria-label^="选择L 形林间木屋"]', viewport.touch);
       const beforeRotation = await js(`document.querySelector('[aria-label^="选择L 形林间木屋"] .roof-plane').getAttribute('d')`);
@@ -118,14 +125,70 @@ app.whenReady().then(async () => {
       await click(`.board > .tile:nth-child(${picnic.r*8+picnic.c+1})`, viewport.touch);
       assert.equal(await js(`document.querySelectorAll('.placed-facility-art[data-kind="picnic"]').length`), 1);
       assert.equal(await js(`document.querySelector('.rule-dock')`), null);
-      await click('.game-title [aria-label="返回关卡选择"]', viewport.touch);
+      await click('.game-title [aria-label="返回营地日记"]', viewport.touch);
       await js(`document.querySelector('.level-grid').scrollTop=9999`);
       assert.ok(await js(`document.querySelector('.level-grid').scrollTop>0`));
       await click('.levels-page .back-link', viewport.touch);
       await click('.menu-buttons button:last-child', viewport.touch);
       assert.ok(await js(`document.querySelector('.manual-content').textContent.includes('黄色短杠') && document.querySelector('.manual-content').textContent.includes('林间木屋') && document.querySelector('.manual-content').textContent.includes('点击旋转')`));
+      const manual = await js(`document.querySelector('.manual-content').textContent`);
+      assert.ok(manual.includes('图纸') && manual.includes('通关后解锁') && manual.includes('首次通关'));
+      assert.equal(manual.includes('重做'), false);
       await js(`document.querySelector('.manual-content').scrollTop=9999`);
       assert.ok(await js(`document.querySelector('.manual-content').scrollTop>0`));
+      await click('.modal-close', viewport.touch);
+      // First completion unlocks the blueprint; replaying never repeats the win dialog.
+      await load([], true, 1, []);
+      await click('.menu-buttons .primary', viewport.touch);
+      await click('.facility-card', viewport.touch);
+      await click('.board > .tile:nth-child(16)', viewport.touch);
+      assert.equal(await js(`document.querySelector('dialog').open && !!document.querySelector('.win-content')`), true);
+      assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), false);
+      await click('.modal-close', viewport.touch);
+      const solvedSave = await js(`localStorage.getItem('wildgrid-save-v1')`);
+      await click('.blueprint-button', viewport.touch);
+      assert.equal(await js(`document.querySelector('dialog').open && !!document.querySelector('.blueprint-board')`), true);
+      assert.equal(await js(`document.querySelectorAll('.blueprint-board > .tile').length`), 36);
+      assert.equal(await js(`document.querySelectorAll('.blueprint-board .placed-camp').length`), 1);
+      assert.equal(await js(`document.querySelectorAll('.blueprint-board button').length`), 0);
+      await js(`window.dispatchEvent(new KeyboardEvent('keydown', {key:'z',ctrlKey:true}))`);
+      await settle();
+      assert.equal(await js(`localStorage.getItem('wildgrid-save-v1')`), solvedSave);
+      await click('.modal-close', viewport.touch);
+      await js(`Array.from(document.querySelectorAll('.operations button')).find(el=>el.textContent.includes('重新游玩')).click()`);
+      await settle();
+      assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), false);
+      await click('.facility-card', viewport.touch);
+      await click('.board > .tile:nth-child(16)', viewport.touch);
+      assert.equal(await js(`document.querySelector('dialog').open`), false);
+      await win.loadFile(path.join(root, 'dist', 'index.html'));
+      await settle();
+      await click('.menu-buttons .primary', viewport.touch);
+      assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), false);
+      await click('.blueprint-button', viewport.touch);
+      assert.equal(await js(`document.querySelectorAll('.blueprint-board .placed-camp').length`), 1);
+      await js(`document.querySelector('dialog').dispatchEvent(new Event('cancel', {cancelable:true}))`);
+      await settle();
+      assert.equal(await js(`document.querySelector('dialog').open`), false);
+      await click('.facility-card', viewport.touch);
+      await click('.board > .tile:nth-child(16)', viewport.touch);
+      assert.equal(await js(`document.querySelector('dialog').open`), false);
+      assert.deepEqual(await js(`JSON.parse(localStorage.getItem('wildgrid-save-v1')).completed`), [1]);
+      // The largest blueprint includes every multi-cell facility and fits each viewport.
+      await load([], true, 30, Array.from({length:30},(_,i)=>i+1));
+      await click('.menu-buttons .primary', viewport.touch);
+      await click('.blueprint-button', viewport.touch);
+      const blueprint = await js(`(() => {
+        const board=document.querySelector('.blueprint-board'), dialog=document.querySelector('dialog');
+        const r=board.getBoundingClientRect();
+        return {tiles:board.querySelectorAll(':scope > .tile').length,multi:Array.from(board.querySelectorAll('.placed-facility-art')).map(el=>({id:el.dataset.pieceId,rotation:Number(el.dataset.rotation)})),single:board.querySelectorAll('.tile.placed:not(.placed-multi)').length,fits:r.width>0 && r.left>=0 && r.right<=innerWidth && dialog.scrollWidth<=dialog.clientWidth+1};
+      })()`);
+      assert.equal(blueprint.tiles, 64);
+      const multiAnswer = solutions[30].filter(at=>levels[29].pieces.find(p=>p.id===at.id).shape!=='single');
+      assert.deepEqual(blueprint.multi, multiAnswer.map(at=>({id:at.id,rotation:at.rotation})));
+      assert.equal(blueprint.single, levels[29].pieces.length-multiAnswer.length);
+      assert.ok(blueprint.fits, JSON.stringify(blueprint));
+      writeFileSync(path.join(output, `blueprint-${viewport.width}.png`), (await contents.capturePage()).toPNG());
       await click('.modal-close', viewport.touch);
     }
     // Every rotated footprint keeps doors, entrances and table legs upright.
@@ -156,7 +219,7 @@ app.whenReady().then(async () => {
     assert.deepEqual(failures, []);
     writeFileSync(path.join(output,'results.json'), JSON.stringify({measurements,rotations},null,2));
     console.log('UI PASS:', JSON.stringify(measurements));
-    console.log('Four orientations, footprint hit targets, touch pickup/placement/rotation/sliders, audio activation/volume/mute, live tips, independent manual and scrolling PASS.');
+    console.log('Blueprint unlock and complete answers, first-completion dialog, field manual, compact tools, four orientations, touch, audio and scrolling PASS.');
     clearTimeout(deadline); app.exit(0);
   } catch (error) { writeFileSync(path.join(output,'failure.png'), (await contents.capturePage()).toPNG()); console.error(error); clearTimeout(deadline); app.exit(1); }
 });

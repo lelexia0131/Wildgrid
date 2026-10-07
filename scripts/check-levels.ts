@@ -1,7 +1,7 @@
 import { solveLevel } from '../src/game/solver';
 import { evaluate } from '../src/game/rules';
 import data from '../src/data/levels.json';
-import answers from '../tests/solutions.json';
+import answers from '../src/data/solutions.json';
 import type { Level, Placement } from '../src/game/types';
 const levels = data as Level[];
 const solutions = answers as Record<string, Placement[]>;

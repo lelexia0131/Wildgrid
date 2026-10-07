@@ -67,7 +67,7 @@ Windows 桌面版使用 Electron 加载本地 `wildgrid://game` 资源，无需�
 
 ## Android 测试 APK
 
-Android 使用 Capacitor 8 封装同一份 `dist`，应用名“野格”，包名 `com.wildgrid.game`，versionName `0.2.0`、versionCode `1`。需要 Node.js 22+、JDK 21 和 Android SDK 36；设置 `ANDROID_HOME` / `ANDROID_SDK_ROOT`，`JAVA_HOME` 指向 JDK 21。Windows 构建脚本也会查找 SDK 同级 AndroidStudio 或标准安装目录中的 JDK。
+Android 使用 Capacitor 8 封装同一份 `dist`，应用名“野格”，包名 `com.wildgrid.game`，versionName `0.2.1`、versionCode `2`。需要 Node.js 22+、JDK 21 和 Android SDK 36；设置 `ANDROID_HOME` / `ANDROID_SDK_ROOT`，`JAVA_HOME` 指向 JDK 21。Windows 构建脚本也会查找 SDK 同级 AndroidStudio 或标准安装目录中的 JDK。
 
 ```sh
 npm run android:sync # 构建 Web、生成游戏图标、同步 Android
@@ -75,7 +75,7 @@ npm run android:open # 在 Android Studio 打开原生容器
 npm run android:apk  # 使用 Gradle wrapper 生成签名的 debug APK
 ```
 
-APK 输出：`android/app/build/outputs/apk/debug/app-debug.apk`。可以直接安装测试，或执行 `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`。Android 源码保留在仓库，APK、Gradle 缓存和同步的 Web 构建产物均忽略。
+APK 输出：`release/野格-v0.2.1.apk`，Gradle 原始输出仍位于 `android/app/build/outputs/apk/debug/app-debug.apk`。可以直接安装测试，或执行 `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`。Android 源码保留在仓库，APK、Gradle 缓存和同步的 Web 构建产物均忽略。
 
 手机竖屏采用大棋盘与下方固定高度设施区，横屏采用棋盘与工具并排；列表、关卡选择和说明书各自可滚动。安全区使用 `env(safe-area-inset-*)` 和 Capacitor 的 inset 变量兼容旧 WebView。沿用 localStorage 保存进度和设置，强制退出再启动仍可恢复；清除应用数据或卸载会删除存档。音频仅在第一次用户交互时启动，后台暂停。Android 使用本地打包资源，不注册 Web Service Worker，避免旧缓存覆盖新版 APK。
 

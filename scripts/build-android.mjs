@@ -1,4 +1,4 @@
-import { existsSync, statSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
@@ -21,4 +21,8 @@ if (result.error) throw result.error;
 if (result.status !== 0) process.exit(result.status || 1);
 const apk = resolve('android/app/build/outputs/apk/debug/app-debug.apk');
 if (!existsSync(apk) || !statSync(apk).size) throw new Error('Gradle finished without a debug APK.');
-console.log(`APK: ${apk} (${statSync(apk).size} bytes)`);
+const { version } = JSON.parse(readFileSync(resolve('package.json'), 'utf8'));
+const output = resolve(`release/野格-v${version}.apk`);
+mkdirSync(dirname(output), { recursive: true });
+copyFileSync(apk, output);
+console.log(`APK: ${output} (${statSync(output).size} bytes)`);

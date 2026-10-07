@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.2.1",
   "type": "module",
-  "description": "野格 · 原创露营逻辑益智游戏",
+  "description": "野格",
   "author": "Wildgrid",
   "main": "electron/main.cjs",
   "scripts": {
