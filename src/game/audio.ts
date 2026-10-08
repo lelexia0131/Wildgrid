@@ -10,7 +10,7 @@ class WildernessAudio {
   private step = 0;
   private next = 0;
   private scene: 'menu' | 'game' = 'menu';
-  private settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true };
+  private settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true };
   private melody = [72,0,76,79,0,76,74,0, 72,0,67,0,69,72,0,0, 69,0,72,76,0,74,72,0, 67,0,64,0,67,69,0,0, 72,0,76,79,81,0,79,76, 74,0,72,0,69,67,0,0, 69,72,0,74,76,0,72,0, 67,0,69,0,72,0,0,0];
   setScene(scene: 'menu' | 'game') { this.scene = scene; }
   setSettings(settings: Settings) {

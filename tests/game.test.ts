@@ -10,11 +10,31 @@ import { progressForPlay, readSave, writeSave } from '../src/game/storage';
 const levels = data as Level[];
 const solutions = answers as Record<string, Placement[]>;
 test('reopening a solved level starts fresh while unfinished play resumes', () => {
-  const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true } };
+  const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true } };
   assert.deepEqual(progressForPlay(save, levels[0]), []);
   assert.deepEqual(progressForPlay(save, levels[1]), solutions[2].slice(0, 1));
   assert.deepEqual(save.completed, [1, 2]);
   assert.deepEqual(save.progress[1], solutions[1]);
+});
+test('continuous placement defaults on for new and old saves and preserves disabled state', () => {
+  const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  let stored = 'null';
+  Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: { getItem: () => stored, setItem: (_key: string, value: string) => { stored = value; } } });
+  try {
+    assert.equal(readSave(levels).settings.continuousPlacement, true);
+    stored = JSON.stringify({ version: 1, completed: [1], current: 1, progress: {}, settings: { music: .35, effects: .65, muted: false, facilityTips: false } });
+    const save = readSave(levels);
+    assert.equal(save.settings.continuousPlacement, true);
+    save.settings.continuousPlacement = false;
+    assert.equal(writeSave(save), true);
+    const restored = readSave(levels);
+    assert.equal(restored.settings.continuousPlacement, false);
+    assert.equal(restored.settings.facilityTips, false);
+    assert.deepEqual(restored.completed, [1]);
+  } finally {
+    if (previous) Object.defineProperty(globalThis, 'localStorage', previous);
+    else Reflect.deleteProperty(globalThis, 'localStorage');
+  }
 });
 test('facility tip setting preserves disabled state and defaults on for old saves', () => {
   const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');

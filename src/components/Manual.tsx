@@ -34,7 +34,7 @@ export function Manual() {
   return <div className="manual-content">
     <div className="manual-intro"><h2>野外手册</h2></div>
     <section className="manual-sandbox"><h3>模式选择与本地地图</h3><p>首页点击「开始冒险」进入「模式选择」，可以继续冒险、进入沙盒模式，或打开本地地图。沙盒模式可以创造自己的地图，也可以导入朋友分享的地图代码。</p><div className="manual-cards">
-      <article><header><Art kind="camp"/><h4>创造地图</h4></header><p>选择 6×6 或 8×8，开始规划营地。设施库提供全部现有设施，选中后可以连续放置，放下一个仍保留类型和方向；设施形状、地形要求和放置规则与冒险相同。</p><p>摆放设施后自动生成行列占格目标。导入游玩时，这些设施会回到待放区，由玩家重新求解。</p></article>
+      <article><header><Art kind="camp"/><h4>创造地图</h4></header><p>选择 6×6 或 8×8，开始规划营地。设施库提供全部现有设施，默认开启连续放置，放下一个仍保留类型和方向，可在设置中关闭。设施形状、地形要求和放置规则与冒险相同。</p><p>摆放设施后自动生成行列占格目标。导入游玩时，这些设施会回到待放区，由玩家重新求解。</p></article>
       <article><header><Art kind="water"/><h4>编辑地形与设施</h4></header><p>选择水源、森林或山地，点击空格放置，再次点击同一格移除。地形不能覆盖设施，先拿起设施再修改。</p><p>点击已放设施拿起，再点空地移动；切换地形按钮可收回拿起的设施。多格设施选中后点击旋转；撤销可以恢复地形、添加、收回、移动和旋转操作。</p></article>
       <article><header><Art kind="tower"/><h4>保存与营地质检</h4></header><p>创造地图的营地工具第一排是「旋转、撤销」，第二排是「保存、导出地图」。点击保存或导出地图后，会先自动检查设施是否合法，以及关卡是否只有唯一解。</p><p>质检通过后，保存会把地图加入本地地图，导出会生成分享代码。无解、多个解或设施不合法时，保存和导出都不会生效；修改地图后再次保存或导出会重新质检。</p></article>
       <article><header><Art kind="cabin"/><h4>分享与导入</h4></header><p>点击导出地图并通过质检后，WG1: 开头的地图代码会自动复制到剪贴板，也可以在弹窗中再次复制。</p><p>回到沙盒菜单选择导入地图，粘贴地图代码后点击开始游玩。导入后从空棋盘放置设施，不能继续编辑地图；营地工具中的「保存」可以把地图和当前游玩进度存入本地地图。完成或返回都不会改变冒险存档和解锁进度。</p></article>
@@ -49,6 +49,6 @@ export function Manual() {
     </div></section>
     <section><h3>设施图鉴</h3><div className="manual-cards">{facilities.map(f=><article key={f.kind}><header><Art kind={f.kind}/><h4>{f.name}</h4></header><p><b>要求　</b>{f.require}</p><p><b>禁止　</b>{f.forbid}</p><div className="manual-shapes">{f.shapes.map(shape=><ShapeView key={shape} shape={shape}/>)}</div><div className="manual-examples"><Example good map={f.good}>{f.require}</Example><Example map={f.bad}>{f.why}</Example></div></article>)}</div></section>
     <section><h3>点击旋转</h3><p>只有多格设施需要旋转。选中设施后，点击旋转。</p><div className="manual-rotation"><CampArt shape="domino"/><span>→</span><CampArt shape="domino" rotation={1}/><ShapeView shape="el"/>{[1,2,3].map(r=><span key={r}> → <ShapeView shape="el" rotation={r}/></span>)}</div></section>
-    <section><h3>操作与设置</h3><ol><li>选择设施：点击待放设施卡片；数量多时在列表内滑动或滚动。</li><li>放置设施：选中后，点击空地。多格设施从点击位置开始，按当前形状展开。</li><li>拿起设施：点击地图上的已放设施，再选择新的空地。</li><li>点击旋转：调整选中的多格设施方向。</li><li>撤销：回退上一步操作。</li><li>图纸：冒险中当前 day 通关后解锁；本地地图进入后即可使用。点击可打开图纸弹窗，查看所有设施放置完成后的答案；重新游玩后仍可查看。</li><li>重新游玩：清空当前地图重新开始。每个 day 只有首次通关会弹出“规划完成”。</li><li>打开设置：点击右上角设置按钮。</li></ol><div className="manual-settings"><p><b>背景音乐</b>　调节背景音乐音量</p><p><b>交互音效</b>　调节操作音效音量</p><p><b>静音模式</b>　统一关闭声音</p><p><b>设施提示</b>　显示或隐藏设施区域内的规则卡，创造地图时也会即时生效</p></div></section>
+    <section><h3>操作与设置</h3><ol><li>选择设施：点击待放设施卡片；数量多时在列表内滑动或滚动。</li><li>放置设施：选中后，点击空地。多格设施从点击位置开始，按当前形状展开。</li><li>拿起设施：点击地图上的已放设施，再选择新的空地。</li><li>点击旋转：调整选中的多格设施方向。</li><li>撤销：回退上一步操作。</li><li>图纸：冒险中当前 day 通关后解锁；本地地图进入后即可使用。点击可打开图纸弹窗，查看所有设施放置完成后的答案；重新游玩后仍可查看。</li><li>重新游玩：清空当前地图重新开始。每个 day 只有首次通关会弹出“规划完成”。</li><li>打开设置：点击右上角设置按钮。</li></ol><div className="manual-settings"><p><b>背景音乐</b>　调节背景音乐音量</p><p><b>交互音效</b>　调节操作音效音量</p><p><b>静音模式</b>　统一关闭声音</p><p><b>设施提示</b>　显示或隐藏设施区域内的规则卡，创造地图时也会即时生效</p><p><b>连续放置</b>　默认开启，放置后保留同类型、同形状设施的选择和方向，数量用完时取消选择；关闭后每次放置都会取消选择</p></div></section>
   </div>;
 }

@@ -9,4 +9,4 @@ export type Piece = { id: string; kind: FacilityKind; shape: Shape };
 export type Placement = Cell & { id: string; rotation: number };
 export type Level = { id: number; name: string; chapter: string; tip: string; size: number; terrain: Terrain[]; pieces: Piece[]; rows: number[]; cols: number[] };
 export type Issue = { status: Status; reasons: string[] };
-export type Settings = { music: number; effects: number; muted: boolean; facilityTips: boolean };
+export type Settings = { music: number; effects: number; muted: boolean; facilityTips: boolean; continuousPlacement: boolean };

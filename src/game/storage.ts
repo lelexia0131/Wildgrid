@@ -1,7 +1,7 @@
 import type { Level, Placement, Settings } from './types';
 import { evaluate } from './rules';
 export type Save = { version: 1; completed: number[]; current: number; progress: Record<number, Placement[]>; settings: Settings };
-const fresh = (): Save => ({ version: 1, completed: [], current: 1, progress: {}, settings: { music: 0.35, effects: 0.65, muted: false, facilityTips: true } });
+const fresh = (): Save => ({ version: 1, completed: [], current: 1, progress: {}, settings: { music: 0.35, effects: 0.65, muted: false, facilityTips: true, continuousPlacement: true } });
 const volume = (v: unknown, fallback: number) => typeof v === 'number' && Number.isFinite(v) ? Math.max(0, Math.min(1, v)) : fallback;
 export function progressForPlay(save: Save, level: Level): Placement[] {
   const progress = save.progress[level.id] || [];
@@ -21,7 +21,7 @@ export function readSave(levels: Level[]): Save {
         seen.add(p.id); return true;
       }) : [];
     }
-    save.settings = { music: volume(raw.settings?.music, .35), effects: volume(raw.settings?.effects, .65), muted: raw.settings?.muted === true, facilityTips: raw.settings?.facilityTips !== false };
+    save.settings = { music: volume(raw.settings?.music, .35), effects: volume(raw.settings?.effects, .65), muted: raw.settings?.muted === true, facilityTips: raw.settings?.facilityTips !== false, continuousPlacement: raw.settings?.continuousPlacement !== false };
     return save;
   } catch { return fresh(); }
 }

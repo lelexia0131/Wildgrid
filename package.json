@@ -13,7 +13,7 @@
     "test": "tsx --test tests/*.test.ts",
     "levels:check": "tsx scripts/check-levels.ts",
     "test:desktop": "electron tests/desktop-smoke.cjs",
-    "test:ui": "electron tests/ui-smoke.cjs",
+    "test:ui": "electron tests/ui-smoke.cjs && electron tests/continuous-placement-ui.cjs",
     "icons": "node scripts/build-icons.mjs",
     "android:icons": "node scripts/build-android-icons.mjs",
     "android:sync": "npm run build && npm run android:icons && cap sync android",
