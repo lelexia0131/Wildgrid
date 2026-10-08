@@ -127,9 +127,8 @@ export function SandboxMenu({ screen, onBack, onContinue, onSurvival, onNavigate
               <span className="local-map-card-art"><Art kind="fire"/></span><span><strong>{map.name}</strong><small className={map.survival ? "survival-card-state" : undefined}>{map.survival ? `荒野求生 · ${map.survival.difficulty}难 · ${map.survival.completed ? '已通关' : '未通关'}` : `${map.draft.level.size}×${map.draft.level.size} · ${map.draft.level.pieces.length} 处设施`}</small></span><ArrowRight size={16}/>
             </button>)}
           </div>
-          <section className="local-map-detail" aria-label={selectedMap.name}>
+          <section className={`local-map-detail${selectedMap.survival ? ' survival-map-detail' : ''}`} aria-label={selectedMap.name}>
             <div className="local-map-heading"><h2 title={selectedMap.name}>{selectedMap.name}</h2><button className="icon-button local-map-rename" aria-label="编辑地图名称" title="编辑地图名称" onClick={() => editMap('rename')}><Pencil size={16}/></button><span>{selectedMap.draft.level.size}×{selectedMap.draft.level.size}</span></div>
-            {selectedMap.survival && <p className="survival-map-state">荒野求生 · {selectedMap.survival.difficulty}难 · {selectedMap.survival.completed ? '已通关，图纸永久解锁' : '未通关，图纸与地图编辑待解锁'}</p>}
             <div className="local-map-content">
               <div className="local-map-view"><h3>地图样貌</h3><LocalMapPreview map={selectedMap}/></div>
               <div className="local-map-items"><h3>地图放置物品</h3><ul>{items.map(piece => <li key={`${piece.kind}_${piece.shape}`}><span className="local-map-item-art"><FacilityArt kind={piece.kind} shape={piece.shape}/></span><span><strong>{facilityNames[piece.kind]}</strong><small>{shapeNames[piece.shape]}</small></span><b>×{selectedMap.draft.level.pieces.filter(item => item.kind === piece.kind && item.shape === piece.shape).length}</b></li>)}</ul></div>

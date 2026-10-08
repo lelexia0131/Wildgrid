@@ -46,19 +46,18 @@
 .survival-tool-row { display: flex; gap: 6px; }
 .survival-tool-row > button { flex: 1; min-width: 0; justify-content: center; }
 .survival-badge > img { width: 100%; height: 100%; display: block; }
-.survival-map-state { font-size: 16px; color: #52684c; line-height: 1.6; margin: 12px 0; }
 .local-map-card .survival-card-state { overflow-wrap: anywhere; }
 .local-map-edit { font-size: 16px; min-height: 48px; }
 .local-map-card:has(.survival-card-state) { min-height: 92px; }
-.local-map-detail:has(.survival-map-state) { overflow-y: auto; }
-.local-map-detail:has(.survival-map-state) .local-map-content { display: flex; flex-wrap: wrap; flex: none; gap: 20px; }
-.local-map-detail:has(.survival-map-state) .local-map-view { container-type: normal; flex: 1 1 260px; }
-.local-map-detail:has(.survival-map-state) .local-map-preview { width: min(100%, 430px); height: auto; aspect-ratio: 1; }
-.local-map-detail:has(.survival-map-state) .local-map-items { flex: 1 1 250px; }
-.local-map-detail:has(.survival-map-state) .local-map-items ul { grid-auto-rows: minmax(66px, auto); }
-.local-map-detail:has(.survival-map-state) .local-map-items strong, .local-map-detail:has(.survival-map-state) .local-map-items small, .local-map-detail:has(.survival-map-state) .local-map-items b, .local-map-detail:has(.survival-map-state) .local-map-content h3 { line-height: 1.5; white-space: normal; }
-.local-map-detail:has(.survival-map-state) .local-map-actions { position: sticky; bottom: -12px; background: #fafbf0; padding: 12px 0; }
-.local-map-detail:has(.survival-map-state) .local-map-actions > button { min-height: 48px; height: auto; padding: 12px 8px; white-space: normal; }
+.local-map-detail.survival-map-detail { overflow-y: auto; }
+.local-map-detail.survival-map-detail .local-map-content { display: flex; flex-wrap: wrap; flex: none; gap: 20px; }
+.local-map-detail.survival-map-detail .local-map-view { container-type: normal; flex: 1 1 260px; }
+.local-map-detail.survival-map-detail .local-map-preview { width: min(100%, 430px); height: auto; aspect-ratio: 1; }
+.local-map-detail.survival-map-detail .local-map-items { flex: 1 1 250px; }
+.local-map-detail.survival-map-detail .local-map-items ul { grid-auto-rows: minmax(66px, auto); }
+.local-map-detail.survival-map-detail .local-map-items strong, .local-map-detail.survival-map-detail .local-map-items small, .local-map-detail.survival-map-detail .local-map-items b, .local-map-detail.survival-map-detail .local-map-content h3 { line-height: 1.5; white-space: normal; }
+.local-map-detail.survival-map-detail .local-map-actions { position: sticky; bottom: -12px; background: #fafbf0; padding: 12px 0; }
+.local-map-detail.survival-map-detail .local-map-actions > button { min-height: 48px; height: auto; padding: 12px 8px; white-space: normal; }
 .manual-content { font-size: 16px; }
 .manual-survival h4 { font-size: 18px; }
 .manual-survival table { width: 100%; border-collapse: collapse; font-size: 16px; }
@@ -122,11 +121,11 @@
 .sandbox-choice-copy strong, .local-map-card strong, .survival-bottom button, .local-map-actions > button, .sandbox-back, .survival-heading .back-link { font-size: var(--mode-label-size); }
 .survival-identity h2, .local-map-heading h2 { font-size: 20px; }
 .survival-difficulty strong, .sandbox-size-card strong { font-size: 22px; }
-.local-map-card small, .survival-difficulty span, .survival-identity p, .survival-map-state, .local-map-heading > span, .local-map-content h3, .local-map-items strong, .local-map-items small, .local-map-items b, .sandbox-import-heading label, .sandbox-paste, .sandbox-import-card textarea, .sandbox-import-error, .local-map-empty p { font-size: var(--mode-text-size); line-height: 1.5; }
+.local-map-card small, .survival-difficulty span, .survival-identity p, .local-map-heading > span, .local-map-content h3, .local-map-items strong, .local-map-items small, .local-map-items b, .sandbox-import-heading label, .sandbox-paste, .sandbox-import-card textarea, .sandbox-import-error, .local-map-empty p { font-size: var(--mode-text-size); line-height: 1.5; }
 .local-map-items ul { grid-auto-rows: minmax(56px, auto); }
 .local-map-card { min-height: 76px; }
 .local-map-list { grid-auto-rows: minmax(80px, auto); }
-.survival-records p, .survival-generating p, .survival-error, .survival-map-state, .survival-modal > p, .survival-modal .win-content p, .local-map-modal p { font-size: 14px; }
+.survival-records p, .survival-generating p, .survival-error, .survival-modal > p, .survival-modal .win-content p, .local-map-modal p { font-size: 14px; }
 .survival-modal .primary, .survival-modal .secondary, .survival-modal .text-button, .local-map-modal button, .local-map-modal input { font-size: 14px; }
 @media (max-width: 760px) { .sandbox-menu-page, .survival-page { --mode-title-size: 28px; } }
 
