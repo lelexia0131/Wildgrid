@@ -3,7 +3,7 @@ const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { execFile } = require('node:child_process');
 const { createHash } = require('node:crypto');
-const { mkdir, readFile, writeFile } = require('node:fs/promises');
+const { mkdir, readFile, writeFile, unlink } = require('node:fs/promises');
 const https = require('node:https');
 
 app.setAppUserModelId('com.wildgrid.game');
@@ -11,6 +11,7 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'wildgrid', privileges: { standa
 
 const GAME_URL = 'wildgrid://game/index.html';
 const MAX_CLIPBOARD_LENGTH = 32768;
+const PLAYER_ID_CACHE_VERSION = 2;
 let playerIdRequest;
 
 function validPlayerId(value) {
@@ -64,11 +65,12 @@ async function resolvePlayerId(apiUrl) {
       const file = path.join(app.getPath('userData'), 'player-id.json');
       try {
         const saved = JSON.parse(await readFile(file, 'utf8'));
-        if (validPlayerId(saved.playerId)) return { playerId: saved.playerId };
+        if (saved.playerIdCacheVersion === PLAYER_ID_CACHE_VERSION && validPlayerId(saved.playerId)) return { playerId: saved.playerId };
       } catch {}
+      await unlink(file).catch(error => { if (error.code !== 'ENOENT') throw error; });
       const playerId = await requestPlayerId(url, await getDeviceHash());
       await mkdir(path.dirname(file), { recursive: true });
-      await writeFile(file, JSON.stringify({ playerId }), 'utf8');
+      await writeFile(file, JSON.stringify({ playerIdCacheVersion: PLAYER_ID_CACHE_VERSION, playerId }), 'utf8');
       return { playerId };
     })().catch(() => { throw new Error('Player ID unavailable'); }).finally(() => { playerIdRequest = undefined; });
   }

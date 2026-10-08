@@ -22,6 +22,7 @@ import org.json.JSONObject;
 @CapacitorPlugin(name = "WildgridPlayerId")
 public class PlayerIdPlugin extends Plugin {
     private static final String PREFERENCES = "wildgrid-player-id-v1";
+    private static final int PLAYER_ID_CACHE_VERSION = 2;
     private static final int TIMEOUT_MS = 8000;
     private static final int MAX_RESPONSE_BYTES = 1024;
 
@@ -30,6 +31,11 @@ public class PlayerIdPlugin extends Plugin {
         execute(() -> {
             try {
                 SharedPreferences preferences = getContext().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE);
+                if (preferences.getInt("playerIdCacheVersion", 0) != PLAYER_ID_CACHE_VERSION) {
+                    if (!preferences.edit().remove("playerId").remove("playerIdCacheVersion").commit()) {
+                        throw new IOException("Player identity unavailable");
+                    }
+                }
                 String playerId = preferences.getString("playerId", null);
                 if (!isValidPlayerId(playerId)) {
                     URL url = new URL(call.getString("apiUrl", ""));
@@ -51,7 +57,8 @@ public class PlayerIdPlugin extends Plugin {
                         hash.append(Character.forDigit(value & 0x0f, 16));
                     }
                     playerId = requestPlayerId(url, hash.toString());
-                    if (!isValidPlayerId(playerId) || !preferences.edit().putString("playerId", playerId).commit()) {
+                    if (!isValidPlayerId(playerId) || !preferences.edit().putString("playerId", playerId)
+                        .putInt("playerIdCacheVersion", PLAYER_ID_CACHE_VERSION).commit()) {
                         throw new IOException("Player identity unavailable");
                     }
                 }
