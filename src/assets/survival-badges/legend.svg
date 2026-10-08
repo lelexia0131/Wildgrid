@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" fill="none">
+  <defs><linearGradient id="gold" x1="55" y1="30" x2="163" y2="189" gradientUnits="userSpaceOnUse"><stop stop-color="#ffdfa0"/><stop offset=".4" stop-color="#d3a05c"/><stop offset=".72" stop-color="#f2cf85"/><stop offset="1" stop-color="#b17b48"/></linearGradient><radialGradient id="violet"><stop stop-color="#8a7caa"/><stop offset="1" stop-color="#4b4b70"/></radialGradient></defs>
+  <path d="M69 177C38 161 22 136 29 96m122 81c31-16 47-41 40-81" stroke="#b4874a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M32 117c-20-1-25-13-21-26 18 3 25 11 21 26Zm7 24c-22 2-29-9-27-23 19 1 27 8 27 23Zm13 22c-21 8-32 0-33-14 20-5 30 0 33 14Zm16 17c-19 13-32 9-36-5 19-9 30-8 36 5Zm120-63c20-1 25-13 21-26-18 3-25 11-21 26Zm-7 24c22 2 29-9 27-23-19 1-27 8-27 23Zm-13 22c21 8 32 0 33-14-20-5-30 0-33 14Zm-16 17c19 13 32 9 36-5-19-9-30-8-36 5Z" fill="url(#gold)" stroke="#9a7446" stroke-width="2"/>
+  <path d="M50 77c13-19 32-32 60-32s47 13 60 32v77c-20 21-39 36-60 43-21-7-40-22-60-43Z" fill="url(#violet)" stroke="url(#gold)" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M61 81c12-15 29-25 49-25s37 10 49 25v68c-17 18-34 31-49 36-15-5-32-18-49-36Z" stroke="#c6b394" stroke-width="2"/>
+  <path d="M94 97C71 80 68 62 72 35m15 49L51 61m22-3L55 32m31 41-1-25m41 49c23-17 26-35 22-62m-15 49 36-23m-22-3 18-26m-31 41 1-25" stroke="url(#gold)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m82 100 17 9 11-6 11 6 17-9-4 23-12 20-12 22-12-22-12-20Z" fill="url(#gold)" stroke="#8b6847" stroke-width="3" stroke-linejoin="round"/>
+  <path d="m92 104 8 17m28-17-8 17" stroke="#fff0c2" stroke-width="4" stroke-linecap="round"/>
+  <path d="m92 127 10 3m26-3-10 3" stroke="#584653" stroke-width="4" stroke-linecap="round"/>
+  <path d="m103 140 7-4 7 4-7 6Z" fill="#6d4d52"/>
+  <path d="m110 20 5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2Z" fill="#fce1a0" stroke="#a78452" stroke-width="3"/>
+  <path d="m75 175 35 10 35-10-8 23-27 10-27-10Z" fill="url(#gold)" stroke="#947047" stroke-width="3" stroke-linejoin="round"/>
+  <path d="m110 187 8 6-8 8-8-8Z" fill="#b3a6d2" stroke="#66567e" stroke-width="2"/>
+  <path d="m29 64 3 7 7 3-7 3-3 7-3-7-7-3 7-3Zm162 0 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" fill="#eecb83"/>
+</svg>

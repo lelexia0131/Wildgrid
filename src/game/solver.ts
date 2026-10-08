@@ -2,16 +2,16 @@ import { adjacent, evaluate, occupied, offsets } from './rules';
 import type { Cell, Level, Piece, Placement } from './types';
 
 type Candidate = { at: Placement; cells: Cell[]; mask: bigint; near: bigint; around: bigint; rows: number[]; cols: number[] };
-export type SolverResult = { count: number; solutions: Placement[][]; terrain: number; pieces: number; occupied: number; candidates: number; rotationCandidates: number; nodes: number };
+export type SolverResult = { count: number; solutions: Placement[][]; terrain: number; pieces: number; occupied: number; candidates: number; rotationCandidates: number; nodes: number; aborted: boolean; forced: number };
 
 // One domain per kind + shape. Increasing placement indices remove ID permutations.
-export function solveLevel(level: Level, limit = 2): SolverResult {
+export function solveLevel(level: Level, limit = 2, budget: { deadline?: number; maxNodes?: number } = {}): SolverResult {
   const n = level.size;
   const bits = Array.from({ length: n * n }, (_, i) => 1n << BigInt(i));
   const bit = (p: Cell) => bits[p.r * n + p.c];
   const board = Array.from({ length: n * n }, (_, i) => ({ r: Math.floor(i / n), c: i % n }));
   const groups: { piece: Piece; ids: string[]; domain: Candidate[] }[] = [];
-  const stats: SolverResult = { count: 0, solutions: [], terrain: level.terrain.length, pieces: level.pieces.length, occupied: 0, candidates: 0, rotationCandidates: 0, nodes: 0 };
+  const stats: SolverResult = { count: 0, solutions: [], terrain: level.terrain.length, pieces: level.pieces.length, occupied: 0, candidates: 0, rotationCandidates: 0, nodes: 0, aborted: false, forced: 0 };
   for (const piece of level.pieces) {
     stats.occupied += offsets(piece.shape, 0).length;
     const group = groups.find(g => g.piece.kind === piece.kind && g.piece.shape === piece.shape);
@@ -37,12 +37,14 @@ export function solveLevel(level: Level, limit = 2): SolverResult {
   }
   stats.candidates = groups.reduce((s, g) => s + g.domain.length * g.ids.length, 0);
   stats.rotationCandidates = groups.reduce((s, g) => s + g.domain.filter(p => p.at.rotation !== 0).length * g.ids.length, 0);
+  stats.forced = groups.reduce((s, g) => s + (g.domain.length === g.ids.length ? g.ids.length : 0), 0);
   const remaining = groups.map(g => g.ids.length), last = groups.map(() => -1);
   const rows = Array<number>(n).fill(0), cols = Array<number>(n).fill(0);
   const chosen: { g: number; p: Candidate }[] = [];
   function search(used: bigint, camps: bigint, towers: bigint, fire: bigint, picnic: bigint) {
-    if (stats.count >= limit) return;
+    if (stats.count >= limit || stats.aborted) return;
     stats.nodes++;
+    if (stats.nodes > (budget.maxNodes ?? Infinity) || (stats.nodes % 64 === 1 && Date.now() >= (budget.deadline ?? Infinity))) { stats.aborted = true; return; }
     if (chosen.length === level.pieces.length) {
       if (rows.some((v, i) => v !== level.rows[i]) || cols.some((v, i) => v !== level.cols[i])) return;
       if (chosen.some(({ g, p }) => ['fire', 'picnic'].includes(groups[g].piece.kind) && !(p.near & camps))) return;
@@ -80,7 +82,7 @@ export function solveLevel(level: Level, limit = 2): SolverResult {
       search(used | p.mask, kind === 'camp' ? camps | p.mask : camps, kind === 'tower' ? towers | p.mask : towers, kind === 'fire' ? fire | p.mask : fire, kind === 'picnic' ? picnic | p.mask : picnic);
       for (let j = 0; j < n; j++) { rows[j] -= p.rows[j]; cols[j] -= p.cols[j]; }
       chosen.pop(); remaining[best]++; last[best] = previous;
-      if (stats.count >= limit) break;
+      if (stats.count >= limit || stats.aborted) break;
     }
   }
   if (limit > 0 && level.rows.reduce((a, b) => a + b, 0) === stats.occupied && level.cols.reduce((a, b) => a + b, 0) === stats.occupied) search(0n, 0n, 0n, 0n, 0n);

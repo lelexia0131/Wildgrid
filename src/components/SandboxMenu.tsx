@@ -13,11 +13,13 @@ type Props = {
   screen: SandboxScreen;
   onBack: () => void;
   onContinue: () => void;
+  onSurvival: () => void;
   onNavigate: (screen: 'sandbox' | 'sandbox-size' | 'sandbox-import' | 'local-maps') => void;
   onCreate: (size: 6 | 8) => void;
   onImport: (code: string) => void;
   localMaps: LocalMap[];
   onOpenLocalMap: (map: LocalMap) => void;
+  onEditLocalMap: (map: LocalMap) => void;
   onLocalMapsChange: () => void;
   onSound?: () => void;
 };
@@ -38,7 +40,7 @@ function LocalMapPreview({ map }: { map: LocalMap }) {
   </div>;
 }
 
-export function SandboxMenu({ screen, onBack, onContinue, onNavigate, onCreate, onImport, localMaps, onOpenLocalMap, onLocalMapsChange, onSound }: Props) {
+export function SandboxMenu({ screen, onBack, onContinue, onSurvival, onNavigate, onCreate, onImport, localMaps, onOpenLocalMap, onEditLocalMap, onLocalMapsChange, onSound }: Props) {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [pasting, setPasting] = useState(false);
@@ -99,8 +101,9 @@ export function SandboxMenu({ screen, onBack, onContinue, onNavigate, onCreate, 
         {screen !== 'local-maps' && <h1>{title}</h1>}
         {screen === 'adventure' && <div className="sandbox-choices">
           <button className="sandbox-choice" onClick={() => act(onContinue)}><span className="sandbox-choice-art"><Art kind="camp"/></span><span className="sandbox-choice-copy"><strong>继续冒险</strong></span><ArrowRight size={18}/></button>
+          <button className="sandbox-choice survival-entry" onClick={() => act(onSurvival)}><span className="sandbox-choice-art"><Art kind="tower"/></span><span className="sandbox-choice-copy"><strong>荒野求生</strong></span><ArrowRight size={18}/></button>
           <button className="sandbox-choice" onClick={() => act(() => onNavigate('sandbox'))}><span className="sandbox-choice-art"><Art kind="forest"/></span><span className="sandbox-choice-copy"><strong>沙盒模式</strong></span><ArrowRight size={18}/></button>
-          <button className="sandbox-choice" onClick={() => act(() => onNavigate('local-maps'))}><span className="sandbox-choice-icon"><Art kind="fire"/></span><span className="sandbox-choice-copy"><strong>本地地图</strong></span><ArrowRight size={18}/></button>
+          <button className="sandbox-choice" onClick={() => act(() => onNavigate('local-maps'))}><span className="sandbox-choice-art"><Art kind="fire"/></span><span className="sandbox-choice-copy"><strong>本地地图</strong></span><ArrowRight size={18}/></button>
         </div>}
         {screen === 'sandbox' && <div className="sandbox-choices">
           <button className="sandbox-choice" onClick={() => act(() => onNavigate('sandbox-size'))}><span className="sandbox-choice-icon"><PencilRuler size={25}/></span><span className="sandbox-choice-copy"><strong>创造地图</strong></span><ArrowRight size={18}/></button>
@@ -121,16 +124,17 @@ export function SandboxMenu({ screen, onBack, onContinue, onNavigate, onCreate, 
         {screen === 'local-maps' && (selectedMap ? <div className="local-map-browser">
           <div className="local-map-list" aria-label="本地存档">
             {localMaps.map(map => <button key={map.id} className={`local-map-card ${map.id === selectedMap.id ? 'active' : ''}`} aria-pressed={map.id === selectedMap.id} onClick={() => act(() => setSelectedMapId(map.id))}>
-              <span className="local-map-card-art"><Art kind="fire"/></span><span><strong>{map.name}</strong><small>{map.draft.level.size}×{map.draft.level.size} · {map.draft.level.pieces.length} 处设施</small></span><ArrowRight size={16}/>
+              <span className="local-map-card-art"><Art kind="fire"/></span><span><strong>{map.name}</strong><small className={map.survival ? "survival-card-state" : undefined}>{map.survival ? `荒野求生 · ${map.survival.difficulty}难 · ${map.survival.completed ? '已通关' : '未通关'}` : `${map.draft.level.size}×${map.draft.level.size} · ${map.draft.level.pieces.length} 处设施`}</small></span><ArrowRight size={16}/>
             </button>)}
           </div>
           <section className="local-map-detail" aria-label={selectedMap.name}>
             <div className="local-map-heading"><h2 title={selectedMap.name}>{selectedMap.name}</h2><button className="icon-button local-map-rename" aria-label="编辑地图名称" title="编辑地图名称" onClick={() => editMap('rename')}><Pencil size={16}/></button><span>{selectedMap.draft.level.size}×{selectedMap.draft.level.size}</span></div>
+            {selectedMap.survival && <p className="survival-map-state">荒野求生 · {selectedMap.survival.difficulty}难 · {selectedMap.survival.completed ? '已通关，图纸永久解锁' : '未通关，图纸与地图编辑待解锁'}</p>}
             <div className="local-map-content">
               <div className="local-map-view"><h3>地图样貌</h3><LocalMapPreview map={selectedMap}/></div>
               <div className="local-map-items"><h3>地图放置物品</h3><ul>{items.map(piece => <li key={`${piece.kind}_${piece.shape}`}><span className="local-map-item-art"><FacilityArt kind={piece.kind} shape={piece.shape}/></span><span><strong>{facilityNames[piece.kind]}</strong><small>{shapeNames[piece.shape]}</small></span><b>×{selectedMap.draft.level.pieces.filter(item => item.kind === piece.kind && item.shape === piece.shape).length}</b></li>)}</ul></div>
             </div>
-            <div className="local-map-actions"><button className="primary local-map-enter" onClick={() => act(() => onOpenLocalMap(selectedMap))}>进入地图<ArrowRight size={18}/></button><button className="primary local-map-delete" onClick={() => editMap('delete')}>删除地图<Trash2 size={16}/></button></div>
+            <div className="local-map-actions"><button className="primary local-map-enter" onClick={() => act(() => onOpenLocalMap(selectedMap))}>进入地图<ArrowRight size={18}/></button>{(!selectedMap.survival || selectedMap.survival.blueprintUnlocked) && <button className="secondary local-map-edit" onClick={() => act(() => onEditLocalMap(selectedMap))}>编辑地图<PencilRuler size={18}/></button>}<button className="primary local-map-delete" onClick={() => editMap('delete')}>删除地图<Trash2 size={16}/></button></div>
           </section>
         </div> : <div className="local-map-empty"><span className="local-map-empty-art"><Art kind="fire"/></span><h2>还没有本地地图</h2><p>创造或导入地图后，点击保存，就能在这里找到本地存档。</p></div>)}
       </div>

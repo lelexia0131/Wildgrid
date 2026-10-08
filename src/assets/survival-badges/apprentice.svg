@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" fill="none">
+  <defs><linearGradient id="patch" x1="41" y1="37" x2="170" y2="180" gradientUnits="userSpaceOnUse"><stop stop-color="#d89369"/><stop offset="1" stop-color="#a85e4c"/></linearGradient><radialGradient id="glow"><stop stop-color="#fff0ad"/><stop offset="1" stop-color="#e8b15a"/></radialGradient></defs>
+  <path d="m110 20 65 39 25 69-41 61H61l-41-61 25-69Z" fill="url(#patch)" stroke="#7a4d40" stroke-width="5" stroke-linejoin="round"/>
+  <path d="m110 32 57 34 22 61-36 51H67l-36-51 22-61Z" stroke="#f0c4a0" stroke-width="3" stroke-dasharray="5 7" stroke-linejoin="round"/>
+  <path d="M88 68V52c0-28 44-28 44 0v16" stroke="#5d6656" stroke-width="7" stroke-linecap="round"/>
+  <path d="M96 60v-9c0-16 28-16 28 0v9" stroke="#edcd9b" stroke-width="3"/>
+  <path d="M80 81c-5 20-9 45-6 70h72c3-25-1-50-6-70Z" fill="#697c62" stroke="#405b4c" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M89 88h42c5 17 8 37 5 57H84c-3-20 0-40 5-57Z" fill="url(#glow)" stroke="#e9d89e" stroke-width="3"/>
+  <path d="M110 99c-15 11-8 19-16 26-10 10-1 21 16 21s29-12 19-24c-3-4-6-5-7-12-4 6-5 10-9 12-3-6 2-17-3-23Z" fill="#d57643"/>
+  <path d="M112 123c-10 10-10 20 0 20 9 0 10-9 0-20Z" fill="#fff0a6"/>
+  <path d="M77 80h66l-10-15H87Z" fill="#a5af80" stroke="#405b4c" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M72 152h76l6 11H66Z" fill="#a5af80" stroke="#405b4c" stroke-width="4" stroke-linejoin="round"/>
+  <path d="m90 77 5-5m31 0 5 5M83 93l-4 41m58-41 4 41" stroke="#e0dbad" stroke-width="3" stroke-linecap="round"/>
+  <path d="m45 106 7 3m-7 25 7-3m116-22 7-3m-7 25 7 3" stroke="#ffd48d" stroke-width="4" stroke-linecap="round"/>
+  <path d="m83 177 27-5 27 5-27 13Z" fill="#edcc90" stroke="#8c684e" stroke-width="3"/>
+</svg>

@@ -1,0 +1,140 @@
+.survival-page { flex: 1; min-height: 0; overflow-y: auto; width: calc(100% - 32px); max-width: 960px; margin: 0 auto; padding: 12px 4px 28px; font-size: 16px; line-height: 1.6; }
+.survival-heading { display: flex; align-items: center; gap: 24px; margin-bottom: 18px; }
+.survival-heading h1 { margin: 0; font-size: 30px; letter-spacing: 2px; }
+.survival-heading .back-link { font-size: 16px; height: 48px; align-self: center; }
+.survival-identity { display: flex; align-items: center; gap: 24px; padding: 22px 28px; border: 2px solid #c2ceb0; border-radius: 24px; background: linear-gradient(120deg, #f8f4de, #edf1df); box-shadow: 0 6px 0 #bbc8a126; margin-bottom: 24px; }
+.survival-identity > div:last-child { flex: 1; min-width: 0; }
+.survival-identity h2 { font-size: 24px; margin: 0; color: #365d47; }
+.survival-identity p { margin: 8px 0 0; font-size: 16px; color: #52684c; }
+.survival-badge { position: relative; flex: none; width: 112px; height: 120px; filter: drop-shadow(0 4px 2px #65774b22); }
+.badge-rank-4 { filter: drop-shadow(0 3px 6px #ba9c5744); }
+.survival-xp-track { height: 14px; background: #d8dfc7; border-radius: 10px; overflow: hidden; margin-top: 12px; }
+.survival-xp-track i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #73976c, #c6a558); transition: width .4s; }
+.survival-difficulties { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.survival-difficulty { min-height: 110px; padding: 18px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border: 2px solid var(--difficulty-border); border-radius: 20px; background: var(--difficulty-bg); box-shadow: 0 5px 0 #7d8c5720; transition: transform .15s; color: #3c5945; }
+.survival-difficulty:hover:enabled { transform: translateY(-3px); }
+.survival-difficulty:disabled { opacity: .55; }
+.survival-difficulty strong { font-size: 26px; }
+.survival-difficulty span { font-size: 16px; }
+.difficulty-band-0 { --difficulty-bg: #edf2dd; --difficulty-border: #a6bd8e; }
+.difficulty-band-1 { --difficulty-bg: #e2edd7; --difficulty-border: #8dae87; }
+.difficulty-band-2 { --difficulty-bg: #e0eeea; --difficulty-border: #82aca1; }
+.difficulty-band-3 { --difficulty-bg: #f3e5c1; --difficulty-border: #c1a06b; }
+.difficulty-band-4 { --difficulty-bg: #eae3ef; --difficulty-border: #a195b3; }
+.survival-bottom { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 26px; }
+.survival-bottom button, .survival-generating button { min-height: 50px; height: auto; font-size: 16px; padding: 12px 20px; white-space: normal; }
+.modal.survival-records { width: min(700px, calc(100% - 24px)); margin: auto; padding: 20px; border: 1px solid #cbd5bc; border-radius: 20px; background: #f7f6e9; }
+.survival-records h2 { font-size: 22px; margin: 0; }
+.survival-records > div { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.survival-records p { font-size: 16px; margin: 12px 0; }
+.survival-records > div > p { display: flex; flex-direction: column; gap: 6px; margin: 0; border-top: 1px solid #dde2cc; padding-top: 10px; }
+.survival-generating { position: fixed; z-index: 12; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(420px, calc(100% - 32px)); padding: 28px; border: 2px solid #afc199; border-radius: 24px; background: #faf9ef; box-shadow: 0 8px 40px #344d4140; text-align: center; }
+.survival-generating p { font-size: 18px; margin: 16px 0; }
+.survival-spinner { display: inline-block; width: 36px; height: 36px; border: 4px solid #dce3cc; border-top-color: #668c61; border-radius: 50%; animation: survival-spin 1s linear infinite; }
+.survival-error { font-size: 16px; line-height: 1.6; color: #9b4e39; background: #fbede3; border-radius: 12px; padding: 12px 16px; margin: 12px 0; overflow-wrap: anywhere; }
+.survival-error button { font-size: 16px; min-height: 48px; margin-left: 12px; }
+.modal.survival-modal { width: min(500px, calc(100% - 24px)); font-size: 16px; }
+.survival-modal > p, .survival-modal .win-content p { font-size: 16px; color: #52684c; line-height: 1.7; margin: 12px 0 18px; }
+.survival-modal .primary, .survival-modal .secondary, .survival-modal .text-button { height: auto; min-height: 48px; padding: 12px 16px; font-size: 16px; white-space: normal; }
+.survival-modal .sandbox-modal-actions { flex-wrap: wrap; }
+.survival-win > .survival-badge { margin: 0 auto 20px; width: 140px; height: 150px; animation: survival-arrive .5s ease-out; }
+.survival-win h3 { font-size: 22px; margin: 12px 0; }
+.survival-win > .secondary { width: 100%; margin-top: 12px; }
+.survival-reward { padding: 8px 16px; background: #edf2df; border-radius: 16px; margin-bottom: 20px; }
+.survival-upgrade .survival-badge { animation: survival-arrive .7s ease-out; }
+.survival-operations { display: flex; flex-direction: column; gap: 6px; }
+.survival-tool-row { display: flex; gap: 6px; }
+.survival-tool-row > button { flex: 1; min-width: 0; justify-content: center; }
+.survival-badge > img { width: 100%; height: 100%; display: block; }
+.survival-map-state { font-size: 16px; color: #52684c; line-height: 1.6; margin: 12px 0; }
+.local-map-card .survival-card-state { overflow-wrap: anywhere; }
+.local-map-edit { font-size: 16px; min-height: 48px; }
+.local-map-card:has(.survival-card-state) { min-height: 92px; }
+.local-map-detail:has(.survival-map-state) { overflow-y: auto; }
+.local-map-detail:has(.survival-map-state) .local-map-content { display: flex; flex-wrap: wrap; flex: none; gap: 20px; }
+.local-map-detail:has(.survival-map-state) .local-map-view { container-type: normal; flex: 1 1 260px; }
+.local-map-detail:has(.survival-map-state) .local-map-preview { width: min(100%, 430px); height: auto; aspect-ratio: 1; }
+.local-map-detail:has(.survival-map-state) .local-map-items { flex: 1 1 250px; }
+.local-map-detail:has(.survival-map-state) .local-map-items ul { grid-auto-rows: minmax(66px, auto); }
+.local-map-detail:has(.survival-map-state) .local-map-items strong, .local-map-detail:has(.survival-map-state) .local-map-items small, .local-map-detail:has(.survival-map-state) .local-map-items b, .local-map-detail:has(.survival-map-state) .local-map-content h3 { line-height: 1.5; white-space: normal; }
+.local-map-detail:has(.survival-map-state) .local-map-actions { position: sticky; bottom: -12px; background: #fafbf0; padding: 12px 0; }
+.local-map-detail:has(.survival-map-state) .local-map-actions > button { min-height: 48px; height: auto; padding: 12px 8px; white-space: normal; }
+.manual-content { font-size: 16px; }
+.manual-survival h4 { font-size: 18px; }
+.manual-survival table { width: 100%; border-collapse: collapse; font-size: 16px; }
+.manual-survival th, .manual-survival td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #dce1ce; }
+@keyframes survival-spin { to { transform: rotate(360deg); } }
+@keyframes survival-arrive { from { transform: scale(.7); opacity: .2; } to { transform: scale(1); opacity: 1; } }
+@media (max-width: 760px) {
+  .survival-difficulties { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .survival-difficulty { min-height: 100px; padding: 14px; }
+  .survival-identity { padding: 18px 14px; gap: 12px; }
+  .survival-identity .survival-badge { width: 90px; height: 98px; }
+  .survival-identity h2 { font-size: 22px; }
+  .survival-identity p { line-height: 1.6; }
+  .survival-bottom { flex-direction: column; }
+  .survival-records > div { grid-template-columns: 1fr 1fr; }
+}
+
+
+@media (max-width: 360px) {
+  .survival-identity { flex-direction: column; text-align: center; }
+  .survival-identity > div:last-child { width: 100%; }
+}
+@media (max-width: 540px) {
+  .local-maps-page:has(.survival-card-state) .local-map-browser { grid-template-rows: 150px minmax(0, 1fr); }
+  .local-maps-page:has(.survival-card-state) .local-map-list { grid-auto-rows: minmax(92px, auto); }
+}
+@media (prefers-reduced-motion: reduce) { .survival-spinner, .survival-badge { animation: none; } }
+
+.survival-identity-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.survival-identity-title p { margin: 0; }
+@media (min-width: 761px) and (pointer: fine) {
+  .survival-page { display: flex; flex-direction: column; overflow: visible; padding: 8px 4px 16px; gap: 12px; }
+  .survival-heading { min-height: 40px; margin: 0; flex: none; }
+  .survival-identity { flex: none; padding: 10px 20px; margin: 0; gap: 20px; }
+  .survival-identity .survival-badge { width: 92px; height: 100px; }
+  .survival-identity p { margin-top: 6px; }
+  .survival-identity-title p { margin: 0; }
+  .survival-difficulties { flex: 1; min-height: 170px; max-height: 280px; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .survival-difficulty { min-height: 0; padding: 10px; gap: 6px; }
+  .survival-difficulty strong { line-height: 1.2; }
+  .survival-difficulty span { line-height: 1.4; }
+  .survival-bottom { flex: none; margin: 0; }
+  .survival-error { flex: none; margin: 0; }
+  .modal.survival-records { overflow: visible; }
+}
+
+@media (min-width: 761px) and (pointer: fine) and (max-height: 500px) {
+  .screen-survival .header { position: absolute; top: 0; right: 0; width: auto; }
+  .survival-page { gap: 8px; padding: 4px; }
+  .survival-heading { padding-right: 90px; min-height: 44px; }
+  .survival-identity { padding: 6px 16px; }
+  .survival-identity .survival-badge { width: 74px; height: 82px; }
+  .survival-difficulties { min-height: 150px; gap: 8px; }
+  .survival-difficulty { padding: 6px; gap: 4px; }
+  .survival-bottom button { min-height: 44px; padding: 8px 16px; }
+}
+
+/* Matching hierarchy for the mode chooser, local maps and survival menu. */
+.sandbox-menu-page, .survival-page { --mode-title-size: 32px; --mode-label-size: 16px; --mode-text-size: 14px; }
+.sandbox-menu-copy h1, .local-maps-topline h1, .survival-heading h1 { font-size: var(--mode-title-size); }
+.sandbox-choice-copy strong, .local-map-card strong, .survival-bottom button, .local-map-actions > button, .sandbox-back, .survival-heading .back-link { font-size: var(--mode-label-size); }
+.survival-identity h2, .local-map-heading h2 { font-size: 20px; }
+.survival-difficulty strong, .sandbox-size-card strong { font-size: 22px; }
+.local-map-card small, .survival-difficulty span, .survival-identity p, .survival-map-state, .local-map-heading > span, .local-map-content h3, .local-map-items strong, .local-map-items small, .local-map-items b, .sandbox-import-heading label, .sandbox-paste, .sandbox-import-card textarea, .sandbox-import-error, .local-map-empty p { font-size: var(--mode-text-size); line-height: 1.5; }
+.local-map-items ul { grid-auto-rows: minmax(56px, auto); }
+.local-map-card { min-height: 76px; }
+.local-map-list { grid-auto-rows: minmax(80px, auto); }
+.survival-records p, .survival-generating p, .survival-error, .survival-map-state, .survival-modal > p, .survival-modal .win-content p, .local-map-modal p { font-size: 14px; }
+.survival-modal .primary, .survival-modal .secondary, .survival-modal .text-button, .local-map-modal button, .local-map-modal input { font-size: 14px; }
+@media (max-width: 760px) { .sandbox-menu-page, .survival-page { --mode-title-size: 28px; } }
+
+
+.survival-tool-row .wide-operation { gap: 4px; padding-left: 2px; padding-right: 2px; }
+.survival-tool-row:nth-of-type(2) .wide-operation { gap: 1px; }
+.survival-tool-row:nth-of-type(2) svg { width: 12px; height: 12px; }
+@media (min-width: 761px) and (pointer: fine) {
+  .survival-game .facility-list, .survival-game .rule-dock, .survival-game .operations, .survival-game .guide-strip { scrollbar-width: none; }
+  .survival-game .facility-list::-webkit-scrollbar, .survival-game .rule-dock::-webkit-scrollbar, .survival-game .operations::-webkit-scrollbar, .survival-game .guide-strip::-webkit-scrollbar { display: none; }
+}
