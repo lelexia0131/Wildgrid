@@ -53,9 +53,9 @@ app.whenReady().then(async () => {
   }
   async function enter(mode) {
     await click('.menu-buttons .primary');
-    if (mode === 'adventure') await click('.sandbox-choice:first-child');
-    else if (mode === 'sandbox-play') { await click('.sandbox-choice:nth-child(3)'); await click('.local-map-enter'); }
-    else { await click('.sandbox-choice:nth-child(2)'); await click('.sandbox-choice:first-child'); await click('.sandbox-size-card:first-child'); }
+    if (mode === 'adventure') await click('.sandbox-choice', '继续冒险');
+    else if (mode === 'sandbox-play') { await click('.sandbox-choice', '本地地图'); await click('.local-map-enter'); }
+    else { await click('.sandbox-choice', '沙盒模式'); await click('.sandbox-choice', '创造地图'); await click('.sandbox-size-card:first-child'); }
   }
   try {
     await load(); contents.debugger.attach('1.3');

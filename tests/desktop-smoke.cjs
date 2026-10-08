@@ -23,7 +23,7 @@ app.on('web-contents-created', (_event, contents) => {
   contents.once('did-finish-load', async () => {
     try {
       assert.equal(existsSync(path.join(packaged, 'node_modules')), false, 'Desktop package must not include bundled web dependencies or Android build files');
-      assert.equal(JSON.parse(readFileSync(path.join(packaged, 'package.json'), 'utf8')).version, '0.3.0');
+      assert.equal(JSON.parse(readFileSync(path.join(packaged, 'package.json'), 'utf8')).version, '1.0.0');
       const state = await contents.executeJavaScript(`new Promise(resolve => requestAnimationFrame(() => {
         const art = document.querySelector('.menu-art')?.getBoundingClientRect();
         const buttons = document.querySelector('.menu-buttons')?.getBoundingClientRect();

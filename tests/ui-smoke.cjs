@@ -115,18 +115,21 @@ app.whenReady().then(async () => {
       }
       // Game information opens from settings and returns without closing the dialog.
       await click('.header [aria-label="设置"]', viewport.touch);
-      assert.equal(await js(`document.querySelector('.settings-note').textContent`), 'v0.3.0');
+      assert.equal(await js(`document.querySelector('.settings-note').textContent`), 'v1.0.0');
       assert.equal(await js(`document.querySelector('.settings-about').nextElementSibling === document.querySelector('.settings-note')`), true);
       await click('.settings-about', viewport.touch);
       const about = await js(`(() => {
         const content=document.querySelector('.game-about'), dialog=document.querySelector('dialog'), r=dialog.getBoundingClientRect();
         const details=Array.from(content.querySelectorAll('dd')).map(el=>el.textContent);
-        return {open:dialog.open,heading:content.querySelector('h2').textContent,author:details[0],date:details[1],project:content.querySelector('a').href,copyright:content.textContent.includes('© 2026 lelexia') && content.textContent.includes('原创插画'),thanks:content.textContent.includes('感谢'),fits:r.left>=0 && r.right<=innerWidth && dialog.scrollWidth<=dialog.clientWidth+1 && document.documentElement.scrollWidth<=innerWidth};
+        return {open:dialog.open,heading:content.querySelector('h2').textContent,author:details[0],date:details[1],version:details[2],updated:details[3],modes:['30 个固定关卡','荒野求生','沙盒'].every(mode=>content.textContent.includes(mode)),project:content.querySelector('a').href,copyright:content.textContent.includes('© 2026 lelexia') && content.textContent.includes('原创插画'),thanks:content.textContent.includes('感谢'),fits:r.left>=0 && r.right<=innerWidth && dialog.scrollWidth<=dialog.clientWidth+1 && document.documentElement.scrollWidth<=innerWidth};
       })()`);
       assert.equal(about.open, true);
       assert.equal(about.heading, '游戏说明');
       assert.equal(about.author, 'lelexia');
       assert.equal(about.date, '2026-10-07');
+      assert.equal(about.version, 'v1.0.0');
+      assert.equal(about.updated, '2026-10-08');
+      assert.equal(about.modes, true);
       assert.equal(about.project, 'https://github.com/lelexia0131/Wildgrid');
       assert.ok(about.copyright && about.thanks);
       assert.ok(about.fits, JSON.stringify(about));
