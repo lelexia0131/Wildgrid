@@ -1,12 +1,79 @@
 const { app, BrowserWindow, Menu, clipboard, ipcMain, net, protocol, screen, session, shell } = require('electron');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
+const { execFile } = require('node:child_process');
+const { createHash } = require('node:crypto');
+const { mkdir, readFile, writeFile } = require('node:fs/promises');
+const https = require('node:https');
 
 app.setAppUserModelId('com.wildgrid.game');
 protocol.registerSchemesAsPrivileged([{ scheme: 'wildgrid', privileges: { standard: true, secure: true, supportFetchAPI: true } }]);
 
 const GAME_URL = 'wildgrid://game/index.html';
 const MAX_CLIPBOARD_LENGTH = 32768;
+let playerIdRequest;
+
+function validPlayerId(value) {
+  return typeof value === 'string' && /^\d{6,}$/.test(value) && /[1-9]/.test(value) && (value.length === 6 || value[0] !== '0');
+}
+
+function getDeviceHash() {
+  return new Promise((resolve, reject) => {
+    execFile(path.join(process.env.SystemRoot || 'C:\\Windows', 'System32/reg.exe'), ['query', 'HKLM\\SOFTWARE\\Microsoft\\Cryptography', '/v', 'MachineGuid', '/reg:64'], { timeout: 4000, maxBuffer: 8192, windowsHide: true }, (error, stdout) => {
+      const rawGuid = !error && /^\s*MachineGuid\s+REG_SZ\s+(.+)$/im.exec(stdout)?.[1].trim();
+      if (!rawGuid) return reject(new Error('Player ID unavailable'));
+      resolve(createHash('sha256').update(`wildgrid-player-id-v1:${rawGuid}`).digest('hex'));
+    });
+  });
+}
+
+function requestPlayerId(apiUrl, deviceHash) {
+  return new Promise((resolve, reject) => {
+    const request = https.request(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' } }, response => {
+      let body = '';
+      response.setEncoding('utf8');
+      response.on('data', chunk => {
+        body += chunk;
+        if (body.length > 1024) request.destroy(new Error('Player ID unavailable'));
+      });
+      response.on('error', fail);
+      response.on('end', () => {
+        clearTimeout(timeout);
+        try {
+          const playerId = JSON.parse(body).id;
+          if (response.statusCode !== 200 || !validPlayerId(playerId)) throw new Error();
+          resolve(playerId);
+        } catch { fail(); }
+      });
+    });
+    const timeout = setTimeout(() => request.destroy(new Error('Player ID unavailable')), 8000);
+    function fail() {
+      clearTimeout(timeout);
+      reject(new Error('Player ID unavailable'));
+    }
+    request.on('error', fail);
+    request.end(JSON.stringify({ deviceHash }));
+  });
+}
+
+async function resolvePlayerId(apiUrl) {
+  const url = new URL(apiUrl);
+  if (url.protocol !== 'https:' || url.hostname !== '179.255.156.84' || url.pathname !== '/api/player-id' || url.port || url.username || url.password || url.search || url.hash) throw new Error('Player ID unavailable');
+  if (!playerIdRequest) {
+    playerIdRequest = (async () => {
+      const file = path.join(app.getPath('userData'), 'player-id.json');
+      try {
+        const saved = JSON.parse(await readFile(file, 'utf8'));
+        if (validPlayerId(saved.playerId)) return { playerId: saved.playerId };
+      } catch {}
+      const playerId = await requestPlayerId(url, await getDeviceHash());
+      await mkdir(path.dirname(file), { recursive: true });
+      await writeFile(file, JSON.stringify({ playerId }), 'utf8');
+      return { playerId };
+    })().catch(() => { throw new Error('Player ID unavailable'); }).finally(() => { playerIdRequest = undefined; });
+  }
+  return playerIdRequest;
+}
 
 function validateClipboardSender(event) {
   if (!BrowserWindow.fromWebContents(event.sender) || event.senderFrame !== event.sender.mainFrame || event.senderFrame.url !== GAME_URL) {
@@ -34,6 +101,10 @@ function createWindow() {
 
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
+  ipcMain.handle('wildgrid:player-id-resolve', (event, apiUrl) => {
+    if (!BrowserWindow.fromWebContents(event.sender) || event.senderFrame !== event.sender.mainFrame || event.senderFrame.url !== GAME_URL) throw new Error('Player ID access denied');
+    return resolvePlayerId(apiUrl);
+  });
   ipcMain.handle('wildgrid:clipboard-write', (event, text) => {
     validateClipboardSender(event);
     if (typeof text !== 'string' || text.length > MAX_CLIPBOARD_LENGTH) throw new Error('Invalid map code');

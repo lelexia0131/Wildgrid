@@ -7,6 +7,8 @@ release/
 *.tsbuildinfo
 .vite/
 *.log
+server/data/
+server/node/
 *.apk
 android/.gradle/
 android/build/

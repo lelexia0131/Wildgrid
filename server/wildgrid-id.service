@@ -1,0 +1,20 @@
+[Unit]
+Description=Wildgrid player ID service
+After=network.target
+
+[Service]
+User=wildgrid-id
+Group=wildgrid-id
+WorkingDirectory=/opt/wildgrid-id-server
+ExecStart=/opt/wildgrid-id-server/node/bin/node server.js
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/wildgrid-id-server/data
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
