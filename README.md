@@ -63,7 +63,7 @@ Windows 和 Android 启动时异步读取独立的玩家 ID 缓存；没有缓�
 
 设置的第一项只读显示玩家 ID；获取期间显示“获取中…”，请求失败显示“暂未获取”，重新进入设置会重试。ID 请求不阻止启动和游玩，不修改冒险存档、地图或设置。浏览器预览不申请设备身份。
 
-API 地址集中在 `src/game/playerId.ts`。VPS 的 443 已由现有服务占用，按用户要求保留现有设施，本轮暂缓公网 HTTPS；因此当前新安装客户端会显示“暂未获取”。ID 服务的实际部署与验证状态见 `server/README.md`。
+API 地址集中在 `src/game/playerId.ts`。正式 HTTPS API 已部署，与现有 REALITY 节点通过 Nginx stream 共用公网 443；Windows 和 Android 均已验证真实申请、缓存读取及删除独立 ID 缓存后的服务器恢复。网络不可用时仍显示“暂未获取”，游戏继续正常运行。部署结构见 `server/README.md`。
 
 ## 沙盒模式
 

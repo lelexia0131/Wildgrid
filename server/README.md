@@ -6,10 +6,16 @@ Express + Node.js 内置 SQLite，只提供 `POST /api/player-id`，只接受 JS
 
 依赖通过 `npm ci --omit=dev --ignore-scripts` 安装，systemd 单元来源为本目录的 `wildgrid-id.service`。源码和锁文件可以入库；生产数据库、运行时、SSH 密钥和 TLS 私钥不入库。
 
-## 本轮部署边界
+## 公网 HTTPS 部署
 
-现有 Xray REALITY 占用公网 443。用户明确选择保留已有设施、暂缓公网 HTTPS，因此本轮不修改 Xray、Nginx 或防火墙规则，不申请证书、不启用 Certbot 续期或 reload hook。客户端预留的 HTTPS API 当前尚未可用，地址只在代码中配置。
+Nginx stream 使用 ssl_preread 接管 IPv4 和 IPv6 的公网 443。真实 REALITY SNI 转发到 Xray 的 localhost:10000；默认及无 SNI 流量转发到 Nginx 的 localhost:8443。HTTPS 后端仅将 POST `/api/player-id` 原路径代理到 localhost:3001，其他路径返回 404。客户端仍使用原公网 443，无需修改已有 VLESS 客户端。
 
-后续只有在提供可用入口后才能启用公网 HTTPS。Let's Encrypt 官方支持 Certbot 5.4+ 的 IP webroot 申请，IP 证书使用 `shortlived` profile；需由 Nginx 提供 HTTP-01，使用 Certbot 官方 `renew` 定时机制，并通过 deploy hook 在成功续签后执行 `nginx -t && systemctl reload nginx`。原生客户端继续使用公共证书链校验。
+Xray 由 3x-ui 管理，迁移保存在面板数据库中，原 runtime 配置只改变监听地址和端口。UUID、REALITY 密钥、shortId、flow、serverNames 和路由保持一致；面板 Hosts 公网端点元数据保留订阅导出的原地址与 443，继承全部握手参数。没有启用 PROXY protocol。原 HTTP 网站、下载站及 SSH 保持正常。
+
+实际 Nginx 文件：`/etc/nginx/nginx.conf` 顶层引入 `/etc/nginx/stream-enabled/wildgrid-id.conf`；`/etc/nginx/conf.d/wildgrid-id-https.conf` 配置内部 HTTPS；原 `sites-available/receiver` 仅增加 ACME challenge location，webroot 为 `/var/www/wildgrid-acme`。公网地址只在必要代码和服务器配置中保存，README 不记录 IP。
+
+Certbot 5.8 安装于 `/opt/certbot`，已通过 staging 签发测试并获得正式 Let's Encrypt IP 证书。证书使用 `shortlived` profile，位于 `/etc/letsencrypt/live/wildgrid-ip/`；Windows 和 Android 使用公共证书链校验。`certbot.timer` 开机启用，每日检查两次并加入随机延迟，调用官方 `certbot renew`。成功续签时执行 `/etc/letsencrypt/renewal-hooks/deploy/wildgrid-nginx.sh`：先 `nginx -t`，再 reload Nginx。官方 `renew --dry-run --run-deploy-hooks` 已通过；续签不停止 Xray 或公网 443。
+
+切换前备份了 Nginx、Xray/面板数据库、systemd 配置和玩家数据库，并启用独立 systemd 自动回滚。内部真实 REALITY 握手、外部 VLESS REALITY Vision 代理流量和两端正式 HTTPS API 均通过后，才解除自动回滚。原备份留在 VPS 的 root 私有目录。原两条记录精确确认属于此前测试后才清理；真实玩家记录不再清理。
 
 官方说明：https://letsencrypt.org/2026/03/11/shorter-certs-certbot
