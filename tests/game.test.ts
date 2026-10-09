@@ -52,8 +52,8 @@ test('facility tip setting preserves disabled state and defaults on for old save
     else Reflect.deleteProperty(globalThis, 'localStorage');
   }
 });
-test('all 30 authored levels have valid complete solutions and exact cell clues', () => {
-  assert.equal(levels.length, 30);
+test('all 45 authored levels have valid complete solutions and exact cell clues', () => {
+  assert.equal(levels.length, 45);
   for (const level of levels) {
     const answer = solutions[level.id];
     const result = evaluate(level, answer);

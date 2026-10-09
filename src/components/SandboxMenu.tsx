@@ -24,7 +24,7 @@ type Props = {
   onSound?: () => void;
 };
 
-const facilityNames: Record<FacilityKind, string> = { camp: '营地', fire: '篝火', tower: '瞭望塔', picnic: '野餐桌', cabin: '林间木屋' };
+const facilityNames: Record<FacilityKind, string> = { camp: '营地', fire: '篝火', tower: '瞭望塔', picnic: '野餐桌', cabin: '林间木屋', foodTruck: '餐车', powerTower: '电塔', pool: '泳池' };
 const shapeNames: Record<Shape, string> = { single: '单格', domino: '双格', long: '三格', el: 'L 形' };
 
 function LocalMapPreview({ map }: { map: LocalMap }) {

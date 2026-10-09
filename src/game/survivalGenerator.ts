@@ -6,7 +6,7 @@ import type { SandboxDraft } from './sandbox';
 import { solveLevel } from './solver';
 import { survivalDifficulties, survivalFingerprint } from './survival';
 import type { SurvivalChallenge } from './survival';
-import type { Cell, Level, Placement, TerrainKind } from './types';
+import type { Cell, FacilityKind, Level, Placement, TerrainKind } from './types';
 
 export const survivalGenerationTimeout = 25000;
 function seeded(seed: number) {
@@ -23,13 +23,21 @@ export function generateSurvival(difficulty: number, seed: number, id: string, r
   const deadline = Date.now() + survivalGenerationTimeout - 1000;
   const cells = Array.from({ length: 64 }, (_, i) => ({ r: Math.floor(i / 8), c: i % 8 }));
   const target = spec.min + Math.floor(random() * (spec.max - spec.min + 1));
+  const newBases = [[], [33], [33], [36, 37], [40, 41], [41, 42], [41, 42, 43], [42, 43, 44], [43, 44, 45], [44, 45]][difficulty - 1];
+  const newChance = [.04, .10, .16, .22, .30, .36, .42, .48, .54, .60][difficulty - 1];
+  const newKinds: FacilityKind[] = difficulty < 4 ? ['foodTruck'] : difficulty < 5 ? ['foodTruck', 'powerTower'] : ['foodTruck', 'powerTower', 'pool'];
+  const newLimit = difficulty <= 3 ? 2 : difficulty <= 6 ? 3 : 5;
+  const isNew = (kind: FacilityKind) => ['foodTruck', 'powerTower', 'pool'].includes(kind);
   let serial = 0;
   function rebuild(draft: SandboxDraft) { return withEditorPlacements(draft, draft.placements); }
   function legal(draft: SandboxDraft) { return evaluate(draft.level, draft.placements).won; }
-  function unique(draft: SandboxDraft) { return solveLevel(draft.level, 2, { deadline: Math.min(deadline, Date.now() + 700), maxNodes: 18000 }); }
+  function unique(draft: SandboxDraft) { return solveLevel(draft.level, 2, { deadline: Math.min(deadline, Date.now() + 900), maxNodes: difficulty >= 7 ? 60000 : 18000 }); }
   function transform(base: Level): SandboxDraft {
     const shiftR = Math.floor(random() * (9 - base.size)), shiftC = Math.floor(random() * (9 - base.size));
-    const turns = Math.floor(random() * 4), mirror = random() < .5;
+    // Dense new layouts start in their authored orientation; actual edits below
+    // provide variation without spending the generation budget on search order.
+    const stable = base.id >= 31 && difficulty >= 7;
+    const turns = stable ? 0 : Math.floor(random() * 4), mirror = stable ? false : random() < .5;
     const point = (p: Cell) => {
       let r = p.r + shiftR, c = p.c + shiftC;
       if (mirror) c = 7 - c;
@@ -49,10 +57,18 @@ export function generateSurvival(difficulty: number, seed: number, id: string, r
     const next = structuredClone(draft), count = next.level.pieces.length;
     const operation = countOnly ? count < target ? 0 : 1 : Math.floor(random() * 5);
     if (operation === 0 && count < spec.max) {
-      const templates = facilityLibrary.filter(p => difficulty > 1 || p.shape === 'single');
+      const wantNew = random() < newChance && next.level.pieces.filter(p => isNew(p.kind)).length < newLimit;
+      const templates = facilityLibrary.filter(p => (difficulty > 1 || p.shape === 'single') && (wantNew ? newKinds.includes(p.kind) : !isNew(p.kind)));
       const piece = { ...pick(templates), id: `extra-${++serial}` };
       next.level.pieces.push(piece);
-      next.placements.push({ ...pick(cells), id: piece.id, rotation: Math.floor(random() * 4) });
+      const positions: Placement[] = [];
+      const loose = { ...next.level, rows: Array(8).fill(8), cols: Array(8).fill(8) };
+      for (const cell of cells) for (let rotation = 0; rotation < (piece.shape === 'single' ? 1 : 4); rotation++) {
+        const at = { ...cell, id: piece.id, rotation };
+        if (Object.values(evaluate(loose, [...next.placements, at]).issues).every(issue => issue.status === 'VALID')) positions.push(at);
+      }
+      if (!positions.length) return draft;
+      next.placements.push(pick(positions));
     } else if (operation === 1 && count > spec.min) {
       const piece = pick(next.level.pieces);
       next.level.pieces = next.level.pieces.filter(p => p.id !== piece.id);
@@ -68,16 +84,19 @@ export function generateSurvival(difficulty: number, seed: number, id: string, r
     }
     return rebuild(next);
   }
-  const maxTerrain = difficulty === 1 ? 5 : 6 + difficulty * 2;
+  const maxTerrain = Math.max(difficulty === 1 ? 5 : 6 + difficulty * 2, ...newBases.map(id => (data as Level[])[id - 1].terrain.length));
   for (let attempt = 0; attempt < 24 && Date.now() < deadline; attempt++) {
-    let draft = transform((data as Level[])[pick(spec.bases) - 1]), changes = 0;
+    const bases = newBases.length && (random() < newChance || attempt >= 2) ? newBases : spec.bases;
+    const base = (data as Level[])[pick(bases) - 1];
+    let draft = transform(base), changes = 0;
+    const baseFingerprint = survivalFingerprint(draft);
     // Counts are adjusted on a valid answer first, then the full puzzle is checked.
     for (let edit = 0; edit < 400 && draft.level.pieces.length !== target && Date.now() < deadline; edit++) {
       const next = change(draft, true);
       if (legal(next)) { draft = next; changes++; }
     }
     if (draft.level.pieces.length !== target) continue;
-    for (let edit = 0; edit < 90 && Date.now() < deadline; edit++) {
+    for (let edit = 0; edit < (difficulty >= 7 ? 24 : 90) && Date.now() < deadline; edit++) {
       const next = change(draft);
       if (next.level.pieces.length !== target || next.level.terrain.length > maxTerrain || !legal(next)) continue;
       const solved = unique(next);
@@ -92,10 +111,10 @@ export function generateSurvival(difficulty: number, seed: number, id: string, r
       if (solved.aborted || solved.count === 0) break;
       if (solved.count === 1) {
         const multi = draft.level.pieces.filter(p => p.shape !== 'single').length;
-        const dependent = draft.level.pieces.filter(p => p.kind === 'fire' || p.kind === 'picnic').length;
+        const dependent = draft.level.pieces.filter(p => ['fire', 'picnic', 'foodTruck', 'pool'].includes(p.kind)).length;
         if (changes < 2 || draft.level.terrain.length > maxTerrain || multi < spec.multi || (difficulty >= 7 && (solved.candidates < target * 3 || solved.forced > target / 3 || dependent < 4))) break;
         const fingerprint = survivalFingerprint(draft);
-        if (recent.includes(fingerprint)) break;
+        if (fingerprint === baseFingerprint || recent.includes(fingerprint)) break;
         return { id, difficulty, seed, draft, fingerprint };
       }
       const intended = new Set(draft.placements.flatMap(at => occupied(draft.level.pieces.find(p => p.id === at.id)!, at)).map(key));

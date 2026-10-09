@@ -3,6 +3,10 @@ import { evaluate } from './rules';
 export type Save = { version: 1; completed: number[]; current: number; progress: Record<number, Placement[]>; settings: Settings };
 const fresh = (): Save => ({ version: 1, completed: [], current: 1, progress: {}, settings: { music: 0.35, effects: 0.65, muted: false, facilityTips: true, continuousPlacement: true } });
 const volume = (v: unknown, fallback: number) => typeof v === 'number' && Number.isFinite(v) ? Math.max(0, Math.min(1, v)) : fallback;
+export function levelUnlocked(id: number, completed: number[]): boolean {
+  if (id >= 31) return completed.includes(15) && (id === 31 || completed.includes(id - 1));
+  return id <= Math.min(30, Math.max(1, ...completed.filter(day => day <= 30).map(day => day + 1)));
+}
 export function progressForPlay(save: Save, level: Level): Placement[] {
   const progress = save.progress[level.id] || [];
   return evaluate(level, progress).won ? [] : progress;

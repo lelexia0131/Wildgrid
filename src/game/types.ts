@@ -1,6 +1,6 @@
 export type TerrainKind = 'water' | 'forest' | 'mountain';
 export type GameMode = 'adventure' | 'sandbox-editor' | 'sandbox-play' | 'survival';
-export type FacilityKind = 'camp' | 'fire' | 'tower' | 'picnic' | 'cabin';
+export type FacilityKind = 'camp' | 'fire' | 'tower' | 'picnic' | 'cabin' | 'foodTruck' | 'powerTower' | 'pool';
 export type Shape = 'single' | 'domino' | 'long' | 'el';
 export type Status = 'VALID' | 'INCOMPLETE' | 'INVALID';
 export type Cell = { r: number; c: number };

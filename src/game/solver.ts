@@ -1,7 +1,7 @@
-import { adjacent, evaluate, occupied, offsets } from './rules';
-import type { Cell, Level, Piece, Placement } from './types';
+import { adjacent, campConnections, campRequirements, evaluate, facilityConflict, occupied, offsets } from './rules';
+import type { Cell, FacilityKind, Level, Piece, Placement } from './types';
 
-type Candidate = { at: Placement; cells: Cell[]; mask: bigint; near: bigint; around: bigint; rows: number[]; cols: number[] };
+type Candidate = { at: Placement; cells: Cell[]; mask: bigint; around: bigint; rows: number[]; cols: number[]; connections: { camp: bigint; gap: bigint }[]; forbidden: Partial<Record<FacilityKind, bigint>> };
 export type SolverResult = { count: number; solutions: Placement[][]; terrain: number; pieces: number; occupied: number; candidates: number; rotationCandidates: number; nodes: number; aborted: boolean; forced: number };
 
 // One domain per kind + shape. Increasing placement indices remove ID permutations.
@@ -30,7 +30,13 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
         for (const p of cells) { rows[p.r]++; cols[p.c]++; }
         if (rows.some((v, i) => v > level.rows[i]) || cols.some((v, i) => v > level.cols[i])) continue;
         const mask = cells.reduce((m, p) => m | bit(p), 0n);
-        domain.push({ at, cells, mask, rows, cols, near: board.filter(p => cells.some(q => adjacent(p, q))).reduce((m, p) => m | bit(p), 0n), around: board.filter(p => cells.some(q => adjacent(p, q, true))).reduce((m, p) => m | bit(p), 0n) });
+        const connections = campConnections(piece.kind, cells, board, level.terrain).map(link => ({ camp: bit(link.camp), gap: link.gap ? bit(link.gap) : 0n }));
+        const forbidden: Candidate['forbidden'] = {};
+        for (const kind of ['camp', 'fire', 'foodTruck', 'powerTower'] as const) {
+          const banned = board.filter(p => facilityConflict(piece.kind, cells, kind, [p])).reduce((m, p) => m | bit(p), 0n);
+          if (banned) forbidden[kind] = banned;
+        }
+        domain.push({ at, cells, mask, rows, cols, connections, forbidden, around: board.filter(p => cells.some(q => adjacent(p, q, true))).reduce((m, p) => m | bit(p), 0n) });
       }
     }
     groups.push({ piece, ids: [piece.id], domain });
@@ -41,13 +47,15 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
   const remaining = groups.map(g => g.ids.length), last = groups.map(() => -1);
   const rows = Array<number>(n).fill(0), cols = Array<number>(n).fill(0);
   const chosen: { g: number; p: Candidate }[] = [];
-  function search(used: bigint, camps: bigint, towers: bigint, fire: bigint, picnic: bigint) {
+  const supports = (p: Candidate, camps: bigint, used: bigint) => p.connections.some(link => (link.camp & camps) && !(link.gap & used));
+  function search(used: bigint, byKind: Partial<Record<FacilityKind, bigint>>) {
+    const camps = byKind.camp ?? 0n, towers = byKind.tower ?? 0n, fire = byKind.fire ?? 0n, picnic = byKind.picnic ?? 0n;
     if (stats.count >= limit || stats.aborted) return;
     stats.nodes++;
     if (stats.nodes > (budget.maxNodes ?? Infinity) || (stats.nodes % 64 === 1 && Date.now() >= (budget.deadline ?? Infinity))) { stats.aborted = true; return; }
     if (chosen.length === level.pieces.length) {
       if (rows.some((v, i) => v !== level.rows[i]) || cols.some((v, i) => v !== level.cols[i])) return;
-      if (chosen.some(({ g, p }) => ['fire', 'picnic'].includes(groups[g].piece.kind) && !(p.near & camps))) return;
+      if (chosen.some(({ g, p }) => campRequirements[groups[g].piece.kind] && !supports(p, camps, used))) return;
       const indices = groups.map(() => 0);
       const solution = chosen.map(({ g, p }) => ({ ...p.at, id: groups[g].ids[indices[g]++] }));
       if (!evaluate(level, solution).won) return;
@@ -63,29 +71,30 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
         const p = group.domain[i];
         if (p.mask & used || p.rows.some((v, r) => rows[r] + v > level.rows[r]) || p.cols.some((v, c) => cols[c] + v > level.cols[c])) continue;
         if (group.piece.kind === 'tower' && (p.around & towers) || group.piece.kind === 'fire' && (p.around & picnic) || group.piece.kind === 'picnic' && (p.around & fire)) continue;
+        if (Object.entries(p.forbidden).some(([kind, mask]) => mask & (byKind[kind as FacilityKind] ?? 0n))) continue;
         valid.push(i); possible |= p.mask;
         if (group.piece.kind === 'camp') possibleCamps |= p.mask;
       }
       if (valid.length < remaining[g]) return;
       if (best < 0 || valid.length < choices.length) { best = g; choices = valid; }
     }
-    if (chosen.some(({ g, p }) => ['fire', 'picnic'].includes(groups[g].piece.kind) && !(p.near & possibleCamps))) return;
+    if (chosen.some(({ g, p }) => campRequirements[groups[g].piece.kind] && !supports(p, possibleCamps, used))) return;
     const capacityR = Array<number>(n).fill(0), capacityC = Array<number>(n).fill(0);
     for (const p of board) if (possible & bit(p)) { capacityR[p.r]++; capacityC[p.c]++; }
     if (rows.some((v, r) => v + capacityR[r] < level.rows[r]) || cols.some((v, c) => v + capacityC[c] < level.cols[c])) return;
     const group = groups[best], previous = last[best];
     for (const i of choices) {
       const p = group.domain[i], kind = group.piece.kind;
-      if (['fire', 'picnic'].includes(kind) && !(p.near & possibleCamps)) continue;
+      if (campRequirements[kind] && !supports(p, possibleCamps, used | p.mask)) continue;
       last[best] = i; remaining[best]--; chosen.push({ g: best, p });
       for (let j = 0; j < n; j++) { rows[j] += p.rows[j]; cols[j] += p.cols[j]; }
-      search(used | p.mask, kind === 'camp' ? camps | p.mask : camps, kind === 'tower' ? towers | p.mask : towers, kind === 'fire' ? fire | p.mask : fire, kind === 'picnic' ? picnic | p.mask : picnic);
+      search(used | p.mask, { ...byKind, [kind]: (byKind[kind] ?? 0n) | p.mask });
       for (let j = 0; j < n; j++) { rows[j] -= p.rows[j]; cols[j] -= p.cols[j]; }
       chosen.pop(); remaining[best]++; last[best] = previous;
       if (stats.count >= limit || stats.aborted) break;
     }
   }
-  if (limit > 0 && level.rows.reduce((a, b) => a + b, 0) === stats.occupied && level.cols.reduce((a, b) => a + b, 0) === stats.occupied) search(0n, 0n, 0n, 0n, 0n);
+  if (limit > 0 && level.rows.reduce((a, b) => a + b, 0) === stats.occupied && level.cols.reduce((a, b) => a + b, 0) === stats.occupied) search(0n, {});
   return stats;
 }
 

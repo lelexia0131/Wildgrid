@@ -71,6 +71,7 @@
 .manual-column-dashes { display: flex; flex-direction: column; gap: 4px; }
 .manual-column-dashes i { display: block; width: 15px; height: 5px; border-radius: 3px; background: #dfb748; }
 .manual-intro { display: block; padding: 0 24px; text-align: center; }
+.progress-dots { flex-wrap: wrap; max-width: 266px; }
 .manual-intro h2 { font-size: 30px; letter-spacing: 5px; margin: 0 0 12px; }
 .manual-cell.manual-multi { background: transparent; }
 .manual-facility-art { min-width: 0; min-height: 0; z-index: 1; position: relative; --footprint-color: #eee0b7; --footprint-border: #b6a16b; }

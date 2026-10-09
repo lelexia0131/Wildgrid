@@ -1,6 +1,6 @@
 # 野格 v1.0.0
 
-原创露营主题逻辑益智游戏。React + TypeScript + Vite，无账户、无外部媒体请求；Windows 和 Android 使用独立的匿名玩家 ID 服务。冒险模式有 30 个固定关卡，1–15 关为 6×6，16–30 关为 8×8；荒野求生提供 10 档难度的随机挑战，沙盒模式支持创造、导入与保存本地地图。支持电脑鼠标和手机点击。当前版本 v1.0.0，更新日期 2026-10-08。
+原创露营主题逻辑益智游戏。React + TypeScript + Vite，无账户、无外部媒体请求；Windows 和 Android 使用独立的匿名玩家 ID 服务。冒险模式有 45 个固定关卡，1–15 关为 6×6，16–45 关为 8×8；荒野求生提供 10 档难度的随机挑战，沙盒模式支持创造、导入与保存本地地图。支持电脑鼠标和手机点击。当前版本 v1.0.0，更新日期 2026-10-09。
 
 ## 运行
 
@@ -17,7 +17,7 @@ npm run dev
 npm test          # 关键规则及全部固定关卡解法验证
 npm run build    # TypeScript 检查及生产构建，输出 dist/
 npm run preview  # 本地预览生产版（默认 4173 端口）
-npm run levels:check # Solver 验证 16–30 关唯一解
+npm run levels:check # Solver 验证 16–45 关唯一解
 npm run test:ui  # 多格插画、实时提示开关和手机触摸回归
 ```
 
@@ -40,7 +40,7 @@ src/game/types.ts       数据类型
 src/game/rules.ts       纯规则计算、旋转、占格、三态判定
 src/game/storage.ts     版本化本地存档与读取校验
 src/game/audio.ts       原创 Web Audio 音乐及交互音效
-src/data/levels.json    30 个固定关卡，无运行时随机生成
+src/data/levels.json    45 个固定关卡，无运行时随机生成
 src/components/Art.tsx  原创 SVG 地形、设施与菜单插画
 src/App.tsx             页面、操作历史、棋盘与设置
 src/styles.css          桌面与手机布局
@@ -49,7 +49,7 @@ scripts/author-levels.mjs  手工关卡编辑源，生成固定 JSON 与测试�
 tests/solutions.json    仅用于开发验证，不包含在应用构建中
 ```
 
-关卡 JSON 包含地形、设施清单、行列目标。编辑关卡时可修改 author-levels.mjs 中的固定布局及参考解，再执行 `node scripts/author-levels.mjs`、`npm test` 和 `npm run levels:check`。16–30 关由 Solver 验证唯一解，等价的设施编号和旋转不重复计数。
+关卡 JSON 包含地形、设施清单、行列目标。编辑关卡时可修改 author-levels.mjs 中的固定布局及参考解，再执行 `node scripts/author-levels.mjs`、`npm test` 和 `npm run levels:check`。16–45 关由 Solver 验证唯一解，等价的设施编号和旋转不重复计数。
 
 ## 音频与存档
 
@@ -64,6 +64,12 @@ Windows 和 Android 启动时异步读取独立的玩家 ID 缓存；没有缓�
 设置的第一项只读显示玩家 ID；获取期间显示“获取中…”，请求失败显示“暂未获取”，重新进入设置会重试。ID 请求不阻止启动和游玩，不修改冒险存档、地图或设置。浏览器预览不申请设备身份。
 
 API 地址集中在 `src/game/playerId.ts`。正式 HTTPS API 已部署，与现有 REALITY 节点通过 Nginx stream 共用公网 443；Windows 和 Android 均已验证真实申请、缓存读取及删除独立 ID 缓存后的服务器恢复。网络不可用时仍显示“暂未获取”，游戏继续正常运行。部署结构见 `server/README.md`。
+
+## Day 31–45
+
+通关 Day 15 即可进入 Day 31；Day 31–45 顺序解锁，独立于 Day 16–30。旧关卡和答案保持不变。餐车、电塔、泳池均为单格设施，统一支持冒险、沙盒、本地地图和荒野求生；WG1 编码与三套 v1 存档保持兼容。餐车与营地正交间隔一格空草地，不能直接正交邻营地；电塔禁止八方向邻篝火、正交邻营地；泳池正交邻水且八方向邻营地。
+
+Day 31–40 教学，Day 41–45 对照 26–30 的占格与多格规模设计。设计基准和最终搜索数据见 `reports/day31-baseline.json`、`reports/day31-levels.json`。新增固定数据保存在 `levels.json` 和 `solutions.json` 中。
 
 ## 沙盒模式
 
@@ -113,6 +119,24 @@ APK 输出：`release/野格-v1.0.0.apk`，Gradle 原始输出仍位于 `android
 
 手机竖屏采用大棋盘与下方固定高度设施区，横屏采用棋盘与工具并排；列表、关卡选择和说明书各自可滚动。安全区使用 `env(safe-area-inset-*)` 和 Capacitor 的 inset 变量兼容旧 WebView。沿用 localStorage 保存进度和设置，强制退出再启动仍可恢复；清除应用数据或卸载会删除存档。音频仅在第一次用户交互时启动，后台暂停。Android 使用本地打包资源，不注册 Web Service Worker，避免旧缓存覆盖新版 APK。
 
+## 安装包下载部署
+
+在配置好现有 VPS SSH 别名的 Windows 构建机执行：
+
+```sh
+npm run deploy:downloads
+```
+
+脚本沿用 `package:win` 和 `android:apk`，自动定位本次构建的非空安装包，不依赖版本号。Android 当前没有正式签名配置，沿用已有 debug 签名，不生成新的正式签名密钥。
+
+默认使用已有 `DMIT-root-179.255.156.84` SSH 别名；需要使用其他已配置别名时，可设置环境变量 `WILDGRID_SSH_HOST`。认证由用户的 OpenSSH 配置和密钥提供，仓库不存放密码或密钥。VPS 使用已有 Python 3、Nginx 和 systemd，无需安装新依赖。
+
+安装包先上传到 `/var/www/Wildgrid/` 内的临时文件，核对 SHA-256 后以原子替换发布为 `Wildgrid.exe` 和 `Wildgrid.apk`，目录权限为 755、文件权限为 644。下载地址始终为 `http://<SSH HostName>:8080/Wildgrid.exe` 和 `http://<SSH HostName>:8080/Wildgrid.apk`。
+
+首次部署在现有 `/etc/nginx/sites-available/fiverealms-download` 的 8080 server 内添加两个精确路径，配置修改前备份到 `/var/backups/wildgrid-download/`；`nginx -t` 通过后才 reload，失败恢复原配置。后续配置未变时仅替换安装包。保留原 `/FiveRealms` 路径及其他服务器文件，不修改 443 stream、HTTPS 或玩家 ID 服务及数据库。
+
+部署完成后脚本实际下载两个公网文件并对比本地 SHA-256、文件大小和下载响应头，同时检查原 FiveRealms 链接返回 200；连接或校验失败会以非零状态退出，构建完成的本地安装包仍保留在 `release/`。
+
 ## 验证范围
 
-核心自动验证覆盖：30 关参考解法、旋转面积、取回后未完成状态、防火斜角距离、塔间斜角距离、边界/地形/重叠、多格行列计数、新设施规则，以及已通关布局重新进入时重置、未完成进度继续恢复。`levels:check` 检查 16–30 关唯一解；`test:ui` 在隔离存档中检查桌面与手机横竖屏、多格四向图案、提示即时关闭与恢复、固定棋盘/工具尺寸及触摸拿起/放置。棋盘上的规则错误持续显示，修正后恢复关卡提示。
+核心自动验证覆盖：45 关参考解法、旋转面积、取回后未完成状态、防火斜角距离、塔间斜角距离、边界/地形/重叠、多格行列计数、新设施规则，以及已通关布局重新进入时重置、未完成进度继续恢复。`levels:check` 检查 16–45 关唯一解；`test:ui` 在隔离存档中检查桌面与手机横竖屏、多格四向图案、提示即时关闭与恢复、固定棋盘/工具尺寸及触摸拿起/放置。棋盘上的规则错误持续显示，修正后恢复关卡提示。

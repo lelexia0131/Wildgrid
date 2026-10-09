@@ -1,0 +1,266 @@
+[
+  {
+    "id": 26,
+    "facilities": [
+      "camp_long",
+      "camp_domino",
+      "camp_single",
+      "camp_domino",
+      "camp_single",
+      "camp_single",
+      "camp_single",
+      "fire_single",
+      "fire_single",
+      "tower_single",
+      "tower_single",
+      "tower_single",
+      "picnic_domino",
+      "picnic_domino",
+      "cabin_el"
+    ],
+    "rows": [
+      3,
+      3,
+      2,
+      1,
+      3,
+      5,
+      2,
+      4
+    ],
+    "cols": [
+      3,
+      3,
+      2,
+      3,
+      3,
+      4,
+      1,
+      4
+    ],
+    "search": {
+      "count": 1,
+      "terrain": 17,
+      "pieces": 15,
+      "occupied": 23,
+      "candidates": 310,
+      "rotationCandidates": 98,
+      "nodes": 32158,
+      "aborted": false,
+      "forced": 0
+    }
+  },
+  {
+    "id": 27,
+    "facilities": [
+      "camp_long",
+      "camp_domino",
+      "camp_single",
+      "camp_domino",
+      "camp_single",
+      "camp_single",
+      "camp_single",
+      "fire_single",
+      "fire_single",
+      "fire_single",
+      "tower_single",
+      "tower_single",
+      "tower_single",
+      "picnic_domino",
+      "picnic_domino",
+      "cabin_el"
+    ],
+    "rows": [
+      4,
+      1,
+      4,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "cols": [
+      5,
+      2,
+      5,
+      3,
+      1,
+      2,
+      3,
+      3
+    ],
+    "search": {
+      "count": 1,
+      "terrain": 18,
+      "pieces": 16,
+      "occupied": 24,
+      "candidates": 323,
+      "rotationCandidates": 93,
+      "nodes": 52390,
+      "aborted": false,
+      "forced": 0
+    }
+  },
+  {
+    "id": 28,
+    "facilities": [
+      "camp_long",
+      "camp_domino",
+      "camp_single",
+      "camp_domino",
+      "camp_single",
+      "camp_single",
+      "camp_single",
+      "fire_single",
+      "fire_single",
+      "fire_single",
+      "tower_single",
+      "tower_single",
+      "tower_single",
+      "tower_single",
+      "picnic_domino",
+      "picnic_domino",
+      "cabin_el"
+    ],
+    "rows": [
+      5,
+      2,
+      5,
+      3,
+      1,
+      3,
+      3,
+      3
+    ],
+    "cols": [
+      4,
+      1,
+      4,
+      3,
+      3,
+      3,
+      3,
+      4
+    ],
+    "search": {
+      "count": 1,
+      "terrain": 18,
+      "pieces": 17,
+      "occupied": 25,
+      "candidates": 363,
+      "rotationCandidates": 106,
+      "nodes": 249231,
+      "aborted": false,
+      "forced": 0
+    }
+  },
+  {
+    "id": 29,
+    "facilities": [
+      "camp_long",
+      "camp_domino",
+      "camp_single",
+      "camp_domino",
+      "camp_single",
+      "camp_single",
+      "camp_single",
+      "fire_single",
+      "fire_single",
+      "fire_single",
+      "fire_single",
+      "tower_single",
+      "tower_single",
+      "tower_single",
+      "tower_single",
+      "picnic_domino",
+      "picnic_domino",
+      "cabin_el"
+    ],
+    "rows": [
+      5,
+      1,
+      4,
+      3,
+      3,
+      3,
+      3,
+      4
+    ],
+    "cols": [
+      3,
+      3,
+      4,
+      1,
+      3,
+      5,
+      2,
+      5
+    ],
+    "search": {
+      "count": 1,
+      "terrain": 19,
+      "pieces": 18,
+      "occupied": 26,
+      "candidates": 326,
+      "rotationCandidates": 84,
+      "nodes": 8550,
+      "aborted": false,
+      "forced": 0
+    }
+  },
+  {
+    "id": 30,
+    "facilities": [
+      "camp_long",
+      "camp_domino",
+      "camp_single",
+      "camp_domino",
+      "camp_el",
+      "camp_single",
+      "camp_single",
+      "fire_single",
+      "fire_single",
+      "fire_single",
+      "fire_single",
+      "tower_single",
+      "tower_single",
+      "tower_single",
+      "tower_single",
+      "picnic_domino",
+      "picnic_domino",
+      "cabin_el"
+    ],
+    "rows": [
+      2,
+      4,
+      4,
+      2,
+      6,
+      3,
+      2,
+      5
+    ],
+    "cols": [
+      5,
+      0,
+      5,
+      3,
+      4,
+      3,
+      4,
+      4
+    ],
+    "search": {
+      "count": 1,
+      "terrain": 18,
+      "pieces": 18,
+      "occupied": 28,
+      "candidates": 310,
+      "rotationCandidates": 117,
+      "nodes": 64141,
+      "aborted": false,
+      "forced": 0
+    }
+  }
+]

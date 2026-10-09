@@ -3493,5 +3493,1795 @@
       4,
       4
     ]
+  },
+  {
+    "id": 31,
+    "name": "第31关",
+    "chapter": "",
+    "tip": "餐车与营地上下左右间隔一格，中间留出空草地。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-2",
+        "kind": "foodTruck",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "id": 32,
+    "name": "第32关",
+    "chapter": "",
+    "tip": "多格营地按实际占格判断。餐车不能直接挨着任何营地。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 5
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "foodTruck-2",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "tower-3",
+        "kind": "tower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      0,
+      0,
+      2,
+      1,
+      0,
+      0,
+      1,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      2,
+      0,
+      1,
+      0,
+      1,
+      0
+    ]
+  },
+  {
+    "id": 33,
+    "name": "第33关",
+    "chapter": "",
+    "tip": "旋转营地，给餐车留出一格空草地，再结合行列线索。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 5
+      },
+      {
+        "r": 3,
+        "c": 4,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-3",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-4",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "fire-5",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-6",
+        "kind": "tower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      1,
+      0,
+      3,
+      2,
+      0,
+      2,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      2,
+      3,
+      0,
+      2,
+      1,
+      0
+    ]
+  },
+  {
+    "id": 34,
+    "name": "第34关",
+    "chapter": "",
+    "tip": "电塔与篝火不能八方向相邻，斜角也要留出距离。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 1
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-2",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-3",
+        "kind": "powerTower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "id": 35,
+    "name": "第35关",
+    "chapter": "",
+    "tip": "电塔不能上下左右挨着营地，但可以斜角相邻。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 6
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-4",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-5",
+        "kind": "powerTower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      0,
+      1,
+      2,
+      1,
+      1,
+      1,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      2,
+      1,
+      2,
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "id": 36,
+    "name": "第36关",
+    "chapter": "",
+    "tip": "电塔与瞭望塔不同：瞭望塔邻山，电塔远离篝火与营地。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 6
+      },
+      {
+        "r": 2,
+        "c": 5,
+        "kind": "mountain"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-4",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-5",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-6",
+        "kind": "tower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      1,
+      0,
+      2,
+      2,
+      1,
+      0,
+      2,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      2,
+      3,
+      1,
+      2,
+      0,
+      0
+    ]
+  },
+  {
+    "id": 37,
+    "name": "第37关",
+    "chapter": "",
+    "tip": "餐车的间隔和电塔的距离，要同时满足。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 5
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "kind": "mountain"
+      },
+      {
+        "r": 1,
+        "c": 2,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "foodTruck-2",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-3",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "fire-4",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-5",
+        "kind": "tower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      1,
+      0,
+      2,
+      1,
+      2,
+      0,
+      1,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      3,
+      1,
+      2,
+      0,
+      1,
+      0
+    ]
+  },
+  {
+    "id": 38,
+    "name": "第38关",
+    "chapter": "",
+    "tip": "泳池必须上下左右邻水，周围八格至少有一个营地占格。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 2
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "pool-2",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      0,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "id": 39,
+    "name": "第39关",
+    "chapter": "",
+    "tip": "泳池可以斜角挨着营地，但斜角邻水不算。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "pool-2",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      0,
+      0,
+      2,
+      2,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      1,
+      2,
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "id": 40,
+    "name": "第40关",
+    "chapter": "",
+    "tip": "旋转多格营地，同时照顾泳池邻水与营地的关系。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 5
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "pool-3",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "pool-4",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-5",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "tower-6",
+        "kind": "tower",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      1,
+      0,
+      2,
+      2,
+      1,
+      3,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      1,
+      3,
+      1,
+      1,
+      1,
+      2,
+      0
+    ]
+  },
+  {
+    "id": 41,
+    "name": "第41关",
+    "chapter": "",
+    "tip": "从行列线索出发，把餐车、电塔与泳池串入营地规划。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 3,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "kind": "forest",
+        "r": 1,
+        "c": 2
+      },
+      {
+        "r": 7,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 5,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 5,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 7,
+        "kind": "mountain"
+      },
+      {
+        "r": 1,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 3,
+        "kind": "water"
+      },
+      {
+        "r": 3,
+        "c": 5,
+        "kind": "water"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "kind": "water"
+      },
+      {
+        "r": 1,
+        "c": 6,
+        "kind": "water"
+      },
+      {
+        "r": 6,
+        "c": 2,
+        "kind": "mountain"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "powerTower-3",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "pool-5",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-10",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-11",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-13",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-14",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-15",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      3,
+      3,
+      2,
+      1,
+      2,
+      5,
+      3,
+      4
+    ],
+    "cols": [
+      3,
+      3,
+      2,
+      3,
+      3,
+      4,
+      1,
+      4
+    ]
+  },
+  {
+    "id": 42,
+    "name": "第42关",
+    "chapter": "",
+    "tip": "空出的间隔格也是线索，结合多格营地的方向逐步推理。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 3
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 0
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 4
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "kind": "forest",
+        "r": 5,
+        "c": 6
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 5,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 1,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "kind": "mountain"
+      },
+      {
+        "r": 0,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 1,
+        "kind": "water"
+      },
+      {
+        "r": 1,
+        "c": 6,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "powerTower-3",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "pool-5",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-11",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-12",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-14",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-15",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-16",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      4,
+      1,
+      4,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "cols": [
+      5,
+      3,
+      5,
+      2,
+      1,
+      2,
+      3,
+      3
+    ]
+  },
+  {
+    "id": 43,
+    "name": "第43关",
+    "chapter": "",
+    "tip": "留意斜角与正交的区别，让各处设施找到自己的位置。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 3,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 4,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "kind": "forest",
+        "r": 6,
+        "c": 5
+      },
+      {
+        "r": 3,
+        "c": 1,
+        "kind": "mountain"
+      },
+      {
+        "r": 2,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 0,
+        "kind": "mountain"
+      },
+      {
+        "r": 1,
+        "c": 4,
+        "kind": "water"
+      },
+      {
+        "r": 5,
+        "c": 0,
+        "kind": "water"
+      },
+      {
+        "r": 6,
+        "c": 1,
+        "kind": "water"
+      },
+      {
+        "r": 0,
+        "c": 5,
+        "kind": "mountain"
+      },
+      {
+        "r": 6,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 1,
+        "c": 3,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "pool-5",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-6",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-8",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-11",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-14",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-15",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-17",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      4,
+      3,
+      5,
+      2,
+      2,
+      3,
+      3,
+      3
+    ],
+    "cols": [
+      4,
+      1,
+      3,
+      4,
+      3,
+      3,
+      3,
+      4
+    ]
+  },
+  {
+    "id": 44,
+    "name": "第44关",
+    "chapter": "",
+    "tip": "把邻水、间隔和防火条件结合起来，检查每一个营地占格。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 3
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "kind": "forest",
+        "r": 5,
+        "c": 1
+      },
+      {
+        "r": 5,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 6,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 4,
+        "kind": "mountain"
+      },
+      {
+        "r": 3,
+        "c": 1,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 7,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 6,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "powerTower-3",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "pool-5",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "camp-6",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-9",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-10",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "fire-11",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-14",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-18",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      5,
+      1,
+      4,
+      3,
+      3,
+      3,
+      3,
+      4
+    ],
+    "cols": [
+      3,
+      3,
+      4,
+      2,
+      2,
+      5,
+      2,
+      5
+    ]
+  },
+  {
+    "id": 45,
+    "name": "第45关",
+    "chapter": "",
+    "tip": "从确定的行列开始，旋转多格设施，完成这片营地。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 7
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 6
+      },
+      {
+        "kind": "mountain",
+        "r": 3,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "kind": "forest",
+        "r": 1,
+        "c": 5
+      },
+      {
+        "r": 7,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 7,
+        "kind": "water"
+      },
+      {
+        "r": 2,
+        "c": 6,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "kind": "forest"
+      },
+      {
+        "r": 5,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "kind": "forest",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 0,
+        "kind": "forest"
+      },
+      {
+        "r": 1,
+        "c": 6,
+        "kind": "forest"
+      },
+      {
+        "r": 4,
+        "c": 0,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "powerTower-6",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "camp-7",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-8",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "pool-9",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "fire-10",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-11",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "tower-12",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-13",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-14",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-15",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-16",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "picnic-17",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "cabin-18",
+        "kind": "cabin",
+        "shape": "el"
+      }
+    ],
+    "rows": [
+      2,
+      4,
+      3,
+      3,
+      5,
+      3,
+      3,
+      5
+    ],
+    "cols": [
+      3,
+      0,
+      6,
+      3,
+      5,
+      3,
+      4,
+      4
+    ]
   }
 ]

@@ -14,7 +14,7 @@ export const facilityLibrary: Piece[] = Array.from(new Map((data as Level[]).fla
 })).values());
 
 const terrainKinds: TerrainKind[] = ['water', 'forest', 'mountain'];
-const names: Record<FacilityKind, string> = { camp: '营地', fire: '篝火', tower: '瞭望塔', picnic: '野餐桌', cabin: '林间木屋' };
+const names: Record<FacilityKind, string> = { camp: '营地', fire: '篝火', tower: '瞭望塔', picnic: '野餐桌', cabin: '林间木屋', foodTruck: '餐车', powerTower: '电塔', pool: '泳池' };
 const maxCodeLength = 32768;
 const object = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 const integer = (value: unknown, min: number, max: number): value is number => typeof value === 'number' && Number.isInteger(value) && value >= min && value <= max;

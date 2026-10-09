@@ -19,6 +19,7 @@
     "android:sync": "npm run build && npm run android:icons && cap sync android",
     "android:open": "cap open android",
     "android:apk": "npm run android:sync && node scripts/build-android.mjs",
+    "deploy:downloads": "node scripts/deploy-downloads.mjs",
     "desktop": "node node_modules/electron/install.js && npm run build && electron .",
     "package:win": "node node_modules/electron/install.js && npm run icons && npm run build && electron-builder --win nsis --x64 --publish never"
   },
