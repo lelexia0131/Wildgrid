@@ -97,7 +97,7 @@ app.whenReady().then(async () => {
       const el = document.querySelector(selector); return {selector,height:el.clientHeight,content:el.scrollHeight,scroll:el.scrollTop};
     });
     return {width:innerWidth,height:innerHeight,overflowX:document.documentElement.scrollWidth>innerWidth,documentHeight:document.documentElement.scrollHeight,
-      list:rect(document.querySelector('.local-map-list')),detail:rect(document.querySelector('.local-map-detail')),preview:board,enter:rect(document.querySelector('.local-map-enter')),delete:rect(document.querySelector('.local-map-delete')),regions,
+      list:rect(document.querySelector('.local-map-list')),detail:rect(document.querySelector('.local-map-detail')),view:rect(document.querySelector('.local-map-view')),items:rect(document.querySelector('.local-map-items')),preview:board,enter:rect(document.querySelector('.local-map-enter')),edit:rect(document.querySelector('.local-map-edit')),delete:rect(document.querySelector('.local-map-delete')),regions,
       actionColors:['.local-map-enter','.local-map-delete'].map(selector => getComputedStyle(document.querySelector(selector)).backgroundColor.match(/[0-9.]+/g).map(Number)),
       artFits:Array.from(preview.querySelectorAll('.placed-facility-art')).every(el => { const r=rect(el); return r.left>=board.left-1 && r.top>=board.top-1 && r.right<=board.right+1 && r.bottom<=board.bottom+1; })};
   })()`);
@@ -105,11 +105,13 @@ app.whenReady().then(async () => {
     assert.equal(state.overflowX, false, JSON.stringify(state));
     assert.ok(state.documentHeight <= state.height + 1, JSON.stringify(state));
     for (const region of state.regions) assert.ok(region.content <= region.height + 1 && region.scroll === 0, JSON.stringify(state));
-    for (const rect of [state.preview, state.enter, state.delete]) assert.ok(rect.width > 0 && rect.height > 0 && rect.left >= -1 && rect.top >= -1 && rect.right <= state.width + 1 && rect.bottom <= state.height + 1, JSON.stringify(state));
-    assert.ok(state.enter.right <= state.delete.left && Math.abs(state.enter.top - state.delete.top) < 1 && Math.abs(state.enter.width - state.delete.width) < 1, JSON.stringify(state));
+    for (const rect of [state.preview, state.enter, state.edit, state.delete]) assert.ok(rect.width > 0 && rect.height > 0 && rect.left >= -1 && rect.top >= -1 && rect.right <= state.width + 1 && rect.bottom <= state.height + 1, JSON.stringify(state));
+    assert.ok(state.enter.right <= state.edit.left && Math.abs(state.enter.top - state.edit.top) < 1 && Math.abs(state.enter.width - state.edit.width) < 1, JSON.stringify(state));
+    assert.ok(state.delete.top >= state.enter.bottom && Math.abs(state.enter.width - state.delete.width) < 1, JSON.stringify(state));
     const [green, red] = state.actionColors;
     assert.ok(green[1] > green[0] && green[1] > green[2] && red[0] > red[1] && red[0] > red[2], JSON.stringify(state));
     assert.ok(Math.abs(state.preview.width - state.preview.height) < 1, JSON.stringify(state));
+    assert.ok(state.preview.left >= state.view.left - 1 && state.preview.right <= state.view.right + 1 && state.preview.top >= state.view.top - 1 && state.preview.bottom <= state.view.bottom + 1 && state.preview.bottom <= state.enter.top, JSON.stringify(state));
     assert.equal(state.artFits, true, JSON.stringify(state));
   }
   try {
@@ -118,7 +120,7 @@ app.whenReady().then(async () => {
     log('Game loaded.');
     await js('localStorage.clear()'); await load(); await modes();
     assert.equal(await js(`document.querySelector('.sandbox-menu-copy h1').textContent`), '模式选择');
-    assert.deepEqual(await js(`Array.from(document.querySelectorAll('.sandbox-choice strong')).map(el => el.textContent)`), ['继续冒险', '沙盒模式', '本地地图']);
+    assert.deepEqual(await js(`Array.from(document.querySelectorAll('.sandbox-choice strong')).map(el => el.textContent)`), ['继续冒险', '荒野求生', '沙盒模式', '本地地图']);
     await clickText('本地地图');
     assert.equal(await js(`document.querySelector('.local-map-empty h2').textContent`), '还没有本地地图');
     assert.equal(await stored(), null);
@@ -136,6 +138,7 @@ app.whenReady().then(async () => {
     assert.match(await js('window.__clipboardWrites[0]'), /^WG1:/);
     await click('.modal-close'); await click('.game-title .icon-button');
     assert.equal(await js(`document.querySelector('dialog').open`), false, 'saved editor should leave without a loss prompt');
+    assert.equal(await js(`document.querySelector('.sandbox-menu-page h1').textContent`), '本地地图');
     await localPage();
     assert.deepEqual(await js(`Array.from(document.querySelectorAll('.local-map-card strong')).map(el => el.textContent)`), ['本地地图1']);
     assert.equal(await js(`document.querySelector('.local-map-detail h2').textContent`), '本地地图1');
@@ -154,6 +157,17 @@ app.whenReady().then(async () => {
     await click('.modal-close');
     assert.equal(await js(`document.querySelectorAll('.board > .tile.placed').length`), 0);
     assert.equal(await stored(), beforeBlueprint);
+    await click('.game-title .icon-button');
+    assert.equal(await js(`document.querySelector('.sandbox-menu-page h1').textContent`), '本地地图');
+    await click('.local-map-edit');
+    assert.equal(await js(`document.querySelector('.game-title button').getAttribute('aria-label')`), '返回本地地图');
+    await click('.terrain-tools button:first-child'); await tile(2, 2);
+    await click('.game-title .icon-button');
+    assert.equal(await js(`document.querySelector('dialog[open] h2').textContent`), '返回本地地图？');
+    await clickText('确定返回', 'dialog[open] button');
+    assert.equal(await js(`document.querySelector('.sandbox-menu-page h1').textContent`), '本地地图');
+    assert.equal(await stored(), beforeBlueprint, 'discarding local edits must keep the saved blueprint');
+    await click('.local-map-enter');
     await click('[aria-label="选择单格营地，剩余 1"]'); await tile(0, 1);
     assert.equal(await js(`Boolean(document.querySelector('.win-content'))`), true);
 
@@ -167,6 +181,8 @@ app.whenReady().then(async () => {
     assert.deepEqual((await entries()).find(map => map.id === 2).progress, [{ id: 'a', r: 1, c: 1, rotation: 0 }]);
     await checkAction('.sandbox-save', '已保存到本地地图2');
     assert.equal((await entries()).length, 2);
+    await click('.game-title .icon-button');
+    assert.equal(await js(`document.querySelector('.sandbox-menu-page h1').textContent`), '本地地图');
     await localPage(); await click('.local-map-card:nth-child(2)'); await click('.local-map-enter');
     assert.equal(await js(`document.querySelector('.game-title h1').textContent`), '本地地图2');
     assert.equal(await js(`document.querySelectorAll('.board > .tile.placed-camp').length`), 1);
@@ -270,7 +286,7 @@ app.whenReady().then(async () => {
     log('Stale async export cancellation PASS.');
 
     const measurements = [], layoutFailures = [];
-    for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }, { width: 844, height: 390 }, { width: 2434, height: 594 }]) {
+    for (const viewport of [{ width: 1280, height: 900 }, { width: 1280, height: 665 }, { width: 390, height: 844 }, { width: 844, height: 390 }, { width: 2434, height: 594 }]) {
       win.setContentSize(viewport.width, viewport.height);
       await contents.debugger.sendCommand('Emulation.setDeviceMetricsOverride', { ...viewport, deviceScaleFactor: 1, mobile: viewport.width < 1000 });
       await contents.debugger.sendCommand('Emulation.setTouchEmulationEnabled', { enabled: viewport.width < 1000 });
@@ -329,8 +345,22 @@ app.whenReady().then(async () => {
       try { assertFits(crowded); } catch (error) { layoutFailures.push({ viewport, scenario: '24 saves and eight facility types', message: error.message }); }
       assert.ok(await js(`document.querySelectorAll('.local-map-items li').length >= 5`));
       writeFileSync(path.join(output, `local-maps-${viewport.width}-crowded.png`), (await contents.capturePage()).toPNG());
+      const matchingMaps = { version: 1, maps: [
+        { id: 1, customName: '这是一张超级难的地图', code: rotated8, progress: [] },
+        { id: 2, customName: '132231312312123', code: rotated8, progress: [], source: 'survival', survival: { challengeId: 'layout-check', difficulty: 2, seed: 1, completed: false, blueprintUnlocked: true } },
+      ] };
+      await js(`localStorage.setItem(${JSON.stringify(storageKey)}, ${JSON.stringify(JSON.stringify(matchingMaps))}); void 0;`);
+      await localPage();
+      const sandboxLayout = await geometry();
+      assertFits(sandboxLayout);
+      await click('.local-map-card:nth-child(2)');
+      const survivalLayout = await geometry();
+      assertFits(survivalLayout);
+      for (const region of ['detail', 'view', 'items', 'preview', 'enter', 'edit', 'delete']) assert.deepEqual(survivalLayout[region], sandboxLayout[region], `${region} must keep the same layout when switching map sources at ${viewport.width}×${viewport.height}`);
+      writeFileSync(path.join(output, `local-maps-${viewport.width}x${viewport.height}-survival.png`), (await contents.capturePage()).toPNG());
       measurements.push({ viewport, normal, crowded, scrolling });
     }
+    log('Matching sandbox and survival local-map layouts PASS across five viewports.');
     assert.deepEqual(errors, []);
     writeFileSync(path.join(output, 'results.json'), JSON.stringify({ measurements, layoutFailures }, null, 2));
     assert.equal(layoutFailures.length, 0, 'Layout errors are recorded in results.json');

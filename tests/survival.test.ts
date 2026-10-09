@@ -61,11 +61,11 @@ test('progress, undo, selection and rotations survive reload; settlement is atom
 test('collections keep the original answer, block locked edits and unlock every copy by challenge ID', () => {
   values.clear(); storage();
   const challenge = maps[0], info = { challengeId: challenge.id, difficulty: 1, seed: challenge.seed, completed: false, blueprintUnlocked: false };
+  writeSurvival({ ...readSurvival(), challenge, progress: emptySurvivalProgress(challenge.id) });
   const first = saveLocalMap(challenge.draft, [], undefined, info), second = saveLocalMap(challenge.draft, [], undefined, info);
   assert.deepEqual(first.draft.placements, challenge.draft.placements); assert.deepEqual(first.progress, []);
   const changed = structuredClone(challenge.draft); changed.level.terrain.push({ r: 7, c: 7, kind: 'mountain' });
-  assert.throws(() => saveLocalMap(changed, [], first.id), /通关后才能编辑/);
-  writeSurvival({ ...readSurvival(), challenge, progress: emptySurvivalProgress(challenge.id) });
+  assert.throws(() => saveLocalMap(changed, [], first.id), /通关或放弃挑战后才能编辑/);
   completeSurvival(challenge, challenge.draft.placements);
   unlockSurvivalMaps(challenge.id);
   assert.equal(readLocalMaps().filter(map => map.survival?.blueprintUnlocked).length, 2);
@@ -74,4 +74,28 @@ test('collections keep the original answer, block locked edits and unlock every 
   const edited = saveLocalMap(changed, [], first.id);
   assert.equal(edited.survival, undefined);
   assert.equal(saveLocalMap(challenge.draft).survival, undefined);
+});
+
+test('abandoning a saved challenge unlocks local blueprints and edits without awarding completion', () => {
+  values.clear(); storage();
+  const challenge = maps[0], info = { challengeId: challenge.id, difficulty: 1, seed: challenge.seed, completed: false, blueprintUnlocked: false };
+  writeSurvival({ ...readSurvival(), challenge, progress: emptySurvivalProgress(challenge.id) });
+  const first = saveLocalMap(challenge.draft, [], undefined, info), second = saveLocalMap(challenge.draft, [], undefined, info);
+  const changed = structuredClone(challenge.draft); changed.level.terrain.push({ r: 7, c: 7, kind: 'mountain' });
+  const localBefore = values.get('wildgrid-local-maps-v1');
+  assert.equal(readLocalMaps().every(map => map.survival?.blueprintUnlocked === false), true);
+  writeSurvival({ ...readSurvival(), challenge: null, progress: null });
+  const restored = readLocalMaps();
+  assert.equal(restored.every(map => map.survival?.blueprintUnlocked && !map.survival.completed), true);
+  assert.deepEqual(restored[0].draft.placements, challenge.draft.placements);
+  assert.equal(values.get('wildgrid-local-maps-v1'), localBefore, 'unlocking survives reload without needing a second storage write');
+  assert.deepEqual(readSurvival().completed, []);
+  assert.throws(() => completeSurvival(challenge, challenge.draft.placements), /挑战已结束/);
+  const next = maps[1];
+  writeSurvival({ ...readSurvival(), challenge: next, progress: emptySurvivalProgress(next.id) });
+  assert.equal(readLocalMaps().find(map => map.id === second.id)?.survival?.blueprintUnlocked, true);
+  assert.throws(() => completeSurvival(challenge, challenge.draft.placements), /挑战已结束/);
+  assert.equal(saveLocalMap(changed, [], first.id).survival, undefined);
+  assert.equal(readSurvival().challenge?.id, next.id);
+  assert.deepEqual(readSurvival().completed, []);
 });

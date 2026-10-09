@@ -29,7 +29,7 @@ function parseLocalMaps(raw: string | null): LocalMap[] {
   try { value = JSON.parse(raw || 'null'); } catch { return []; }
   if (!object(value) || value.version !== 1 || !Array.isArray(value.maps)) return [];
   const maps: LocalMap[] = [];
-  const completed = new Set(readSurvival().completed.map(c => c.id));
+  const survivalSave = readSurvival(), completed = new Set(survivalSave.completed.map(c => c.id));
   for (const entry of value.maps) {
     if (!object(entry) || typeof entry.id !== 'number' || !Number.isSafeInteger(entry.id) || entry.id < 1 || maps.some(map => map.id === entry.id) || typeof entry.code !== 'string') continue;
     try {
@@ -37,7 +37,7 @@ function parseLocalMaps(raw: string | null): LocalMap[] {
       const customName = typeof entry.customName === 'string' ? entry.customName.trim() : '';
       const info = entry.survival;
       if (entry.source === 'survival' && (!object(info) || typeof info.challengeId !== 'string' || typeof info.difficulty !== 'number' || !Number.isInteger(info.difficulty) || info.difficulty < 1 || info.difficulty > 10 || typeof info.seed !== 'number' || !Number.isInteger(info.seed))) continue;
-      const survival = entry.source === 'survival' && object(info) ? { challengeId: info.challengeId as string, difficulty: info.difficulty as number, seed: info.seed as number, completed: completed.has(info.challengeId as string) || info.completed === true, blueprintUnlocked: completed.has(info.challengeId as string) || info.blueprintUnlocked === true } : undefined;
+      const survival = entry.source === 'survival' && object(info) ? { challengeId: info.challengeId as string, difficulty: info.difficulty as number, seed: info.seed as number, completed: completed.has(info.challengeId as string) || info.completed === true, blueprintUnlocked: completed.has(info.challengeId as string) || info.blueprintUnlocked === true || survivalSave.challenge?.id !== info.challengeId } : undefined;
       maps.push({ id: entry.id, name: '', ...(customName ? { customName } : {}), draft, progress: validateProgress(draft, entry.progress), ...(survival ? { source: 'survival' as const, survival } : {}) });
     } catch { /* Keep other valid maps when an individual save is damaged. */ }
   }
@@ -66,7 +66,7 @@ export function saveLocalMap(draft: SandboxDraft, progress: Placement[] = [], ex
   if (!Number.isSafeInteger(id)) throw new Error('本地地图存档编号已超出范围');
   const existing = maps.find(map => map.id === id);
   const sameOriginal = !existing || encodeMap(existing.draft) === code;
-  if (existing?.survival && !existing.survival.blueprintUnlocked && !sameOriginal) throw new Error('通关后才能编辑荒野求生地图');
+  if (existing?.survival && !existing.survival.blueprintUnlocked && !sameOriginal) throw new Error('通关或放弃挑战后才能编辑荒野求生地图');
   const info = survival || (sameOriginal ? existing?.survival : undefined);
   const saved: LocalMap = { id, name: existing?.name || `本地地图${maps.length + 1}`, ...(existing?.customName ? { customName: existing.customName } : {}), draft: restored, progress: savedProgress, ...(info ? { source: 'survival', survival: info } : {}) };
   writeLocalMaps([...maps.filter(map => map.id !== id), saved]);

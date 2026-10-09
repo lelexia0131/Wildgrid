@@ -32,6 +32,11 @@ app.whenReady().then(async () => {
     while (Date.now() < until) { if (await js(`!!document.querySelector('.survival-game')`)) return; await settle(); }
     throw new Error(await js(`document.querySelector('.survival-error')?.textContent || 'Generation failed'`));
   }
+  async function waitFor(expression) {
+    const until = Date.now() + 8000;
+    while (Date.now() < until) { if (await js(expression)) return; await settle(); }
+    throw new Error('Timed out: ' + expression);
+  }
   const stored = () => js(`JSON.parse(localStorage.getItem('wildgrid-survival-v1'))`);
   async function screenshot(name) { writeFileSync(path.join(output, `${name}.png`), (await win.webContents.capturePage()).toPNG()); }
   const boardSize = () => js(`document.querySelector('.board-section').getBoundingClientRect().width`);
@@ -103,10 +108,27 @@ app.whenReady().then(async () => {
     assert.equal((await stored()).progress.placements.length, 1);
     assert.equal(await js(`document.querySelector('.operations button:has(svg)').disabled`), true);
     await load(); await modes(); await text('本地地图');
-    assert.equal(await js(`!!document.querySelector('.local-map-edit')`), false);
+    assert.equal(await js(`document.querySelector('.local-map-edit').disabled`), true);
     assert.equal(await js(`document.querySelector('.local-map-preview').querySelectorAll('.placed').length`), 0);
     await screenshot('locked-collection-mobile');
-    await text('进入地图'); await text('重新游玩');
+    const beforeLocal = await stored();
+    await text('进入地图');
+    assert.equal(await js(`!!document.querySelector('.survival-game')`), false);
+    assert.equal(await js(`document.querySelector('.operations').textContent.includes('放弃')`), false);
+    assert.equal(await js(`document.querySelector('.game-title button').getAttribute('aria-label')`), '返回本地地图');
+    assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), true);
+    assert.equal(await js(`document.querySelectorAll('.board > .tile.placed').length`), 0);
+    await place(placements[0], pieces[0]); await text('保存');
+    await waitFor(`JSON.parse(localStorage.getItem('wildgrid-local-maps-v1')).maps[0].progress.length === 1`);
+    assert.deepEqual(await stored(), beforeLocal, 'local progress must not overwrite the active challenge');
+    await text('重新游玩');
+    assert.deepEqual(await stored(), beforeLocal, 'local restart must not restart the active challenge');
+    for (let i = 0; i < placements.length; i++) await place(placements[i], pieces[i]);
+    assert.equal(await js(`!!document.querySelector('.survival-win')`), false);
+    assert.deepEqual(await stored(), beforeLocal, 'solving a local map must not award survival XP');
+    await text('返回本地地图');
+    assert.equal(await js(`document.querySelector('.sandbox-menu-page h1').textContent`), '本地地图');
+    await load(); await menu(); await text('继续挑战 · 1难'); await text('重新游玩');
     for (let i = 0; i < placements.length; i++) await place(placements[i], pieces[i]);
     assert.equal(await js(`!!document.querySelector('.survival-win')`), true);
     assert.equal((await stored()).completed.length, 1); assert.equal((await stored()).challenge, null);
@@ -118,14 +140,47 @@ app.whenReady().then(async () => {
     await text('进入地图'); await text('图纸');
     assert.equal(await js(`!!document.querySelector('.blueprint-content')`), true);
     await click('.modal-close'); await text('重新游玩');
-    await load(); await menu(); await click('.survival-difficulty:nth-child(2)'); await text('开始新挑战'); await waitGame();
+    assert.equal((await stored()).challenge, null, 'local restart must not reactivate a completed challenge');
+    await load(); await menu(); await click('.survival-difficulty:nth-child(2)'); await waitGame();
     const unfinished = (await stored()).challenge.id;
+    await text('保存');
     await click('.game-title .icon-button'); await click('.survival-difficulty:nth-child(3)');
     assert.equal(await js(`document.querySelector('dialog').textContent.includes('保留旧挑战')`), true);
     await text('保留旧挑战'); assert.equal((await stored()).challenge.id, unfinished);
     await text('继续挑战 · 2难'); await text('放弃'); await text('确定放弃');
     assert.equal((await stored()).challenge, null); assert.equal((await stored()).completed.length, 1);
-    assert.equal(await js(`JSON.parse(localStorage.getItem('wildgrid-local-maps-v1')).maps.length`), 1);
+    assert.equal(await js(`JSON.parse(localStorage.getItem('wildgrid-local-maps-v1')).maps.length`), 2);
+    assert.equal(await js(`[...document.querySelectorAll('button')].some(el => el.textContent.includes('继续挑战 ·'))`), false);
+    await click('.survival-heading .back-link'); await text('本地地图'); await click('.local-map-card:nth-child(2)');
+    assert.equal(await js(`document.querySelector('.local-map-edit').disabled`), false);
+    const abandoned = await stored();
+    await text('进入地图'); await text('图纸');
+    assert.equal(await js(`!!document.querySelector('.blueprint-content')`), true);
+    await screenshot('abandoned-local-blueprint');
+    await click('.modal-close'); await text('重新游玩'); await click('.game-title .icon-button');
+    assert.equal(await js(`document.querySelector('.sandbox-menu-page h1').textContent`), '本地地图');
+    assert.deepEqual(await stored(), abandoned, 'opening and restarting an abandoned map must not restore its challenge');
+    await click('.local-map-card:nth-child(2)'); await text('编辑地图');
+    assert.equal(await js(`document.querySelector('.game-title button').getAttribute('aria-label')`), '返回本地地图');
+    await click('.game-title .icon-button');
+    assert.equal(await js(`document.querySelector('.sandbox-menu-page h1').textContent`), '本地地图');
+    await load(); await menu(); await click('.survival-difficulty:nth-child(3)'); await waitGame();
+    const otherChallenge = await stored();
+    await load(); await modes(); await text('本地地图'); await click('.local-map-card:nth-child(2)'); await text('进入地图');
+    assert.equal(await js(`document.querySelector('dialog').open`), false, 'local maps must not ask to replace another challenge');
+    assert.equal(await js(`!!document.querySelector('.survival-game')`), false);
+    assert.deepEqual(await stored(), otherChallenge);
+    await click('.game-title .icon-button'); await click('.sandbox-back'); await click('.survival-entry');
+    await text('继续挑战 · 3难'); await text('保存'); await click('.game-title .icon-button');
+    await click('.survival-difficulty'); await text('开始新挑战'); await waitGame();
+    const replacement = await stored();
+    assert.notEqual(replacement.challenge.id, otherChallenge.challenge.id);
+    await click('.game-title .icon-button'); await click('.survival-heading .back-link'); await text('本地地图');
+    await click('.local-map-card:nth-child(3)');
+    assert.equal(await js(`document.querySelector('.local-map-edit').disabled`), false, 'replacing a challenge must refresh local edit availability immediately');
+    await text('进入地图'); await text('图纸');
+    assert.equal(await js(`!!document.querySelector('.blueprint-content')`), true);
+    assert.deepEqual(await stored(), replacement, 'replaced challenges remain local maps and cannot take over the new challenge');
     }
     // Reuse the already verified high-tier fixture to inspect crowded layouts.
     const fixture = JSON.parse(readFileSync(path.join(output, 'fixtures.json'), 'utf8'))[9];
@@ -166,7 +221,7 @@ app.whenReady().then(async () => {
     await load(); await modes(); await text('本地地图'); await text('进入地图');
     assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), false);
     await text('图纸'); assert.equal(await js(`!!document.querySelector('.blueprint-content')`), true);
-    console.log(process.env.WILDGRID_LAYOUT_ONLY ? 'Survival layouts: phone portrait, landscape and desktop passed.' : 'Survival UI: generation, resume, undo, collection lock/unlock, replacement, abandonment and layouts passed.');
+    console.log(process.env.WILDGRID_LAYOUT_ONLY ? 'Survival layouts: phone portrait, landscape and desktop passed.' : 'Survival UI: isolated local play, blueprint locks, abandonment, navigation, rewards, resume and layouts passed.');
     clearTimeout(deadline); app.exit(0);
   } catch (cause) { console.error(cause); await screenshot('failure'); clearTimeout(deadline); app.exit(1); }
 });

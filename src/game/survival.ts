@@ -89,6 +89,7 @@ export function completeSurvival(challenge: SurvivalChallenge, placements: Place
   if (!evaluate(challenge.draft.level, placements).won) throw new Error('挑战尚未完成');
   const save = readSurvivalForWrite(), before = survivalTotals(save).xp;
   const earned = save.completed.some(c => c.id === challenge.id) ? 0 : survivalDifficulties[challenge.difficulty - 1].xp;
+  if (earned && save.challenge?.id !== challenge.id) throw new Error('挑战已结束，无法继续挑战');
   if (earned) save.completed.push({ id: challenge.id, difficulty: challenge.difficulty, seed: challenge.seed, at: Date.now() });
   if (save.challenge?.id === challenge.id) { save.challenge = null; save.progress = null; }
   writeSurvival(save);

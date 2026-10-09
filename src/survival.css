@@ -49,15 +49,6 @@
 .local-map-card .survival-card-state { overflow-wrap: anywhere; }
 .local-map-edit { font-size: 16px; min-height: 48px; }
 .local-map-card:has(.survival-card-state) { min-height: 92px; }
-.local-map-detail.survival-map-detail { overflow-y: auto; }
-.local-map-detail.survival-map-detail .local-map-content { display: flex; flex-wrap: wrap; flex: none; gap: 20px; }
-.local-map-detail.survival-map-detail .local-map-view { container-type: normal; flex: 1 1 260px; }
-.local-map-detail.survival-map-detail .local-map-preview { width: min(100%, 430px); height: auto; aspect-ratio: 1; }
-.local-map-detail.survival-map-detail .local-map-items { flex: 1 1 250px; }
-.local-map-detail.survival-map-detail .local-map-items ul { grid-auto-rows: minmax(66px, auto); }
-.local-map-detail.survival-map-detail .local-map-items strong, .local-map-detail.survival-map-detail .local-map-items small, .local-map-detail.survival-map-detail .local-map-items b, .local-map-detail.survival-map-detail .local-map-content h3 { line-height: 1.5; white-space: normal; }
-.local-map-detail.survival-map-detail .local-map-actions { position: sticky; bottom: -12px; background: #fafbf0; padding: 12px 0; }
-.local-map-detail.survival-map-detail .local-map-actions > button { min-height: 48px; height: auto; padding: 12px 8px; white-space: normal; }
 .manual-content { font-size: 16px; }
 .manual-survival h4 { font-size: 18px; }
 .manual-survival table { width: 100%; border-collapse: collapse; font-size: 16px; }

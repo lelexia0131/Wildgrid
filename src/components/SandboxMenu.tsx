@@ -127,13 +127,13 @@ export function SandboxMenu({ screen, onBack, onContinue, onSurvival, onNavigate
               <span className="local-map-card-art"><Art kind="fire"/></span><span><strong>{map.name}</strong><small className={map.survival ? "survival-card-state" : undefined}>{map.survival ? `荒野求生 · ${map.survival.difficulty}难 · ${map.survival.completed ? '已通关' : '未通关'}` : `${map.draft.level.size}×${map.draft.level.size} · ${map.draft.level.pieces.length} 处设施`}</small></span><ArrowRight size={16}/>
             </button>)}
           </div>
-          <section className={`local-map-detail${selectedMap.survival ? ' survival-map-detail' : ''}`} aria-label={selectedMap.name}>
+          <section className="local-map-detail" aria-label={selectedMap.name}>
             <div className="local-map-heading"><h2 title={selectedMap.name}>{selectedMap.name}</h2><button className="icon-button local-map-rename" aria-label="编辑地图名称" title="编辑地图名称" onClick={() => editMap('rename')}><Pencil size={16}/></button><span>{selectedMap.draft.level.size}×{selectedMap.draft.level.size}</span></div>
             <div className="local-map-content">
               <div className="local-map-view"><h3>地图样貌</h3><LocalMapPreview map={selectedMap}/></div>
               <div className="local-map-items"><h3>地图放置物品</h3><ul>{items.map(piece => <li key={`${piece.kind}_${piece.shape}`}><span className="local-map-item-art"><FacilityArt kind={piece.kind} shape={piece.shape}/></span><span><strong>{facilityNames[piece.kind]}</strong><small>{shapeNames[piece.shape]}</small></span><b>×{selectedMap.draft.level.pieces.filter(item => item.kind === piece.kind && item.shape === piece.shape).length}</b></li>)}</ul></div>
             </div>
-            <div className="local-map-actions"><button className="primary local-map-enter" onClick={() => act(() => onOpenLocalMap(selectedMap))}>进入地图<ArrowRight size={18}/></button>{(!selectedMap.survival || selectedMap.survival.blueprintUnlocked) && <button className="secondary local-map-edit" onClick={() => act(() => onEditLocalMap(selectedMap))}>编辑地图<PencilRuler size={18}/></button>}<button className="primary local-map-delete" onClick={() => editMap('delete')}>删除地图<Trash2 size={16}/></button></div>
+            <div className="local-map-actions"><button className="primary local-map-enter" onClick={() => act(() => onOpenLocalMap(selectedMap))}>进入地图<ArrowRight size={18}/></button><button className="secondary local-map-edit" disabled={!!selectedMap.survival && !selectedMap.survival.blueprintUnlocked} title={selectedMap.survival && !selectedMap.survival.blueprintUnlocked ? '通关或放弃荒野求生挑战后可编辑' : '编辑地图'} onClick={() => act(() => onEditLocalMap(selectedMap))}>编辑地图<PencilRuler size={18}/></button><button className="primary local-map-delete" onClick={() => editMap('delete')}>删除地图<Trash2 size={16}/></button></div>
           </section>
         </div> : <div className="local-map-empty"><span className="local-map-empty-art"><Art kind="fire"/></span><h2>还没有本地地图</h2><p>创造或导入地图后，点击保存，就能在这里找到本地存档。</p></div>)}
       </div>
