@@ -2,7 +2,7 @@ import type { Settings } from './types';
 type Sound = 'place' | 'pickup' | 'rotate' | 'win' | 'click' | 'select' | 'error';
 // Original pentatonic melody and chord progression, synthesized locally.
 // No recordings, samples, network requests, or third-party audio assets.
-class WildernessAudio {
+export class WildernessAudio {
   private ctx?: AudioContext;
   private music?: GainNode;
   private effects?: GainNode;
@@ -11,7 +11,8 @@ class WildernessAudio {
   private next = 0;
   private scene: 'menu' | 'game' = 'menu';
   private settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true };
-  // 352 steps: 119.68 seconds in-game, 133.76 seconds in the menu.
+  // Original 352-step theme plus a 32-step F–G bridge back into C.
+  // 130.56 seconds in-game, 145.92 seconds in the menu.
   private melody = [
     // Original theme.
     72,0,76,79,0,76,74,0, 72,0,67,0,69,72,0,0,
@@ -40,6 +41,9 @@ class WildernessAudio {
     // Quiet return to the opening.
     76,0,72,0,79,0,76,0, 74,0,72,0,67,69,0,0,
     69,0,72,0,76,0,72,0, 69,0,67,0,72,0,0,0,
+    // Keep the original theme intact; carry the final G into the opening C.
+    69,0,72,0,69,0,72,0, 69,0,72,0,69,0,0,0,
+    67,0,74,0,79,0,74,0, 67,0,74,0,67,0,0,0,
   ];
   setScene(scene: 'menu' | 'game') { this.scene = scene; }
   setSettings(settings: Settings) {
@@ -61,7 +65,7 @@ class WildernessAudio {
         document.addEventListener('visibilitychange', () => {
           if (!this.ctx) return;
           if (document.hidden) void this.ctx.suspend();
-          else { this.next = this.ctx.currentTime + .1; void this.ctx.resume().catch(() => {}); }
+          else void this.ctx.resume().catch(() => {});
         });
       }
       if (this.ctx.state === 'suspended') await this.ctx.resume();
@@ -87,7 +91,8 @@ class WildernessAudio {
       const melody = this.melody[this.step % this.melody.length];
       if (melody) this.note(melody, this.next, 1.4, .25, this.music);
       const root = [48, 45, 41, 43][Math.floor(this.step / 16) % 4];
-      if (this.step % 4 === 0) this.note(root + [12,19,24,19][Math.floor(this.step / 4) % 4], this.next, 1.8, .13, this.music, 'triangle');
+      const arpeggio = this.step === this.melody.length - 4 ? 12 : [12,19,24,19][Math.floor(this.step / 4) % 4];
+      if (this.step % 4 === 0) this.note(root + arpeggio, this.next, 1.8, .13, this.music, 'triangle');
       if (this.step % 16 === 0) {
         this.note(root, this.next, 4, .2, this.music);
         this.note(root + 7, this.next + .04, 3.8, .08, this.music);
