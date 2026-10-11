@@ -36,20 +36,30 @@ npm run test:ui  # 多格插画、实时提示开关和手机触摸回归
 ## 文件结构
 
 ```text
-src/game/types.ts       数据类型
-src/game/rules.ts       纯规则计算、旋转、占格、三态判定
-src/game/storage.ts     版本化本地存档与读取校验
-src/game/audio.ts       原创 Web Audio 音乐及交互音效
-src/data/levels.json    45 个固定关卡，无运行时随机生成
-src/components/Art.tsx  原创 SVG 地形、设施与菜单插画
-src/App.tsx             页面、操作历史、棋盘与设置
-src/styles.css          桌面与手机布局
-public/icon.svg         原创 App 图标
-scripts/author-levels.mjs  手工关卡编辑源，生成固定 JSON 与测试解法
-tests/solutions.json    仅用于开发验证，不包含在应用构建中
+src/App.tsx                 页面组装、展示与事件绑定
+src/components/             棋盘插画、图纸、手册与模式菜单
+src/hooks/                  放置、历史、导航、冒险存档、沙盒编辑与求生挑战控制
+src/game/types.ts           共享数据类型
+src/game/facilityRegistry.ts 设施元数据与稳定形状模板
+src/game/rules.ts           纯规则计算、旋转、占格、三态判定
+src/game/placementValidation.ts 放置记录格式与几何校验
+src/game/levels.ts          固定关卡与答案的 ID 查询
+src/game/solver.ts          位运算搜索，共用正式规则
+src/game/sandbox.ts         沙盒草稿、WG1 编解码与自检
+src/game/survivalGenerator.ts 荒野求生随机生成
+src/game/storage.ts         冒险 v1 存档
+src/game/localMaps.ts       本地地图 v1 存档
+src/game/survival.ts        求生 v1 存档、经验与结算
+src/game/{audio,clipboard,playerId}.ts 平台副作用与适配
+src/data/{levels,solutions}.json 45 个固定关卡与参考答案
+src/*.css                  原有布局与样式
+electron/、android/、server/ 原生容器与玩家 ID 服务
+public/icon.svg            原创 App 图标
+scripts/、tests/           维护脚本与回归验证
+ARCHITECTURE.md            模块职责、依赖方向与扩展入口
 ```
 
-关卡 JSON 包含地形、设施清单、行列目标。编辑关卡时可修改 author-levels.mjs 中的固定布局及参考解，再执行 `node scripts/author-levels.mjs`、`npm test` 和 `npm run levels:check`。16–45 关由 Solver 验证唯一解，等价的设施编号和旋转不重复计数。
+关卡 JSON 包含地形、设施清单、行列目标。编辑关卡时可修改 author-levels.mjs 中的固定布局及参考解，再执行 `node scripts/author-levels.mjs`、`npm test` 和 `npm run levels:check`。16–45 关由 Solver 验证唯一解，等价的设施编号和旋转不重复计数。模块职责与扩展约定见 [ARCHITECTURE.md](ARCHITECTURE.md)。
 
 ## 音频与存档
 

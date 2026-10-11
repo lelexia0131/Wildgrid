@@ -1,5 +1,6 @@
 import { Art, CampArt, FacilityArt, FootprintSurface } from './Art';
 import { offsets } from '../game/rules';
+import { facilities } from '../game/facilityRegistry';
 import { survivalDifficulties, survivalRanks } from '../game/survival';
 import type { FacilityKind, Shape, TerrainKind } from '../game/types';
 
@@ -24,16 +25,6 @@ function ShapeView({ shape, rotation = 0 }: { shape: Shape; rotation?: number })
   const cells = offsets(shape,rotation), width=Math.max(...cells.map(p=>p.c))+1;
   return <span className="manual-shape" style={{gridTemplateColumns:`repeat(${width}, 12px)`}}>{cells.map(p=><i key={`${p.r},${p.c}`} style={{gridRow:p.r+1,gridColumn:p.c+1}}/>)}</span>;
 }
-export const facilities: {kind:FacilityKind; name:string; require:string; forbid:string; good:string[]; bad:string[]; why:string; shapes:Shape[]; extra?:{map:string[];why:string}[]}[] = [
- {kind:'camp',name:'营地',require:'至少一格挨着水源（上下左右）。多格营地只需其中一格邻水。',forbid:'覆盖地形、重叠；上下左右挨着餐车或电塔。',good:['WCC'],bad:['W.','.C'],why:'这里只是斜角邻水。',shapes:['single','domino','long','el']},
- {kind:'fire',name:'篝火',require:'至少一侧挨着营地（上下左右）。',forbid:'挨着森林或电塔，包括斜角。',good:['WCB'],bad:['WCB','.F.'],why:'森林在篝火斜角，也不允许。',shapes:['single']},
- {kind:'tower',name:'瞭望塔',require:'挨着山地（上下左右）。',forbid:'两座瞭望塔紧挨（包括斜角）。',good:['MT'],bad:['MT','.T'],why:'两座塔相邻，必须拉开距离。',shapes:['single']},
- {kind:'picnic',name:'野餐桌',require:'至少一格挨着营地（上下左右）。双格，可横放或竖放。',forbid:'任何一格挨着篝火，包括斜角。',good:['WCPP'],bad:['WCPP','..B.'],why:'野餐桌紧邻篝火，斜角也不允许。',shapes:['domino']},
- {kind:'cabin',name:'林间木屋',require:'至少一格挨着森林（上下左右）。拐角形三格，可四向旋转。',forbid:'任何一格挨着水源（上下左右）。',good:['FHH','.H.'],bad:['FHH','.HW'],why:'木屋的一格上下左右挨着水。',shapes:['el']},
- {kind:'foodTruck',name:'餐车',require:'与至少一个营地占格上下左右间隔一格空草地。多格营地按实际占格判断。',forbid:'上下左右直接挨着任何营地。',good:['WCC.V'],bad:['WCCV'],why:'餐车直接挨着营地，中间必须留一格。',shapes:['single'],extra:[{map:['WCBV'],why:'中间有篝火，不能作为空出的间隔格。'}]},
- {kind:'powerTower',name:'电塔',require:'与篝火、营地保持规定距离；可以斜角挨着营地。',forbid:'周围八格出现篝火；上下左右挨着营地。',good:['WC.','..E'],bad:['WCB.','...E'],why:'篝火在电塔斜角，仍然禁止。',shapes:['single'],extra:[{map:['WCE'],why:'电塔上下左右挨着营地，必须移开。'}]},
- {kind:'pool',name:'泳池',require:'上下左右挨着至少一格水源，周围八格至少有一个营地占格。',forbid:'水源只有斜角相邻；周围八格没有营地。',good:['.WC','.S.'],bad:['WC.','.S.'],why:'营地虽然相邻，但水源只在泳池斜角。',shapes:['single'],extra:[{map:['WS..','...W','...C'],why:'泳池邻水，但周围八格没有营地。'}]},
-];
 export function Manual() {
   return <div className="manual-content">
     <div className="manual-intro"><h2>野外手册</h2></div>

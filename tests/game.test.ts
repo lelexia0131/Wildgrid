@@ -1,18 +1,16 @@
 import { countSolutions } from '../src/game/solver';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import data from '../src/data/levels.json';
-import answers from '../src/data/solutions.json';
+import { getLevelById, levels, solutions } from '../src/game/levels';
 import { evaluate, occupied, offsets, placementBlock, rotateAround } from '../src/game/rules';
+import { validatePlacements } from '../src/game/placementValidation';
 import type { Level, Placement } from '../src/game/types';
 import { progressForPlay, readSave, writeSave } from '../src/game/storage';
 
-const levels = data as Level[];
-const solutions = answers as Record<string, Placement[]>;
 test('reopening a solved level starts fresh while unfinished play resumes', () => {
   const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true } };
-  assert.deepEqual(progressForPlay(save, levels[0]), []);
-  assert.deepEqual(progressForPlay(save, levels[1]), solutions[2].slice(0, 1));
+  assert.deepEqual(progressForPlay(save, getLevelById(1)!), []);
+  assert.deepEqual(progressForPlay(save, getLevelById(2)!), solutions[2].slice(0, 1));
   assert.deepEqual(save.completed, [1, 2]);
   assert.deepEqual(save.progress[1], solutions[1]);
 });
@@ -97,7 +95,7 @@ test('placed camps rotate clockwise around every occupied mouse cell', () => {
   }
 });
 test('rotation can detect terrain, another facility and board-edge collisions without moving the original', () => {
-  const level = levels[9], piece = level.pieces[0];
+  const level = getLevelById(10)!, piece = level.pieces[0];
   const at = { id: piece.id, r: 1, c: 1, rotation: 0 };
   const rotated = rotateAround(piece, at, { r: 1, c: 1 });
   assert.ok(placementBlock(level, [at], rotated)?.includes('地形'));
@@ -109,7 +107,7 @@ test('rotation can detect terrain, another facility and board-edge collisions wi
   assert.deepEqual(at, { id: piece.id, r: 1, c: 1, rotation: 0 });
 });
 test('fire without a camp is pending, forest diagonals immediately invalidate it', () => {
-  const level = levels[4];
+  const level = getLevelById(5)!;
   const fire = solutions[5].filter(p => p.id.startsWith('fire'));
   assert.equal(evaluate(level, fire).issues[fire[0].id].status, 'INCOMPLETE');
   const forestLevel = { ...level, terrain: [...level.terrain, { kind: 'forest' as const, r: 1, c: 4 }] };
@@ -118,7 +116,7 @@ test('fire without a camp is pending, forest diagonals immediately invalidate it
   assert.equal(evaluate(level, isolated).issues[fire[0].id].status, 'INVALID');
 });
 test('terrain, overlap and board edges block placement; environmental mistakes remain editable data', () => {
-  const level = levels[9], piece = level.pieces[0];
+  const level = getLevelById(10)!, piece = level.pieces[0];
   assert.ok(placementBlock(level, [], { id: piece.id, r: 2, c: 1, rotation: 0 }));
   assert.ok(placementBlock(level, [], { id: piece.id, r: 5, c: 5, rotation: 0 }));
   const bad = [{ id: piece.id, r: 0, c: 0, rotation: 0 }];
@@ -126,11 +124,11 @@ test('terrain, overlap and board edges block placement; environmental mistakes r
   assert.equal(evaluate(level, bad).status, 'INVALID');
   assert.equal(evaluate(level, bad).won, false);
   assert.equal(evaluate(level, solutions[10]).won, true);
-  const pair = levels[1];
+  const pair = getLevelById(2)!;
   assert.ok(placementBlock(pair, [solutions[2][0]], { ...solutions[2][0], id: pair.pieces[1].id }));
 });
 test('multi-cell camp needs only one water neighbor; row/column counts measure cells', () => {
-  const level = levels[9], at = solutions[10][0];
+  const level = getLevelById(10)!, at = solutions[10][0];
   assert.equal(occupied(level.pieces[0], at).length, 2);
   const result = evaluate(level, [at]);
   assert.equal(result.rows[2], 2);
@@ -145,6 +143,32 @@ test('towers may not touch diagonally', () => {
   assert.equal(result.issues.t1.status, 'INVALID');
   assert.equal(result.issues.t2.status, 'INVALID');
   assert.ok(result.issues.t1.reasons.some(r => r.includes('瞭望塔之间')));
+});
+
+test('placement validation recovers geometry only and retains unfinished rule-invalid save progress', () => {
+  const level: Level = { id: 99, name: '', chapter: '', tip: '', size: 6, terrain: [{ kind: 'water', r: 0, c: 0 }], pieces: [{ id: 'camp', kind: 'camp', shape: 'long' }, { id: 'fire', kind: 'fire', shape: 'single' }], rows: Array(6).fill(0), cols: Array(6).fill(0) };
+  const camp = { id: 'camp', r: 1, c: 1, rotation: 0 }, fire = { id: 'fire', r: 4, c: 4, rotation: 0, legacyNote: 'keep' };
+  const cases: [Placement[], string][] = [
+    [[{ ...camp, id: 'unknown' }], 'unknown'], [[camp, camp], 'duplicate'],
+    [[{ ...camp, r: 1.5 }], 'coordinates'], [[{ ...camp, rotation: 4 }], 'rotation'],
+    [[{ ...camp, c: 5 }], 'bounds'], [[{ ...camp, r: 0, c: 0 }], 'terrain'],
+    [[camp, { ...fire, r: 1, c: 2 }], 'overlap'],
+  ];
+  for (const [placements, code] of cases) assert.equal(validatePlacements(level, placements).error?.code, code);
+  assert.equal(validatePlacements(level, null).error?.code, 'array');
+  const progress = [{ ...camp, c: 5 }, camp, camp, { ...fire, r: 1, c: 2 }, fire];
+  assert.deepEqual(validatePlacements(level, progress, 'recover').placements, [camp, fire]);
+  assert.equal(evaluate(level, [camp, fire]).status, 'INVALID');
+  assert.equal(validatePlacements(level, [camp, fire]).error, null);
+  const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: { getItem: () => JSON.stringify({ version: 1, completed: [99], current: 99, progress: { 99: progress } }) } });
+  try {
+    assert.deepEqual(readSave([level]).progress[99], [camp, fire]);
+    assert.deepEqual(readSave([level]).completed, [99]);
+  } finally {
+    if (previous) Object.defineProperty(globalThis, 'localStorage', previous);
+    else Reflect.deleteProperty(globalThis, 'localStorage');
+  }
 });
 
 test('solver counts layouts, ignoring identical IDs and equivalent rotations', () => {

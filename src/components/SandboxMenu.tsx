@@ -4,9 +4,9 @@ import { Art, FacilityArt } from './Art';
 import { SandboxArt } from './SandboxArt';
 import { readClipboard } from '../game/clipboard';
 import { key } from '../game/rules';
+import { facilityNames, shapeNames } from '../game/facilityRegistry';
 import type { LocalMap } from '../game/localMaps';
 import { deleteLocalMap, renameLocalMap } from '../game/localMaps';
-import type { FacilityKind, Shape } from '../game/types';
 
 type SandboxScreen = 'adventure' | 'sandbox' | 'sandbox-size' | 'sandbox-import' | 'local-maps';
 type Props = {
@@ -23,9 +23,6 @@ type Props = {
   onLocalMapsChange: () => void;
   onSound?: () => void;
 };
-
-const facilityNames: Record<FacilityKind, string> = { camp: '营地', fire: '篝火', tower: '瞭望塔', picnic: '野餐桌', cabin: '林间木屋', foodTruck: '餐车', powerTower: '电塔', pool: '泳池' };
-const shapeNames: Record<Shape, string> = { single: '单格', domino: '双格', long: '三格', el: 'L 形' };
 
 function LocalMapPreview({ map }: { map: LocalMap }) {
   const { level } = map.draft;

@@ -27,7 +27,7 @@ app.whenReady().then(async () => {
     const locks=await js(`Array.from(document.querySelectorAll('.level-card')).map(el=>({disabled:el.disabled,text:el.textContent}))`);
     assert.equal(locks.length,45);assert.equal(locks[30].disabled,false);assert.equal(locks[31].disabled,true);
     assert.equal(locks[15].disabled,false);assert.equal(locks[16].disabled,true);assert.ok(locks[30].text.includes('8 × 8'));
-    const level=levels[40], newKinds=['foodTruck','powerTower','pool'];
+    const level=levels.find(level=>level.id===41), newKinds=['foodTruck','powerTower','pool'];
     const remaining=level.pieces.filter(p=>newKinds.includes(p.kind));
     const progress=answers[41].filter(at=>!remaining.some(p=>p.id===at.id));
     for(const viewport of [{width:1280,height:900},{width:390,height:844},{width:844,height:390}]) {

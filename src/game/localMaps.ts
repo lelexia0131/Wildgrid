@@ -1,4 +1,4 @@
-import { placementBlock } from './rules';
+import { validatePlacements } from './placementValidation';
 import { decodeMap, encodeMap } from './sandbox';
 import type { SandboxDraft } from './sandbox';
 import type { Placement } from './types';
@@ -11,17 +11,13 @@ const object = (value: unknown): value is Record<string, unknown> => typeof valu
 
 function validateProgress(draft: SandboxDraft, value: unknown): Placement[] {
   if (!Array.isArray(value) || value.length > draft.level.pieces.length) throw new Error('地图游玩进度不完整');
-  const progress: Placement[] = [], seen = new Set<string>();
-  for (const at of value) {
-    if (!object(at) || typeof at.id !== 'string' || !draft.level.pieces.some(piece => piece.id === at.id) || seen.has(at.id)) throw new Error('地图游玩进度包含未知或重复设施');
-    if (typeof at.r !== 'number' || typeof at.c !== 'number' || typeof at.rotation !== 'number' || ![at.r, at.c, at.rotation].every(Number.isInteger) || at.r < 0 || at.c < 0 || at.r >= draft.level.size || at.c >= draft.level.size || at.rotation < 0 || at.rotation > 3) throw new Error('地图游玩进度的坐标或旋转方向无效');
-    const placement = { id: at.id, r: at.r, c: at.c, rotation: at.rotation };
-    const blocked = placementBlock(draft.level, progress, placement);
-    if (blocked) throw new Error(`地图游玩进度无效：${blocked}`);
-    seen.add(at.id);
-    progress.push(placement);
+  const { placements, error } = validatePlacements(draft.level, value);
+  if (error) {
+    if (error.code === 'unknown' || error.code === 'duplicate') throw new Error('地图游玩进度包含未知或重复设施');
+    if (error.code === 'coordinates' || error.code === 'rotation') throw new Error('地图游玩进度的坐标或旋转方向无效');
+    throw new Error(`地图游玩进度无效：${error.message}`);
   }
-  return progress;
+  return placements;
 }
 
 function parseLocalMaps(raw: string | null): LocalMap[] {

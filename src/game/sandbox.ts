@@ -1,20 +1,13 @@
-import data from '../data/levels.json';
-import { evaluate, key, occupied, offsets } from './rules';
+import { evaluate, occupied, offsets } from './rules';
+import { facilityLibrary, facilityNames as names } from './facilityRegistry';
+import { validatePlacements } from './placementValidation';
 import { solveLevel } from './solver';
-import type { FacilityKind, Level, Piece, Placement, TerrainKind } from './types';
+import type { Level, Placement, TerrainKind } from './types';
 
 export type SandboxDraft = { level: Level; placements: Placement[] };
 export type SandboxCheck = { status: 'unique' | 'multiple' | 'none' | 'invalid'; message: string };
 
-// Stable IDs describe existing kind/shape definitions, independent of display
-// names, level order, or the individual instances created by the editor.
-export const facilityLibrary: Piece[] = Array.from(new Map((data as Level[]).flatMap(level => level.pieces).map(piece => {
-  const id = `${piece.kind}_${piece.shape}`;
-  return [id, { id, kind: piece.kind, shape: piece.shape }] as const;
-})).values());
-
 const terrainKinds: TerrainKind[] = ['water', 'forest', 'mountain'];
-const names: Record<FacilityKind, string> = { camp: '营地', fire: '篝火', tower: '瞭望塔', picnic: '野餐桌', cabin: '林间木屋', foodTruck: '餐车', powerTower: '电塔', pool: '泳池' };
 const maxCodeLength = 32768;
 const object = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 const integer = (value: unknown, min: number, max: number): value is number => typeof value === 'number' && Number.isInteger(value) && value >= min && value <= max;
@@ -61,27 +54,21 @@ function draftError(value: unknown): string | null {
     if (ids.has(piece.id)) return '地图中存在重复的设施编号';
     ids.add(piece.id);
   }
-  const placed = new Set<string>();
-  for (const at of placements) {
-    if (!object(at) || !instanceId(at.id) || !ids.has(at.id)) return '放置数据包含未知设施';
-    if (placed.has(at.id)) return '同一设施出现了多次放置数据';
-    if (!integer(at.r, 0, n - 1) || !integer(at.c, 0, n - 1)) return '设施坐标超出棋盘范围';
-    if (!integer(at.rotation, 0, 3)) return '设施旋转方向无效';
-    placed.add(at.id);
-  }
-  if (placed.size !== ids.size) return '请将设施库中已选的设施放入地图，或取消选择';
   const draft = value as SandboxDraft;
-  const used = new Map<string, Piece>();
-  for (const at of draft.placements) {
-    const piece = draft.level.pieces.find(p => p.id === at.id)!;
-    for (const cell of occupied(piece, at)) {
-      if (cell.r < 0 || cell.c < 0 || cell.r >= n || cell.c >= n) return `${names[piece.kind]}超出棋盘边界`;
-      if (terrainCells.has(key(cell))) return `${names[piece.kind]}覆盖了固定地形`;
-      const other = used.get(key(cell));
-      if (other) return `${names[other.kind]}与${names[piece.kind]}发生重叠`;
-      used.set(key(cell), piece);
-    }
+  const validated = validatePlacements(draft.level, placements);
+  const error = validated.error;
+  if (error) {
+    if (error.code === 'unknown') return '放置数据包含未知设施';
+    if (error.code === 'duplicate') return '同一设施出现了多次放置数据';
+    if (error.code === 'coordinates') return '设施坐标超出棋盘范围';
+    if (error.code === 'rotation') return '设施旋转方向无效';
+    const piece = draft.level.pieces.find(piece => piece.id === error.id)!;
+    if (error.code === 'bounds') return `${names[piece.kind]}超出棋盘边界`;
+    if (error.code === 'terrain') return `${names[piece.kind]}覆盖了固定地形`;
+    const other = draft.level.pieces.find(piece => piece.id === error.otherId)!;
+    return `${names[other.kind]}与${names[piece.kind]}发生重叠`;
   }
+  if (validated.placements.length !== ids.size) return '请将设施库中已选的设施放入地图，或取消选择';
   const area = draft.level.pieces.reduce((sum, piece) => sum + offsets(piece.shape, 0).length, 0);
   if (draft.level.rows.reduce((a, b) => a + b, 0) !== area || draft.level.cols.reduce((a, b) => a + b, 0) !== area) return '行列占格提示与设施总占格数不一致';
   // Blueprint legality uses the actual gameplay rules; clue feasibility is

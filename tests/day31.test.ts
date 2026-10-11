@@ -2,19 +2,17 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import data from '../src/data/levels.json';
-import answers from '../src/data/solutions.json';
+import { getLevelById, levels, solutions } from '../src/game/levels';
 import { evaluate, occupied } from '../src/game/rules';
 import { solveLevel } from '../src/game/solver';
-import { checkSandbox, decodeMap, encodeMap, facilityLibrary, withEditorPlacements } from '../src/game/sandbox';
+import { checkSandbox, decodeMap, encodeMap, withEditorPlacements } from '../src/game/sandbox';
+import { facilities, facilityLibrary } from '../src/game/facilityRegistry';
 import { levelUnlocked, readSave, writeSave } from '../src/game/storage';
 import { readLocalMaps, saveLocalMap } from '../src/game/localMaps';
 import { completeSurvival, emptySurvivalProgress, readSurvival, survivalTotals, writeSurvival } from '../src/game/survival';
 import { generateSurvival } from '../src/game/survivalGenerator';
-import { facilities } from '../src/components/Manual';
 import type { FacilityKind, Level, Placement, TerrainKind } from '../src/game/types';
 
-const levels = data as Level[], solutions = answers as Record<string, Placement[]>;
 const values = new Map<string, string>();
 Object.defineProperty(globalThis, 'localStorage', {configurable:true,value:{getItem:(k:string)=>values.get(k)??null,setItem:(k:string,v:string)=>values.set(k,v)}});
 function fixture(pieces: Level['pieces'], placements: Placement[], terrain: Level['terrain']) {
@@ -62,7 +60,7 @@ test('Days 31–45 are unique, retain all old maps and answers, and stay within 
     const reversed=[...solutions[level.id]].reverse();
     for(let i=1;i<reversed.length;i++) assert.notEqual(evaluate(level,reversed.slice(0,i)).status,'INVALID',`Day ${level.id} prefix ${i}`);
     if(level.id>=41) {
-      const original=levels[level.id-16], spec=baseline[level.id-41].search;
+      const original=getLevelById(level.id-15)!, spec=baseline[level.id-41].search;
       assert.equal(level.pieces.length,original.pieces.length);
       assert.equal(result.occupied,spec.occupied);
       assert.deepEqual(level.pieces.filter(p=>p.shape!=='single').map(p=>`${p.kind}_${p.shape}`).sort(),original.pieces.filter(p=>p.shape!=='single').map(p=>`${p.kind}_${p.shape}`).sort());
@@ -99,7 +97,7 @@ test('separate unlock chains, WG1 and all three save systems preserve old and ne
   assert.equal(levelUnlocked(32,[15,31]),true);assert.equal(levelUnlocked(33,[15,31]),false);
   assert.equal(levelUnlocked(17,[15,31,32]),false);assert.equal(levelUnlocked(31,[30]),false);
   for(const kind of ['foodTruck','powerTower','pool']) assert.ok(facilityLibrary.some(p=>p.kind===kind&&p.shape==='single'));
-  const old={level:levels[29],placements:solutions[30]}, fresh={level:levels[40],placements:solutions[41]};
+  const old={level:getLevelById(30)!,placements:solutions[30]}, fresh={level:getLevelById(41)!,placements:solutions[41]};
   for(const d of [old,fresh]) { const code=encodeMap(d);assert.ok(code.startsWith('WG1:'));assert.deepEqual(decodeMap(code).level.pieces,d.level.pieces); }
   assert.equal(checkSandbox(fresh).status,'unique');
   const save=readSave(levels);save.completed=[1,15,31];save.current=32;save.progress[17]=solutions[17].slice(0,2);save.progress[32]=solutions[32].slice(0,1);writeSave(save);

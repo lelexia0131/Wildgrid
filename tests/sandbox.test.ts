@@ -1,9 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import data from '../src/data/levels.json';
-import { checkSandbox, createSandbox, decodeMap, encodeMap, facilityLibrary, withEditorPlacements } from '../src/game/sandbox';
+import { levels } from '../src/game/levels';
+import { facilityLibrary } from '../src/game/facilityRegistry';
+import { checkSandbox, createSandbox, decodeMap, encodeMap, withEditorPlacements } from '../src/game/sandbox';
 import type { SandboxDraft } from '../src/game/sandbox';
-import type { Level } from '../src/game/types';
 
 function camps(): SandboxDraft {
   const draft = createSandbox(6);
@@ -12,8 +12,8 @@ function camps(): SandboxDraft {
   return withEditorPlacements(draft, [{ id: 'a', r: 1, c: 1, rotation: 0 }, { id: 'b', r: 1, c: 2, rotation: 0 }]);
 }
 
-test('sandbox library is derived from adventure definitions and map codes restore both sizes exactly', () => {
-  assert.deepEqual(new Set(facilityLibrary.map(p => `${p.kind}_${p.shape}`)), new Set((data as Level[]).flatMap(l => l.pieces.map(p => `${p.kind}_${p.shape}`))));
+test('sandbox library covers adventure definitions and map codes restore both sizes exactly', () => {
+  assert.deepEqual(new Set(facilityLibrary.map(p => `${p.kind}_${p.shape}`)), new Set(levels.flatMap(l => l.pieces.map(p => `${p.kind}_${p.shape}`))));
   const eight = createSandbox(8);
   eight.level.terrain = [{ kind: 'water', r: 3, c: 1 }, { kind: 'forest', r: 7, c: 7 }, { kind: 'mountain', r: 0, c: 6 }];
   eight.level.pieces = [{ id: 'rotated-camp', kind: 'camp', shape: 'domino' }];

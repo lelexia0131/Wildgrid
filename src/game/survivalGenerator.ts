@@ -1,7 +1,7 @@
-import data from '../data/levels.json';
-import answers from '../data/solutions.json';
+import { getLevelById, getSolution } from './levels';
+import { facilityLibrary } from './facilityRegistry';
 import { adjacent, evaluate, key, occupied, offsets } from './rules';
-import { facilityLibrary, withEditorPlacements } from './sandbox';
+import { withEditorPlacements } from './sandbox';
 import type { SandboxDraft } from './sandbox';
 import { solveLevel } from './solver';
 import { survivalDifficulties, survivalFingerprint } from './survival';
@@ -45,7 +45,7 @@ export function generateSurvival(difficulty: number, seed: number, id: string, r
       return { r, c };
     };
     const pieces = base.pieces.map((p, i) => ({ ...p, id: `wild-${i}` }));
-    const placements = (answers as Record<string, Placement[]>)[base.id].map(at => {
+    const placements = getSolution(base.id)!.map(at => {
       const i = base.pieces.findIndex(p => p.id === at.id), piece = pieces[i];
       const footprint = occupied(piece, at).map(point), r = Math.min(...footprint.map(p => p.r)), c = Math.min(...footprint.map(p => p.c));
       const rotation = [0, 1, 2, 3].find(turn => offsets(piece.shape, turn).every(p => footprint.some(q => q.r === p.r + r && q.c === p.c + c)))!;
@@ -84,10 +84,10 @@ export function generateSurvival(difficulty: number, seed: number, id: string, r
     }
     return rebuild(next);
   }
-  const maxTerrain = Math.max(difficulty === 1 ? 5 : 6 + difficulty * 2, ...newBases.map(id => (data as Level[])[id - 1].terrain.length));
+  const maxTerrain = Math.max(difficulty === 1 ? 5 : 6 + difficulty * 2, ...newBases.map(id => getLevelById(id)!.terrain.length));
   for (let attempt = 0; attempt < 24 && Date.now() < deadline; attempt++) {
     const bases = newBases.length && (random() < newChance || attempt >= 2) ? newBases : spec.bases;
-    const base = (data as Level[])[pick(bases) - 1];
+    const base = getLevelById(pick(bases))!;
     let draft = transform(base), changes = 0;
     const baseFingerprint = survivalFingerprint(draft);
     // Counts are adjusted on a valid answer first, then the full puzzle is checked.

@@ -1,6 +1,7 @@
 import { decodeMap, encodeMap } from './sandbox';
 import type { SandboxDraft } from './sandbox';
-import { evaluate, placementBlock } from './rules';
+import { evaluate } from './rules';
+import { validatePlacements } from './placementValidation';
 import type { Placement, Shape } from './types';
 
 export const survivalDifficulties = [
@@ -56,13 +57,9 @@ export function readSurvival(): SurvivalSave {
       const draft = decodeMap(c.code), spec = survivalDifficulties[c.difficulty - 1];
       if (draft.level.size !== 8 || draft.level.pieces.length < spec.min || draft.level.pieces.length > spec.max || !evaluate(draft.level, draft.placements).won) return save;
       const valid = (value: unknown): Placement[] => {
-        if (!Array.isArray(value)) throw new Error('挑战进度损坏');
-        const placed: Placement[] = [];
-        for (const at of value) {
-          if (!at || !draft.level.pieces.some(piece => piece.id === at.id) || placed.some(other => other.id === at.id) || ![at.r, at.c, at.rotation].every(Number.isInteger) || at.rotation < 0 || at.rotation > 3 || placementBlock(draft.level, placed, at)) throw new Error('挑战进度损坏');
-          placed.push({ id: at.id, r: at.r, c: at.c, rotation: at.rotation });
-        }
-        return placed;
+        const { placements, error } = validatePlacements(draft.level, value);
+        if (error) throw new Error('挑战进度损坏');
+        return placements;
       };
       save.challenge = { id: c.id, difficulty: c.difficulty, seed: c.seed, draft, fingerprint: c.fingerprint || c.code };
       try {

@@ -4,6 +4,7 @@ const { mkdirSync, writeFileSync } = require('node:fs');
 const path = require('node:path');
 const levels = require('../src/data/levels.json');
 const solutions = require('../src/data/solutions.json');
+const level30 = levels.find(level => level.id === 30);
 
 const root = path.resolve(__dirname, '..');
 app.disableHardwareAcceleration();
@@ -150,7 +151,7 @@ app.whenReady().then(async () => {
       await load([picnic], false);
       await click('.menu-buttons .primary', viewport.touch);
       assert.equal(await js(`document.querySelectorAll('.placed-facility-art[data-kind="picnic"]').length`), 1);
-      const shape = levels[29].pieces.find(p=>p.id===picnic.id).shape;
+      const shape = level30.pieces.find(p=>p.id===picnic.id).shape;
       const cells = shape === 'domino' && picnic.rotation%2 ? [{r:0,c:0},{r:1,c:0}] : [{r:0,c:0},{r:0,c:1}];
       const pickup = (picnic.r+cells[1].r)*8+picnic.c+cells[1].c+1;
       await click(`.board > .tile:nth-child(${pickup})`, viewport.touch);
@@ -217,9 +218,9 @@ app.whenReady().then(async () => {
         return {tiles:board.querySelectorAll(':scope > .tile').length,multi:Array.from(board.querySelectorAll('.placed-facility-art')).map(el=>({id:el.dataset.pieceId,rotation:Number(el.dataset.rotation)})),single:board.querySelectorAll('.tile.placed:not(.placed-multi)').length,fits:r.width>0 && r.left>=0 && r.right<=innerWidth && dialog.scrollWidth<=dialog.clientWidth+1};
       })()`);
       assert.equal(blueprint.tiles, 64);
-      const multiAnswer = solutions[30].filter(at=>levels[29].pieces.find(p=>p.id===at.id).shape!=='single');
+      const multiAnswer = solutions[30].filter(at=>level30.pieces.find(p=>p.id===at.id).shape!=='single');
       assert.deepEqual(blueprint.multi, multiAnswer.map(at=>({id:at.id,rotation:at.rotation})));
-      assert.equal(blueprint.single, levels[29].pieces.length-multiAnswer.length);
+      assert.equal(blueprint.single, level30.pieces.length-multiAnswer.length);
       assert.ok(blueprint.fits, JSON.stringify(blueprint));
       writeFileSync(path.join(output, `blueprint-${viewport.width}.png`), (await contents.capturePage()).toPNG());
       await click('.modal-close', viewport.touch);
@@ -229,7 +230,7 @@ app.whenReady().then(async () => {
     await contents.debugger.sendCommand('Emulation.clearDeviceMetricsOverride');
     await contents.debugger.sendCommand('Emulation.setTouchEmulationEnabled', {enabled:false});
     const rotations = [];
-    const multi = levels[29].pieces.filter((p,i,all)=>p.shape!=='single' && all.findIndex(q=>q.kind===p.kind && q.shape===p.shape)===i);
+    const multi = level30.pieces.filter((p,i,all)=>p.shape!=='single' && all.findIndex(q=>q.kind===p.kind && q.shape===p.shape)===i);
     for (const {kind,shape,id} of multi) {
       for (let rotation=0;rotation<4;rotation++) {
         await load([{id,r:2,c:4,rotation}]);
