@@ -132,6 +132,8 @@ flowchart TD
 
 模式切换由 `useGameNavigation` 决定页面/模式，App 连接历史恢复、交互重置和各模式的进入回调。通关弹窗、提示、ResizeObserver、身份显示及键盘事件保持 UI 生命周期管理。
 
+教程内容与触发判定位于 `game/tutorial.ts`，通过独立的 `wildgrid-tutorial-v1` 记录已看阶段、设施、跳过及语言。`useTutorial` 接收现有游戏状态及放置/历史操作发出的少量事件，调用现有 `placementBlock` 选择练习落点；不读取解答、不实现规则。`TutorialOverlay` 解析语义目标，按实时 DOM 尺寸绘制聚焦和箭头，并安排旁白位置；通关教学挂载到原有 dialog 的顶层。`TutorialSettings` 提供控制，`i18n/` 的类型化字典集中保存教程、固定界面、手册与动态反馈文案，显示层翻译原有规则消息和关卡提示，核心规则与关卡数据不变。新增设施需同时补齐两种语言的简短介绍。
+
 ## 公共接口
 
 | 实现位置 | 主要接口 | 调用方与用途 |
@@ -149,7 +151,7 @@ flowchart TD
 | `survival.ts` | `readSurvival()`、`readSurvivalForWrite()`、`writeSurvival()`、`emptySurvivalProgress()`、`completeSurvival()` | 求生 Hook、本地地图模块；存档、历史恢复与原子结算 |
 | `survival.ts` | `survivalTotals()`、`rankFor()`、`survivalFingerprint()`、难度/身份定义 | 菜单、徽章、生成器与结算复用 |
 | `survivalGenerator.ts` | `generateSurvival()`、`survivalGenerationTimeout` | 生成 Worker、求生 Hook及测试；保留原随机和难度算法 |
-| 业务 Hook | `commit()` / `undo()` / `redo()` / `restore()`；`choose()` / `clickCell()` / `rotate()` / `rotatePlaced()`；模式操作 | App 通过公开操作控制历史、摆放、沙盒及挑战；不访问内部 Worker/ref |
+| 业务 Hook | `commit()` / `undo()` / `redo()` / `restore()`；`choose()` / `clickCell()` / `rotatePlaced()`；模式操作 | App 通过公开操作控制历史、摆放、沙盒及挑战；不访问内部 Worker/ref |
 | 平台模块 | `audio.start()` / `play()` / `setScene()` / `setSettings()`、`readClipboard()` / `writeClipboard()`、`resolvePlayerId()` | UI 与 Hook 调用；平台差异封装在适配入口及原生桥 |
 
 ## 存档与地图代码

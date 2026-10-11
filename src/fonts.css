@@ -1,0 +1,15 @@
+@font-face { font-family: 'Wildgrid Playful'; src: url('./assets/fonts/ZCOOLKuaiLe-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Wildgrid Chunky'; src: url('./assets/fonts/LilitaOne-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+:root { --label-font: 'Wildgrid Chunky', 'Wildgrid Playful', sans-serif; }
+button, h1, h2, h3, h4, .facility-info strong, .local-map-items strong, .terrain-label, .status-pill, .volume-control label, .player-id-setting > span, .tutorial-language, .tutorial-progress, .survival-difficulty strong { font-family: var(--label-font); font-weight: 400; letter-spacing: .3px; }
+.game-title h1, .sandbox-menu-copy h1, .survival-heading h1, .page-heading h1 { letter-spacing: 1px; text-shadow: 0 2px 0 #d5debd; }
+.manual-content p, .manual-content li, .manual-content td, .tutorial-narration p, .tutorial-narration small { font-family: inherit; }
+[lang='en'] .operations button { font-size: 11px; }
+[lang='en'] .operations .wide-operation span, [lang='en'] .operations .history-buttons span { white-space: normal; line-height: 1.15; }
+[lang='en'] .facility-info strong { font-size: 11px; }
+.adventure-operations { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; overflow-x: hidden; }
+.adventure-operations .history-buttons { display: flex; grid-column: 1/-1; min-width: 0; gap: 8px; }
+.adventure-operations .history-buttons > button { flex: 1; min-width: 0; padding: 6px 4px; gap: 6px; }
+.adventure-operations > .wide-operation { min-width: 0; padding: 8px 4px; gap: 6px; }
+.adventure-operations > .wide-operation span { flex: 1; min-width: 0; white-space: normal; text-align: center; }
+@media (max-height:500px) { [lang='en'] .operations button, [lang='en'] .facility-info strong { font-size: 10px; } }

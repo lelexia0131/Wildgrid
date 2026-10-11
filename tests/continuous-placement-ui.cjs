@@ -39,7 +39,7 @@ app.whenReady().then(async () => {
   async function prepare(continuousPlacement) {
     const settings = { music: .35, effects: .65, muted: false, facilityTips: true };
     if (continuousPlacement !== undefined) settings.continuousPlacement = continuousPlacement;
-    await js(`localStorage.clear(); localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({version:1,completed:Array.from({length:16},(_,i)=>i+1),current:17,progress:{},settings}))}); localStorage.setItem('wildgrid-local-maps-v1', ${JSON.stringify(JSON.stringify({version:1,maps:[{id:1,code,progress:[]}]}))}); void 0;`);
+    await js(`localStorage.clear(); localStorage.setItem('wildgrid-tutorial-v1', '{"version":1,"enabled":false}'); localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({version:1,completed:Array.from({length:16},(_,i)=>i+1),current:17,progress:{},settings}))}); localStorage.setItem('wildgrid-local-maps-v1', ${JSON.stringify(JSON.stringify({version:1,maps:[{id:1,code,progress:[]}]}))}); void 0;`);
     await load();
   }
   const tile = (r, c, size = 8) => click(`.board > .tile:nth-child(${r * size + c + 1})`);
@@ -67,11 +67,11 @@ app.whenReady().then(async () => {
       await js('localStorage.clear()'); await load();
       assert.equal((await saved()).settings.continuousPlacement, true);
       await prepare(); await click('.header [aria-label="设置"]');
-      assert.deepEqual(await js(`(() => { const about=document.querySelector('.settings-about'), option=about.previousElementSibling; return {label:option.textContent.trim(),role:option.getAttribute('role'),checked:option.getAttribute('aria-checked')}; })()`), {label:'连续放置',role:'switch',checked:'true'});
+      assert.deepEqual(await js(`(() => { const option=Array.from(document.querySelectorAll('[role="switch"]')).find(el=>el.textContent.includes('连续放置')); return {label:option.textContent.trim(),role:option.getAttribute('role'),checked:option.getAttribute('aria-checked')}; })()`), {label:'连续放置',role:'switch',checked:'true'});
       assert.equal((await saved()).settings.continuousPlacement, true);
       writeFileSync(path.join(output, `settings-${viewport.width}.png`), (await contents.capturePage()).toPNG());
       await click('.modal-close'); await enter('adventure');
-      await click(camp); await click('.operations > .wide-operation');
+      await click(camp); await click(camp);
       // A blocked attempt preserves both selection and orientation.
       await tile(7, 3);
       assert.equal(await active(), true); assert.deepEqual((await saved()).progress[17], []);
@@ -88,7 +88,7 @@ app.whenReady().then(async () => {
       await click('.operations .wide-operation', '重新游玩'); await toggle();
       assert.equal((await saved()).settings.continuousPlacement, false);
       await load(); await click('.header [aria-label="设置"]');
-      assert.equal(await js(`document.querySelector('.settings-about').previousElementSibling.getAttribute('aria-checked')`), 'false');
+      assert.equal(await js(`Array.from(document.querySelectorAll('[role="switch"]')).find(el=>el.textContent.includes('连续放置')).getAttribute('aria-checked')`), 'false');
       await click('.modal-close'); await enter('adventure');
       await click(camp); await tile(3, 3);
       assert.equal(await active(), false); await tile(3, 5);
@@ -96,7 +96,7 @@ app.whenReady().then(async () => {
 
       // Imported/local maps use their finite inventory with the same behavior.
       await prepare(true); await enter('sandbox-play');
-      await click(camp); await click('.operations > .wide-operation');
+      await click(camp); await click(camp);
       await tile(3, 3); assert.equal(await active(), true);
       await tile(3, 4); assert.equal(await active(), false);
       assert.deepEqual(await art(), [{kind:'camp',rotation:1},{kind:'camp',rotation:1}]);
@@ -106,7 +106,7 @@ app.whenReady().then(async () => {
 
       // The editor keeps supplying fresh instances while enabled, then deselects when disabled.
       await prepare(true); await enter('sandbox-editor');
-      await click(camp); await click('.operations > .wide-operation');
+      await click(camp); await click(camp);
       await tile(5, 4, 6); assert.equal(await active(), true); assert.deepEqual(await art(), []);
       await tile(0, 1, 6); await tile(2, 1, 6);
       assert.equal(await active(), true);

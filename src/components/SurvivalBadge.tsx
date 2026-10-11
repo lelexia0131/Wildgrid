@@ -1,3 +1,4 @@
+import { useI18n } from '../i18n/context';
 import newcomer from '../assets/survival-badges/newcomer.svg';
 import apprentice from '../assets/survival-badges/apprentice.svg';
 import explorer from '../assets/survival-badges/explorer.svg';
@@ -7,5 +8,6 @@ import { survivalRanks } from '../game/survival';
 
 const badges = [newcomer, apprentice, explorer, veteran, legend];
 export function SurvivalBadge({ rank }: { rank: number }) {
-  return <div className={`survival-badge badge-rank-${rank}`} role="img" aria-label={`${survivalRanks[rank].name}徽章`}><img src={badges[rank]} alt=""/></div>;
+  const { t, localize } = useI18n();
+  return <div className={`survival-badge badge-rank-${rank}`} role="img" aria-label={localize(t("{0}徽章", survivalRanks[rank].name))}><img src={badges[rank]} alt=""/></div>;
 }

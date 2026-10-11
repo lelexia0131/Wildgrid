@@ -50,7 +50,7 @@ app.whenReady().then(async () => {
   })()`);
   async function load(progress = [], tips = true, current = 30, completed = Array.from({length:29},(_,i)=>i+1)) {
     await win.loadFile(path.join(root, 'dist', 'index.html'));
-    await js(`localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({ version: 1, completed, current, progress:{[current]:progress}, settings:{music:.35,effects:.65,muted:false,facilityTips:tips} }))})`);
+    await js(`localStorage.setItem('wildgrid-tutorial-v1', '{"version":1,"enabled":false}'); localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({ version: 1, completed, current, progress:{[current]:progress}, settings:{music:.35,effects:.65,muted:false,facilityTips:tips} }))})`);
     await win.loadFile(path.join(root, 'dist', 'index.html'));
     await settle();
     await js(audioProbe);
@@ -84,7 +84,7 @@ app.whenReady().then(async () => {
       assert.ok(await js(`document.querySelectorAll('.board > .tile').length === 64`));
       await click('[aria-label^="选择L 形林间木屋"]', viewport.touch);
       const beforeRotation = await js(`document.querySelector('[aria-label^="选择L 形林间木屋"] .roof-plane').getAttribute('d')`);
-      await click('.operations > .wide-operation', viewport.touch);
+      await click('[aria-label^="选择L 形林间木屋"]', viewport.touch);
       assert.notEqual(await js(`document.querySelector('[aria-label^="选择L 形林间木屋"] .roof-plane').getAttribute('d')`), beforeRotation);
       await toggleTips(viewport.touch);
       const after = await geometry();
@@ -164,7 +164,7 @@ app.whenReady().then(async () => {
       assert.ok(await js(`document.querySelector('.level-grid').scrollTop>0`));
       await click('.levels-page .back-link', viewport.touch);
       await click('.menu-buttons button:last-child', viewport.touch);
-      assert.ok(await js(`document.querySelector('.manual-content').textContent.includes('黄色短杠') && document.querySelector('.manual-content').textContent.includes('林间木屋') && document.querySelector('.manual-content').textContent.includes('点击旋转')`));
+      assert.ok(await js(`document.querySelector('.manual-content').textContent.includes('黄色短杠') && document.querySelector('.manual-content').textContent.includes('林间木屋') && document.querySelector('.manual-content').textContent.includes('点击卡片旋转')`));
       const manual = await js(`document.querySelector('.manual-content').textContent`);
       assert.ok(manual.includes('图纸') && manual.includes('通关后解锁') && manual.includes('首次通关'));
       assert.equal(manual.includes('重做'), false);
