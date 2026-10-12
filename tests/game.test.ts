@@ -8,7 +8,7 @@ import type { Level, Placement } from '../src/game/types';
 import { progressForPlay, readSave, writeSave } from '../src/game/storage';
 
 test('reopening a solved level starts fresh while unfinished play resumes', () => {
-  const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true } };
+  const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false } };
   assert.deepEqual(progressForPlay(save, getLevelById(1)!), []);
   assert.deepEqual(progressForPlay(save, getLevelById(2)!), solutions[2].slice(0, 1));
   assert.deepEqual(save.completed, [1, 2]);
@@ -45,6 +45,28 @@ test('facility tip setting preserves disabled state and defaults on for old save
     assert.equal(writeSave(save), true);
     assert.equal(readSave(levels).settings.facilityTips, false);
     assert.deepEqual(readSave(levels).completed, [1]);
+  } finally {
+    if (previous) Object.defineProperty(globalThis, 'localStorage', previous);
+    else Reflect.deleteProperty(globalThis, 'localStorage');
+  }
+});
+
+test('facility names default off for new and legacy saves and persist independently of rule tips', () => {
+  const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  let stored = 'null';
+  Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: { getItem: () => stored, setItem: (_key: string, value: string) => { stored = value; } } });
+  try {
+    assert.equal(readSave(levels).settings.facilityNames, false);
+    stored = JSON.stringify({ version: 1, settings: { facilityTips: false } });
+    const save = readSave(levels);
+    assert.equal(save.settings.facilityNames, false);
+    save.settings.facilityNames = true;
+    assert.equal(writeSave(save), true);
+    assert.equal(readSave(levels).settings.facilityNames, true);
+    assert.equal(readSave(levels).settings.facilityTips, false);
+    save.settings.facilityNames = false;
+    writeSave(save);
+    assert.equal(readSave(levels).settings.facilityNames, false);
   } finally {
     if (previous) Object.defineProperty(globalThis, 'localStorage', previous);
     else Reflect.deleteProperty(globalThis, 'localStorage');

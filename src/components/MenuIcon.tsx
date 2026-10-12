@@ -3,37 +3,44 @@ import { facilityNames, terrainNames } from '../game/facilityRegistry';
 import type { FacilityKind, TerrainKind } from '../game/types';
 import type { MapIconId } from '../game/mapIcons';
 
-export function MenuIcon({ kind }: { kind: MapIconId | 'check' | 'share' | 'edit' | 'badge' }) {
+export function MenuIcon({ kind }: { kind: MapIconId | 'check' | 'share' | 'edit' | 'badge' | 'archive' | 'resume' | 'tools' | 'difficulty' | 'overview' | 'clues' | 'rotate' | 'settings' }) {
   if (kind in facilityNames || kind in terrainNames) return <Art kind={kind as FacilityKind | TerrainKind}/>;
   return <svg className="art menu-icon" data-icon={kind} viewBox="0 0 100 100" fill="none" aria-hidden="true" strokeLinecap="round" strokeLinejoin="round">
     {!['adventure', 'survival', 'sandbox', 'maps'].includes(kind) && <ellipse cx="50" cy="87" rx="36" ry="6" fill="#526d4820"/>}
     {kind === 'adventure' && <>
-      <path d="m13 48 13-9 20 8 17-7v37l-17 7-20-8-13 7Z" fill="#f1e2b6" stroke="#bd9c68" strokeWidth="2"/>
-      <path d="M26 41v35m20-28v34" stroke="#d7be8b" strokeWidth="2"/>
-      <path d="M19 69q8-15 15-5t18-9" stroke="#92aa7f" strokeWidth="3" strokeDasharray="3 5"/>
-      <path d="M63 16V9h12v7" stroke="#bc995a" strokeWidth="4"/>
-      <circle cx="66" cy="42" r="28" fill="#b99152"/><circle cx="66" cy="39" r="26" fill="#f0ce83"/><circle cx="66" cy="39" r="20" fill="#fff0c5"/>
-      <path d="m71 22 4 19-14 15-4-19Z" fill="#477561"/><path d="m71 22 4 19-9-2Z" fill="#7fa58c"/><path d="m61 56-4-19 9 2Z" fill="#d8c395"/>
-      <circle cx="66" cy="39" r="3" fill="#b39459"/>
+      <path d="M45 18v68" stroke="#b69461" strokeWidth="9"/><path d="M43 19v65" stroke="#efd4a0" strokeWidth="3"/>
+      <path d="M17 20h54l14 13-14 13H17Z" fill="#557d60"/><path d="M19 22h51l10 11-10 10H19Z" fill="#a8c791"/><path d="M28 33h33m-7-6 7 6-7 6" stroke="#f9edca" strokeWidth="4"/>
+      <path d="M73 49H28L15 61l13 12h45Z" fill="#c6a16a"/><path d="M72 52H29L19 61l10 9h43Z" fill="#f0d397"/><path d="M37 61h27" stroke="#a08050" strokeWidth="3"/>
+      <path d="M33 86h25m12 0 5-14 5 14m-65 0 3-8 4 8" stroke="#75976c" strokeWidth="4"/><ellipse cx="45" cy="88" rx="32" ry="4" fill="#526d4820"/>
     </>}
     {kind === 'survival' && <>
-      <path d="M37 22v-7q13-10 26 0v7" stroke="#a78a5f" strokeWidth="6"/>
-      <path d="M23 36q-9-8-9 9l3 24m60-33q9-8 9 9l-3 24" stroke="#446b54" strokeWidth="6"/>
-      <rect x="23" y="21" width="54" height="63" rx="16" fill="#70976a"/><path d="M66 24q11 4 11 17v28q0 14-13 15V25Z" fill="#507951"/>
-      <path d="M25 26q25-10 50 0l-4 25q-21 8-42 0Z" fill="#a6bc83"/>
-      <path d="M36 29v25m28-25v25" stroke="#e4d6a0" strokeWidth="5"/><rect x="32" y="48" width="9" height="7" rx="2" fill="#b79b60"/><rect x="59" y="48" width="9" height="7" rx="2" fill="#b79b60"/>
-      <rect x="32" y="61" width="36" height="18" rx="6" fill="#c3ce93"/><path d="M38 65h24m-16 10 5-7 5 7Z" stroke="#76875a" strokeWidth="2"/>
-      <path d="M18 16h64" stroke="#d3b783" strokeWidth="9"/><path d="M20 14h59" stroke="#f3dfad" strokeWidth="5"/>
+      <path d="m21 76 53-50" stroke="#a38964" strokeWidth="13"/><path d="m22 72 51-48" stroke="#ead4a5" strokeWidth="5"/><path d="m68 28 16-16 6 6-17 16Z" fill="#739381"/>
+      <path d="m18 37 18-17 23 20-19 19Z" fill="#a8b8aa"/><path d="m18 37 18-17 8 7-18 19Z" fill="#e4e8ce"/><path d="m40 58 8-8 28 27-8 8Z" fill="#b5885b"/><path d="m45 55 25 24" stroke="#e5bf8a" strokeWidth="3"/>
+      <path d="M16 17v8m-4-4h8m37-9-4 7m8-3-8 3m28 34-7 3" stroke="#e3b764" strokeWidth="3"/><path d="m23 84 15-2m37 6 9-3" stroke="#779471" strokeWidth="4"/>
     </>}
-    {(kind === 'sandbox' || kind === 'edit') && <>
+    {kind === 'sandbox' && <>
+      <path d="m10 66 39-19 41 19-40 22Z" fill="#5f8a77"/><path d="m10 60 39-19 41 19-40 22Z" fill="#a2c9b9"/><path d="M10 60v6l40 22v-6m40-22v6" stroke="#5f8a77" strokeWidth="2"/>
+      <path d="m23 49 19-9 17 9-18 10Z" fill="#f0d493"/><path d="M23 49v14l18 10V59m18-10v14L41 73" fill="#c3a56c"/><path d="m23 49 18 10 18-10" stroke="#fae8b5" strokeWidth="2"/>
+      <path d="m58 41 13-7 13 7-13 7Z" fill="#b6d6aa"/><path d="M58 41v12l13 7V48m13-7v12l-13 7" fill="#74996b"/>
+      <g transform="rotate(32 55 25)"><path d="M49 8h12v31l-6 12-6-12Z" fill="#edc16f"/><path d="M49 8h4v31h-4Z" fill="#fff0bb"/><path d="m49 39 6 12 6-12" fill="#dec99b"/><path d="m52 46 3 5 3-5Z" fill="#426954"/><rect x="49" y="7" width="12" height="8" rx="2" fill="#749ca4"/></g>
+    </>}
+    {kind === 'maps' && <>
+      <path d="m13 26 22-8 28 10 22-8v56l-22 8-28-10-22 8Z" fill="#c2ab81"/><path d="m13 21 22-8 28 10 22-8v55l-22 8-28-10-22 8Z" fill="#f3e5bc"/><path d="M35 13v55m28-45v55" stroke="#d7be8e" strokeWidth="2"/>
+      <path d="m17 41 8-6 8 6m11 9 8-11 9 12m5-11 8-7 8 6" stroke="#93af85" strokeWidth="3"/><path d="M23 59q15-19 25 2t29-9" stroke="#ad9567" strokeWidth="2" strokeDasharray="3 5"/>
+      <path d="M59 40q0-14 13-14t13 14c0 9-13 20-13 20S59 49 59 40Z" fill="#ae7868"/><circle cx="72" cy="39" r="6" fill="#fae3b5"/>
+    </>}
+    {kind === 'edit' && <>
       <g transform="rotate(-8 47 52)"><rect x="12" y="19" width="62" height="65" rx="8" fill="#bd965f"/><rect x="12" y="15" width="62" height="65" rx="8" fill="#e4c88d"/><rect x="20" y="23" width="46" height="49" rx="4" fill="#f8efcf"/><path d="M35 23v49m15-49v49M20 39h46m-46 16h46" stroke="#c7d5ac" strokeWidth="2"/><path d="m26 64 10-17 13 12 9-23" stroke="#83a080" strokeWidth="3"/></g>
       <g transform="rotate(25 78 47)"><path d="M72 12h13v57l-6 15-7-15Z" fill="#efbf65"/><path d="M72 12h5v57h-5Z" fill="#ffe6a6"/><path d="m72 69 7 15 6-15Z" fill="#e5cb9b"/><path d="m76 78 3 6 3-6Z" fill="#4e6653"/><rect x="72" y="9" width="13" height="10" rx="3" fill="#7ca5a4"/></g>
     </>}
-    {kind === 'maps' && <>
-      <path d="m19 25 53-5 13 13v46l-53 7-13-13Z" fill="#ae8c57"/><path d="m20 22 52-5 13 13-52 7Z" fill="#f7e7be"/><path d="M21 29v42l9 9V38Z" fill="#dfc38b"/><path d="m31 36 54-6v48l-54 7Z" fill="#89a57b"/><path d="m36 40 44-5v38l-44 6Z" fill="#c9d9a9"/>
-      <path d="m44 62 7-11 9 8 8-15" stroke="#7b9b73" strokeWidth="3"/><path d="M22 41l7 6m-7 6 7 6m-7 6 7 6" stroke="#9b7a4c" strokeWidth="3"/>
-      <path d="M62 30v18l7-5 7 3V28Z" fill="#db9e65"/><circle cx="64" cy="69" r="5" fill="#f3d38a"/>
-    </>}
+    {kind === 'archive' && <><rect x="16" y="29" width="68" height="51" rx="5" fill="#96af83"/><path d="M18 43h64v33H18Z" fill="#c1d2a0"/><rect x="12" y="26" width="76" height="17" rx="4" fill="#6e8c67"/><rect x="36" y="50" width="28" height="15" rx="3" fill="#f1dfae"/><path d="M42 57h16" stroke="#ad996d" strokeWidth="3"/><path d="m26 25-3-12 48-4 2 16" fill="#f4e8c6"/><path d="m33 20 9-4 11 5 10-5" stroke="#a6b793" strokeWidth="2"/></>}
+    {kind === 'resume' && <><circle cx="50" cy="48" r="33" fill="#9fb78c"/><circle cx="50" cy="48" r="26" fill="#f6e6ba"/><path d="M50 30v19l14 8" stroke="#779370" strokeWidth="4"/><path d="m42 11 8-6 8 6" stroke="#b59660" strokeWidth="4"/><path d="M72 66v22l18-11Z" fill="#668d73"/></>}
+    {kind === 'tools' && <><path d="m21 27 14-8 10 15-14 8Z" fill="#a7b9a1"/><path d="m35 36 36 41" stroke="#c1a06b" strokeWidth="10"/><path d="m31 23 4-4 10 15-4 4" fill="#d7dfc5"/><path d="m28 79 40-49" stroke="#729482" strokeWidth="9"/><path d="m62 32 7-17 12 5-5 17Z" fill="#e4c28a"/></>}
+    {kind === 'difficulty' && <><path d="M16 78V63h17v15m9 0V45h17v33m9 0V23h17v55" fill="#adc69a" stroke="#6f926b" strokeWidth="3"/><path d="m16 44 26-20 17 3 22-17" stroke="#cba65f" strokeWidth="4"/><path d="m71 9 11-1-2 12" stroke="#cba65f" strokeWidth="4"/></>}
+    {kind === 'overview' && <><path d="M16 19h68v62H16Z" fill="#97ac85"/><path d="M21 24h58v52H21Z" fill="#e5edcf"/><path d="M40 24v52m20-52v52M21 41h58m-58 18h58" stroke="#c1d0a4" strokeWidth="3"/><path d="m30 50 10 10 28-29" stroke="#74946c" strokeWidth="7"/></>}
+    {kind === 'clues' && <><path d="M15 25h19m-19 15h19m-19 15h19M45 25h19m-19 15h19" stroke="#d4ad57" strokeWidth="6"/><circle cx="69" cy="65" r="22" fill="#e2eaca" stroke="#779775" strokeWidth="4"/><path d="m58 66 8 8 15-18" stroke="#74946c" strokeWidth="5"/></>}
+    {kind === 'rotate' && <><path d="M74 29a30 30 0 1 0 4 37" stroke="#a6b889" strokeWidth="7"/><path d="m72 12 7 21-22-3" fill="#e8c98e"/><path d="M36 35h14v14h14v14H36Z" fill="#d8b16c"/><path d="M40 39h6v13h14v7H40Z" fill="#f7e3ae"/></>}
+    {kind === 'settings' && <><path d="M22 16v66m28-66v66m28-66v66" stroke="#a3b992" strokeWidth="6"/><rect x="11" y="29" width="22" height="14" rx="4" fill="#e9c88b"/><rect x="39" y="57" width="22" height="14" rx="4" fill="#7ca593"/><rect x="67" y="20" width="22" height="14" rx="4" fill="#d6b48c"/><path d="M17 34h10m18 28h10m18-37h10" stroke="#f7edc9" strokeWidth="2"/></>}
     {kind === 'lantern' && <>
       <path d="M33 25V17q17-20 34 0v8" stroke="#647e69" strokeWidth="5"/><path d="m34 26-6 52h44l-6-52Z" fill="#90aca0"/>
       <path d="m38 31-5 39h34l-5-39Z" fill="#fae4a2"/><path d="M49 36v28" stroke="#fff5d3" strokeWidth="7"/><path d="m51 49-9 16h18Z" fill="#f0bd65"/>

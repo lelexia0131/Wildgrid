@@ -10,7 +10,6 @@ export function Blueprint({ level, placements, name = `day ${level.id}` }: { lev
     return { at, piece, cells: occupied(piece, at) };
   });
   return <section className="blueprint-content">
-    <h2>{t("图纸")}</h2>
     <div className="blueprint-sheet" role="img" aria-label={localize(t("{0} 的完整营地答案，全部 {1} 个设施已放置", name, level.pieces.length))} style={{ '--size': level.size } as React.CSSProperties}>
       <div className="blueprint-corner"/>
       <div className="blueprint-columns">{level.cols.map((count, i) => <span key={i}>{count}</span>)}</div>

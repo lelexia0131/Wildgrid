@@ -1,10 +1,14 @@
 @font-face { font-family: 'Wildgrid Playful'; src: url('./assets/fonts/ZCOOLKuaiLe-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: 'Wildgrid Chunky'; src: url('./assets/fonts/LilitaOne-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Wildgrid Hand Chinese'; src: url('./assets/fonts/MaShanZheng-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Wildgrid Hand Supplement'; src: url('./assets/fonts/Wildgrid-Hand-Supplement.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Wildgrid Hand Latin'; src: url('./assets/fonts/Caveat-Variable.ttf') format('truetype'); font-weight: 400 700; font-style: normal; font-display: swap; }
 :root {
   --body-font: 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
   --heading-font: 'Wildgrid Chunky', 'Wildgrid Playful', sans-serif;
   --label-font: 'Wildgrid Playful', 'Wildgrid Chunky', sans-serif;
   --number-font: 'Wildgrid Chunky', 'Wildgrid Playful', var(--body-font);
+  --handwriting-font: 'Wildgrid Hand Latin', 'Wildgrid Hand Chinese', 'Wildgrid Hand Supplement', 'Wildgrid Playful', cursive;
   font-family: var(--body-font);
 }
 [lang='en'] { --label-font: 'Wildgrid Chunky', 'Wildgrid Playful', sans-serif; }

@@ -14,6 +14,7 @@ test('completed and abandoned history retains exact map snapshots without duplic
     const draft = withEditorPlacements({ level, placements }, placements);
     const challenge: SurvivalChallenge = { id: 'history-clear', difficulty: 1, seed: 123, startedAt: Date.now() - 60000, draft, fingerprint: 'history-clear' };
     writeSurvival({ ...readSurvival(), challenge, progress: emptySurvivalProgress(challenge.id) });
+    assert.deepEqual(readSurvival().records, []);
     const first = completeSurvival(challenge, placements);
     const record = readSurvival().records[0];
     assert.equal(record.startedAt, challenge.startedAt);

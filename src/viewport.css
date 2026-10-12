@@ -225,6 +225,21 @@ input[type=range] { height: 22px; }
 .tile:has(.terrain-label):hover, .tile:has(.terrain-label):focus-visible { z-index: 5; }
 .tile:hover .terrain-label, .tile:focus-visible .terrain-label { opacity: 1; }
 .tile .terrain-label .art { width: 17px; height: 17px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.tools-panel:has(.camp-tools) { grid-template-rows: minmax(0, 1fr) auto; }
+.operations.camp-tools { display: block; overflow: hidden; padding: 7px; }
+.camp-tools h2 { margin: 0 0 8px; }
+.camp-tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 48px)); justify-content: center; gap: 6px 9px; }
+.camp-tools .camp-tool { position: relative; display: flex; align-items: center; justify-content: center; min-width: 0; height: 38px; min-height: 36px; padding: 2px; border: 1px solid #c9d4b9; border-radius: 8px; background: linear-gradient(#faf5e3, #e8ead3); box-shadow: 0 3px 0 #acba9859, inset 0 1px 0 #fffdf3; transition: transform .15s, background .15s; }
+.camp-tools .camp-tool > svg { width: 32px; height: 32px; }
+.camp-tools .camp-tool.tool-blueprint { background: linear-gradient(#edf5ee, #d3e5dc); border-color: #b6cdc0; }
+.camp-tools .camp-tool.tool-journal, .camp-tools .camp-tool.tool-export { background: linear-gradient(#fff1d5, #efe0b9); border-color: #d4c29b; }
+.camp-tools .camp-tool.tool-abandon { background: linear-gradient(#f9ece0, #ecd6c6); border-color: #d5b6a2; }
+.camp-tools .camp-tool:hover:enabled { transform: translateY(-2px); background: #f5edcd; }
+.camp-tools .camp-tool:active:enabled { transform: translateY(2px); box-shadow: none; }
+.camp-tools .camp-tool:focus-visible { outline: 0; box-shadow: inset 0 0 0 2px #698b63, 0 3px 0 #acba9859, 0 0 8px #89a56a45; }
+@media (max-height: 500px), (max-width: 540px) { .operations.camp-tools { padding: 6px; } .camp-tool-grid { gap: 5px; } }
+@media (pointer: coarse) { .camp-tools .camp-tool { height: 44px; } }
 .label-water { background: #d4eceb; color: #3a737b; }
 .label-forest { background: #dce9d2; color: #4c7052; }
 .label-mountain { background: #e6e0d1; color: #75654e; }

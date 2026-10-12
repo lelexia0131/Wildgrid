@@ -5,13 +5,14 @@ import type { FacilityKind, Shape, TerrainKind } from '../game/types';
 export function FootprintSurface({ shape, rotation }: { shape: Shape; rotation: number }) {
   const cells = offsets(shape, rotation);
   const width = (Math.max(...cells.map(p => p.c)) + 1) * 100, height = (Math.max(...cells.map(p => p.r)) + 1) * 100;
-  const has = (r: number, c: number) => cells.some(p => p.r === r && p.c === c);
-  const fill = cells.map(p => `M${p.c * 100} ${p.r * 100}h100v100h-100Z`).join('');
-  const outline = cells.map(({r,c}) => [
-    !has(r-1,c) ? `M${c*100} ${r*100}h100` : '', !has(r+1,c) ? `M${c*100} ${(r+1)*100}h100` : '',
-    !has(r,c-1) ? `M${c*100} ${r*100}v100` : '', !has(r,c+1) ? `M${(c+1)*100} ${r*100}v100` : '',
-  ].join('')).join('');
-  return <svg className="facility-footprint" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><path className="footprint-fill" d={fill}/><path className="footprint-outline" d={outline} fill="none" strokeWidth="1.5" vectorEffect="non-scaling-stroke"/></svg>;
+  const corners = footprintCorners(cells);
+  const outline = corners.map((p,i) => {
+    const previous = corners[(i+corners.length-1)%corners.length], next = corners[(i+1)%corners.length];
+    const before = { x:p.x-Math.sign(p.x-previous.x)*8, y:p.y-Math.sign(p.y-previous.y)*8 };
+    const after = { x:p.x+Math.sign(next.x-p.x)*8, y:p.y+Math.sign(next.y-p.y)*8 };
+    return `${i ? 'L' : 'M'}${before.x} ${before.y}Q${p.x} ${p.y} ${after.x} ${after.y}`;
+  }).join('')+'Z';
+  return <svg className="facility-footprint" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><path className="footprint-fill" d={outline}/><path className="footprint-outline" d={outline} fill="none" strokeWidth="1.5" vectorEffect="non-scaling-stroke"/></svg>;
 }
 
 function FootprintArt({ shape, rotation, children }: { shape: Shape; rotation: number; children: React.ReactNode }) {
@@ -24,9 +25,8 @@ function FootprintArt({ shape, rotation, children }: { shape: Shape; rotation: n
 }
 
 type Point = { x: number; y: number };
-// Trace the occupied outline, then inset the roof for a fixed view from above.
-function roofOutline(shape: Shape, rotation: number, ridge = false): Point[] {
-  const cells = offsets(shape, rotation), edges: [Point, Point][] = [];
+function footprintCorners(cells: { r: number; c: number }[]): Point[] {
+  const edges: [Point, Point][] = [];
   const has = (r: number, c: number) => cells.some(p => p.r === r && p.c === c);
   for (const {r,c} of cells) {
     const x = c * 100, y = r * 100;
@@ -41,12 +41,17 @@ function roofOutline(shape: Shape, rotation: number, ridge = false): Point[] {
     points.push(end);
     end = edges.find(([start]) => start.x === end.x && start.y === end.y)![1];
   }
-  const corners = points.filter((p,i) => {
+  return points.filter((p,i) => {
     const prev = points[(i+points.length-1)%points.length], next = points[(i+1)%points.length];
     return (p.x-prev.x)*(next.y-p.y) !== (p.y-prev.y)*(next.x-p.x);
   });
+}
+
+// Trace the occupied outline, then inset the roof for a fixed view from above.
+function roofOutline(shape: Shape, rotation: number, ridge = false): Point[] {
+  const corners = footprintCorners(offsets(shape, rotation));
   const inset = (a: Point, b: Point) => {
-    const x = Math.sign(a.y-b.y), y = Math.sign(b.x-a.x), distance = ridge ? y > 0 ? 42 : y < 0 ? 58 : 50 : y > 0 ? 38 : y < 0 ? 30 : 10;
+    const x = Math.sign(a.y-b.y), y = Math.sign(b.x-a.x), distance = ridge ? y > 0 ? 42 : y < 0 ? 58 : 50 : y > 0 ? 38 : y < 0 ? 30 : 23;
     return {x:x*distance,y:y*distance};
   };
   return corners.map((p,i) => {
@@ -65,7 +70,9 @@ function BuildingArt({ kind, shape, rotation }: { kind: 'camp' | 'cabin'; shape:
   const camp = kind === 'camp';
   const ridge = `M${peaks.map(p=>`${p.x} ${p.y}`).join('L')}Z`;
   const chimney = [...cells].sort((a,b)=>a.r-b.r || a.c-b.c)[0];
+  const width = (Math.max(...cells.map(p=>p.c))+1)*100, height = (Math.max(...cells.map(p=>p.r))+1)*100;
   return <FootprintArt shape={shape} rotation={rotation}>
+    <g transform={`translate(${width*.11} ${height*.11}) scale(.78)`}>
     <path d={`M${points.map(p=>`${p.x+4} ${p.y+21}`).join('L')}Z`} fill="#624c2420"/>
     {edges.filter(({p,q})=>q.y>p.y).map(({p,q},i)=><path key={i} d={`M${p.x} ${p.y}L${q.x} ${q.y}l8 12L${p.x+8} ${p.y+12}Z`} fill={camp ? '#bf8b45' : '#9f754f'}/>)}
     {fronts.map((f,i)=><g key={i}><rect x={f.x} y={f.y} width={f.width} height="20" fill={camp ? '#d2a05a' : '#c59865'}/>{!camp && <path d={`M${f.x+4} ${f.y+7}h${f.width-8}m-${f.width-8} 7h${f.width-8}`} stroke="#af804e" strokeWidth="2"/>}</g>)}
@@ -90,6 +97,7 @@ function BuildingArt({ kind, shape, rotation }: { kind: 'camp' | 'cabin'; shape:
       <rect x={chimney.c*100+60} y={chimney.r*100+27} width="12" height="24" fill="#9b9382"/><path d={`M${chimney.c*100+58} ${chimney.r*100+27}h16v6h-16Z`} fill="#b6af9c"/>
       <path d={`M${doorX-16} ${doorY+24}h32`} stroke="#d6b789" strokeWidth="4" strokeLinecap="round"/>
     </>}
+    </g>
   </FootprintArt>;
 }
 

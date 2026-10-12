@@ -10,7 +10,7 @@ export class WildernessAudio {
   private step = 0;
   private next = 0;
   private scene: 'menu' | 'game' = 'menu';
-  private settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true };
+  private settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false };
   // Original 352-step theme plus a 32-step F–G bridge back into C.
   // 130.56 seconds in-game, 145.92 seconds in the menu.
   private melody = [

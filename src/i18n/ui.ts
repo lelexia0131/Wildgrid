@@ -5,6 +5,8 @@ import { feedbackEnglish } from './feedback';
 // Gameplay and save data keep their original values; localization happens at display time.
 export const uiEnglish = {
   '野格': 'WILDGRID',
+  '设施名称显示': 'Facility names', '暂无未完成挑战': 'No unfinished challenge', '已放弃': 'Abandoned',
+  '目录': 'Contents', '上一页': 'Previous page', '下一页': 'Next page', '第 {0} 页，共 {1} 页': 'Page {0} of {1}',
   '编辑图标': 'Edit Icon', '选择图标': 'Choose an icon', '保存图标': 'Save Icon',
   '旅途罗盘': 'Trail compass', '远行背包': 'Hiking backpack', '绘图工具': 'Drawing tools', '地图册': 'Map journal',
   '露营灯': 'Lantern', '登山靴': 'Hiking boots', '相机': 'Camera', '热饮': 'Warm drink',
