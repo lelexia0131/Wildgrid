@@ -25,7 +25,15 @@
 .survival-bottom button, .survival-generating button { min-height: 50px; height: auto; font-size: 16px; padding: 12px 20px; white-space: normal; }
 .modal.survival-records { width: min(700px, calc(100% - 24px)); margin: auto; padding: 20px; border: 1px solid #cbd5bc; border-radius: 20px; background: #f7f6e9; }
 .survival-records h2 { font-size: 22px; margin: 0; }
-.survival-records > div { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.survival-record-table { margin-top: 18px; border: 1px solid #d4ddc7; border-radius: 10px; overflow: hidden; }
+.survival-record-head, .survival-record-row { display: grid; grid-template-columns: 70px minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 10px; padding: 12px; text-align: left; }
+.survival-record-head { color: #53694e; background: #e5ecd9; font-size: 14px; }
+.survival-record-row { width: 100%; min-height: 56px; border-top: 1px solid #dbe1cf; font-family: var(--body-font); font-size: 14px; line-height: 1.5; color: #4b6148; }
+.survival-record-row:nth-child(even) { background: #eff2e4; }
+.survival-record-row:not(:disabled):hover { background: #dfe9d0; }
+.survival-record-row > span { min-width: 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.survival-record-row:disabled { color: #87917c; }
+.record-unfinished { color: #a17e52; }
 .survival-records p { font-size: 16px; margin: 12px 0; }
 .survival-records > div > p { display: flex; flex-direction: column; gap: 6px; margin: 0; border-top: 1px solid #dde2cc; padding-top: 10px; }
 .survival-generating { position: fixed; z-index: 12; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(420px, calc(100% - 32px)); padding: 28px; border: 2px solid #afc199; border-radius: 24px; background: #faf9ef; box-shadow: 0 8px 40px #344d4140; text-align: center; }
@@ -63,7 +71,7 @@
   .survival-identity h2 { font-size: 22px; }
   .survival-identity p { line-height: 1.6; }
   .survival-bottom { flex-direction: column; }
-  .survival-records > div { grid-template-columns: 1fr 1fr; }
+  .survival-record-head, .survival-record-row { grid-template-columns: 58px minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 10px 8px; font-size: 13px; }
 }
 
 
@@ -92,7 +100,7 @@
   .survival-difficulty span { line-height: 1.4; }
   .survival-bottom { flex: none; margin: 0; }
   .survival-error { flex: none; margin: 0; }
-  .modal.survival-records { overflow: visible; }
+  .modal.survival-records { overflow-y: auto; }
 }
 
 @media (min-width: 761px) and (pointer: fine) and (max-height: 500px) {

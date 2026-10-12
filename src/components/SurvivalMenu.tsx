@@ -3,18 +3,22 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Flag, X } from 'lucide-react';
 import { SurvivalBadge } from './SurvivalBadge';
 import { rankFor, survivalDifficulties, survivalRanks, survivalTotals } from '../game/survival';
-import type { SurvivalSave } from '../game/survival';
+import type { SurvivalRecord, SurvivalSave } from '../game/survival';
 
-export function SurvivalMenu({ save, generating, error, onStart, onContinue, onBack, onCancel }: {
+const recordTime = (at?: number) => at === undefined ? '—' : new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(at);
+
+export function SurvivalMenu({ save, generating, error, onStart, onContinue, onBack, onCancel, onReview, canReview }: {
   save: SurvivalSave; generating: number | null; error: string;
   onStart: (difficulty: number) => void; onContinue: () => void; onBack: () => void; onCancel: () => void;
+  onReview: (record: SurvivalRecord) => void; canReview: (record: SurvivalRecord) => boolean;
 }) {
   const { t, localize } = useI18n();
   const [records, setRecords] = useState(false);
   const recordsRef = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (records) recordsRef.current?.showModal(); }, [records]);
-  const { counts, total, xp } = survivalTotals(save), rank = rankFor(xp), next = survivalRanks[rank + 1];
+  const { counts, xp } = survivalTotals(save), rank = rankFor(xp), next = survivalRanks[rank + 1];
   const progress = next ? (xp - survivalRanks[rank].xp) / (next.xp - survivalRanks[rank].xp) : 1;
+  const history = [...save.records].sort((a, b) => (b.startedAt ?? b.finishedAt ?? 0) - (a.startedAt ?? a.finishedAt ?? 0));
   return <main className="survival-page">
     <div className="survival-heading"><button className="back-link" onClick={onBack} disabled={generating !== null}><ArrowLeft size={20}/>{t("返回")}</button><h1>{t("荒野求生")}</h1></div>
     <section className="survival-identity" aria-label={t("玩家身份")}>
@@ -23,9 +27,9 @@ export function SurvivalMenu({ save, generating, error, onStart, onContinue, onB
     <div className="survival-difficulties" aria-label={t("选择难度")}>{survivalDifficulties.map((_, i) => <button key={i} className={`survival-difficulty difficulty-band-${Math.floor(i / 2)}`} disabled={generating !== null} onClick={() => onStart(i + 1)}><strong>{t("{0}难", i + 1)}</strong><span>{t("通关 {0} 次", counts[i])}</span></button>)}</div>
     <div className="survival-bottom">
       {save.challenge && <button className="primary" disabled={generating !== null} onClick={onContinue}>{t("继续挑战 · {0}难", save.challenge.difficulty)}<ArrowRight size={20}/></button>}
-      <button className="secondary" onClick={() => setRecords(!records)} aria-expanded={records}><Flag size={20}/>{t("通关记录 · 共 {0} 次", total)}</button>
+      <button className="secondary" onClick={() => setRecords(!records)} aria-expanded={records}><Flag size={20}/>{t("通关记录 · 共 {0} 次", history.length)}</button>
     </div>
-    {records && <dialog ref={recordsRef} className="modal survival-records" aria-label={t("通关记录")} onCancel={event => { event.preventDefault(); setRecords(false); }}><button className="modal-close icon-button" aria-label={t("关闭通关记录")} onClick={() => setRecords(false)}><X size={20}/></button><h2>{t("通关记录")}</h2><p>{t("总通关 {0} 次 · 累计经验 {1}", total, xp)}</p><div>{counts.map((count, i) => <p key={i}><strong>{t("{0}难 · {1} 次", i + 1, count)}</strong><span>{t("每次 +{0} 经验", survivalDifficulties[i].xp)}</span></p>)}</div></dialog>}
+    {records && <dialog ref={recordsRef} className="modal survival-records" aria-label={t("通关记录")} onCancel={event => { event.preventDefault(); setRecords(false); }}><button className="modal-close icon-button" aria-label={t("关闭通关记录")} onClick={() => setRecords(false)}><X size={20}/></button><h2>{t("通关记录")}</h2><div className="survival-record-table" role="table" aria-label={t("通关记录")}><div className="survival-record-head" role="row"><span role="columnheader">{t("难度")}</span><span role="columnheader">{t("开始时间")}</span><span role="columnheader">{t("完成时间")}</span></div><div role="rowgroup">{history.map(record => <button className="survival-record-row" role="row" key={record.id} disabled={!canReview(record)} title={canReview(record) ? t("复盘") : t("历史地图未保存")} onClick={() => { setRecords(false); onReview(record); }}><strong role="cell">{t("{0}难", record.difficulty)}</strong><span role="cell">{recordTime(record.startedAt)}</span><span role="cell" className={record.finishedAt === undefined ? 'record-unfinished' : ''}>{record.finishedAt === undefined ? t("未完成") : recordTime(record.finishedAt)}</span></button>)}</div></div>{history.length === 0 && <p>{t("暂无记录")}</p>}</dialog>}
     {generating !== null && <div className="survival-generating" role="status"><span className="survival-spinner"/><p>{t("正在生成 {0}难地图并验证唯一解…", generating)}</p><button className="secondary" onClick={onCancel}><X size={18}/>{t("取消生成")}</button></div>}
     {error && <p className="survival-error" role="alert">{localize(error)}</p>}
   </main>;

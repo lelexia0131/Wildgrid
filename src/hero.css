@@ -1,35 +1,100 @@
 /* The lettering and island share one headpiece; the illustration keeps its space. */
-.menu-art { width: min(680px, 100%, calc((100dvh - 300px) * 1.29)); display: flex; flex-direction: column; align-items: center; flex: none; pointer-events: none; }
+.menu-page { gap: 12px; }
+.menu-art { width: min(680px, 100%, calc((100dvh - var(--safe-top) - var(--safe-bottom) - 320px) * 1.29)); display: flex; flex-direction: column; align-items: center; flex: none; pointer-events: none; }
 .camp-title { width: 88%; height: clamp(82px, 16dvh, 140px); margin: 0; position: relative; z-index: 1; }
 .camp-title svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .menu-page .hero-art { margin-top: -36px; flex: none; }
-.menu-buttons button { font-size: 16px; letter-spacing: .6px; }
+.menu-copy { width: min(440px, 100%); }
+.menu-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 14px; }
+.menu-buttons button {
+  position: relative; width: 100%; min-width: 0; height: 60px; padding: 0 18px; gap: 10px;
+  border: 2px solid var(--button-edge); border-radius: 18px;
+  color: var(--button-ink); font-size: 19px; letter-spacing: .6px; line-height: 1.2;
+  text-shadow: 0 1px 0 #fff6;
+  box-shadow: inset 0 2px 0 #fff8, inset 0 -3px 0 #0000000c, 0 6px 0 var(--button-base), 0 10px 16px #42604420;
+  background-position: 0% 0%; transition: background-position .3s, transform .16s, box-shadow .16s;
+}
+.menu-buttons button::before { content: ''; position: absolute; inset: 5px 11px auto; height: 12px; border-radius: 10px; background: linear-gradient(#fff4, #fff0); pointer-events: none; }
+.menu-buttons .menu-adventure {
+  --button-light: #ffe99a; --button-color: #f4ca5f; --button-shade: #e9a84b;
+  --button-edge: #bc893f; --button-base: #a77336; --button-ink: #654421;
+  grid-column: 1 / -1; height: 68px; font-size: 24px; gap: 22px;
+}
+.menu-buttons .menu-journal {
+  --button-light: #caddad; --button-color: #a9c692; --button-shade: #84ac7e;
+  --button-edge: #6a8d63; --button-base: #55774f; --button-ink: #304f3b;
+}
+.menu-buttons .menu-guide {
+  --button-light: #c4e2de; --button-color: #9ac8c6; --button-shade: #7bb0b3;
+  --button-edge: #628e8c; --button-base: #4d7578; --button-ink: #2b5158;
+}
 .menu-buttons button svg { flex: none; }
+.menu-buttons button, .menu-buttons button:hover, .menu-buttons button:active { background-image: linear-gradient(155deg, var(--button-light), var(--button-color) 55%, var(--button-shade)); background-size: 160% 160%; }
+.menu-buttons button:hover, .menu-buttons button:focus-visible, .menu-buttons button:active { background-position: 100% 100%; }
+@media (hover: hover) {
+  .menu-buttons button:hover { transform: translateY(-2px); box-shadow: inset 0 2px 0 #fffa, inset 0 -3px 0 #0000000c, 0 8px 0 var(--button-base), 0 13px 20px #42604426; }
+}
+.menu-buttons button:active { transform: translateY(4px); box-shadow: inset 0 2px 0 #fff6, inset 0 -2px 0 #0000000c, 0 2px 0 var(--button-base), 0 4px 8px #42604420; }
 
-.hero-cloud { animation: camp-cloud 12s ease-in-out infinite; }
+.hero-cloud { transform: translateX(125px); animation: camp-cloud 58s linear -9s infinite; }
+.hero-cloud-far { transform: translateX(642px); animation-duration: 73s; animation-delay: -42s; }
+.hero-bird { --flight-height: 112px; --bird-size: 1; transform: translate(153px, 179px); animation: camp-bird-flight 27s linear -7s infinite; }
+.hero-bird-far { --flight-height: 82px; --bird-size: .75; transform: translate(542px, 93px) scale(.75); animation-duration: 34s; animation-delay: -22s; }
+.hero-bird-low { --flight-height: 171px; --bird-size: .85; transform: translate(690px, 165px) scale(.85); animation-duration: 31s; animation-delay: -15s; }
+.hero-bird-wings { transform-box: fill-box; transform-origin: center; animation: camp-bird-flap 1.2s ease-in-out infinite; }
+.hero-bird-far .hero-bird-wings { animation-duration: 1.45s; animation-delay: -.6s; }
+.hero-bird-low .hero-bird-wings { animation-duration: 1.1s; animation-delay: -.3s; }
+.hero-forest { --sway-duration: 5.8s; --sway-delay: -3.7s; }
+.hero-forest-back { --sway-duration: 6.6s; --sway-delay: -1.3s; }
+.hero-forest-right { --sway-duration: 5.1s; --sway-delay: -2.6s; }
+/* Keep trunks and ground shadows still; all layers of each crown move together. */
+.hero-forest > path:nth-of-type(n + 2) { transform-box: view-box; transform-origin: 49px 72px; animation: camp-tree var(--sway-duration) ease-in-out var(--sway-delay) infinite; }
+.hero-forest > path:nth-of-type(2) { transform-origin: 29px 70px; }
+.hero-forest > path:nth-of-type(3) { transform-origin: 72px 65px; }
 .hero-current { animation: camp-current 3.8s linear infinite; }
 /* Only the three flame paths move; the logs and shadow remain on the ground. */
 .hero-fire > path:nth-of-type(2),
 .hero-fire > path:nth-of-type(3),
-.hero-fire > path:nth-of-type(4) { transform-box: view-box; transform-origin: 50px 80px; animation: camp-fire 2.6s ease-in-out infinite; }
-.hero-fire > path:nth-of-type(3) { animation-delay: -.8s; }
+.hero-fire > path:nth-of-type(4) { transform-box: view-box; transform-origin: 50px 80px; animation: camp-fire 1.7s ease-in-out -.4s infinite; }
+.hero-fire > path:nth-of-type(3) { animation-duration: 1.3s; animation-delay: -.8s; }
+.hero-fire > path:nth-of-type(4) { animation-duration: 2.1s; animation-delay: -1.2s; }
+.hero-fire-glow { transform-box: fill-box; transform-origin: center; animation: camp-fire-glow 2.8s ease-in-out -.9s infinite; }
 .hero-art[data-motion='paused'] *, .hero-art[data-motion='paused'] { animation-play-state: paused; }
-@keyframes camp-cloud { 0%, 100% { transform: translateX(-5px); } 50% { transform: translateX(7px); } }
+@keyframes camp-cloud {
+  0% { transform: translate(-110px, 0); opacity: 0; }
+  8%, 92% { opacity: 1; }
+  50% { transform: translate(395px, -4px); }
+  100% { transform: translate(900px, 0); opacity: 0; }
+}
+@keyframes camp-bird-flight {
+  0% { transform: translate(-28px, var(--flight-height)) scale(var(--bird-size)); opacity: 0; }
+  8%, 92% { opacity: .8; }
+  50% { transform: translate(400px, calc(var(--flight-height) - 9px)) scale(var(--bird-size)); }
+  100% { transform: translate(828px, var(--flight-height)) scale(var(--bird-size)); opacity: 0; }
+}
+@keyframes camp-bird-flap { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-.65); } }
+@keyframes camp-tree { 0%, 100% { transform: rotate(-1.4deg); } 50% { transform: rotate(1.8deg) skewX(.4deg); } }
 @keyframes camp-current { to { stroke-dashoffset: -47; } }
-@keyframes camp-fire { 0%, 100% { transform: scale(.97, .96) rotate(-1deg); opacity: .9; } 50% { transform: scale(1.02, 1.04) rotate(1deg); opacity: 1; } }
+@keyframes camp-fire { 0%, 100% { transform: scale(.96, .9) rotate(-2deg); } 50% { transform: scale(1.05, 1.09) rotate(2deg); } }
+@keyframes camp-fire-glow { 0%, 100% { transform: scale(.9); opacity: .65; } 50% { transform: scale(1.12); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .hero-art * { animation: none !important; } }
 
 @media (max-width: 600px) {
-  .menu-buttons { gap: 8px; }
-  .menu-buttons button { font-size: 14px; padding: 0 14px; }
+  .menu-buttons { gap: 14px 12px; }
+  .menu-buttons button { height: 56px; font-size: 17px; padding: 0 12px; gap: 8px; border-radius: 16px; }
+  .menu-buttons .menu-adventure { height: 64px; font-size: 22px; }
   .menu-page .hero-art { margin-top: -22px; }
+}
+@media (max-width: 360px) {
+  [lang='en'] .menu-buttons .secondary { padding: 0 8px; gap: 6px; font-size: 15px; letter-spacing: .2px; white-space: nowrap; }
+  [lang='en'] .menu-buttons .secondary svg { width: 19px; height: 19px; }
 }
 @media (max-height: 500px) and (min-width: 601px) {
   .menu-page { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(230px, 1fr); gap: 16px; padding-bottom: 12px; max-width: 900px; }
-  .menu-art { width: min(420px, 100%, calc((100dvh - 130px) * 1.29)); justify-self: center; }
+  .menu-art { width: min(420px, 100%, calc((100dvh - var(--safe-top) - var(--safe-bottom) - 150px) * 1.29)); justify-self: center; }
   .camp-title { height: 76px; }
   .menu-page .hero-art { margin-top: -38px; }
-  .menu-buttons { flex-direction: column; gap: 8px; max-width: 270px; margin: auto; }
-  .menu-buttons button { width: 100%; font-size: 15px; }
-  .menu-progress { flex-direction: column; gap: 8px; margin-top: 12px; }
+  .menu-copy { justify-self: center; }
+  .menu-buttons button { padding: 0 12px; font-size: 17px; }
+  .menu-buttons .menu-adventure { font-size: 22px; }
 }

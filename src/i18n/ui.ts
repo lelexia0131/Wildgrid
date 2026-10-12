@@ -5,6 +5,14 @@ import { feedbackEnglish } from './feedback';
 // Gameplay and save data keep their original values; localization happens at display time.
 export const uiEnglish = {
   '野格': 'WILDGRID',
+  '编辑图标': 'Edit Icon', '选择图标': 'Choose an icon', '保存图标': 'Save Icon',
+  '旅途罗盘': 'Trail compass', '远行背包': 'Hiking backpack', '绘图工具': 'Drawing tools', '地图册': 'Map journal',
+  '露营灯': 'Lantern', '登山靴': 'Hiking boots', '相机': 'Camera', '热饮': 'Warm drink',
+  '橡果': 'Acorn', '野花': 'Wildflower', '月夜': 'Moonlight', '望远镜': 'Binoculars',
+  '{0}难 · {1}': 'Level {0} · {1}',
+  '开始时间': 'Started', '完成时间': 'Finished', '未完成': 'Unfinished', '复盘': 'Review',
+  '历史地图未保存': 'Historical map unavailable', '暂无记录': 'No records yet',
+  '{0}难 · 复盘': 'Level {0} · Review',
   ...manualEnglish, ...feedbackEnglish,
   '需占 {0} 格，已占 {1} 格{2}': 'Target: {0} cells. Filled: {1}{2}',
   '{0}：{1}': '{0}: {1}', '{0}，点击拿起': '{0}, tap to pick up',

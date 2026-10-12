@@ -19,7 +19,6 @@ body { min-width: 0; }
 }
 .menu-art { width: min(680px, 100%, calc((100dvh - 175px) * 1.29)); margin: 0; }
 .menu-copy { padding: 0; flex: none; }
-.menu-progress { margin-top: 18px; }
 .menu-buttons button { height: 46px; }
 
 .game-page {
@@ -138,7 +137,6 @@ input[type=range] { height: 22px; }
   .guide-strip p { font-size: 10px; }
   .menu-page { padding-bottom: 16px; }
   .menu-art { width: min(520px, 100%, calc((100dvh - 160px) * 1.29)); }
-  .menu-progress { margin-top: 16px; }
   .menu-buttons button { height: 44px; min-width: 0; }
   .levels-page { width: calc(100% - 24px); gap: 10px; padding-bottom: 12px; }
   .level-grid { gap: 8px; }
@@ -223,7 +221,6 @@ input[type=range] { height: 22px; }
 .game-title h1 { white-space: nowrap; }
 .level-grid { grid-template-rows: none; grid-auto-rows: minmax(138px, auto); overflow-y: auto; padding: 3px 3px 8px; align-content: start; scrollbar-width: thin; }
 .menu-buttons { flex-wrap: wrap; }
-.progress-dots { max-width: 180px; flex-wrap: wrap; }
 .tile .terrain-label { position: absolute; left: 50%; top: 0; transform: translate(-50%, -65%); z-index: 9; display: flex; align-items: center; gap: 3px; width: max-content; padding: 3px 7px; border-radius: 20px; box-shadow: 0 2px 6px #304a4020; font-size: 10px; line-height: 16px; pointer-events: none; opacity: 0; transition: opacity .12s; }
 .tile:has(.terrain-label):hover, .tile:has(.terrain-label):focus-visible { z-index: 5; }
 .tile:hover .terrain-label, .tile:focus-visible .terrain-label { opacity: 1; }
@@ -231,14 +228,18 @@ input[type=range] { height: 22px; }
 .label-water { background: #d4eceb; color: #3a737b; }
 .label-forest { background: #dce9d2; color: #4c7052; }
 .label-mountain { background: #e6e0d1; color: #75654e; }
+.label-camp, .label-picnic, .label-foodTruck { background: #f2dfb0; color: #856136; }
+.label-fire { background: #f5d6b1; color: #995d36; }
+.label-tower, .label-cabin { background: #dce9d2; color: #4c7052; }
+.label-powerTower { background: #e0e6de; color: #59736b; }
+.label-pool { background: #d4eceb; color: #3a737b; }
 .placed-picnic { background: #e9dfbd; }
-.placed-cabin { background: #d6dfbc; }
+.placed-cabin { background: #e7dab0; }
 .tile.placed.placed-multi, .tile.placed.placed-multi:hover { background: transparent; border-color: transparent; box-shadow: none; }
 .tile.placed-multi::before, .tile.placed-multi::after { display: none; }
 .placed-facility-art { position: relative; --footprint-color: #e7dab0; --footprint-border: #b6a16b; }
 .placed-facility-art[data-kind="picnic"] { --footprint-color: #e9dfbd; }
-.placed-facility-art[data-kind="cabin"] { --footprint-color: #d6dfbc; }
-.placed-facility-art.hovered { --footprint-color: #e1e8c9; }
+.placed-facility-art.hovered { --footprint-color: #efdfae; }
 .placed-facility-art.invalid { --footprint-color: #ead2b1; --footprint-border: #cb8570; }
 .placed-facility-art.incomplete { --footprint-border: #c5ad65; }
 .facility-footprint { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 5px; }

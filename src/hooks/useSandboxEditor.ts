@@ -107,7 +107,7 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
 
   return {
     localMaps, localMapId, sandboxDraft, mapCode, check, checking, editorDirty, terrainBrush, setTerrainBrush,
-    openSandbox, importSandbox, openLocalMap, editLocalMap, runSandboxAction, copyMapCode,
+    openSandbox, openSandboxPlay, importSandbox, openLocalMap, editLocalMap, runSandboxAction, copyMapCode,
     closeMapCode: () => setMapCode(''), invalidateCheck, cancelCheck, markEditorDirty, resetSandboxContext, refreshLocalMaps,
   };
 }

@@ -6,6 +6,7 @@
 .tutorial-narration > p { margin-top: 10px; }
 .tutorial-narration p { font-size: 14px; line-height: 1.7; margin: 0; }
 .tutorial-narration small { display: block; color: #738266; font-size: 12px; margin-top: 8px; }
+.tutorial-example { display: block; width: 156px; height: 90px; margin: 8px auto 0; }
 .tutorial-controls { display: flex; align-items: center; gap: 6px; margin-top: 14px; }
 .tutorial-controls button { min-height: 44px; padding: 8px 12px; border-radius: 10px; background: #ebe6d4; font-size: 13px; }
 .tutorial-controls button:disabled { opacity: .4; }

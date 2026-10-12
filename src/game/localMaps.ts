@@ -3,9 +3,11 @@ import { decodeMap, encodeMap } from './sandbox';
 import type { SandboxDraft } from './sandbox';
 import type { Placement } from './types';
 import { readSurvival } from './survival';
+import { isMapIcon } from './mapIcons';
+import type { MapIconId } from './mapIcons';
 
 export type SurvivalMapInfo = { challengeId: string; difficulty: number; seed: number; completed: boolean; blueprintUnlocked: boolean };
-export type LocalMap = { id: number; name: string; customName?: string; draft: SandboxDraft; progress: Placement[]; source?: 'survival'; survival?: SurvivalMapInfo };
+export type LocalMap = { id: number; name: string; customName?: string; icon?: MapIconId; draft: SandboxDraft; progress: Placement[]; source?: 'survival'; survival?: SurvivalMapInfo };
 const storageKey = 'wildgrid-local-maps-v1';
 const object = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -34,7 +36,7 @@ function parseLocalMaps(raw: string | null): LocalMap[] {
       const info = entry.survival;
       if (entry.source === 'survival' && (!object(info) || typeof info.challengeId !== 'string' || typeof info.difficulty !== 'number' || !Number.isInteger(info.difficulty) || info.difficulty < 1 || info.difficulty > 10 || typeof info.seed !== 'number' || !Number.isInteger(info.seed))) continue;
       const survival = entry.source === 'survival' && object(info) ? { challengeId: info.challengeId as string, difficulty: info.difficulty as number, seed: info.seed as number, completed: completed.has(info.challengeId as string) || info.completed === true, blueprintUnlocked: completed.has(info.challengeId as string) || info.blueprintUnlocked === true || survivalSave.challenge?.id !== info.challengeId } : undefined;
-      maps.push({ id: entry.id, name: '', ...(customName ? { customName } : {}), draft, progress: validateProgress(draft, entry.progress), ...(survival ? { source: 'survival' as const, survival } : {}) });
+      maps.push({ id: entry.id, name: '', ...(customName ? { customName } : {}), ...(isMapIcon(entry.icon) ? { icon: entry.icon } : {}), draft, progress: validateProgress(draft, entry.progress), ...(survival ? { source: 'survival' as const, survival } : {}) });
     } catch { /* Keep other valid maps when an individual save is damaged. */ }
   }
   return maps.sort((a, b) => a.id - b.id).map((map, index) => ({ ...map, name: map.customName || `本地地图${index + 1}` }));
@@ -49,7 +51,7 @@ function readMapsForWrite(): LocalMap[] {
 }
 
 function writeLocalMaps(maps: LocalMap[]) {
-  const entries = maps.map(map => ({ id: map.id, customName: map.customName, code: encodeMap(map.draft), progress: map.progress, source: map.source, survival: map.survival }));
+  const entries = maps.map(map => ({ id: map.id, customName: map.customName, icon: map.icon, code: encodeMap(map.draft), progress: map.progress, source: map.source, survival: map.survival }));
   try { localStorage.setItem(storageKey, JSON.stringify({ version: 1, maps: entries })); } catch { throw new Error('本地地图保存失败，请检查存储空间或本地存储权限后重试'); }
 }
 
@@ -64,7 +66,7 @@ export function saveLocalMap(draft: SandboxDraft, progress: Placement[] = [], ex
   const sameOriginal = !existing || encodeMap(existing.draft) === code;
   if (existing?.survival && !existing.survival.blueprintUnlocked && !sameOriginal) throw new Error('通关或放弃挑战后才能编辑荒野求生地图');
   const info = survival || (sameOriginal ? existing?.survival : undefined);
-  const saved: LocalMap = { id, name: existing?.name || `本地地图${maps.length + 1}`, ...(existing?.customName ? { customName: existing.customName } : {}), draft: restored, progress: savedProgress, ...(info ? { source: 'survival', survival: info } : {}) };
+  const saved: LocalMap = { id, name: existing?.name || `本地地图${maps.length + 1}`, ...(existing?.customName ? { customName: existing.customName } : {}), ...(existing?.icon ? { icon: existing.icon } : {}), draft: restored, progress: savedProgress, ...(info ? { source: 'survival', survival: info } : {}) };
   writeLocalMaps([...maps.filter(map => map.id !== id), saved]);
   return saved;
 }
@@ -88,5 +90,12 @@ export function renameLocalMap(id: number, name: string): void {
   const map = maps.find(map => map.id === id);
   if (!map) throw new Error('要编辑的本地地图存档不存在');
   map.customName = name.trim() || undefined;
+  writeLocalMaps(maps);
+}
+
+export function setLocalMapIcon(id: number, icon: MapIconId): void {
+  const maps = readMapsForWrite(), map = maps.find(map => map.id === id);
+  if (!map) throw new Error('要编辑的本地地图存档不存在');
+  map.icon = icon;
   writeLocalMaps(maps);
 }

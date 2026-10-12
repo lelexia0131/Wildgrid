@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { basicLessons, finishLesson, freshTutorial, matchesAction, readTutorial, resolveTutorial, tutorialStorageKey, writeTutorial } from '../src/game/tutorial';
+import { basicLessons, finishLesson, freshTutorial, matchesAction, readTutorial, resolveTutorial, tutorialDays, tutorialStorageKey, writeTutorial } from '../src/game/tutorial';
 import { getLevelById, levels } from '../src/game/levels';
 import { dictionaries } from '../src/i18n';
 import type { FacilityKind } from '../src/game/types';
@@ -34,37 +34,43 @@ test('tutorial migration uses play records and leaves all three existing saves i
     assert.equal(readTutorial().basicComplete, true);
   } finally { if (previous) Object.defineProperty(globalThis, 'localStorage', previous); else Reflect.deleteProperty(globalThis, 'localStorage'); }
 });
-test('first play is progressive and action conditions match only the intended operation', () => {
+test('Day 1 has one fixed sequence with a welcome, wrong/right examples and a verified placement', () => {
   const level = getLevelById(1)!;
   const context = { mode: 'adventure' as const, level, placements: [], selected: null, won: false };
   let state = freshTutorial();
-  const orientation = resolveTutorial(state, context)!;
-  assert.equal(orientation.id, 'orientation');
-  state = finishLesson(state, orientation);
-  const camp = resolveTutorial(state, context)!;
-  assert.equal(camp.facility, 'camp');
-  state = finishLesson(state, camp, true);
-  assert.deepEqual(state.skipped, ['facility:camp']);
-  assert.equal(resolveTutorial(state, context)?.id, 'placing');
+  const lesson = resolveTutorial(state, context)!;
+  assert.equal(lesson.id, 'day:1');
+  assert.deepEqual(lesson.steps.map(s => s.id), ['welcome', 'board', 'clues', 'camp', 'wrong', 'right', 'select', 'place', 'complete']);
+  assert.equal(lesson.steps[4].example, 'wrong'); assert.equal(lesson.steps[5].example, 'right');
+  const place = lesson.steps[7];
+  assert.deepEqual(place.target, { type: 'cell', cell: { r: 2, c: 3 } });
+  assert.equal(matchesAction(place.actionCondition!, { type: 'place', pieceId: 'camp-1', r: 0, c: 0, rotation: 0 }), false);
+  assert.equal(matchesAction(place.actionCondition!, { type: 'place', pieceId: 'camp-1', r: 2, c: 3, rotation: 0 }), true);
+  state = finishLesson(state, lesson, true);
+  assert.deepEqual(state.skipped, ['day:1']);
+  assert.equal(resolveTutorial(state, context), null);
   assert.equal(matchesAction({ type: 'pickup', pieceId: 'camp-1' }, { type: 'pickup', pieceId: 'camp-2' }), false);
   assert.equal(matchesAction({ type: 'place', kind: 'camp' }, { type: 'place', kind: 'camp' }), true);
   assert.equal(matchesAction({ type: 'rotate' }, { type: 'select' }), false);
 });
-test('all eight facilities, including Day 31 additions, queue once in every play mode', () => {
+test('tutorials appear only on scheduled Adventure days and keep their steps fixed', () => {
   const introduced = new Set<FacilityKind>();
-  for (const mode of ['adventure', 'survival', 'sandbox-play'] as const) {
-    let state = freshTutorial(true);
+  for (const mode of ['adventure', 'survival', 'sandbox-play', 'sandbox-editor'] as const) {
+    let state = freshTutorial();
     for (const level of levels) {
       const context = { mode, level, placements: [], selected: null, won: false };
       let lesson;
       while ((lesson = resolveTutorial(state, context))) {
-        assert.ok(lesson.facility);
-        introduced.add(lesson.facility!);
+        assert.equal(mode, 'adventure');
+        assert.ok(tutorialDays.some(day => day === level.id));
+        if (lesson.facility) introduced.add(lesson.facility);
+        const progress = { ...state, activeStep: { day: level.id, index: Math.min(1, lesson.steps.length - 1) } };
+        assert.deepEqual(resolveTutorial(progress, { ...context, selected: level.pieces[0] })?.steps, lesson.steps);
         state = finishLesson(state, lesson);
       }
       assert.equal(resolveTutorial(state, context), null);
     }
-    assert.equal(state.facilitiesSeen.length, 8);
+    assert.equal(state.facilitiesSeen.length, mode === 'adventure' ? 8 : 0);
     assert.equal(resolveTutorial({ ...state, facilitiesSeen: [], enabled: false }, { mode, level: levels[0], placements: [], selected: null, won: false }), null);
   }
   assert.deepEqual([...introduced].sort(), Object.keys(dictionaries.zh.facilities).sort());

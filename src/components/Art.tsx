@@ -25,7 +25,7 @@ function FootprintArt({ shape, rotation, children }: { shape: Shape; rotation: n
 
 type Point = { x: number; y: number };
 // Trace the occupied outline, then inset the roof for a fixed view from above.
-function roofOutline(shape: Shape, rotation: number): Point[] {
+function roofOutline(shape: Shape, rotation: number, ridge = false): Point[] {
   const cells = offsets(shape, rotation), edges: [Point, Point][] = [];
   const has = (r: number, c: number) => cells.some(p => p.r === r && p.c === c);
   for (const {r,c} of cells) {
@@ -46,32 +46,38 @@ function roofOutline(shape: Shape, rotation: number): Point[] {
     return (p.x-prev.x)*(next.y-p.y) !== (p.y-prev.y)*(next.x-p.x);
   });
   const inset = (a: Point, b: Point) => {
-    const x = Math.sign(a.y-b.y), y = Math.sign(b.x-a.x), distance = y > 0 ? 16 : y < 0 ? 30 : 10;
+    const x = Math.sign(a.y-b.y), y = Math.sign(b.x-a.x), distance = ridge ? y > 0 ? 42 : y < 0 ? 58 : 50 : y > 0 ? 38 : y < 0 ? 30 : 10;
     return {x:x*distance,y:y*distance};
   };
   return corners.map((p,i) => {
     const a = inset(corners[(i+corners.length-1)%corners.length],p), b = inset(p,corners[(i+1)%corners.length]);
-    return {x:p.x+a.x+b.x,y:p.y+a.y+b.y};
+    return {x:p.x+a.x+b.x,y:p.y+a.y+b.y-(ridge ? 28 : 0)};
   });
 }
 
 function BuildingArt({ kind, shape, rotation }: { kind: 'camp' | 'cabin'; shape: Shape; rotation: number }) {
-  const gradient = useId(), points = roofOutline(shape, rotation), cells = offsets(shape, rotation);
+  const points = roofOutline(shape, rotation), peaks = roofOutline(shape, rotation, true), cells = offsets(shape, rotation);
   const roof = `M${points.map(p=>`${p.x} ${p.y}`).join('L')}Z`;
   const edges = points.map((p,i)=>({p,q:points[(i+1)%points.length]}));
   const fronts = edges.filter(({p,q})=>q.x<p.x).map(({p,q})=>({x:q.x,y:q.y,width:p.x-q.x}));
   const front = [...fronts].sort((a,b)=>b.y-a.y || b.width-a.width)[0];
   const doorX = front.x + (front.width > 120 ? 40 : front.width / 2), doorY = front.y;
   const camp = kind === 'camp';
-  const ridge = cells.flatMap(p=>cells.filter(q=>q.r===p.r && q.c===p.c+1 || q.c===p.c && q.r===p.r+1).map(q=>`M${p.c*100+50} ${p.r*100+42}L${q.c*100+50} ${q.r*100+42}`)).join('');
+  const ridge = `M${peaks.map(p=>`${p.x} ${p.y}`).join('L')}Z`;
   const chimney = [...cells].sort((a,b)=>a.r-b.r || a.c-b.c)[0];
   return <FootprintArt shape={shape} rotation={rotation}>
-    <defs><linearGradient id={gradient} x1="0" y1="0" x2="1" y2="1"><stop stopColor={camp ? '#ffdc8d' : '#7e9b78'}/><stop offset="1" stopColor={camp ? '#e2ab50' : '#456e56'}/></linearGradient></defs>
     <path d={`M${points.map(p=>`${p.x+4} ${p.y+21}`).join('L')}Z`} fill="#624c2420"/>
     {edges.filter(({p,q})=>q.y>p.y).map(({p,q},i)=><path key={i} d={`M${p.x} ${p.y}L${q.x} ${q.y}l8 12L${p.x+8} ${p.y+12}Z`} fill={camp ? '#bf8b45' : '#9f754f'}/>)}
     {fronts.map((f,i)=><g key={i}><rect x={f.x} y={f.y} width={f.width} height="20" fill={camp ? '#d2a05a' : '#c59865'}/>{!camp && <path d={`M${f.x+4} ${f.y+7}h${f.width-8}m-${f.width-8} 7h${f.width-8}`} stroke="#af804e" strokeWidth="2"/>}</g>)}
-    <path className="roof-plane" d={roof} fill={`url(#${gradient})`} stroke={camp ? '#b58a4b' : '#42654e'} strokeWidth="3" strokeLinejoin="round"/>
-    <path d={ridge} stroke={camp ? '#ffe6aa' : '#a4b891'} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d={roof} fill={camp ? '#dba552' : '#67875f'}/>
+    {edges.map(({p,q},i) => {
+      const a = peaks[i], b = peaks[(i+1)%peaks.length];
+      const shade = q.x > p.x ? 0 : q.y > p.y ? 1 : q.x < p.x ? 2 : 3;
+      return <path key={`roof-${i}`} className="roof-plane" d={`M${p.x} ${p.y}L${q.x} ${q.y}L${b.x} ${b.y}L${a.x} ${a.y}Z`} fill={(camp ? ['#ffe7a0','#dca14a','#efc06b','#ffd58a'] : ['#a4bb8d','#456d54','#789969','#91ad7d'])[shade]} stroke={camp ? '#d7a355' : '#6c8d63'} strokeWidth="1" strokeLinejoin="round"/>;
+    })}
+    <path d={ridge} stroke={camp ? '#c99142' : '#45684f'} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d={ridge} stroke={camp ? '#ffedb4' : '#bfd0a2'} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+    {!camp && cells.map(p => <path key={`shingles-${p.r}-${p.c}`} d={`M${p.c*100+22} ${p.r*100+50}h18m10 0h18m-39 12h16m10 0h16`} stroke="#b5c49a" strokeWidth="2" strokeLinecap="round" opacity=".6"/>)}
     {camp ? <>
       <path d={`M${doorX} ${doorY-28}l-34 48h68Z`} fill="#e9b25b"/>
       <path className="building-door" d={`M${doorX} ${doorY-7}l-15 27h30Z`} fill="#49604d"/>

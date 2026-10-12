@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { audio } from '../game/audio';
 import { readLocalMaps, saveLocalMap, unlockSurvivalMaps } from '../game/localMaps';
-import { completeSurvival, emptySurvivalProgress, readSurvival, readSurvivalForWrite, writeSurvival } from '../game/survival';
+import { archiveSurvival, completeSurvival, emptySurvivalProgress, readSurvival, readSurvivalForWrite, writeSurvival } from '../game/survival';
 import type { SurvivalChallenge, SurvivalProgress, SurvivalReward, SurvivalSave } from '../game/survival';
 import { survivalGenerationTimeout } from '../game/survivalGenerator';
 import type { Piece, Shape } from '../game/types';
@@ -82,10 +82,11 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
       worker.onmessage = (event: MessageEvent<{ challenge?: SurvivalChallenge; error?: string }>) => {
         if (generatorRef.current !== worker) return;
         if (!event.data.challenge) { fail(event.data.error || '地图生成失败，请重试'); return; }
-        const current = event.data.challenge;
+        const current = { ...event.data.challenge, startedAt: Date.now() };
         cancelGeneration();
         try {
           const latest = readSurvivalForWrite();
+          if (latest.challenge) archiveSurvival(latest, latest.challenge, latest.progress?.placements || []);
           persistSurvival({ ...latest, recent: [...latest.recent, current.fingerprint].slice(-40), challenge: current, progress: emptySurvivalProgress(current.id) });
           refreshLocalMaps();
           playSurvival(current);
@@ -97,7 +98,10 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
   function abandonSurvival() {
     try {
       const latest = readSurvivalForWrite();
-      if (latest.challenge?.id === challenge?.id) persistSurvival({ ...latest, challenge: null, progress: null });
+      if (latest.challenge && latest.challenge.id === challenge?.id) {
+        archiveSurvival(latest, latest.challenge, latest.progress?.placements || []);
+        persistSurvival({ ...latest, challenge: null, progress: null });
+      }
       refreshLocalMaps();
       setAbandonOpen(false); returnToMenu();
     } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '未能清除挑战进度，请重试'); }

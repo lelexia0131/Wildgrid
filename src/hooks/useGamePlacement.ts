@@ -24,9 +24,10 @@ export function useGamePlacement({ mode, level, placements, continuousPlacement,
   const rotation = selected ? rotations[selected.shape] || 0 : 0;
   const rotate = useCallback(() => {
     if (!selected || selected.shape === 'single') return;
-    setRotations(s => ({ ...s, [selected.shape]: ((s[selected.shape] || 0) + 1) % 4 })); audio.play('rotate');
-    onAction?.({ type: 'rotate', kind: selected.kind, pieceId: selected.id });
-  }, [selected, onAction]);
+    const nextRotation = ((rotations[selected.shape] || 0) + 1) % 4;
+    setRotations(s => ({ ...s, [selected.shape]: nextRotation })); audio.play('rotate');
+    onAction?.({ type: 'rotate', kind: selected.kind, pieceId: selected.id, rotation: nextRotation });
+  }, [selected, rotations, onAction]);
   function resetPieceIds(draft: SandboxDraft) {
     nextPieceId.current = Math.max(0, ...draft.level.pieces.map(piece => Number(/^custom-(\d+)$/.exec(piece.id)?.[1]) || 0));
   }
@@ -54,10 +55,9 @@ export function useGamePlacement({ mode, level, placements, continuousPlacement,
     }
     const placed = placements.find(at => occupied(level.pieces.find(p => p.id === at.id)!, at).some(p => key(p) === key(cell)));
     if (placed) {
-      const issue = result.issues[placed.id];
       const piece = level.pieces.find(p => p.id === placed.id)!;
       commit(placements.filter(at => at.id !== placed.id)); setSelected(piece); setRotations(s => ({ ...s, [piece.shape]: placed.rotation }));
-      setNotice(mode === 'sandbox-editor' ? '已拿起设施，点击空地移动；切换地形画笔可收回。' : issue.status === 'INVALID' ? '' : '已拿起设施，点击空地重新放置。');
+      setNotice('');
       sound('pickup'); onAction?.({ type: 'pickup', kind: piece.kind, pieceId: piece.id }); return;
     }
     const terrain = level.terrain.find(t => key(t) === key(cell));
@@ -78,7 +78,7 @@ export function useGamePlacement({ mode, level, placements, continuousPlacement,
       ? { ...selected, id: `custom-${++nextPieceId.current}` }
       : level.pieces.find(p => p.kind === selected.kind && p.shape === selected.shape && !next.some(at => at.id === p.id)) || null;
     setNotice(''); setSelected(nextPiece); setHover(null);
-    onAction?.({ type: 'place', kind: selected.kind, pieceId: selected.id });
+    onAction?.({ type: 'place', kind: selected.kind, pieceId: selected.id, r: cell.r, c: cell.c, rotation });
   }
   const ghost = selected && hover ? occupied(selected, { ...hover, id: selected.id, rotation }) : [];
   const ghostBlocked = selected && hover ? Boolean(placementBlock(mode === 'sandbox-editor' ? { ...level, pieces: [...level.pieces, selected] } : level, placements, { ...hover, id: selected.id, rotation })) : false;

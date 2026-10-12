@@ -4,6 +4,7 @@ import { dictionaries } from '../i18n';
 import type { Language } from '../i18n';
 import type { TutorialLesson, TutorialStep, TutorialTarget } from '../game/tutorial';
 import './tutorial.css';
+import { Art } from './Art';
 
 type Rect = { x: number; y: number; width: number; height: number };
 const uiSelectors = { board: '.board', facilities: '.facility-list', undo: '[data-tutorial="undo"]', feedback: '.rule-dock, .guide-strip', goal: '.board-with-clues', win: '.win-content, .board' };
@@ -50,7 +51,7 @@ function placeNarration(targets: Rect[], width: number, height: number, viewport
 type Props = { lesson: TutorialLesson; step: TutorialStep; index: number; language: Language; onNext: () => void; onBack: () => void; onSkip: () => void; portal?: HTMLElement | null };
 export function TutorialOverlay({ lesson, step, index, language, onNext, onBack, onSkip, portal }: Props) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const pointerAdvance = useRef(0);
+  const pointerAdvance = useRef(-Infinity);
   const [layout, setLayout] = useState<{ targets: Rect[]; card: Rect; viewport: Rect } | null>(null);
   const maskId = useId().replace(/:/g, '');
   const dictionary = dictionaries[language];
@@ -83,7 +84,7 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
   }, [step.target.type, JSON.stringify(step.target), step.placement, language, index, lesson.id]);
   useLayoutEffect(() => {
     if (!step.blockInteraction && step.advance !== 'click') return;
-    const allowed = (target: EventTarget | null) => target instanceof Element && !!target.closest('.tutorial-narration, [data-tutorial="settings"]');
+    const allowed = (target: EventTarget | null) => target instanceof Element && (!!target.closest('.tutorial-narration, [data-tutorial="settings"]') || step.advance === 'action' && targetElements(step.target).some(el => el.contains(target)) || step.id === 'complete' && !!target.closest('.win-content .primary'));
     const inFocus = (event: MouseEvent) => layout?.targets.some(r => step.shape === 'circle' || step.target.type === 'clues'
       ? Math.hypot(event.clientX - r.x - r.width / 2, event.clientY - r.y - r.height / 2) <= r.width / 2
       : event.clientX >= r.x && event.clientX <= r.x + r.width && event.clientY >= r.y && event.clientY <= r.y + r.height);
@@ -112,7 +113,7 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
       if (event.key === 'Tab' || allowed(event.target) && !event.ctrlKey && !event.metaKey && event.key !== 'Escape') return;
       event.preventDefault(); event.stopPropagation();
       if (event.key === 'Escape' && step.allowSkip) onSkip();
-      else if (event.key === 'Enter' || event.key === ' ') onNext();
+      else if ((event.key === 'Enter' || event.key === ' ') && step.advance !== 'action') onNext();
     };
     document.addEventListener('pointerdown', blockPointer, true);
     document.addEventListener('pointerup', pointerup, true);
@@ -140,8 +141,9 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
     <div ref={cardRef} className="tutorial-narration" role="region" aria-label={copy.title} lang={language === 'zh' ? 'zh-CN' : 'en'} style={{ left: card?.x ?? 12, top: card?.y ?? 12, visibility: layout ? 'visible' : 'hidden' }}>
       <span className="tutorial-progress">{dictionary.controls.progress} {index + 1}/{lesson.steps.length}</span>
       <p aria-live="polite">{copy.text}</p>
-      <small>{dictionary.controls.continue}</small>
-      <div className="tutorial-controls">{step.allowSkip && <button className="tutorial-skip" onClick={onSkip}>{dictionary.controls.skip}</button>}<button disabled={index === 0} onClick={onBack}>{dictionary.controls.back}</button><button className="tutorial-next" onClick={onNext}>{index + 1 === lesson.steps.length ? lesson.facility ? dictionary.controls.understood : dictionary.controls.finish : dictionary.controls.next}</button></div>
+      {step.example && <svg className="tutorial-example" viewBox="0 0 156 90" role="img" aria-label={copy.title}><g fill="#d5dfb4" stroke="#a6b78a" strokeWidth="2">{[0,1,2,3].map(i => <rect key={i} x={8+i%2*40} y={5+Math.floor(i/2)*40} width="36" height="36" rx="5"/>)}</g><svg x="8" y="5" width="36" height="36"><Art kind="water"/></svg><svg x="48" y={step.example === 'wrong' ? 45 : 5} width="36" height="36"><Art kind="camp"/></svg><path d={step.example === 'wrong' ? 'M107 30l23 23m0-23-23 23' : 'm101 44 12 12 26-30'} fill="none" stroke={step.example === 'wrong' ? '#bb735b' : '#678c60'} strokeWidth="6" strokeLinecap="round"/></svg>}
+      <small>{step.advance === 'action' ? dictionary.controls.action : dictionary.controls.continue}</small>
+      <div className="tutorial-controls">{step.allowSkip && <button className="tutorial-skip" onClick={onSkip}>{dictionary.controls.skip}</button>}<button disabled={index === 0 || step.advance === 'action' || lesson.steps[index - 1]?.advance === 'action'} onClick={onBack}>{dictionary.controls.back}</button><button className="tutorial-next" disabled={step.advance === 'action'} onClick={onNext}>{index + 1 === lesson.steps.length ? lesson.facility ? dictionary.controls.understood : dictionary.controls.finish : dictionary.controls.next}</button></div>
     </div>
   </div>;
   return createPortal(content, portal || document.body);

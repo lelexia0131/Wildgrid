@@ -11,13 +11,13 @@ import { SandboxMenu } from './components/SandboxMenu';
 import { SurvivalMenu } from './components/SurvivalMenu';
 import { SurvivalBadge } from './components/SurvivalBadge';
 import { survivalRanks } from './game/survival';
-import type { SurvivalChallenge, SurvivalProgress } from './game/survival';
+import type { SurvivalChallenge, SurvivalProgress, SurvivalRecord } from './game/survival';
 import { key, occupied } from './game/rules';
 import { levelUnlocked } from './game/storage';
 import { levels, getLevelById, getSolution } from './game/levels';
 import { facilityLibrary, facilityNames, facilityTips, shapeNames, terrainNames } from './game/facilityRegistry';
 import { audio } from './game/audio';
-import { withEditorPlacements } from './game/sandbox';
+import { decodeMap, withEditorPlacements } from './game/sandbox';
 import type { SandboxDraft } from './game/sandbox';
 import { resolvePlayerId } from './game/playerId';
 import type { FacilityKind, Placement, Shape, TerrainKind } from './game/types';
@@ -63,6 +63,7 @@ export default function App() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [winOpen, setWinOpen] = useState(false);
   const [blueprintOpen, setBlueprintOpen] = useState(false);
+  const [replay, setReplay] = useState<SurvivalRecord | null>(null);
   const [leaveOpen, setLeaveOpen] = useState(false);
   const wonRef = useRef(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -90,7 +91,7 @@ export default function App() {
     invalidateCheck: sandbox.invalidateCheck, resetSandboxContext: sandbox.resetSandboxContext, refreshLocalMaps: sandbox.refreshLocalMaps, setNotice, sound,
   });
   const { survival, challenge, survivalReward, survivalError, generating, replaceChallenge, abandonOpen, openSurvivalMenu, continueSurvival, cancelGeneration, requestSurvival, abandonSurvival, collectSurvival, settleSurvival } = survivalController;
-  const sandboxName = localMaps.find(map => map.id === localMapId)?.name || '自定义地图';
+  const sandboxName = replay ? `${replay.difficulty}难 · 复盘` : localMaps.find(map => map.id === localMapId)?.name || '自定义地图';
   const blueprintUnlocked = mode === 'adventure' ? save.completed.includes(levelId) : mode === 'sandbox-play' && localMapId !== undefined && localMaps.some(map => map.id === localMapId && (!map.survival || map.survival.blueprintUnlocked));
   const selectedPiece = selected;
   const continueId = levelUnlocked(save.current, save.completed) ? save.current : 1;
@@ -98,7 +99,7 @@ export default function App() {
   const groups = mode === 'sandbox-editor' ? facilityLibrary : level.pieces.filter((p, i, all) => all.findIndex(other => other.kind === p.kind && other.shape === p.shape) === i);
   const invalidCount = Object.values(result.issues).filter(i => i.status === 'INVALID').length;
   const errors = [...new Set(Object.values(result.issues).filter(i => i.status === 'INVALID').flatMap(i => i.reasons))];
-  const tutorial = useTutorial({ screen, mode, level, placements, selected, rotations, won: result.won, winOpen, paused: settingsOpen || manualOpen || blueprintOpen || leaveOpen || !!mapCode || replaceChallenge !== null || abandonOpen });
+  const tutorial = useTutorial({ screen, mode, level, placements, selected, rotations, undoAvailable: !!history.past.length, won: result.won, winOpen, paused: settingsOpen || manualOpen || blueprintOpen || leaveOpen || !!mapCode || replaceChallenge !== null || abandonOpen });
   const { t, localize } = createTranslator(tutorial.state.language);
   tutorialHandler.current = tutorial.onAction;
 
@@ -131,7 +132,7 @@ export default function App() {
     if (screen === 'game' && mode === 'adventure') adventure.recordProgress(levelId, placements);
   }, [levelId, placements, screen, mode, adventure.recordProgress]);
   useEffect(() => {
-    if (screen === 'game' && mode !== 'sandbox-editor' && result.won && !wonRef.current) {
+    if (screen === 'game' && mode !== 'sandbox-editor' && !replay && result.won && !wonRef.current) {
       if (mode === 'survival' && challenge) { settleSurvival(challenge); return; }
       wonRef.current = true; setSelected(null); audio.play('win');
       if (mode === 'sandbox-play') setWinOpen(true);
@@ -140,7 +141,7 @@ export default function App() {
         adventure.completeLevel(levelId);
       }
     } else if (!result.won) wonRef.current = false;
-  }, [result.won, levelId, screen, save.completed, mode, challenge]);
+  }, [result.won, levelId, screen, save.completed, mode, challenge, replay]);
   useEffect(() => {
     if (!notice) return;
     const id = window.setTimeout(() => setNotice(''), 4200);
@@ -168,6 +169,7 @@ export default function App() {
   }, [screen, settingsOpen, winOpen, manualOpen, blueprintOpen, leaveOpen, mapCode, abandonOpen, replaceChallenge, undo, redo]);
 
   function start(id: number, reset = false) {
+    setReplay(null);
     if (winOpen) onTutorialAction({ type: 'closeHint' });
     sound(); setSelected(null); setRotations({}); setHover(null); setNotice(''); setWinOpen(false);
     wonRef.current = false; setTerrainBrush(null); setTipGroup(null);
@@ -180,11 +182,13 @@ export default function App() {
     sound(); commit([]); setSelected(null); setRotations({}); setNotice(''); setWinOpen(false); survivalController.resetReward();
   }
   function enterSandbox(mode: 'sandbox-editor' | 'sandbox-play', present: SandboxDraft) {
+    setReplay(null); setBlueprintOpen(false);
     historyController.restore({ past: [], present, future: [] });
     setSelected(null); setRotations({}); setHover(null); setTipGroup(null); setNotice('');
     setWinOpen(false); wonRef.current = false; navigation.enterGame(mode);
   }
   function enterSurvival(current: SurvivalChallenge, progress: SurvivalProgress | null) {
+    setReplay(null);
     historyController.restore({ past: progress?.past.map(placements => ({ level: current.draft.level, placements })) || [], present: { level: current.draft.level, placements: progress?.placements || [] }, future: progress?.future.map(placements => ({ level: current.draft.level, placements })) || [] });
     setSelected(current.draft.level.pieces.find(piece => piece.id === progress?.selectedId && !progress.placements.some(at => at.id === piece.id)) || null);
     setRotations(progress?.rotations || {}); setHover(null); setTipGroup(null); setNotice('');
@@ -199,7 +203,15 @@ export default function App() {
     if (winOpen) onTutorialAction({ type: 'closeHint' });
     sandbox.cancelCheck();
     setLeaveOpen(false); setWinOpen(false); setSelected(null); setTerrainBrush(null); setNotice('');
-    navigation.returnToMenu(localMapId);
+    if (replay) { setScreen('survival'); setReplay(null); }
+    else navigation.returnToMenu(localMapId);
+  }
+  function reviewSurvival(record: SurvivalRecord) {
+    const collected = localMaps.find(map => map.survival?.challengeId === record.id);
+    const draft = record.code ? decodeMap(record.code) : collected?.draft;
+    if (!draft) return;
+    sandbox.openSandboxPlay(draft, record.code ? record.placements : record.finishedAt === undefined ? collected?.progress || [] : draft.placements);
+    setReplay(record);
   }
   function closeDialog() {
     if (aboutOpen) { setAboutOpen(false); return; }
@@ -215,12 +227,12 @@ export default function App() {
 
     {screen === 'menu' && <main className="menu-page">
       <div className="menu-art"><GameTitle/><HeroArt/></div>
-      <div className="menu-copy"><div className="menu-buttons"><button className="primary" onClick={() => { sound(); setScreen('adventure'); }}>{t("开始冒险")}<ArrowRight size={19}/></button><button className="secondary" onClick={() => { sound(); setScreen('levels'); }}><Map size={18}/>  {t("营地日记")}</button><button className="secondary" onClick={() => { sound(); setManualOpen(true); }}><BookOpen size={18}/>  {t("野外手册")}</button></div><div className="menu-progress"><span className="progress-dots">{levels.map(level => <i key={level.id} className={save.completed.includes(level.id) ? 'complete' : ''}/>)}</span><span>{t("已完成")} {save.completed.length} / {levels.length}</span></div></div>
+      <div className="menu-copy"><div className="menu-buttons"><button className="primary menu-adventure" onClick={() => { sound(); setScreen('adventure'); }}>{t("开始冒险")}<ArrowRight size={23}/></button><button className="secondary menu-journal" onClick={() => { sound(); setScreen('levels'); }}><Map size={21}/>  {t("营地日记")}</button><button className="secondary menu-guide" onClick={() => { sound(); setManualOpen(true); }}><BookOpen size={21}/>  {t("野外手册")}</button></div></div>
     </main>}
 
     {(screen === 'adventure' || screen === 'sandbox' || screen === 'sandbox-size' || screen === 'sandbox-import' || screen === 'local-maps') && <SandboxMenu screen={screen} localMaps={localMaps} onOpenLocalMap={openLocalMap} onEditLocalMap={editLocalMap} onSurvival={openSurvivalMenu} onLocalMapsChange={sandbox.refreshLocalMaps} onBack={() => { sound(); setScreen(screen === 'adventure' ? 'menu' : screen === 'sandbox' || screen === 'local-maps' ? 'adventure' : 'sandbox'); }} onContinue={() => start(continueId)} onNavigate={setScreen} onCreate={openSandbox} onImport={importSandbox} onSound={() => sound()}/>}
 
-    {screen === 'survival' && <SurvivalMenu save={survival} generating={generating} error={survivalError} onStart={requestSurvival} onContinue={continueSurvival} onCancel={cancelGeneration} onBack={() => { sound(); setScreen('adventure'); }}/> }
+    {screen === 'survival' && <SurvivalMenu save={survival} generating={generating} error={survivalError} onStart={requestSurvival} onContinue={continueSurvival} onCancel={cancelGeneration} onBack={() => { sound(); setScreen('adventure'); }} onReview={reviewSurvival} canReview={record => !!record.code || localMaps.some(map => map.survival?.challengeId === record.id)}/> }
 
 
     {screen === 'levels' && <main className="levels-page"><button className="back-link" onClick={() => { sound(); setScreen('menu'); }}><ArrowLeft size={16}/>  {t("返回营地")}</button><div className="page-heading"><div><h1>{t("营地日记")}</h1></div><div className="completion-count"><Flag size={21}/><strong>{save.completed.length}</strong><span>/ {levels.length}  {t("已完成")}</span></div></div><div className="level-grid">{levels.map(l => {
@@ -245,9 +257,9 @@ export default function App() {
             const issue = at ? result.issues[at.id] : undefined;
             const isGhost = ghost.some(p => key(p) === key(cell));
             const hasNeighbor = (dr: number, dc: number) => footprint.some(p => p.r === cell.r + dr && p.c === cell.c + dc);
-            const label = terrain ? names[terrain.kind] : piece ? `${names[piece.kind]}${issue?.reasons.length ? `：${issue.reasons.join('；')}` : '，点击拿起'}` : '空地';
-            return <button key={index} data-cell={`${cell.r},${cell.c}`} data-piece-id={at?.id} className={`tile ${terrain ? `terrain-${terrain.kind}` : ''} ${piece ? `placed placed-${piece.kind} ${piece.shape !== 'single' ? 'placed-multi' : ''}` : ''} ${issue?.status === 'INVALID' ? 'invalid' : ''} ${issue?.status === 'INCOMPLETE' ? 'pending' : ''} ${isGhost ? `ghost ${ghostBlocked ? 'blocked' : ''}` : ''} ${hasNeighbor(-1, 0) ? 'join-top' : ''} ${hasNeighbor(1, 0) ? 'join-bottom' : ''} ${hasNeighbor(0, -1) ? 'join-left' : ''} ${hasNeighbor(0, 1) ? 'join-right' : ''}`} aria-label={t("第 {0} 行第 {1} 列，{2}", cell.r + 1, cell.c + 1, label)} title={terrain ? undefined : localize(label)} onPointerEnter={e => { if (e.pointerType !== 'touch') setHover(cell); }} onFocus={() => setHover(cell)} onClick={() => clickCell(cell)} onContextMenu={event => { if (at && piece && piece.shape !== 'single') { event.preventDefault(); rotatePlaced(at, cell); } }}>
-              {terrain ? <><Art kind={terrain.kind}/><span className={`terrain-label label-${terrain.kind}`} role="tooltip"><Art kind={terrain.kind}/>{localize(names[terrain.kind])}</span></> : piece ? piece.shape === 'single' ? <Art kind={piece.kind}/> : null : <span className={`grass grass-${index % 5}`}><i/><i/></span>}
+            const label = terrain ? names[terrain.kind] : piece ? `${names[piece.kind]}${issue?.reasons.length ? `：${issue.reasons.join('；')}` : ''}` : '空地';
+            return <button key={index} data-cell={`${cell.r},${cell.c}`} data-piece-id={at?.id} className={`tile ${terrain ? `terrain-${terrain.kind}` : ''} ${piece ? `placed placed-${piece.kind} ${piece.shape !== 'single' ? 'placed-multi' : ''}` : ''} ${issue?.status === 'INVALID' ? 'invalid' : ''} ${issue?.status === 'INCOMPLETE' ? 'pending' : ''} ${isGhost ? `ghost ${ghostBlocked ? 'blocked' : ''}` : ''} ${hasNeighbor(-1, 0) ? 'join-top' : ''} ${hasNeighbor(1, 0) ? 'join-bottom' : ''} ${hasNeighbor(0, -1) ? 'join-left' : ''} ${hasNeighbor(0, 1) ? 'join-right' : ''}`} aria-label={t("第 {0} 行第 {1} 列，{2}", cell.r + 1, cell.c + 1, label)} onPointerEnter={e => { if (e.pointerType !== 'touch') setHover(cell); }} onFocus={() => setHover(cell)} onClick={() => clickCell(cell)} onContextMenu={event => { if (at && piece && piece.shape !== 'single') { event.preventDefault(); rotatePlaced(at, cell); } }}>
+              {terrain ? <><Art kind={terrain.kind}/><span className={`terrain-label label-${terrain.kind}`} role="tooltip"><Art kind={terrain.kind}/>{localize(names[terrain.kind])}</span></> : piece ? <>{piece.shape === 'single' && <Art kind={piece.kind}/>}<span className={`terrain-label label-${piece.kind}`} role="tooltip"><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at!.rotation}/>{localize(names[piece.kind])}</span></> : <span className={`grass grass-${index % 5}`}><i/><i/></span>}
               {issue?.status === 'INVALID' && isAnchor && <span className="error-mark">!</span>}
               {issue?.status === 'INCOMPLETE' && isAnchor && <span className="pending-mark">·</span>}
               {isGhost && !terrain && !piece && <span className="ghost-dot"/>}
@@ -280,7 +292,7 @@ export default function App() {
       })}</div>
       {showFacilityTips && <div className="rule-dock" aria-live="polite">{shownKind ? <><strong>{localize(names[shownKind])}</strong><span><b>{t("要求")}</b>{localize(facilityTips[shownKind][0])}</span><span><b>{t("禁止")}</b>{localize(facilityTips[shownKind][1])}</span>{shownShape !== 'single' && <span><b>{t("提示")}</b>{t("再次点击卡片旋转")}</span>}</> : <p>{t("选择或悬停设施，查看要求与禁止事项。")}</p>}</div>}
       </section>
-      {mode === 'survival' ? <section className="operations survival-operations"><h2>{t("营地工具")}</h2><div className="survival-tool-row"><button className="wide-operation" disabled={!history.past.length} data-tutorial="undo" onClick={undo}><Undo2 size={18}/><span>{t("撤销")}</span></button></div><div className="survival-tool-row"><button className="wide-operation" onClick={restart}><RotateCcw size={17}/><span>{t("重新游玩")}</span></button><button className="wide-operation survival-collect" onClick={collectSurvival}><Save size={18}/><span>{t("保存")}</span></button><button className="wide-operation" onClick={survivalController.openAbandon}><X size={18}/><span>{t("放弃")}</span></button></div></section> : <section className={`operations ${mode === 'adventure' ? 'adventure-operations' : ''}`}><h2>{t("营地工具")}</h2>{mode === 'sandbox-editor' ? <><button className="wide-operation" disabled={!history.past.length} data-tutorial="undo" onClick={undo}><Undo2 size={18}/><span>{t("撤销")}</span></button><button className="wide-operation sandbox-save" disabled={checking} onClick={() => runSandboxAction('save')}><Save size={18}/><span>{localize(checking ? t("正在质检…") : t("保存"))}</span></button><button className="wide-operation sandbox-export" disabled={checking} onClick={() => runSandboxAction('export')}><ScrollText size={17}/><span>{t("导出地图")}</span></button></> : <><div className="history-buttons"><button disabled={!history.past.length} data-tutorial="undo" onClick={undo}><Undo2 size={18}/><span>{t("撤销")}</span></button>{(mode === 'adventure' || localMapId !== undefined) && <button className="blueprint-button" disabled={!blueprintUnlocked} title={localize(blueprintUnlocked ? t("查看图纸") : mode === 'adventure' ? t("通关后解锁") : t("通关或放弃荒野求生挑战后解锁"))} onClick={() => { sound(); setBlueprintOpen(true); }}><ScrollText size={18}/><span>{t("图纸")}</span></button>}</div><button className="wide-operation" onClick={restart}><RotateCcw size={17}/><span>{t("重新游玩")}</span></button>{mode === 'sandbox-play' ? <button className="wide-operation sandbox-save" disabled={checking} onClick={() => runSandboxAction('save')}><Save size={17}/><span>{localize(checking ? t("正在质检…") : t("保存"))}</span></button> : <button className="wide-operation" onClick={returnToMenu}><Grid2X2 size={17}/><span>{t("营地日记")}</span><ChevronRight size={15}/></button>}</>}</section>}
+      {mode === 'survival' ? <section className="operations survival-operations"><h2>{t("营地工具")}</h2><div className="survival-tool-row"><button className="wide-operation" disabled={!history.past.length} data-tutorial="undo" onClick={undo}><Undo2 size={18}/><span>{t("撤销")}</span></button></div><div className="survival-tool-row"><button className="wide-operation" onClick={restart}><RotateCcw size={17}/><span>{t("重新游玩")}</span></button><button className="wide-operation survival-collect" onClick={collectSurvival}><Save size={18}/><span>{t("保存")}</span></button><button className="wide-operation" onClick={survivalController.openAbandon}><X size={18}/><span>{t("放弃")}</span></button></div></section> : <section className={`operations ${mode === 'adventure' ? 'adventure-operations' : ''}`}><h2>{t("营地工具")}</h2>{mode === 'sandbox-editor' ? <><button className="wide-operation" disabled={!history.past.length} data-tutorial="undo" onClick={undo}><Undo2 size={18}/><span>{t("撤销")}</span></button><button className="wide-operation sandbox-save" disabled={checking} onClick={() => runSandboxAction('save')}><Save size={18}/><span>{localize(checking ? t("正在质检…") : t("保存"))}</span></button><button className="wide-operation sandbox-export" disabled={checking} onClick={() => runSandboxAction('export')}><ScrollText size={17}/><span>{t("导出地图")}</span></button></> : <><div className="history-buttons"><button disabled={!history.past.length} data-tutorial="undo" onClick={undo}><Undo2 size={18}/><span>{t("撤销")}</span></button>{!replay && (mode === 'adventure' || localMapId !== undefined) && <button className="blueprint-button" disabled={!blueprintUnlocked} title={localize(blueprintUnlocked ? t("查看图纸") : mode === 'adventure' ? t("通关后解锁") : t("通关或放弃荒野求生挑战后解锁"))} onClick={() => { sound(); setBlueprintOpen(true); }}><ScrollText size={18}/><span>{t("图纸")}</span></button>}</div><button className="wide-operation" onClick={restart}><RotateCcw size={17}/><span>{t("重新游玩")}</span></button>{mode === 'sandbox-play' ? !replay && <button className="wide-operation sandbox-save" disabled={checking} onClick={() => runSandboxAction('save')}><Save size={17}/><span>{localize(checking ? t("正在质检…") : t("保存"))}</span></button> : <button className="wide-operation" onClick={returnToMenu}><Grid2X2 size={17}/><span>{t("营地日记")}</span><ChevronRight size={15}/></button>}</>}</section>}
       </aside></div>
       <div className={`guide-strip ${invalidCount || (mode !== 'adventure' && check && check.status !== 'unique') ? 'warning' : ''}`} role="status" aria-live="polite"><span className="guide-icon">{invalidCount ? '!' : <Sparkles size={18}/>}</span><div><p>{localize(mode === 'survival' ? notice || errors[0] || (shownKind && showFacilityTips ? t("{0}：{1}；禁止{2}", names[shownKind], facilityTips[shownKind][0], facilityTips[shownKind][1]) : level.tip) : notice === '已经被占用' || mode !== 'adventure' ? notice || check?.message || errors.join('；') || level.tip : errors.join('；') || notice || level.tip)}</p></div>{invalidCount > 0 && <span className="issue-count">{invalidCount}  {t("处待调整")}</span>}</div>
       {mode === 'survival' && survivalError && <div className="survival-error" role="alert">{localize(survivalError)}{result.won && !survivalReward && <button className="secondary" onClick={() => challenge && settleSurvival(challenge)}>{t("重试结算")}</button>}</div>}

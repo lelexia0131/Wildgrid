@@ -16,6 +16,13 @@ h1, h2, h3, h4, .sandbox-choice-copy strong, .local-map-items strong {
 .modal h2, .manual-content h2 { letter-spacing: .8px; text-shadow: 0 2px 0 #d5debd; font-weight: 400; }
 button, .terrain-label, .status-pill { font-family: var(--label-font); font-weight: 400; letter-spacing: .2px; }
 .sandbox-choice-copy strong, .local-map-items strong { font-weight: 400; }
+.sandbox-choice-copy .mode-lettering { display: inline-block; font-family: var(--label-font); font-size: 28px; line-height: 1.4; color: var(--mode-letter-color, #9dc4ad); -webkit-text-stroke: 2.5px var(--mode-letter-edge, #385f49); paint-order: stroke fill; text-shadow: 0 3px 0 var(--mode-letter-shadow, #416849); white-space: nowrap; }
+.mode-lettering > span { display: inline-block; white-space: pre; }
+.mode-lettering > span:nth-child(3n + 1) { transform: rotate(-3deg); }
+.mode-lettering > span:nth-child(3n + 2) { transform: translateY(-1px) rotate(2deg); }
+[lang='en'] .sandbox-choice-copy .mode-lettering { font-size: 25px; letter-spacing: .3px; -webkit-text-stroke-width: 2px; }
+@media (max-width: 760px) { [lang='en'] .sandbox-choice-copy .mode-lettering { font-size: 19px; } }
+@media (max-width: 360px) { [lang='en'] .sandbox-choice-copy .mode-lettering { font-size: 17px; } }
 /* Small controls, settings and prose keep open, familiar letterforms. */
 .facility-info strong, .volume-control label, .player-id-setting, .tutorial-language,
 .tutorial-progress, .mute-setting, .settings-about, .tutorial-setting-action,

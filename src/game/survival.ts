@@ -21,13 +21,14 @@ export const survivalRanks = [
   { name: '荒野探索者', xp: 100 }, { name: '资深生存家', xp: 500 }, { name: '荒野传奇', xp: 1000 },
 ];
 export const rankFor = (xp: number) => survivalRanks.reduce((current, rank, i) => xp >= rank.xp ? i : current, 0);
-export type SurvivalChallenge = { id: string; difficulty: number; seed: number; draft: SandboxDraft; fingerprint: string };
+export type SurvivalChallenge = { id: string; difficulty: number; seed: number; startedAt?: number; draft: SandboxDraft; fingerprint: string };
 export type SurvivalProgress = { id: string; status: 'active'; placements: Placement[]; past: Placement[][]; future: Placement[][]; rotations: Partial<Record<Shape, number>>; selectedId: string | null };
 export type SurvivalCompletion = { id: string; difficulty: number; seed: number; at: number };
-export type SurvivalSave = { version: 1; completed: SurvivalCompletion[]; recent: string[]; challenge: SurvivalChallenge | null; progress: SurvivalProgress | null };
+export type SurvivalRecord = { id: string; difficulty: number; seed: number; startedAt?: number; finishedAt?: number; code?: string; placements: Placement[] };
+export type SurvivalSave = { version: 1; completed: SurvivalCompletion[]; records: SurvivalRecord[]; recent: string[]; challenge: SurvivalChallenge | null; progress: SurvivalProgress | null };
 export type SurvivalReward = { earned: number; xp: number; count: number; beforeRank: number; rank: number };
 const storageKey = 'wildgrid-survival-v1';
-const fresh = (): SurvivalSave => ({ version: 1, completed: [], recent: [], challenge: null, progress: null });
+const fresh = (): SurvivalSave => ({ version: 1, completed: [], records: [], recent: [], challenge: null, progress: null });
 const difficultyValid = (n: number) => Number.isInteger(n) && n >= 1 && n <= 10;
 export function survivalTotals(save: SurvivalSave) {
   const counts = survivalDifficulties.map((_, i) => save.completed.filter(c => c.difficulty === i + 1).length);
@@ -50,6 +51,15 @@ export function readSurvival(): SurvivalSave {
       if (!entry || typeof entry.id !== 'string' || seen.has(entry.id) || !difficultyValid(entry.difficulty) || !Number.isInteger(entry.seed) || !Number.isFinite(entry.at)) continue;
       seen.add(entry.id); save.completed.push(entry);
     }
+    for (const entry of Array.isArray(raw.records) ? raw.records : []) {
+      if (!entry || typeof entry.id !== 'string' || save.records.some(r => r.id === entry.id) || !difficultyValid(entry.difficulty) || !Number.isInteger(entry.seed)) continue;
+      let code: string | undefined, placements: Placement[] = [];
+      if (typeof entry.code === 'string') {
+        try { const draft = decodeMap(entry.code); code = entry.code; placements = validatePlacements(draft.level, entry.placements, 'recover').placements; } catch { /* Retain record metadata if its map is unavailable. */ }
+      }
+      save.records.push({ id: entry.id, difficulty: entry.difficulty, seed: entry.seed, startedAt: Number.isFinite(entry.startedAt) ? entry.startedAt : undefined, finishedAt: Number.isFinite(entry.finishedAt) ? entry.finishedAt : undefined, code, placements });
+    }
+    for (const entry of save.completed) if (!save.records.some(r => r.id === entry.id)) save.records.push({ id: entry.id, difficulty: entry.difficulty, seed: entry.seed, finishedAt: entry.at, placements: [] });
     save.recent = Array.isArray(raw.recent) ? raw.recent.filter((s: unknown) => typeof s === 'string').slice(-40) : [];
     const c = raw.challenge, p = raw.progress;
     if (c && typeof c.id === 'string' && difficultyValid(c.difficulty) && Number.isInteger(c.seed) && typeof c.code === 'string' && p?.id === c.id && p.status === 'active') {
@@ -61,7 +71,7 @@ export function readSurvival(): SurvivalSave {
         if (error) throw new Error('挑战进度损坏');
         return placements;
       };
-      save.challenge = { id: c.id, difficulty: c.difficulty, seed: c.seed, draft, fingerprint: c.fingerprint || c.code };
+      save.challenge = { id: c.id, difficulty: c.difficulty, seed: c.seed, startedAt: Number.isFinite(c.startedAt) ? c.startedAt : undefined, draft, fingerprint: c.fingerprint || c.code };
       try {
         const rotations: Partial<Record<Shape, number>> = {};
         for (const shape of ['single', 'domino', 'long', 'el'] as Shape[]) if (Number.isInteger(p.rotations?.[shape]) && p.rotations[shape] >= 0 && p.rotations[shape] <= 3) rotations[shape] = p.rotations[shape];
@@ -75,9 +85,15 @@ export function readSurvival(): SurvivalSave {
 
 export function writeSurvival(save: SurvivalSave): void {
   const c = save.challenge;
-  const challenge = c ? { id: c.id, difficulty: c.difficulty, seed: c.seed, code: encodeMap(c.draft), fingerprint: c.fingerprint } : null;
+  const challenge = c ? { id: c.id, difficulty: c.difficulty, seed: c.seed, startedAt: c.startedAt, code: encodeMap(c.draft), fingerprint: c.fingerprint } : null;
   try { localStorage.setItem(storageKey, JSON.stringify({ ...save, challenge })); }
   catch { throw new Error('挑战保存失败，请检查本地存储空间或权限后重试'); }
+}
+
+export function archiveSurvival(save: SurvivalSave, challenge: SurvivalChallenge, placements: Placement[], finishedAt?: number): void {
+  if (save.records.some(r => r.id === challenge.id && r.finishedAt !== undefined)) return;
+  const record: SurvivalRecord = { id: challenge.id, difficulty: challenge.difficulty, seed: challenge.seed, startedAt: challenge.startedAt, finishedAt, code: encodeMap(challenge.draft), placements: structuredClone(placements) };
+  save.records = [...save.records.filter(r => r.id !== challenge.id), record];
 }
 
 // Completion, reward ledger and removal of the unfinished challenge share one
@@ -87,7 +103,11 @@ export function completeSurvival(challenge: SurvivalChallenge, placements: Place
   const save = readSurvivalForWrite(), before = survivalTotals(save).xp;
   const earned = save.completed.some(c => c.id === challenge.id) ? 0 : survivalDifficulties[challenge.difficulty - 1].xp;
   if (earned && save.challenge?.id !== challenge.id) throw new Error('挑战已结束，无法继续挑战');
-  if (earned) save.completed.push({ id: challenge.id, difficulty: challenge.difficulty, seed: challenge.seed, at: Date.now() });
+  if (earned) {
+    const at = Date.now();
+    archiveSurvival(save, challenge, placements, at);
+    save.completed.push({ id: challenge.id, difficulty: challenge.difficulty, seed: challenge.seed, at });
+  }
   if (save.challenge?.id === challenge.id) { save.challenge = null; save.progress = null; }
   writeSurvival(save);
   const totals = survivalTotals(save);
