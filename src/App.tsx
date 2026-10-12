@@ -25,6 +25,7 @@ import type { FacilityKind, Placement, Shape, TerrainKind } from './game/types';
 import { useAdventureProgress } from './hooks/useAdventureProgress';
 import { useGameHistory } from './hooks/useGameHistory';
 import { useGameNavigation } from './hooks/useGameNavigation';
+import { useHomeEntrance } from './hooks/useHomeEntrance';
 import { useGamePlacement } from './hooks/useGamePlacement';
 import { useSandboxEditor } from './hooks/useSandboxEditor';
 import { useSurvivalChallenge } from './hooks/useSurvivalChallenge';
@@ -51,6 +52,7 @@ export default function App() {
   const { save, saved, updateSettings } = adventure;
   const navigation = useGameNavigation(save.current);
   const { screen, setScreen, mode, levelId } = navigation;
+  const homeEntering = useHomeEntrance(screen === 'menu');
   const [notice, setNotice] = useState('');
   const [manualOpen, setManualOpen] = useState(false);
   const [tipGroup, setTipGroup] = useState<FacilityKind | null>(null);
@@ -220,14 +222,14 @@ export default function App() {
     setSettingsOpen(false); setWinOpen(false); setManualOpen(false); setBlueprintOpen(false); setLeaveOpen(false); sandbox.closeMapCode(); survivalController.closeSurvivalDialogs();
   }
 
-  return <LanguageContext.Provider value={tutorial.state.language}><div lang={tutorial.state.language === 'zh' ? 'zh-CN' : 'en'} className={`app screen-${screen} ${screen === 'game' && mode === 'survival' ? 'survival-game' : ''}`} onPointerDown={() => { void audio.start(); }}>
+  return <LanguageContext.Provider value={tutorial.state.language}><div lang={tutorial.state.language === 'zh' ? 'zh-CN' : 'en'} className={`app screen-${screen} ${homeEntering ? 'home-entering' : ''} ${screen === 'game' && mode === 'survival' ? 'survival-game' : ''}`} onPointerDown={() => { void audio.start(); }}>
     <div className="ambient ambient-one"/><div className="ambient ambient-two"/>
     <header className="header">
       <div className="header-actions"><button className="icon-button sound-toggle" aria-label={localize(save.settings.muted ? t("开启声音") : t("静音"))} onClick={() => { updateSettings(s => ({ ...s, muted: !s.muted })); }}>{save.settings.muted ? <VolumeX size={19}/> : <Volume2 size={19}/>}</button><button className="icon-button" data-tutorial="settings" aria-label={t("设置")} onClick={() => { sound(); setSettingsOpen(true); }}><Settings2 size={20}/></button></div>
     </header>
 
     {screen === 'menu' && <main className="menu-page">
-      <div className="menu-art"><GameTitle/><HeroArt/></div>
+      <div className="menu-art"><GameTitle entering={homeEntering}/><HeroArt entering={homeEntering}/></div>
       <div className="menu-copy"><div className="menu-buttons"><button className="primary menu-adventure" onClick={() => { sound(); setScreen('adventure'); }}>{t("开始冒险")}<ArrowRight size={23}/></button><button className="secondary menu-journal" onClick={() => { sound(); setScreen('levels'); }}><Map size={21}/>  {t("营地日记")}</button><button className="secondary menu-guide" onClick={() => { sound(); setManualOpen(true); }}><BookOpen size={21}/>  {t("野外手册")}</button></div></div>
     </main>}
 

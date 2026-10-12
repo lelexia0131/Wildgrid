@@ -12,7 +12,7 @@ export function FootprintSurface({ shape, rotation }: { shape: Shape; rotation: 
     const after = { x:p.x+Math.sign(next.x-p.x)*8, y:p.y+Math.sign(next.y-p.y)*8 };
     return `${i ? 'L' : 'M'}${before.x} ${before.y}Q${p.x} ${p.y} ${after.x} ${after.y}`;
   }).join('')+'Z';
-  return <svg className="facility-footprint" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><path className="footprint-fill" d={outline}/><path className="footprint-outline" d={outline} fill="none" strokeWidth="1.5" vectorEffect="non-scaling-stroke"/></svg>;
+  return <svg className="facility-footprint" data-shape={shape} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><path className="footprint-fill" d={outline}/><path className="footprint-outline" d={outline} fill="none" strokeWidth="1.5" vectorEffect="non-scaling-stroke"/></svg>;
 }
 
 function FootprintArt({ shape, rotation, children }: { shape: Shape; rotation: number; children: React.ReactNode }) {
@@ -47,16 +47,16 @@ function footprintCorners(cells: { r: number; c: number }[]): Point[] {
   });
 }
 
-// Trace the occupied outline, then inset the roof for a fixed view from above.
+// Keep both wings equally wide and join their roof ridges at the inner cell.
 function roofOutline(shape: Shape, rotation: number, ridge = false): Point[] {
   const corners = footprintCorners(offsets(shape, rotation));
   const inset = (a: Point, b: Point) => {
-    const x = Math.sign(a.y-b.y), y = Math.sign(b.x-a.x), distance = ridge ? y > 0 ? 42 : y < 0 ? 58 : 50 : y > 0 ? 38 : y < 0 ? 30 : 23;
+    const x = Math.sign(a.y-b.y), y = Math.sign(b.x-a.x), distance = ridge ? 50 : 17;
     return {x:x*distance,y:y*distance};
   };
   return corners.map((p,i) => {
     const a = inset(corners[(i+corners.length-1)%corners.length],p), b = inset(p,corners[(i+1)%corners.length]);
-    return {x:p.x+a.x+b.x,y:p.y+a.y+b.y-(ridge ? 28 : 0)};
+    return {x:p.x+a.x+b.x,y:p.y+a.y+b.y-(ridge ? 8 : 0)};
   });
 }
 
@@ -66,38 +66,35 @@ function BuildingArt({ kind, shape, rotation }: { kind: 'camp' | 'cabin'; shape:
   const edges = points.map((p,i)=>({p,q:points[(i+1)%points.length]}));
   const fronts = edges.filter(({p,q})=>q.x<p.x).map(({p,q})=>({x:q.x,y:q.y,width:p.x-q.x}));
   const front = [...fronts].sort((a,b)=>b.y-a.y || b.width-a.width)[0];
-  const doorX = front.x + (front.width > 120 ? 40 : front.width / 2), doorY = front.y;
+  const doorX = front.x + (front.width > 120 ? 33 : front.width / 2), doorY = front.y;
   const camp = kind === 'camp';
   const ridge = `M${peaks.map(p=>`${p.x} ${p.y}`).join('L')}Z`;
   const chimney = [...cells].sort((a,b)=>a.r-b.r || a.c-b.c)[0];
-  const width = (Math.max(...cells.map(p=>p.c))+1)*100, height = (Math.max(...cells.map(p=>p.r))+1)*100;
   return <FootprintArt shape={shape} rotation={rotation}>
-    <g transform={`translate(${width*.11} ${height*.11}) scale(.78)`}>
-    <path d={`M${points.map(p=>`${p.x+4} ${p.y+21}`).join('L')}Z`} fill="#624c2420"/>
-    {edges.filter(({p,q})=>q.y>p.y).map(({p,q},i)=><path key={i} d={`M${p.x} ${p.y}L${q.x} ${q.y}l8 12L${p.x+8} ${p.y+12}Z`} fill={camp ? '#bf8b45' : '#9f754f'}/>)}
-    {fronts.map((f,i)=><g key={i}><rect x={f.x} y={f.y} width={f.width} height="20" fill={camp ? '#d2a05a' : '#c59865'}/>{!camp && <path d={`M${f.x+4} ${f.y+7}h${f.width-8}m-${f.width-8} 7h${f.width-8}`} stroke="#af804e" strokeWidth="2"/>}</g>)}
+    <path d={`M${points.map(p=>`${p.x+4} ${p.y+11}`).join('L')}Z`} fill="#624c2420"/>
+    {edges.filter(({p,q})=>q.y>p.y).map(({p,q},i)=><path key={i} d={`M${p.x} ${p.y}L${q.x} ${q.y}l6 12L${p.x+6} ${p.y+12}Z`} fill={camp ? '#b99559' : '#9f754f'}/>)}
+    {fronts.map((f,i)=><g key={i}><rect x={f.x} y={f.y} width={f.width} height={camp ? 7 : 14} fill={camp ? '#cbb279' : '#c59865'}/>{!camp && <path d={`M${f.x+4} ${f.y+5}h${f.width-8}m-${f.width-8} 6h${f.width-8}`} stroke="#af804e" strokeWidth="2"/>}</g>)}
     <path d={roof} fill={camp ? '#dba552' : '#67875f'}/>
     {edges.map(({p,q},i) => {
       const a = peaks[i], b = peaks[(i+1)%peaks.length];
       const shade = q.x > p.x ? 0 : q.y > p.y ? 1 : q.x < p.x ? 2 : 3;
-      return <path key={`roof-${i}`} className="roof-plane" d={`M${p.x} ${p.y}L${q.x} ${q.y}L${b.x} ${b.y}L${a.x} ${a.y}Z`} fill={(camp ? ['#ffe7a0','#dca14a','#efc06b','#ffd58a'] : ['#a4bb8d','#456d54','#789969','#91ad7d'])[shade]} stroke={camp ? '#d7a355' : '#6c8d63'} strokeWidth="1" strokeLinejoin="round"/>;
+      return <path key={`roof-${i}`} className="roof-plane" d={`M${p.x} ${p.y}L${q.x} ${q.y}L${b.x} ${b.y}L${a.x} ${a.y}Z`} fill={(camp ? ['#ffdfa0','#d8a04a','#f4c66f','#f7ce7c'] : ['#91ad7d','#456d54','#789969','#a4bb8d'])[shade]} stroke={camp ? '#d7a355' : '#6c8d63'} strokeWidth="1" strokeLinejoin="round"/>;
     })}
-    <path d={ridge} stroke={camp ? '#c99142' : '#45684f'} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d={ridge} stroke={camp ? '#ffedb4' : '#bfd0a2'} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d={ridge} stroke={camp ? '#c99142' : '#45684f'} strokeWidth={camp ? 3 : 4} strokeLinecap="round" strokeLinejoin="round"/>
+    <path d={ridge} stroke={camp ? '#ffedb4' : '#bfd0a2'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     {!camp && cells.map(p => <path key={`shingles-${p.r}-${p.c}`} d={`M${p.c*100+22} ${p.r*100+50}h18m10 0h18m-39 12h16m10 0h16`} stroke="#b5c49a" strokeWidth="2" strokeLinecap="round" opacity=".6"/>)}
     {camp ? <>
-      <path d={`M${doorX} ${doorY-28}l-34 48h68Z`} fill="#e9b25b"/>
-      <path className="building-door" d={`M${doorX} ${doorY-7}l-15 27h30Z`} fill="#49604d"/>
-      <path d={`M${doorX} ${doorY-7}v27h-15Z`} fill="#b17a3d"/>
-      <path d={`M${doorX-32} ${doorY+21}l-5 6m69-6 5 6`} stroke="#9f7f51" strokeWidth="3" strokeLinecap="round"/>
+      <path d={`M${doorX} ${doorY-37}l-30 44h60Z`} fill="#e9b25b"/>
+      <path className="building-door" d={`M${doorX} ${doorY-22}l-17 29h34Z`} fill="#4d6350"/>
+      <path d={`M${doorX} ${doorY-22}l-4 26h-11Z`} fill="#b37b39"/>
+      <path d={`M${doorX} ${doorY-37}l-3-6m3 6 3-6M${doorX-30} ${doorY+7}l-5 4m65-4 5 4`} stroke="#9f7f51" strokeWidth="3" strokeLinecap="round"/>
     </> : <>
-      <rect className="building-door" x={doorX-10} y={doorY-6} width="20" height="26" rx="2" fill="#53654e"/>
-      <circle cx={doorX+6} cy={doorY+9} r="2" fill="#e8c783"/>
-      {front.width>120 && <><rect x={front.x+front.width-55} y={doorY+3} width="25" height="13" fill="#f5d795"/><path d={`M${front.x+front.width-43} ${doorY+3}v13`} stroke="#ead3a6" strokeWidth="2"/></>}
+      <rect className="building-door" x={doorX-9} y={doorY-8} width="18" height="22" rx="2" fill="#53654e"/>
+      <circle cx={doorX+5} cy={doorY+3} r="2" fill="#e8c783"/>
+      {front.width>120 && <><rect x={front.x+front.width-49} y={doorY+2} width="22" height="10" fill="#f5d795"/><path d={`M${front.x+front.width-38} ${doorY+2}v10`} stroke="#ead3a6" strokeWidth="2"/></>}
       <rect x={chimney.c*100+60} y={chimney.r*100+27} width="12" height="24" fill="#9b9382"/><path d={`M${chimney.c*100+58} ${chimney.r*100+27}h16v6h-16Z`} fill="#b6af9c"/>
-      <path d={`M${doorX-16} ${doorY+24}h32`} stroke="#d6b789" strokeWidth="4" strokeLinecap="round"/>
+      <path d={`M${doorX-14} ${doorY+11}h28`} stroke="#d6b789" strokeWidth="4" strokeLinecap="round"/>
     </>}
-    </g>
   </FootprintArt>;
 }
 

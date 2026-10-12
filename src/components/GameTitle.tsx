@@ -15,7 +15,7 @@ const englishGlyphs = [
 const positions = [22, 96, 135, 186, 246, 306, 367, 407];
 const tilts = [-5, 3, -2, 2, -3, 3, -2, 4];
 
-export function GameTitle() {
+export function GameTitle({ entering = false }: { entering?: boolean }) {
   const { language, t } = useI18n();
   const id = useId();
   const chinese = language === 'zh';
@@ -31,6 +31,14 @@ export function GameTitle() {
             <path transform="rotate(4 234 88)" d="M183 32 181 139M163 63 204 61M180 65 159 103M183 76 201 94M229 30 213 55M224 42 266 41Q250 77 211 91M220 55Q247 80 279 87M220 101 264 100 264 136 220 136Z"/>
           </g> : englishGlyphs.map((d, i) => <path key={i} d={d} fillRule="evenodd" transform={`translate(${positions[i]} ${35 + (i % 2) * 3}) rotate(${tilts[i]} 25 36)`}/>)}
         </g>
+        {entering && <>
+          <linearGradient id={`${id}-shine`} x1="0" y1="0" x2="1" y2="0">
+            <stop stopColor="#ffd377" stopOpacity="0"/><stop offset=".4" stopColor="#ffe8a2" stopOpacity=".35"/><stop offset=".55" stopColor="#fff6d1" stopOpacity=".9"/><stop offset="1" stopColor="#ffd377" stopOpacity="0"/>
+          </linearGradient>
+          <mask id={`${id}-shine-mask`} maskUnits="userSpaceOnUse" x="0" y="0" width="490" height="172">
+            <use href={`#${id}-letters`} stroke="white" strokeWidth={chinese ? 15 : 2} fill={chinese ? 'none' : 'white'} strokeLinejoin="round"/>
+          </mask>
+        </>}
       </defs>
       <g strokeLinejoin="round">
         <use href={`#${id}-letters`} transform="translate(0 7)" stroke="#674f36" strokeWidth={chinese ? 26 : 10} fill={chinese ? 'none' : '#674f36'}/>
@@ -45,6 +53,7 @@ export function GameTitle() {
         <path d={chinese ? 'M38 43 49 43M41 113 51 113M225 125 240 125M230 128 235 128' : 'M151 91h18m-14 4h8M195 52v14M421 88v9'}/>
       </g>
       <path d={chinese ? 'M104 157q58 10 119-1' : 'M175 129q70 9 142-1'} fill="none" stroke="#a9b690" strokeWidth="3" strokeLinecap="round"/>
+      {entering && <g mask={`url(#${id}-shine-mask)`}><rect className="home-title-shine" x="-160" y="0" width="160" height="172" fill={`url(#${id}-shine)`}/></g>}
     </svg>
   </h1>;
 }

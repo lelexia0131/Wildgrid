@@ -2,11 +2,12 @@ import { useId } from 'react';
 import { Art } from './Art';
 import { useHeroMotion } from '../hooks/useHeroMotion';
 
-export function HeroArt() {
+export function HeroArt({ entering = false }: { entering?: boolean }) {
   const running = useHeroMotion();
   const id = useId();
   return <svg className="landscape hero-art" data-motion={running ? 'running' : 'paused'} viewBox="0 0 800 620" fill="none" aria-hidden="true">
     <defs><linearGradient id={`${id}-island`} x1="180" y1="270" x2="660" y2="500" gradientUnits="userSpaceOnUse"><stop stopColor="#cbd5a4"/><stop offset="1" stopColor="#91b08a"/></linearGradient><linearGradient id={`${id}-stream`} x1="480" y1="250" x2="390" y2="480" gradientUnits="userSpaceOnUse"><stop stopColor="#b6d9cb"/><stop offset="1" stopColor="#79b4b0"/></linearGradient><radialGradient id={`${id}-fire-glow`}><stop stopColor="#f5c363" stopOpacity=".38"/><stop offset="1" stopColor="#f5c363" stopOpacity="0"/></radialGradient></defs>
+    {entering && <defs><radialGradient id={`${id}-fire-bloom`}><stop stopColor="#ffe3a0" stopOpacity=".8"/><stop offset=".45" stopColor="#f9c266" stopOpacity=".3"/><stop offset="1" stopColor="#f9c266" stopOpacity="0"/></radialGradient></defs>}
     <circle cx="620" cy="130" r="48" fill="#efd69a" opacity=".75"/>
     <defs><clipPath id={`${id}-sky`}><rect x="0" y="60" width="800" height="190"/></clipPath></defs>
     <g stroke="#fffdf1" strokeWidth="12" strokeLinecap="round" clipPath={`url(#${id}-sky)`}>
@@ -33,6 +34,7 @@ export function HeroArt() {
     <svg x="254" y="261" width="167" height="167"><Art kind="camp"/></svg>
     <svg x="453" y="333" width="113" height="113"><Art kind="camp"/></svg>
     <ellipse className="hero-fire-glow" cx="377" cy="400" rx="32" ry="30" fill={`url(#${id}-fire-glow)`}/>
+    {entering && <ellipse className="home-fire-bloom" cx="377" cy="400" rx="54" ry="42" fill={`url(#${id}-fire-bloom)`}/>}
     <svg x="339" y="350" width="76" height="76"><Art kind="fire" className="hero-fire"/></svg>
     <g stroke="#749569" strokeWidth="3" strokeLinecap="round"><path d="m221 378 2-8m2 8 5-5m306 32 2-8m2 8 5-5M349 251l2-8m2 8 5-5m-85 181 2-8m2 8 5-5"/></g>
     <g fill="#f1de9d"><circle cx="241" cy="391" r="4"/><circle cx="250" cy="387" r="3"/><circle cx="595" cy="342" r="4"/><circle cx="574" cy="364" r="3"/><circle cx="291" cy="454" r="4"/></g>

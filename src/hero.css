@@ -79,6 +79,53 @@
 @keyframes camp-fire-glow { 0%, 100% { transform: scale(.9); opacity: .65; } 50% { transform: scale(1.12); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .hero-art * { animation: none !important; } }
 
+/* Entrance layers are temporary; the existing scene loops keep their own clock. */
+.home-title-shine, .home-fire-bloom { opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .home-entering::before, .home-entering::after { content: ''; position: absolute; pointer-events: none; z-index: 3; }
+  .home-entering::before {
+    inset: 0; background: linear-gradient(145deg, #1d393d45, #30473530 65%, #493e3426);
+    animation: home-dawn 1.2s ease-out both;
+  }
+  .home-entering::after {
+    inset: -50%;
+    background: linear-gradient(135deg, transparent 38%, #f4bd5308 43%, #fbd17b28 48%, #ffe9b338 50%, #fbd17b18 54%, transparent 62%);
+    animation: home-sunlight .7s cubic-bezier(.25, .1, .35, 1) .5s both;
+  }
+  .home-entering .camp-title { transform-origin: 50% 60%; animation: home-title .7s ease-out 1s both; }
+  .home-entering .home-title-shine { animation: home-title-shine .45s ease-in-out 1.15s both; }
+  .home-entering .home-fire-bloom { transform-box: fill-box; transform-origin: center; animation: home-fire-bloom .65s ease-in-out 1s both; }
+  .home-entering .menu-buttons button, .home-entering .header-actions button {
+    animation: home-button .46s ease-out var(--home-delay) both;
+  }
+  .home-entering .menu-adventure { --home-delay: 1.5s; }
+  .home-entering .menu-journal { --home-delay: 1.62s; }
+  .home-entering .menu-guide { --home-delay: 1.74s; }
+  .home-entering .header-actions button:first-child { --home-delay: 1.68s; }
+  .home-entering .header-actions button:last-child { --home-delay: 1.74s; }
+}
+@keyframes home-dawn { 0% { opacity: 1; } 42% { opacity: .48; } 100% { opacity: 0; } }
+@keyframes home-sunlight {
+  0% { transform: translate(-45%, -45%); opacity: 0; }
+  25% { opacity: .85; }
+  65% { opacity: 1; }
+  100% { transform: translate(45%, 45%); opacity: 0; }
+}
+@keyframes home-title {
+  0% { transform: scale(.88); opacity: 0; }
+  55% { transform: scale(1.035); opacity: 1; }
+  78% { transform: scale(.992); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes home-title-shine { 0% { transform: translateX(0); opacity: 0; } 15%, 75% { opacity: 1; } 100% { transform: translateX(650px); opacity: 0; } }
+@keyframes home-fire-bloom { 0%, 100% { transform: scale(.85); opacity: 0; } 45% { transform: scale(1.15); opacity: 1; } }
+@keyframes home-button {
+  0% { transform: translateY(12px); opacity: 0; }
+  65% { transform: translateY(-2px); opacity: 1; }
+  85% { transform: translateY(1px); }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
 @media (max-width: 600px) {
   .menu-buttons { gap: 14px 12px; }
   .menu-buttons button { height: 56px; font-size: 17px; padding: 0 12px; gap: 8px; border-radius: 16px; }
