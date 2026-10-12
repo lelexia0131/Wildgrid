@@ -97,7 +97,7 @@ export default function App() {
   const selectedPiece = selected;
   const continueId = levelUnlocked(save.current, save.completed) ? save.current : 1;
   const nextDay = !!getLevelById(levelId + 1) && levelUnlocked(levelId + 1, save.completed);
-  const groups = mode === 'sandbox-editor' ? facilityLibrary : level.pieces.filter((p, i, all) => all.findIndex(other => other.kind === p.kind && other.shape === p.shape) === i);
+  const groups = facilityLibrary.filter(group => mode === 'sandbox-editor' || level.pieces.some(p => p.kind === group.kind && p.shape === group.shape));
   const invalidCount = Object.values(result.issues).filter(i => i.status === 'INVALID').length;
   const errors = [...new Set(Object.values(result.issues).filter(i => i.status === 'INVALID').flatMap(i => i.reasons))];
   const tutorial = useTutorial({ screen, mode, level, placements, selected, rotations, undoAvailable: !!history.past.length, won: result.won, winOpen, paused: settingsOpen || manualOpen || blueprintOpen || leaveOpen || !!mapCode || replaceChallenge !== null || abandonOpen });
