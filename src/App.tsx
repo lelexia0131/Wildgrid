@@ -1,7 +1,9 @@
 import { createTranslator, LanguageContext, useI18n } from './i18n/context';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, Compass, Flag, Grid2X2, Leaf, LockKeyhole, Map, MousePointer2, RotateCcw, Save, ScrollText, Settings2, Sparkles, Undo2, Volume2, VolumeX, X } from 'lucide-react';
-import { Art, FacilityArt, FootprintSurface, Landscape } from './components/Art';
+import { Art, FacilityArt, FootprintSurface } from './components/Art';
+import { GameTitle } from './components/GameTitle';
+import { HeroArt } from './components/HeroArt';
 import { version } from '../package.json';
 import { Blueprint } from './components/Blueprint';
 import { Manual } from './components/Manual';
@@ -212,7 +214,7 @@ export default function App() {
     </header>
 
     {screen === 'menu' && <main className="menu-page">
-      <div className="menu-art"><Landscape/></div>
+      <div className="menu-art"><GameTitle/><HeroArt/></div>
       <div className="menu-copy"><div className="menu-buttons"><button className="primary" onClick={() => { sound(); setScreen('adventure'); }}>{t("开始冒险")}<ArrowRight size={19}/></button><button className="secondary" onClick={() => { sound(); setScreen('levels'); }}><Map size={18}/>  {t("营地日记")}</button><button className="secondary" onClick={() => { sound(); setManualOpen(true); }}><BookOpen size={18}/>  {t("野外手册")}</button></div><div className="menu-progress"><span className="progress-dots">{levels.map(level => <i key={level.id} className={save.completed.includes(level.id) ? 'complete' : ''}/>)}</span><span>{t("已完成")} {save.completed.length} / {levels.length}</span></div></div>
     </main>}
 

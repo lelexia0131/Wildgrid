@@ -1,0 +1,35 @@
+/* The lettering and island share one headpiece; the illustration keeps its space. */
+.menu-art { width: min(680px, 100%, calc((100dvh - 300px) * 1.29)); display: flex; flex-direction: column; align-items: center; flex: none; pointer-events: none; }
+.camp-title { width: 88%; height: clamp(82px, 16dvh, 140px); margin: 0; position: relative; z-index: 1; }
+.camp-title svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.menu-page .hero-art { margin-top: -36px; flex: none; }
+.menu-buttons button { font-size: 16px; letter-spacing: .6px; }
+.menu-buttons button svg { flex: none; }
+
+.hero-cloud { animation: camp-cloud 12s ease-in-out infinite; }
+.hero-current { animation: camp-current 3.8s linear infinite; }
+/* Only the three flame paths move; the logs and shadow remain on the ground. */
+.hero-fire > path:nth-of-type(2),
+.hero-fire > path:nth-of-type(3),
+.hero-fire > path:nth-of-type(4) { transform-box: view-box; transform-origin: 50px 80px; animation: camp-fire 2.6s ease-in-out infinite; }
+.hero-fire > path:nth-of-type(3) { animation-delay: -.8s; }
+.hero-art[data-motion='paused'] *, .hero-art[data-motion='paused'] { animation-play-state: paused; }
+@keyframes camp-cloud { 0%, 100% { transform: translateX(-5px); } 50% { transform: translateX(7px); } }
+@keyframes camp-current { to { stroke-dashoffset: -47; } }
+@keyframes camp-fire { 0%, 100% { transform: scale(.97, .96) rotate(-1deg); opacity: .9; } 50% { transform: scale(1.02, 1.04) rotate(1deg); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hero-art * { animation: none !important; } }
+
+@media (max-width: 600px) {
+  .menu-buttons { gap: 8px; }
+  .menu-buttons button { font-size: 14px; padding: 0 14px; }
+  .menu-page .hero-art { margin-top: -22px; }
+}
+@media (max-height: 500px) and (min-width: 601px) {
+  .menu-page { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(230px, 1fr); gap: 16px; padding-bottom: 12px; max-width: 900px; }
+  .menu-art { width: min(420px, 100%, calc((100dvh - 130px) * 1.29)); justify-self: center; }
+  .camp-title { height: 76px; }
+  .menu-page .hero-art { margin-top: -38px; }
+  .menu-buttons { flex-direction: column; gap: 8px; max-width: 270px; margin: auto; }
+  .menu-buttons button { width: 100%; font-size: 15px; }
+  .menu-progress { flex-direction: column; gap: 8px; margin-top: 12px; }
+}

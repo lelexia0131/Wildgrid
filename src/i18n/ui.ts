@@ -4,6 +4,7 @@ import { feedbackEnglish } from './feedback';
 // Chinese strings are stable lookup keys for the existing presentation metadata.
 // Gameplay and save data keep their original values; localization happens at display time.
 export const uiEnglish = {
+  '野格': 'WILDGRID',
   ...manualEnglish, ...feedbackEnglish,
   '需占 {0} 格，已占 {1} 格{2}': 'Target: {0} cells. Filled: {1}{2}',
   '{0}：{1}': '{0}: {1}', '{0}，点击拿起': '{0}, tap to pick up',
