@@ -14,8 +14,9 @@ type Options = {
   setNotice: (notice: string) => void;
   sound: (name?: Parameters<typeof audio.play>[0]) => void;
   onAction?: (event: TutorialEvent) => void;
+  onReject: (cells: Cell[]) => void;
 };
-export function useGamePlacement({ mode, level, placements, continuousPlacement, terrainBrush, clearTerrainBrush, commit, setNotice, sound, onAction }: Options) {
+export function useGamePlacement({ mode, level, placements, continuousPlacement, terrainBrush, clearTerrainBrush, commit, setNotice, sound, onAction, onReject }: Options) {
   const [selected, setSelected] = useState<Piece | null>(null);
   const [rotations, setRotations] = useState<Partial<Record<Shape, number>>>({});
   const [hover, setHover] = useState<Cell | null>(null);
@@ -41,13 +42,13 @@ export function useGamePlacement({ mode, level, placements, continuousPlacement,
     const piece = level.pieces.find(p => p.id === at.id)!;
     const next = rotateAround(piece, at, pivot);
     const block = placementBlock(level, placements, next);
-    if (block) { setNotice(block.includes('地形') || block.includes('重叠') ? '已经被占用' : block); sound('error'); return; }
+    if (block) { onReject([...occupied(piece, next), pivot]); setNotice(block); sound('error'); return; }
     commit(placements.map(p => p.id === at.id ? next : p)); setNotice(''); sound('rotate');
     onAction?.({ type: 'rotate', kind: piece.kind, pieceId: piece.id });
   }
   function clickCell(cell: Cell) {
     if (mode === 'sandbox-editor' && terrainBrush) {
-      if (placements.some(at => occupied(level.pieces.find(p => p.id === at.id)!, at).some(p => key(p) === key(cell)))) { setNotice('先拿起这里的设施，再修改地形'); sound('error'); return; }
+      if (placements.some(at => occupied(level.pieces.find(p => p.id === at.id)!, at).some(p => key(p) === key(cell)))) { onReject([cell]); setNotice('先拿起这里的设施，再修改地形'); sound('error'); return; }
       const current = level.terrain.find(t => key(t) === key(cell));
       const terrain = level.terrain.filter(t => key(t) !== key(cell));
       if (current?.kind !== terrainBrush) terrain.push({ ...cell, kind: terrainBrush });
@@ -69,15 +70,16 @@ export function useGamePlacement({ mode, level, placements, continuousPlacement,
     const candidate = { ...cell, id: selected.id, rotation };
     const placementLevel = mode === 'sandbox-editor' ? { ...level, pieces: [...level.pieces, selected] } : level;
     const block = placementBlock(placementLevel, placements, candidate);
-    if (block) { setNotice(block); sound('error'); return; }
+    if (block) { onReject(occupied(selected, candidate)); setNotice(block); sound('error'); return; }
     const next = [...placements, candidate];
     commit(next, placementLevel);
     const issue = evaluate(mode === 'sandbox-editor' ? withEditorPlacements({ level: placementLevel, placements }, next).level : level, next).issues[candidate.id];
     sound(issue.status === 'INVALID' ? 'error' : 'place');
+    if (issue.status === 'INVALID') onReject(occupied(selected, candidate));
     const nextPiece = !continuousPlacement ? null : mode === 'sandbox-editor'
       ? { ...selected, id: `custom-${++nextPieceId.current}` }
       : level.pieces.find(p => p.kind === selected.kind && p.shape === selected.shape && !next.some(at => at.id === p.id)) || null;
-    setNotice(''); setSelected(nextPiece); setHover(null);
+    setNotice(issue.status === 'INVALID' ? issue.reasons.join('；') : ''); setSelected(nextPiece); setHover(null);
     onAction?.({ type: 'place', kind: selected.kind, pieceId: selected.id, r: cell.r, c: cell.c, rotation });
   }
   const ghost = selected && hover ? occupied(selected, { ...hover, id: selected.id, rotation }) : [];

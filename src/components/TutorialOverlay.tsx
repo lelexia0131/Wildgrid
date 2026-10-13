@@ -62,8 +62,11 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
     elements[0]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     let frame = 0;
     const measure = () => {
+      if (document.hidden) return;
       const viewport = { x: 0, y: 0, width: window.innerWidth, height: window.innerHeight };
-      const measured = elements.map(el => el.getBoundingClientRect()).filter(r => r.width && r.height);
+      // The win target can move from the board into a newly opened dialog.
+      const current = targetElements(step.target);
+      const measured = (current.length ? current : elements).map(el => el.getBoundingClientRect()).filter(r => r.width && r.height);
       const targets = (step.target.type === 'instance' && measured.length ? [bounds(measured.map(r => ({ x: r.x, y: r.y, width: r.width, height: r.height })))] : measured)
         .map(r => {
           const circle = step.shape === 'circle' || step.target.type === 'clues';
@@ -79,8 +82,10 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
       }
       frame = requestAnimationFrame(measure);
     };
+    const visibility = () => { cancelAnimationFrame(frame); if (!document.hidden) measure(); };
+    document.addEventListener('visibilitychange', visibility);
     measure();
-    return () => cancelAnimationFrame(frame);
+    return () => { cancelAnimationFrame(frame); document.removeEventListener('visibilitychange', visibility); };
   }, [step.target.type, JSON.stringify(step.target), step.placement, language, index, lesson.id]);
   useLayoutEffect(() => {
     if (!step.blockInteraction && step.advance !== 'click') return;

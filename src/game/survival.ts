@@ -38,8 +38,12 @@ export const emptySurvivalProgress = (id: string): SurvivalProgress => ({ id, st
 export const survivalFingerprint = (draft: SandboxDraft) => JSON.stringify({ terrain: draft.level.terrain.map(t => `${t.r},${t.c}:${t.kind}`).sort(), pieces: draft.level.pieces.map(p => `${p.kind}_${p.shape}`).sort(), rows: draft.level.rows, cols: draft.level.cols });
 
 export function readSurvivalForWrite(): SurvivalSave {
-  try { localStorage.getItem(storageKey); } catch { throw new Error('无法读取挑战存档，请检查本地存储权限'); }
-  return readSurvival();
+  let raw;
+  try { raw = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch { throw new Error('挑战存档无法读取，原数据已保留'); }
+  const save = readSurvival();
+  if (raw && (raw.version !== 1 || !Array.isArray(raw.completed) || raw.completed.length !== save.completed.length || raw.challenge && !save.challenge || raw.records && (!Array.isArray(raw.records) || raw.records.length > save.records.length))) throw new Error('挑战存档不完整或版本不兼容，原数据已保留');
+  if (raw?.challenge && (!Array.isArray(raw.progress?.placements) || raw.progress.placements.length !== save.progress?.placements.length || Array.isArray(raw.progress.past) && Math.min(80, raw.progress.past.length) !== save.progress?.past.length || Array.isArray(raw.progress.future) && Math.min(80, raw.progress.future.length) !== save.progress?.future.length)) throw new Error('挑战存档不完整或版本不兼容，原数据已保留');
+  return save;
 }
 
 export function readSurvival(): SurvivalSave {
@@ -84,6 +88,7 @@ export function readSurvival(): SurvivalSave {
 }
 
 export function writeSurvival(save: SurvivalSave): void {
+  readSurvivalForWrite();
   const c = save.challenge;
   const challenge = c ? { id: c.id, difficulty: c.difficulty, seed: c.seed, startedAt: c.startedAt, code: encodeMap(c.draft), fingerprint: c.fingerprint } : null;
   try { localStorage.setItem(storageKey, JSON.stringify({ ...save, challenge })); }

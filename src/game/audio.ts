@@ -10,6 +10,15 @@ export class WildernessAudio {
   private step = 0;
   private next = 0;
   private scene: 'menu' | 'game' = 'menu';
+  private effectTimes: number[] = [];
+  private onVisibility = () => {
+    if (!this.ctx) return;
+    if (document.hidden) {
+      if (this.timer !== undefined) clearInterval(this.timer);
+      this.timer = undefined;
+      void this.ctx.suspend().catch(() => {});
+    } else void this.start();
+  };
   private settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false };
   // Original 352-step theme plus a 32-step F–G bridge back into C.
   // 130.56 seconds in-game, 145.92 seconds in the menu.
@@ -59,16 +68,16 @@ export class WildernessAudio {
         this.ctx = new AudioContext();
         this.music = this.ctx.createGain(); this.music.connect(this.ctx.destination);
         this.effects = this.ctx.createGain(); this.effects.connect(this.ctx.destination);
+        this.music.gain.setValueAtTime(0, this.ctx.currentTime);
+        this.effects.gain.setValueAtTime(0, this.ctx.currentTime);
         this.setSettings(this.settings);
         this.next = this.ctx.currentTime + .08;
-        this.timer = window.setInterval(() => this.schedule(), 100);
-        document.addEventListener('visibilitychange', () => {
-          if (!this.ctx) return;
-          if (document.hidden) void this.ctx.suspend();
-          else void this.ctx.resume().catch(() => {});
-        });
+        document.addEventListener('visibilitychange', this.onVisibility);
       }
+      if (document.hidden) return;
       if (this.ctx.state === 'suspended') await this.ctx.resume();
+      if (document.hidden) return;
+      if (this.timer === undefined) this.timer = window.setInterval(() => this.schedule(), 100);
       this.schedule();
     } catch { /* Browsers without Web Audio can still play the game. */ }
   }
@@ -101,10 +110,14 @@ export class WildernessAudio {
     }
   }
   play(sound: Sound) {
-    if (!this.ctx || !this.effects || this.ctx.state !== 'running') return;
+    if (!this.ctx || !this.effects || this.ctx.state !== 'running' || document.hidden || this.settings.muted || !this.settings.effects) return;
+    const now = this.ctx.currentTime;
+    this.effectTimes = this.effectTimes.filter(time => now - time < .22);
+    this.effectTimes.push(now);
+    const gain = (sound === 'error' ? .14 : .32) / Math.sqrt(this.effectTimes.length);
     const notes: Record<Sound, number[]> = { place: [79,84], pickup: [79,72], rotate: [76,81], win: [72,76,79,84,88], click: [76], select: [81], error: [55,53] };
-    notes[sound].forEach((note, i) => this.note(note, this.ctx!.currentTime + i * (sound === 'win' ? .14 : .045), sound === 'win' ? .9 : .18, sound === 'error' ? .14 : .32, this.effects!));
+    notes[sound].forEach((note, i) => this.note(note, now + i * (sound === 'win' ? .14 : .045), sound === 'win' ? .75 : .18, gain, this.effects!));
   }
-  dispose() { if (this.timer) clearInterval(this.timer); void this.ctx?.close(); }
+  dispose() { if (this.timer !== undefined) clearInterval(this.timer); document.removeEventListener('visibilitychange', this.onVisibility); void this.ctx?.close(); }
 }
 export const audio = new WildernessAudio();

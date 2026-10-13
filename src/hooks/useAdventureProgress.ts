@@ -20,5 +20,5 @@ export function useAdventureProgress() {
     const level = getLevelById(id)!;
     return { level, placements: reset ? [] : progressForPlay(save, level) };
   }
-  return { save, saved, recordProgress, completeLevel, updateSettings, getStartSnapshot };
+  return { save, saved, recordProgress, completeLevel, updateSettings, getStartSnapshot, retrySave: () => setSaved(writeSave(save)) };
 }

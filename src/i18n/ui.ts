@@ -4,6 +4,12 @@ import { feedbackEnglish } from './feedback';
 // Chinese strings are stable lookup keys for the existing presentation metadata.
 // Gameplay and save data keep their original values; localization happens at display time.
 export const uiEnglish = {
+  '进度暂未保存，原存档已保留。请检查存储空间后重试。': 'Progress could not be saved. Your existing save is preserved. Check storage space and retry.',
+  '重试保存': 'Retry save',
+  '挑战存档无法读取，原数据已保留': 'Unable to read the challenge save. Existing data has been preserved.',
+  '挑战存档不完整或版本不兼容，原数据已保留': 'The challenge save is incomplete or incompatible. Existing data has been preserved.',
+  '本地地图无法读取，原数据已保留': 'Unable to read local maps. Existing data has been preserved.',
+  '本地地图不完整或版本不兼容，原数据已保留': 'Local maps are incomplete or incompatible. Existing data has been preserved.',
   '野格': 'WILDGRID',
   '设施名称显示': 'Facility names', '暂无未完成挑战': 'No unfinished challenge', '已放弃': 'Abandoned',
   '目录': 'Contents', '上一页': 'Previous page', '下一页': 'Next page', '第 {0} 页，共 {1} 页': 'Page {0} of {1}',

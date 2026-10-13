@@ -4,10 +4,10 @@ import { WildernessAudio } from '../src/game/audio';
 
 type Voice = { midi: number; start: number; end: number; type: string; bus: number; release: number; gain: number };
 
-async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advance: (time: number) => void, visibility: (hidden: boolean) => Promise<void>) => void | Promise<void>) {
+async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advance: (time: number) => void, visibility: (hidden: boolean) => Promise<void>, audio: WildernessAudio) => void | Promise<void>) {
   const voices: Voice[] = [];
   let tick = () => {}, visibilityChange = () => {}, bus = 0;
-  const documentStub = { hidden: false, addEventListener: (_name: string, callback: () => void) => { visibilityChange = callback; } };
+  const documentStub = { hidden: false, addEventListener: (_name: string, callback: () => void) => { visibilityChange = callback; }, removeEventListener: () => {} };
   class Context {
     currentTime = 0;
     state = 'running';
@@ -48,7 +48,7 @@ async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advanc
     await audio.start();
     await check(voices, time => { context.currentTime = time; tick(); }, async hidden => {
       documentStub.hidden = hidden; visibilityChange(); await Promise.resolve();
-    });
+    }, audio);
   } finally {
     audio.dispose();
     for (const { key, descriptor } of originals) {
@@ -114,5 +114,20 @@ test('backgrounding and returning preserve the already scheduled BGM clock', asy
     return captured;
   };
   assert.deepEqual(await collect(true), await collect(false));
+});
+
+test('rapid effects remain distinct with restrained gain; mute and hidden pages stay silent', async () => {
+  await withAudio('game', async (voices, _advance, visibility, audio) => {
+    audio.play('place'); audio.play('place'); audio.play('rotate');
+    const effects = voices.filter(voice => voice.bus === 1);
+    assert.equal(effects.length, 6);
+    assert.ok(effects[2].gain < effects[0].gain && effects[4].gain < effects[2].gain);
+    await visibility(true); audio.play('win');
+    assert.equal(voices.filter(voice => voice.bus === 1).length, 6);
+    await visibility(false);
+    audio.setSettings({ music: .35, effects: .65, muted: true, facilityTips: true, continuousPlacement: true, facilityNames: false });
+    audio.play('place');
+    assert.equal(voices.filter(voice => voice.bus === 1).length, 6);
+  });
 });
 

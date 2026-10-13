@@ -27,6 +27,7 @@ import { useGameHistory } from './hooks/useGameHistory';
 import { useGameNavigation } from './hooks/useGameNavigation';
 import { useHomeEntrance } from './hooks/useHomeEntrance';
 import { useGamePlacement } from './hooks/useGamePlacement';
+import { useBoardFeedback } from './hooks/useBoardFeedback';
 import { useSandboxEditor } from './hooks/useSandboxEditor';
 import { useSurvivalChallenge } from './hooks/useSurvivalChallenge';
 import { useTutorial } from './hooks/useTutorial';
@@ -42,7 +43,16 @@ const terrainKinds = [...new Set(levels.flatMap(l => l.terrain.map(t => t.kind))
 function Dashes({ target, used, column = false }: { target: number; used: number; column?: boolean }) {
   const { t, localize } = useI18n();
   const left = Math.max(0, target - used), over = used > target;
-  return <div className={`clue ${column ? 'column-clue' : ''} ${over ? 'over' : ''}`} aria-label={localize(t("需占 {0} 格，已占 {1} 格{2}", target, used, over ? '，超出提示' : ''))} title={localize(t("需要 {0} 格 · 已占 {1} 格", target, used))}>
+  const clueRef = useRef<HTMLDivElement>(null), previous = useRef(used);
+  useLayoutEffect(() => {
+    clueRef.current?.getAnimations().forEach(animation => animation.cancel());
+    if (previous.current !== target && used === target && !document.hidden) {
+      clueRef.current?.animate([{ backgroundColor: '#efcf79', color: '#725629' }, { backgroundColor: 'transparent', color: '#a0b18b' }], { duration: 360 });
+    }
+    previous.current = used;
+    return () => clueRef.current?.getAnimations().forEach(animation => animation.cancel());
+  }, [target, used]);
+  return <div ref={clueRef} className={`clue ${column ? 'column-clue' : ''} ${over ? 'over' : ''} ${used === target ? 'complete' : ''}`} aria-label={localize(t("需占 {0} 格，已占 {1} 格{2}", target, used, over ? '，超出提示' : ''))} title={localize(t("需要 {0} 格 · 已占 {1} 格", target, used))}>
     {over ? <span className="overflow-count">+{used - target}</span> : left === 0 ? <Check size={13} strokeWidth={2.5} /> : Array.from({ length: left }, (_, i) => <i key={i} />)}
   </div>;
 }
@@ -65,6 +75,8 @@ export default function App() {
   const playerIdStarted = useRef(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [winOpen, setWinOpen] = useState(false);
+  const [celebration, setCelebration] = useState<'board' | 'dialog' | null>(null);
+  const celebrationContext = useRef<{ level: typeof level; placements: Placement[]; mode: typeof mode } | null>(null);
   const [blueprintOpen, setBlueprintOpen] = useState(false);
   const [replay, setReplay] = useState<SurvivalRecord | null>(null);
   const [leaveOpen, setLeaveOpen] = useState(false);
@@ -78,19 +90,21 @@ export default function App() {
     if (mode === 'sandbox-editor') sandbox.markEditorDirty();
   }, [mode]);
   const onHistoryRestore = useCallback(() => {
-    gamePlacement.setSelected(null); setNotice(''); audio.play('click');
+    feedback.restoring.current = true;
+    gamePlacement.setSelected(null); setNotice(''); audio.play('pickup');
   }, []);
   const historyController = useGameHistory(() => adventure.getStartSnapshot(save.current), onHistoryChange, onHistoryRestore, type => onTutorialAction({ type }));
   const { history, undo, redo } = historyController;
   const { level, placements } = history.present;
+  const feedback = useBoardFeedback(boardRef, level, placements, screen === 'game');
   const sandbox = useSandboxEditor({ mode, present: history.present, placements, enterGame: enterSandbox, resetPieceIds: draft => gamePlacement.resetPieceIds(draft), setNotice, sound });
   const { localMaps, localMapId, sandboxDraft, mapCode, check, checking, editorDirty, terrainBrush, setTerrainBrush, openSandbox, importSandbox, openLocalMap, editLocalMap, runSandboxAction } = sandbox;
-  const gamePlacement = useGamePlacement({ mode, level, placements, continuousPlacement: save.settings.continuousPlacement, terrainBrush, clearTerrainBrush: () => setTerrainBrush(null), commit, setNotice, sound, onAction: onTutorialAction });
+  const gamePlacement = useGamePlacement({ mode, level, placements, continuousPlacement: save.settings.continuousPlacement, terrainBrush, clearTerrainBrush: () => setTerrainBrush(null), commit, setNotice, sound, onAction: onTutorialAction, onReject: feedback.reject });
   const { selected, setSelected, rotations, setRotations, hover, setHover, result, choose, rotatePlaced, clickCell, ghost, ghostBlocked } = gamePlacement;
   const survivalController = useSurvivalChallenge({
     active: screen === 'game' && mode === 'survival', history, rotations, selected,
     enterGame: enterSurvival, openMenu: () => setScreen('survival'), returnToMenu,
-    onSettled: () => { wonRef.current = true; setSelected(null); audio.play('win'); setWinOpen(true); },
+    onSettled: () => { wonRef.current = true; beginCelebration(); },
     invalidateCheck: sandbox.invalidateCheck, resetSandboxContext: sandbox.resetSandboxContext, refreshLocalMaps: sandbox.refreshLocalMaps, setNotice, sound,
   });
   const { survival, challenge, survivalReward, survivalError, generating, replaceChallenge, abandonOpen, openSurvivalMenu, continueSurvival, cancelGeneration, requestSurvival, abandonSurvival, collectSurvival, settleSurvival } = survivalController;
@@ -124,6 +138,11 @@ export default function App() {
   const showFacilityTips = save.settings.facilityTips;
 
   useEffect(() => { audio.setSettings(save.settings); }, [save.settings]);
+  useEffect(() => {
+    const sync = () => document.documentElement.toggleAttribute('data-page-hidden', document.hidden);
+    sync(); document.addEventListener('visibilitychange', sync);
+    return () => { document.removeEventListener('visibilitychange', sync); document.documentElement.removeAttribute('data-page-hidden'); };
+  }, []);
   useEffect(() => { audio.setScene(screen === 'game' ? 'game' : 'menu'); }, [screen]);
   useEffect(() => {
     if (playerId || (playerIdStarted.current && !settingsOpen)) return;
@@ -134,16 +153,38 @@ export default function App() {
   useLayoutEffect(() => {
     if (screen === 'game' && mode === 'adventure') adventure.recordProgress(levelId, placements);
   }, [levelId, placements, screen, mode, adventure.recordProgress]);
+  function beginCelebration() {
+    setSelected(null); setHover(null); audio.play('win');
+    celebrationContext.current = { level, placements, mode };
+    if (document.hidden || matchMedia('(prefers-reduced-motion: reduce)').matches) { setWinOpen(true); return; }
+    setCelebration('board');
+  }
+  function skipCelebration() { setCelebration(null); setWinOpen(true); }
+  useEffect(() => {
+    if (!celebration) return;
+    const timer = window.setTimeout(() => {
+      if (celebration === 'board') { setWinOpen(true); setCelebration('dialog'); }
+      else setCelebration(null);
+    }, celebration === 'board' ? 600 : 700);
+    const finish = () => { setCelebration(null); setWinOpen(true); };
+    const hide = () => { if (document.hidden) finish(); };
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    document.addEventListener('visibilitychange', hide); preference.addEventListener('change', finish);
+    return () => { clearTimeout(timer); document.removeEventListener('visibilitychange', hide); preference.removeEventListener('change', finish); };
+  }, [celebration]);
+  useLayoutEffect(() => {
+    const context = celebrationContext.current;
+    if (context && (screen !== 'game' || context.level !== level || context.placements !== placements || context.mode !== mode || settingsOpen || manualOpen || blueprintOpen || leaveOpen)) {
+      celebrationContext.current = null; setCelebration(null); setWinOpen(false);
+    }
+  }, [screen, level, placements, mode, settingsOpen, manualOpen, blueprintOpen, leaveOpen]);
   useEffect(() => {
     if (screen === 'game' && mode !== 'sandbox-editor' && !replay && result.won && !wonRef.current) {
       if (mode === 'survival' && challenge) { settleSurvival(challenge); return; }
-      wonRef.current = true; setSelected(null); audio.play('win');
-      if (mode === 'sandbox-play') setWinOpen(true);
-      else if (!save.completed.includes(levelId)) {
-        setWinOpen(true);
-        adventure.completeLevel(levelId);
-      }
-    } else if (!result.won) wonRef.current = false;
+      wonRef.current = true;
+      beginCelebration();
+      if (mode === 'adventure' && !save.completed.includes(levelId)) adventure.completeLevel(levelId);
+    }
   }, [result.won, levelId, screen, save.completed, mode, challenge, replay]);
   useEffect(() => {
     if (!notice) return;
@@ -182,6 +223,7 @@ export default function App() {
   function restart() {
     if (mode === 'survival' && !survivalController.prepareRestart()) return;
     if (winOpen) onTutorialAction({ type: 'closeHint' });
+    wonRef.current = false;
     sound(); commit([]); setSelected(null); setRotations({}); setNotice(''); setWinOpen(false); survivalController.resetReward();
   }
   function enterSandbox(mode: 'sandbox-editor' | 'sandbox-play', present: SandboxDraft) {
@@ -219,10 +261,14 @@ export default function App() {
   function closeDialog() {
     if (aboutOpen) { setAboutOpen(false); return; }
     onTutorialAction({ type: 'closeHint' });
-    setSettingsOpen(false); setWinOpen(false); setManualOpen(false); setBlueprintOpen(false); setLeaveOpen(false); sandbox.closeMapCode(); survivalController.closeSurvivalDialogs();
+    setCelebration(null); setSettingsOpen(false); setWinOpen(false); setManualOpen(false); setBlueprintOpen(false); setLeaveOpen(false); sandbox.closeMapCode(); survivalController.closeSurvivalDialogs();
   }
 
-  return <LanguageContext.Provider value={tutorial.state.language}><div lang={tutorial.state.language === 'zh' ? 'zh-CN' : 'en'} className={`app screen-${screen} ${homeEntering ? 'home-entering' : ''} ${screen === 'game' && mode === 'survival' ? 'survival-game' : ''}`} onPointerDown={() => { void audio.start(); }}>
+  return <LanguageContext.Provider value={tutorial.state.language}><div lang={tutorial.state.language === 'zh' ? 'zh-CN' : 'en'} className={`app screen-${screen} ${homeEntering ? 'home-entering' : ''} ${screen === 'game' && mode === 'survival' ? 'survival-game' : ''}`} onPointerDown={() => { void audio.start(); }} onClickCapture={event => {
+    if (celebration !== 'board') return;
+    if ((event.target as Element).closest('.board-with-clues')) { event.preventDefault(); event.stopPropagation(); skipCelebration(); }
+    else setCelebration(null);
+  }}>
     <div className="ambient ambient-one"/><div className="ambient ambient-two"/>
     <header className="header">
       <div className="header-actions"><button className="icon-button sound-toggle" aria-label={localize(save.settings.muted ? t("开启声音") : t("静音"))} onClick={() => { updateSettings(s => ({ ...s, muted: !s.muted })); }}>{save.settings.muted ? <VolumeX size={19}/> : <Volume2 size={19}/>}</button><button className="icon-button" data-tutorial="settings" aria-label={t("设置")} onClick={() => { sound(); setSettingsOpen(true); }}><Settings2 size={20}/></button></div>
@@ -233,7 +279,7 @@ export default function App() {
       <div className="menu-copy"><div className="menu-buttons"><button className="primary menu-adventure" onClick={() => { sound(); setScreen('adventure'); }}>{t("开始冒险")}<ArrowRight size={23}/></button><button className="secondary menu-journal" onClick={() => { sound(); setScreen('levels'); }}><Map size={21}/>  {t("营地日记")}</button><button className="secondary menu-guide" onClick={() => { sound(); setManualOpen(true); }}><BookOpen size={21}/>  {t("野外手册")}</button></div></div>
     </main>}
 
-    {(screen === 'adventure' || screen === 'sandbox' || screen === 'sandbox-size' || screen === 'sandbox-import' || screen === 'local-maps') && <SandboxMenu screen={screen} localMaps={localMaps} onOpenLocalMap={openLocalMap} onEditLocalMap={editLocalMap} onSurvival={openSurvivalMenu} onLocalMapsChange={sandbox.refreshLocalMaps} onBack={() => { sound(); setScreen(screen === 'adventure' ? 'menu' : screen === 'sandbox' || screen === 'local-maps' ? 'adventure' : 'sandbox'); }} onContinue={() => start(continueId)} onNavigate={setScreen} onCreate={openSandbox} onImport={importSandbox} onSound={() => sound()}/>}
+    {(screen === 'adventure' || screen === 'sandbox' || screen === 'sandbox-size' || screen === 'sandbox-import' || screen === 'local-maps') && <SandboxMenu key={screen} screen={screen} localMaps={localMaps} onOpenLocalMap={openLocalMap} onEditLocalMap={editLocalMap} onSurvival={openSurvivalMenu} onLocalMapsChange={sandbox.refreshLocalMaps} onBack={() => { sound(); setScreen(screen === 'adventure' ? 'menu' : screen === 'sandbox' || screen === 'local-maps' ? 'adventure' : 'sandbox'); }} onContinue={() => start(continueId)} onNavigate={setScreen} onCreate={openSandbox} onImport={importSandbox} onSound={() => sound()}/>}
 
     {screen === 'survival' && <SurvivalMenu save={survival} generating={generating} error={survivalError} onStart={requestSurvival} onContinue={continueSurvival} onCancel={cancelGeneration} onBack={() => { sound(); setScreen('adventure'); }} onReview={reviewSurvival} canReview={record => !!record.code || localMaps.some(map => map.survival?.challengeId === record.id)}/> }
 
@@ -245,8 +291,8 @@ export default function App() {
 
     {screen === 'game' && <main className="game-page">
       <div className="game-heading"><div className="game-title"><button className="icon-button" aria-label={localize(mode === 'survival' ? t("返回荒野求生") : mode === 'adventure' ? t("返回营地日记") : localMapId !== undefined ? t("返回本地地图") : t("返回沙盒模式"))} onClick={leaveGame}><ArrowLeft size={20}/></button><div><h1>{localize(mode === 'sandbox-editor' ? t("创造地图") : mode === 'survival' ? t("荒野求生 · {0}难", challenge?.difficulty) : mode === 'sandbox-play' ? sandboxName : levelLabel(level.id))}</h1></div></div>{mode === 'sandbox-editor' ? <div className="status-pill"><Leaf size={14}/>{level.size} × {level.size}</div> : result.won && <div className="status-pill finished"><span/>{t("规划完成")}</div>}</div>
-      <div className="play-layout"><section ref={boardRef} className="board-section" aria-label={t("营地棋盘")}><div className="board-topline"><span><Compass size={16}/>  {t("营地规划图")}</span></div>
-        <div className="board-with-clues" style={{ '--size': level.size } as React.CSSProperties}>
+      <div className="play-layout"><section ref={boardRef} className={`board-section ${celebration ? 'celebrating' : ''} ${mode === 'survival' ? 'reward-board' : ''}`} aria-label={t("营地棋盘")}><div className="board-topline"><span><Compass size={16}/>  {t("营地规划图")}</span></div>
+        <div className="board-with-clues" key={`${mode}-${level.id}`} style={{ '--size': level.size } as React.CSSProperties}>
           <div className="clue-corner"><Leaf size={17}/></div><div className="column-clues">{level.cols.map((target, i) => <Dashes key={i} target={target} used={result.cols[i]} column/>)}</div>
           <div className="row-clues">{level.rows.map((target, i) => <Dashes key={i} target={target} used={result.rows[i]}/>)}</div>
           <div className="board" role="group" aria-label={t("{0} 行 {1} 列棋盘", level.size, level.size)} onPointerLeave={() => setHover(null)}>{Array.from({ length: level.size * level.size }, (_, index) => {
@@ -262,7 +308,7 @@ export default function App() {
             const hasNeighbor = (dr: number, dc: number) => footprint.some(p => p.r === cell.r + dr && p.c === cell.c + dc);
             const label = terrain ? names[terrain.kind] : piece ? `${names[piece.kind]}${issue?.reasons.length ? `：${issue.reasons.join('；')}` : ''}` : '空地';
             return <button key={index} data-cell={`${cell.r},${cell.c}`} data-piece-id={at?.id} className={`tile ${terrain ? `terrain-${terrain.kind}` : ''} ${piece ? `placed placed-${piece.kind} ${piece.shape !== 'single' ? 'placed-multi' : ''}` : ''} ${issue?.status === 'INVALID' ? 'invalid' : ''} ${issue?.status === 'INCOMPLETE' ? 'pending' : ''} ${isGhost ? `ghost ${ghostBlocked ? 'blocked' : ''}` : ''} ${hasNeighbor(-1, 0) ? 'join-top' : ''} ${hasNeighbor(1, 0) ? 'join-bottom' : ''} ${hasNeighbor(0, -1) ? 'join-left' : ''} ${hasNeighbor(0, 1) ? 'join-right' : ''}`} aria-label={t("第 {0} 行第 {1} 列，{2}", cell.r + 1, cell.c + 1, label)} onPointerEnter={e => { if (e.pointerType !== 'touch') setHover(cell); }} onFocus={() => setHover(cell)} onClick={() => clickCell(cell)} onContextMenu={event => { if (at && piece && piece.shape !== 'single') { event.preventDefault(); rotatePlaced(at, cell); } }}>
-              {terrain ? <><Art kind={terrain.kind}/><span className={`terrain-label label-${terrain.kind}`} role="tooltip"><Art kind={terrain.kind}/>{localize(names[terrain.kind])}</span></> : piece ? <>{piece.shape === 'single' && <Art kind={piece.kind}/>} {save.settings.facilityNames && <span className={`terrain-label label-${piece.kind}`} role="tooltip"><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at!.rotation}/>{localize(names[piece.kind])}</span>}</> : <span className={`grass grass-${index % 5}`}><i/><i/></span>}
+              {terrain ? <><Art kind={terrain.kind}/><span className={`terrain-label label-${terrain.kind}`} role="tooltip"><Art kind={terrain.kind}/>{localize(names[terrain.kind])}</span></> : piece ? <>{piece.shape === 'single' && <span className="single-facility-art" data-art-id={at!.id} key={at!.id}><Art kind={piece.kind}/></span>} {save.settings.facilityNames && <span className={`terrain-label label-${piece.kind}`} role="tooltip"><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at!.rotation}/>{localize(names[piece.kind])}</span>}</> : <span className={`grass grass-${index % 5}`}><i/><i/></span>}
               {issue?.status === 'INVALID' && isAnchor && <span className="error-mark">!</span>}
               {issue?.status === 'INCOMPLETE' && isAnchor && <span className="pending-mark">·</span>}
               {isGhost && !terrain && !piece && <span className="ghost-dot"/>}
@@ -274,8 +320,10 @@ export default function App() {
             const row = Math.min(...cells.map(p => p.r)), column = Math.min(...cells.map(p => p.c));
             const width = Math.max(...cells.map(p => p.c)) - column + 1, height = Math.max(...cells.map(p => p.r)) - row + 1;
             const issue = result.issues[at.id];
-            return <div className={`placed-facility-art ${issue.status.toLowerCase()} ${hover && cells.some(p => key(p) === key(hover)) ? 'hovered' : ''}`} key={at.id} data-kind={piece.kind} data-rotation={at.rotation} style={{ gridRow: `${row + 1} / span ${height}`, gridColumn: `${column + 1} / span ${width}` }}><FootprintSurface shape={piece.shape} rotation={at.rotation}/><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at.rotation}/></div>;
-          })}</div></div>
+            return <div className={`placed-facility-art ${issue.status.toLowerCase()} ${hover && cells.some(p => key(p) === key(hover)) ? 'hovered' : ''}`} key={at.id} data-art-id={at.id} data-kind={piece.kind} data-rotation={at.rotation} style={{ gridRow: `${row + 1} / span ${height}`, gridColumn: `${column + 1} / span ${width}` }}><FootprintSurface shape={piece.shape} rotation={at.rotation}/><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at.rotation}/></div>;
+          })}</div><div className="facility-art-layer departure-art-layer" aria-hidden="true"/>
+          {celebration && <div className="board-celebration" aria-hidden="true"><div className="board-golden-ring"/>{Array.from({ length: 8 }, (_, i) => <i key={i} style={{ '--particle': i, left: `${12 + (i * 29) % 78}%`, top: `${18 + (i * 37) % 70}%` } as React.CSSProperties}>{i % 3 === 0 ? <Leaf size={13}/> : '✦'}</i>)}</div>}
+          </div>
         </div>
         <div className="board-legend"><span><i className="yellow-dash"/> {localize(mode === 'sandbox-editor' ? t("自动生成行列目标") : t("待占格数"))}</span><span><span className="legend-dot"/> {localize(mode === 'sandbox-editor' ? t("地形画笔可修改") : t("固定地形不可移动"))}</span><span><MousePointer2 size={13}/>  {t("点击放置 / 拿起")}</span></div>
       </section>
@@ -287,7 +335,7 @@ export default function App() {
         const active = selectedPiece?.kind === group.kind && selectedPiece.shape === group.shape;
         return <div className="facility-wrapper" key={`${group.kind}-${group.shape}`} onPointerEnter={() => { setTipGroup(group.kind); setTipShape(group.shape); }} onFocus={() => { setTipGroup(group.kind); setTipShape(group.shape); }}>
           <button data-facility={group.kind} data-shape={group.shape} className={`facility-card ${active ? 'active' : ''} ${remaining === 0 ? 'empty' : ''}`} aria-label={localize(t("选择{0}{1}{2}", shapeNames[group.shape], names[group.kind], mode === 'sandbox-editor' ? '，不限数量' : `，剩余 ${remaining}`))} aria-pressed={active} disabled={!remaining} onClick={() => choose(group.kind, group.shape)}>
-            <div className="facility-art"><FacilityArt kind={group.kind} shape={group.shape} rotation={rotations[group.shape] || 0}/></div>
+            <div className={`facility-art ${active ? 'selected-art' : ''}`} key={`${rotations[group.shape] || 0}-${active}`}><FacilityArt kind={group.kind} shape={group.shape} rotation={rotations[group.shape] || 0}/></div>
             <div className="facility-info"><strong>{localize(names[group.kind])}</strong></div>
             {mode !== 'sandbox-editor' && <span className="quantity">{remaining === 0 ? <Check size={14}/> : `×${remaining}`}</span>}
           </button>
@@ -310,15 +358,16 @@ export default function App() {
         </>}
       </div></section>
       </aside></div>
-      <div className={`guide-strip ${invalidCount || (mode !== 'adventure' && check && check.status !== 'unique') ? 'warning' : ''}`} role="status" aria-live="polite"><span className="guide-icon"><Megaphone size={18}/></span><div><p>{localize(mode === 'survival' ? notice || errors[0] || (shownKind && showFacilityTips ? t("{0}：{1}；禁止{2}", names[shownKind], facilityTips[shownKind][0], facilityTips[shownKind][1]) : level.tip) : notice === '已经被占用' || mode !== 'adventure' ? notice || check?.message || errors.join('；') || level.tip : errors.join('；') || notice || level.tip)}</p></div>{invalidCount > 0 && <span className="issue-count">{invalidCount}  {t("处待调整")}</span>}</div>
+      <div className={`guide-strip ${invalidCount || (mode !== 'adventure' && check && check.status !== 'unique') ? 'warning' : ''}`} role="status" aria-live="polite"><span className="guide-icon"><Megaphone size={18}/></span><div><p>{localize(mode === 'survival' ? notice || errors[0] || (shownKind && showFacilityTips ? t("{0}：{1}；禁止{2}", names[shownKind], facilityTips[shownKind][0], facilityTips[shownKind][1]) : level.tip) : notice || (mode !== 'adventure' ? check?.message : '') || errors.join('；') || level.tip)}</p></div>{invalidCount > 0 && <span className="issue-count">{invalidCount}  {t("处待调整")}</span>}</div>
       {mode === 'survival' && survivalError && <div className="survival-error" role="alert">{localize(survivalError)}{result.won && !survivalReward && <button className="secondary" onClick={() => challenge && settleSurvival(challenge)}>{t("重试结算")}</button>}</div>}
-      {!saved && <div className="save-error" role="status">{t("浏览器存储不可用，进度暂未保存")}</div>}
     </main>}
 
-    <dialog ref={dialogRef} className={`modal ${blueprintOpen ? 'blueprint-modal' : manualOpen ? 'manual-modal' : ''} ${replaceChallenge !== null || abandonOpen || (mode === 'survival' && winOpen) ? 'survival-modal' : ''}`} onCancel={e => { e.preventDefault(); closeDialog(); }} onClick={e => { if (e.target === e.currentTarget) { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeDialog(); } }}>
+    {!saved && <div className="save-error" role="alert">{t("进度暂未保存，原存档已保留。请检查存储空间后重试。")}<button className="text-button" onClick={adventure.retrySave}>{t("重试保存")}</button></div>}
+    <dialog ref={dialogRef} className={`modal ${winOpen ? 'win-modal' : ''} ${blueprintOpen ? 'blueprint-modal' : manualOpen ? 'manual-modal' : ''} ${replaceChallenge !== null || abandonOpen || (mode === 'survival' && winOpen) ? 'survival-modal' : ''}`} onCancel={e => { e.preventDefault(); closeDialog(); }} onClick={e => { if (e.target === e.currentTarget) { const r = e.currentTarget.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeDialog(); } }}>
+      {!saved && <p className="save-error" role="alert">{t("进度暂未保存，原存档已保留。请检查存储空间后重试。")}</p>}
       <button ref={closeRef} className="modal-close icon-button" aria-label={t("关闭")} onClick={closeDialog}><X size={19}/></button>
-      {replaceChallenge !== null ? <><h2>{t("开始新的挑战？")}</h2><p>{t("你有一个未完成的挑战。开始新挑战后将放弃旧进度，已有经验和收藏地图会保留。")}</p><div className="sandbox-modal-actions"><button className="secondary" onClick={survivalController.cancelReplacement}>{t("保留旧挑战")}</button><button className="primary" onClick={survivalController.confirmReplacement}>{t("开始新挑战")}</button></div></> : abandonOpen ? <><h2>{t("放弃当前挑战？")}</h2><p>{t("放弃后无法再挑战本关。已有经验和本地地图会保留，保存的地图可在本地查看图纸和编辑。")}</p>{survivalError && <p className="survival-error" role="alert">{localize(survivalError)}</p>}<div className="sandbox-modal-actions"><button className="secondary" onClick={survivalController.closeAbandon}>{t("继续挑战")}</button><button className="primary" onClick={abandonSurvival}>{t("确定放弃")}</button></div></> : leaveOpen ? <><h2>{localize(localMapId !== undefined ? t("返回本地地图？") : t("返回沙盒模式？"))}</h2><p className="sandbox-check-result">{t("尚未保存的地图将丢失，确定返回吗？")}</p><div className="sandbox-modal-actions"><button className="secondary" onClick={() => setLeaveOpen(false)}>{t("继续创造")}</button><button className="primary" onClick={returnToMenu}>{t("确定返回")}<ArrowRight size={16}/></button></div></> : mapCode ? <div className="map-code"><h2>{t("把营地分享出去")}</h2><p role="status">{localize(notice || '地图代码已复制到剪贴板')}</p><textarea aria-label={t("导出的地图代码")} readOnly value={mapCode} spellCheck={false}/><div className="sandbox-modal-actions"><button className="primary" onClick={sandbox.copyMapCode}><ScrollText size={16}/>{t("再次复制")}</button><button className="secondary" onClick={sandbox.closeMapCode}>{t("继续创造")}</button></div></div> : blueprintOpen && blueprintUnlocked ? <Blueprint level={level} placements={mode === 'sandbox-play' ? sandboxDraft!.placements : getSolution(levelId)!} name={mode === 'sandbox-play' ? sandboxName : undefined}/> : manualOpen ? <Manual/> : settingsOpen && aboutOpen ? <div className="game-about"><h2>{t("游戏说明")}</h2><dl><div><dt>{t("作者")}</dt><dd>lelexia</dd></div><div><dt>{t("制作日期")}</dt><dd>2026-10-07</dd></div><div><dt>{t("游戏版本")}</dt><dd>v{localize(version)}</dd></div><div><dt>{t("更新日期")}</dt><dd>2026-10-09</dd></div><div><dt>{t("项目地址")}</dt><dd><a href="https://github.com/lelexia0131/Wildgrid" target="_blank" rel="noreferrer">https://github.com/lelexia0131/Wildgrid</a></dd></div></dl><p>{t("露营主题逻辑益智游戏：在冒险模式挑战 45 个固定关卡，在荒野求生中选择 10 档难度的随机地图、积累经验和身份徽章，也可以在沙盒中创造、导入和分享地图，并通过本地地图保存、继续游玩。")}</p><p>{t("© 2026 lelexia。野格的原创插画、关卡及合成音乐与音效归作者所有。第三方开源组件的权利归各自作者所有。")}</p><p>{t("感谢 React、Vite、Electron、Capacitor 等开源项目，以及每一位游玩、反馈和支持野格的朋友。")}</p><button className="secondary" onClick={() => setAboutOpen(false)}><ArrowLeft size={16}/>{t("返回设置")}</button></div> : settingsOpen ? <><h2>{t("设置")}</h2><div className="player-id-setting"><span>{t("玩家 ID")}</span><strong className={!playerId ? 'player-id-status' : undefined} role="status" aria-live="polite">{localize(playerIdLoading ? t("获取中…") : playerId || '暂未获取')}</strong></div><div className="volume-control"><label htmlFor="music-volume"><span>{t("背景音乐")}</span><output>{Math.round(save.settings.music * 100)}%</output></label><input id="music-volume" type="range" min="0" max="100" value={Math.round(save.settings.music * 100)} onChange={e => updateSettings(s => ({ ...s, music: Number(e.target.value) / 100 }))}/></div><div className="volume-control"><label htmlFor="effects-volume"><span>{t("交互音效")}</span><output>{Math.round(save.settings.effects * 100)}%</output></label><input id="effects-volume" type="range" min="0" max="100" value={Math.round(save.settings.effects * 100)} onChange={e => updateSettings(s => ({ ...s, effects: Number(e.target.value) / 100 }))} onPointerUp={() => sound('place')}/></div><button className={`mute-setting ${save.settings.muted ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.muted} onClick={() => updateSettings(s => ({ ...s, muted: !s.muted }))}><span>{save.settings.muted ? <VolumeX size={18}/> : <Volume2 size={18}/>}  {t("静音模式")}</span><i/></button><button className={`mute-setting ${save.settings.facilityTips ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.facilityTips} onClick={() => updateSettings(s => ({ ...s, facilityTips: !s.facilityTips }))}><span><MousePointer2 size={18}/>  {t("设施提示")}</span><i/></button><button className={`mute-setting ${save.settings.continuousPlacement ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.continuousPlacement} onClick={() => updateSettings(s => ({ ...s, continuousPlacement: !s.continuousPlacement }))}><span><Grid2X2 size={18}/>  {t("连续放置")}</span><i/></button><button className={`mute-setting ${save.settings.facilityNames ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.facilityNames} onClick={() => updateSettings(s => ({ ...s, facilityNames: !s.facilityNames }))}><span><Tags size={18}/>  {t("设施名称显示")}</span><i/></button><TutorialSettings tutorial={tutorial}/><button className="settings-about" onClick={() => { sound(); setAboutOpen(true); }}><span><BookOpen size={18}/>{t("游戏说明")}</span><ChevronRight size={16}/></button><p className="settings-note">v{localize(version)}</p></> : mode === 'survival' && survivalReward ? <div className={`win-content survival-win ${survivalReward.rank > survivalReward.beforeRank ? 'survival-upgrade' : ''}`}><SurvivalBadge rank={survivalReward.rank}/><h2>{localize(survivalReward.rank > survivalReward.beforeRank ? t("身份升级！") : t("挑战完成"))}</h2><h3>{localize(survivalRanks[survivalReward.rank].name)}</h3>{survivalReward.rank > survivalReward.beforeRank && <p>{localize(survivalRanks[survivalReward.beforeRank].name)} → {localize(survivalRanks[survivalReward.rank].name)}</p>}<div className="survival-reward"><p>{localize(survivalReward.earned ? t("本次获得 +{0} 经验", survivalReward.earned) : t("这张地图已通关，本次不重复奖励"))}</p><p>{t("累计经验")} {survivalReward.xp}</p><p>{t("难度 {0} · 通关 {1} 次", challenge?.difficulty, survivalReward.count)}</p></div><button className="primary" onClick={returnToMenu}>{t("返回难度选择")}<ArrowRight size={18}/></button><button className="secondary" onClick={collectSurvival}><Save size={18}/>{t("保存")}</button><button className="text-button" onClick={restart}><RotateCcw size={18}/>{t("重新游玩")}</button>{notice && <p role="status">{localize(notice)}</p>}{survivalError && <p className="survival-error" role="alert">{localize(survivalError)}</p>}</div> : <div className="win-content"><div className="win-emblem"><Art kind="camp"/><span><Check size={18}/></span></div><h2>{t("规划完成")}</h2><div className="win-level">{localize(mode === 'sandbox-play' ? sandboxName : levelLabel(levelId))}</div><button className="primary" onClick={() => mode === 'sandbox-play' ? returnToMenu() : nextDay ? start(levelId + 1) : (setWinOpen(false), setScreen('levels'))}>{localize(mode === 'sandbox-play' ? localMapId ? t("返回本地地图") : t("返回沙盒模式") : nextDay ? t("下一关") : t("回看旅程"))}<ArrowRight size={18}/></button><button className="text-button" onClick={restart}><RotateCcw size={15}/>  {t("重新游玩")}</button></div>}
+      {replaceChallenge !== null ? <><h2>{t("开始新的挑战？")}</h2><p>{t("你有一个未完成的挑战。开始新挑战后将放弃旧进度，已有经验和收藏地图会保留。")}</p><div className="sandbox-modal-actions"><button className="secondary" onClick={survivalController.cancelReplacement}>{t("保留旧挑战")}</button><button className="primary" onClick={survivalController.confirmReplacement}>{t("开始新挑战")}</button></div></> : abandonOpen ? <><h2>{t("放弃当前挑战？")}</h2><p>{t("放弃后无法再挑战本关。已有经验和本地地图会保留，保存的地图可在本地查看图纸和编辑。")}</p>{survivalError && <p className="survival-error" role="alert">{localize(survivalError)}</p>}<div className="sandbox-modal-actions"><button className="secondary" onClick={survivalController.closeAbandon}>{t("继续挑战")}</button><button className="primary" onClick={abandonSurvival}>{t("确定放弃")}</button></div></> : leaveOpen ? <><h2>{localize(localMapId !== undefined ? t("返回本地地图？") : t("返回沙盒模式？"))}</h2><p className="sandbox-check-result">{t("尚未保存的地图将丢失，确定返回吗？")}</p><div className="sandbox-modal-actions"><button className="secondary" onClick={() => setLeaveOpen(false)}>{t("继续创造")}</button><button className="primary" onClick={returnToMenu}>{t("确定返回")}<ArrowRight size={16}/></button></div></> : mapCode ? <div className="map-code"><h2>{t("把营地分享出去")}</h2><p role="status">{localize(notice || '地图代码已复制到剪贴板')}</p><textarea aria-label={t("导出的地图代码")} readOnly value={mapCode} spellCheck={false}/><div className="sandbox-modal-actions"><button className="primary" onClick={sandbox.copyMapCode}><ScrollText size={16}/>{t("再次复制")}</button><button className="secondary" onClick={sandbox.closeMapCode}>{t("继续创造")}</button></div></div> : blueprintOpen && blueprintUnlocked ? <Blueprint level={level} placements={mode === 'sandbox-play' ? sandboxDraft!.placements : getSolution(levelId)!} name={mode === 'sandbox-play' ? sandboxName : undefined}/> : manualOpen ? <Manual/> : settingsOpen && aboutOpen ? <div className="game-about"><h2>{t("游戏说明")}</h2><dl><div><dt>{t("作者")}</dt><dd>lelexia</dd></div><div><dt>{t("制作日期")}</dt><dd>2026-10-07</dd></div><div><dt>{t("游戏版本")}</dt><dd>v{localize(version)}</dd></div><div><dt>{t("更新日期")}</dt><dd>2026-10-12</dd></div><div><dt>{t("项目地址")}</dt><dd><a href="https://github.com/lelexia0131/Wildgrid" target="_blank" rel="noreferrer">https://github.com/lelexia0131/Wildgrid</a></dd></div></dl><p>{t("露营主题逻辑益智游戏：在冒险模式挑战 45 个固定关卡，在荒野求生中选择 10 档难度的随机地图、积累经验和身份徽章，也可以在沙盒中创造、导入和分享地图，并通过本地地图保存、继续游玩。")}</p><p>{t("© 2026 lelexia。野格的原创插画、关卡及合成音乐与音效归作者所有。第三方开源组件的权利归各自作者所有。")}</p><p>{t("感谢 React、Vite、Electron、Capacitor 等开源项目，以及每一位游玩、反馈和支持野格的朋友。")}</p><button className="secondary" onClick={() => setAboutOpen(false)}><ArrowLeft size={16}/>{t("返回设置")}</button></div> : settingsOpen ? <><h2>{t("设置")}</h2><div className="player-id-setting"><span>{t("玩家 ID")}</span><strong className={!playerId ? 'player-id-status' : undefined} role="status" aria-live="polite">{localize(playerIdLoading ? t("获取中…") : playerId || '暂未获取')}</strong></div><div className="volume-control"><label htmlFor="music-volume"><span>{t("背景音乐")}</span><output>{Math.round(save.settings.music * 100)}%</output></label><input id="music-volume" type="range" min="0" max="100" value={Math.round(save.settings.music * 100)} onChange={e => updateSettings(s => ({ ...s, music: Number(e.target.value) / 100 }))}/></div><div className="volume-control"><label htmlFor="effects-volume"><span>{t("交互音效")}</span><output>{Math.round(save.settings.effects * 100)}%</output></label><input id="effects-volume" type="range" min="0" max="100" value={Math.round(save.settings.effects * 100)} onChange={e => updateSettings(s => ({ ...s, effects: Number(e.target.value) / 100 }))} onPointerUp={() => sound('place')}/></div><button className={`mute-setting ${save.settings.muted ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.muted} onClick={() => updateSettings(s => ({ ...s, muted: !s.muted }))}><span>{save.settings.muted ? <VolumeX size={18}/> : <Volume2 size={18}/>}  {t("静音模式")}</span><i/></button><button className={`mute-setting ${save.settings.facilityTips ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.facilityTips} onClick={() => updateSettings(s => ({ ...s, facilityTips: !s.facilityTips }))}><span><MousePointer2 size={18}/>  {t("设施提示")}</span><i/></button><button className={`mute-setting ${save.settings.continuousPlacement ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.continuousPlacement} onClick={() => updateSettings(s => ({ ...s, continuousPlacement: !s.continuousPlacement }))}><span><Grid2X2 size={18}/>  {t("连续放置")}</span><i/></button><button className={`mute-setting ${save.settings.facilityNames ? 'is-muted' : ''}`} role="switch" aria-checked={save.settings.facilityNames} onClick={() => updateSettings(s => ({ ...s, facilityNames: !s.facilityNames }))}><span><Tags size={18}/>  {t("设施名称显示")}</span><i/></button><TutorialSettings tutorial={tutorial}/><button className="settings-about" onClick={() => { sound(); setAboutOpen(true); }}><span><BookOpen size={18}/>{t("游戏说明")}</span><ChevronRight size={16}/></button><p className="settings-note">v{localize(version)}</p></> : mode === 'survival' && survivalReward ? <div className={`win-content survival-win ${survivalReward.rank > survivalReward.beforeRank ? 'survival-upgrade' : ''}`}><SurvivalBadge rank={survivalReward.rank}/><h2>{localize(survivalReward.rank > survivalReward.beforeRank ? t("身份升级！") : t("挑战完成"))}</h2><h3>{localize(survivalRanks[survivalReward.rank].name)}</h3>{survivalReward.rank > survivalReward.beforeRank && <p>{localize(survivalRanks[survivalReward.beforeRank].name)} → {localize(survivalRanks[survivalReward.rank].name)}</p>}<div className="survival-reward"><p>{localize(survivalReward.earned ? t("本次获得 +{0} 经验", survivalReward.earned) : t("这张地图已通关，本次不重复奖励"))}</p><p>{t("累计经验")} {survivalReward.xp}</p><p>{t("难度 {0} · 通关 {1} 次", challenge?.difficulty, survivalReward.count)}</p></div><button className="primary" onClick={returnToMenu}>{t("返回难度选择")}<ArrowRight size={18}/></button><button className="secondary" onClick={collectSurvival}><Save size={18}/>{t("保存")}</button><button className="text-button" onClick={restart}><RotateCcw size={18}/>{t("重新游玩")}</button>{notice && <p role="status">{localize(notice)}</p>}{survivalError && <p className="survival-error" role="alert">{localize(survivalError)}</p>}</div> : <div className="win-content"><div className="win-emblem"><Art kind="camp"/><span><Check size={18}/></span></div><h2>{t("规划完成")}</h2><div className="win-level">{localize(mode === 'sandbox-play' ? sandboxName : levelLabel(levelId))}</div><button className="primary" onClick={() => mode === 'sandbox-play' ? returnToMenu() : nextDay ? start(levelId + 1) : (setWinOpen(false), setScreen('levels'))}>{localize(mode === 'sandbox-play' ? localMapId ? t("返回本地地图") : t("返回沙盒模式") : nextDay ? t("下一关") : t("回看旅程"))}<ArrowRight size={18}/></button><button className="text-button" onClick={restart}><RotateCcw size={15}/>  {t("重新游玩")}</button></div>}
     </dialog>
-    {tutorial.active && <TutorialOverlay {...tutorial.active} language={tutorial.state.language} onNext={tutorial.next} onBack={tutorial.back} onSkip={tutorial.skip} portal={winOpen ? dialogRef.current : null}/>}
+    {tutorial.active && !celebration && <TutorialOverlay {...tutorial.active} language={tutorial.state.language} onNext={tutorial.next} onBack={tutorial.back} onSkip={tutorial.skip} portal={winOpen ? dialogRef.current : null}/>}
   </div></LanguageContext.Provider>;
 }

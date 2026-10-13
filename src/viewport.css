@@ -368,3 +368,80 @@ input[type=range] { height: 22px; }
   .screen-game .guide-strip { height: 40px; min-height: 40px; }
   .screen-game .operations .wide-operation, .screen-game .operations .history-buttons > button { min-height: 36px; padding: 4px; }
 }
+
+/* Shared tactile finish; retain the illustrated home buttons and tool colours. */
+.app { --panel-edge: #c7d1b7; --panel-shadow: 0 4px 0 #cbd4b34d, 0 8px 18px #344e420a; }
+.app :is(.primary, .secondary):not(.menu-adventure, .menu-journal, .menu-guide) {
+  border: 2px solid #a9b99b; border-radius: 14px; gap: 10px;
+  box-shadow: inset 0 2px 0 #ffffff40, 0 4px 0 #b5c1a4;
+  line-height: 1.25; white-space: normal; min-width: 0;
+}
+.app .primary:not(.menu-adventure) { border-color: #294e3e; box-shadow: inset 0 2px 0 #ffffff20, 0 4px 0 #244539; }
+.app :is(.primary, .secondary):not(.menu-adventure, .menu-journal, .menu-guide):enabled:active {
+  transform: translateY(3px) scale(.99); box-shadow: inset 0 1px 0 #ffffff30, 0 1px 0 #859779;
+}
+.app :is(.icon-button, .facility-card, .sandbox-choice, .survival-difficulty, .level-card, .camp-tool):enabled:active { transform: translateY(2px) scale(.98); }
+.app :is(.primary, .secondary, .icon-button):disabled { opacity: .45; transform: none; }
+.app :is(.facility-panel, .operations, .local-map-card, .survival-identity) { border-color: var(--panel-edge); box-shadow: var(--panel-shadow); }
+.app .modal:not(.manual-modal) { border-color: var(--panel-edge); box-shadow: 0 6px 0 #a4b18a40, 0 20px 60px #243d4330; }
+.modal::backdrop { backdrop-filter: none; }
+.app > main:not(.menu-page) { animation: screen-arrive 180ms ease-out; }
+.modal[open] { animation: screen-arrive 180ms ease-out; }
+.modal.win-modal[open] { animation: win-arrive 420ms cubic-bezier(.2,.8,.25,1); }
+.win-modal .win-emblem, .win-modal .survival-badge { position: relative; isolation: isolate; }
+.win-modal :is(.win-emblem, .survival-badge)::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: 50%;
+  background: linear-gradient(115deg, transparent 30%, #fff2b8a0 48%, transparent 66%);
+  opacity: 0; animation: reward-shine 500ms 120ms ease-out;
+}
+.survival-upgrade .survival-badge { animation: reward-bounce 500ms ease-out; }
+.survival-win .survival-reward { animation: screen-arrive 250ms 100ms both; }
+.single-facility-art { display: block; width: 100%; height: 100%; pointer-events: none; }
+.departing-facility { position: relative; min-width: 0; min-height: 0; pointer-events: none; }
+.departing-facility > .art { width: 100%; height: 100%; }
+.departure-art-layer { z-index: 3; }
+.app .tile:active { transform: none; }
+.tile.ghost:not(.blocked) { background: #b9d5a0; border-color: #4d824c; box-shadow: inset 0 0 0 2px #f3ffe080; }
+.ghost-dot { background: #537d54a0; }
+.facility-card.active { border-width: 1px; }
+.facility-art.selected-art { animation: facility-select 150ms ease-out; }
+.clue { border-radius: 6px; }
+.celebrating .clue.complete { animation: clue-celebrate 600ms ease-out; }
+.board-celebration { position: absolute; inset: 0; z-index: 4; pointer-events: none; border-radius: inherit; }
+.board-golden-ring {
+  position: absolute; inset: 0; border: 10px solid #eccc754d; border-radius: inherit;
+  box-shadow: inset 0 0 26px #e9c56365; opacity: 0; animation: board-gold 600ms ease-out;
+}
+.reward-board .board-golden-ring { border-color: #efc56380; }
+.board-celebration > i {
+  position: absolute; display: flex; color: #c79834; font-style: normal; font-size: 17px;
+  opacity: 0; animation: board-particle 750ms ease-out both; animation-delay: calc(var(--particle) * 35ms);
+}
+.board-celebration > i:nth-child(3n) { color: #78925d; }
+.save-error { margin: 4px 16px 10px; padding: 10px 12px; border: 1px solid #cdab8a; border-radius: 12px; background: #f9ead4; color: #855d40; font: 13px/1.5 var(--body-font); }
+.save-error .text-button { display: inline-flex; margin: 0 0 0 12px; color: inherit; min-height: 32px; }
+.facility-info { min-width: 0; flex: 1; }
+.facility-info strong { overflow-wrap: anywhere; }
+[lang='en'] .modal h2 { padding-right: 16px; }
+.sandbox-modal-actions > button { flex: 1; min-height: 48px; height: auto; padding: 10px; }
+@keyframes screen-arrive { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes win-arrive { 0% { opacity: 0; transform: scale(.94) translateY(7px); } 70% { opacity: 1; transform: scale(1.018); } 100% { transform: none; } }
+@keyframes reward-shine { 0% { opacity: 0; transform: translateX(-12px); } 40% { opacity: .75; } 100% { opacity: 0; transform: translateX(12px); } }
+@keyframes reward-bounce { 0% { transform: scale(.9); } 60% { transform: scale(1.06); } 100% { transform: none; } }
+@keyframes facility-select { from { transform: translateY(3px) rotate(-6deg) scale(.96); } to { transform: none; } }
+@keyframes clue-celebrate { 35% { background: #f2d98d; color: #8b642b; } 100% { background: transparent; } }
+@keyframes board-gold { 0% { opacity: 0; transform: scale(1); } 20% { opacity: 1; } 100% { opacity: 0; transform: scale(.2); } }
+@keyframes board-particle { 0% { opacity: 0; transform: translateY(5px) scale(.6); } 25% { opacity: .85; } 100% { opacity: 0; transform: translateY(-28px) rotate(35deg) scale(.85); } }
+[data-page-hidden] *, [data-page-hidden] *::before, [data-page-hidden] *::after { animation-play-state: paused !important; }
+@media (max-height: 650px) {
+  .app .win-modal { padding: 24px 18px 18px; }
+  .app .win-modal .win-emblem { width: 76px; height: 76px; margin-bottom: 12px; }
+  .app .survival-win > .survival-badge { width: 84px; height: 90px; margin-bottom: 8px; }
+  .app .survival-win h3 { font-size: 20px; margin: 8px 0; }
+  .app .survival-win p { font-size: 14px; margin: 6px 0 10px; line-height: 1.4; }
+  .app .survival-reward { margin-bottom: 12px; padding: 6px 12px; }
+  .app .win-modal .text-button { margin-top: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app :is(.primary, .secondary, .icon-button, .facility-card, .sandbox-choice, .survival-difficulty, .level-card, .camp-tool):enabled:active { transform: none; }
+}

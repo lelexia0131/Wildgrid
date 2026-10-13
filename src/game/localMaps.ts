@@ -47,7 +47,11 @@ export function readLocalMaps(): LocalMap[] {
 }
 
 function readMapsForWrite(): LocalMap[] {
-  try { return parseLocalMaps(localStorage.getItem(storageKey)); } catch { throw new Error('无法读取本地地图，请检查本地存储权限后重试'); }
+  let stored, raw;
+  try { stored = localStorage.getItem(storageKey); raw = JSON.parse(stored || 'null'); } catch { throw new Error('本地地图无法读取，原数据已保留'); }
+  const maps = parseLocalMaps(stored);
+  if (raw && (raw.version !== 1 || !Array.isArray(raw.maps) || raw.maps.length !== maps.length)) throw new Error('本地地图不完整或版本不兼容，原数据已保留');
+  return maps;
 }
 
 function writeLocalMaps(maps: LocalMap[]) {
