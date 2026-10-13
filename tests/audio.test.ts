@@ -1,20 +1,32 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { WildernessAudio } from '../src/game/audio';
+import type { Settings } from '../src/game/types';
+import { readSave, writeSave } from '../src/game/storage';
 
 type Voice = { midi: number; start: number; end: number; type: string; bus: number; release: number; gain: number };
+type GainEvent = { bus: number; method: string; value: number; time: number };
+type Probe = { events: GainEvent[]; timers: Set<number>; contexts: () => number; defer: (operation: 'resume' | 'suspend') => () => void };
+const settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true };
 
-async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advance: (time: number) => void, visibility: (hidden: boolean) => Promise<void>, audio: WildernessAudio) => void | Promise<void>) {
+async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advance: (time: number) => void, visibility: (hidden: boolean) => Promise<void>, audio: WildernessAudio, probe: Probe) => void | Promise<void>, initialSettings = settings) {
   const voices: Voice[] = [];
-  let tick = () => {}, visibilityChange = () => {}, bus = 0;
+  const events: GainEvent[] = [], timers = new Set<number>();
+  let tick = () => {}, visibilityChange = () => {}, bus = 0, timerId = 0, contexts = 0;
+  let resumeGate: Promise<void> | undefined, suspendGate: Promise<void> | undefined;
   const documentStub = { hidden: false, addEventListener: (_name: string, callback: () => void) => { visibilityChange = callback; }, removeEventListener: () => {} };
   class Context {
     currentTime = 0;
     state = 'running';
     destination = {};
     createGain() {
+      const record = (method: string, value: number, time: number) => { events.push({ bus: node.bus, method, value, time }); node.gain.value = value; };
       const node = { bus: bus++, target: -1, release: 0, peak: 0, gain: {
-        setValueAtTime: () => {}, linearRampToValueAtTime: (value: number) => { node.release = value; node.peak = Math.max(node.peak, value); },
+        value: 0,
+        cancelAndHoldAtTime: (time: number) => record('hold', node.gain.value, time),
+        cancelScheduledValues: (time: number) => record('cancel', node.gain.value, time),
+        setValueAtTime: (value: number, time: number) => record('set', value, time),
+        linearRampToValueAtTime: (value: number, time: number) => { record('ramp', value, time); node.release = value; node.peak = Math.max(node.peak, value); },
         exponentialRampToValueAtTime: (value: number) => { node.release = value; }, setTargetAtTime: () => {},
       }, connect: (target: { bus: number }) => { node.target = target.bus; }, disconnect: () => {} };
       return node;
@@ -31,12 +43,12 @@ async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advanc
       };
       return oscillator;
     }
-    async resume() { this.state = 'running'; }
-    async suspend() { this.state = 'suspended'; }
+    async resume() { if (resumeGate) await resumeGate; this.state = 'running'; }
+    async suspend() { if (suspendGate) await suspendGate; this.state = 'suspended'; }
     async close() { this.state = 'closed'; }
   }
   const context = new Context();
-  const replacements = { AudioContext: function () { return context; }, window: { setInterval: (callback: () => void) => { tick = callback; return 1; } }, document: documentStub, clearInterval: () => {} };
+  const replacements = { AudioContext: function () { contexts++; return context; }, window: { setInterval: (callback: () => void) => { tick = callback; timers.add(++timerId); return timerId; } }, document: documentStub, clearInterval: (id: number) => timers.delete(id) };
   const originals = Object.entries(replacements).map(([key, value]) => {
     const descriptor = Object.getOwnPropertyDescriptor(globalThis, key);
     Object.defineProperty(globalThis, key, { configurable: true, value });
@@ -45,10 +57,17 @@ async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advanc
   const audio = new WildernessAudio();
   try {
     audio.setScene(scene);
+    audio.setSettings(initialSettings);
     await audio.start();
     await check(voices, time => { context.currentTime = time; tick(); }, async hidden => {
-      documentStub.hidden = hidden; visibilityChange(); await Promise.resolve();
-    }, audio);
+      documentStub.hidden = hidden; visibilityChange(); await new Promise<void>(resolve => setImmediate(resolve));
+    }, audio, { events, timers, contexts: () => contexts, defer: operation => {
+      if (operation === 'resume') context.state = 'suspended';
+      let release!: () => void;
+      const gate = new Promise<void>(resolve => { release = resolve; });
+      if (operation === 'resume') resumeGate = gate; else suspendGate = gate;
+      return release;
+    } });
   } finally {
     audio.dispose();
     for (const { key, descriptor } of originals) {
@@ -125,9 +144,102 @@ test('rapid effects remain distinct with restrained gain; mute and hidden pages 
     await visibility(true); audio.play('win');
     assert.equal(voices.filter(voice => voice.bus === 1).length, 6);
     await visibility(false);
-    audio.setSettings({ music: .35, effects: .65, muted: true, facilityTips: true, continuousPlacement: true, facilityNames: false });
+    audio.setSettings({ music: .35, effects: .65, muted: true, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true });
     audio.play('place');
     assert.equal(voices.filter(voice => voice.bus === 1).length, 6);
   });
+});
+
+test('zero music stops tails, pending notes and scheduling across scenes and visibility; effects stay independent', async () => {
+  await withAudio('game', async (voices, advance, visibility, audio, probe) => {
+    for (let time = .1; time <= .6; time += .1) advance(time);
+    const music = voices.filter(voice => voice.bus === 0);
+    assert.ok(music.some(voice => voice.start > .6), 'Include notes scheduled ahead of the audio clock');
+    audio.setSettings({ ...settings, music: 0, effects: .6 });
+    assert.equal(probe.timers.size, 0);
+    assert.ok(music.every(voice => voice.end <= .615 + 1e-9));
+    assert.deepEqual(probe.events.filter(event => event.bus === 0).slice(-2).map(event => [event.method, event.value]), [['hold', .105], ['ramp', 0]]);
+    audio.play('place'); audio.play('win');
+    assert.equal(voices.filter(voice => voice.bus === 1).length, 7);
+    for (const scene of ['menu', 'game'] as const) {
+      audio.setScene(scene); await Promise.all([audio.start(), audio.start()]);
+      advance(3); await visibility(true); await visibility(false); await audio.start(); advance(6);
+    }
+    assert.equal(voices.filter(voice => voice.bus === 0).length, music.length);
+    assert.equal(probe.timers.size, 0);
+    assert.equal(probe.contexts(), 1);
+    assert.equal(probe.events.filter(event => event.bus === 0).at(-1)?.value, 0);
+  });
+});
+
+test('saved zero music creates no BGM; restoring it starts one scheduler without reviving stopped tails', async () => {
+  await withAudio('menu', async (voices, advance, _visibility, audio, probe) => {
+    assert.equal(voices.length, 0);
+    assert.equal(probe.timers.size, 0);
+    audio.setSettings({ ...settings, music: .4, effects: 0 });
+    await Promise.all([audio.start(), audio.start(), audio.start()]);
+    const opening = voices.length;
+    assert.equal(opening, 4);
+    assert.equal(probe.timers.size, 1);
+    audio.play('click'); audio.play('win');
+    assert.equal(voices.length, opening);
+    audio.setSettings({ ...settings, music: 0 });
+    const stopped = voices.map(voice => voice.end);
+    audio.setSettings({ ...settings, music: .4, effects: 0 });
+    await Promise.all([audio.start(), audio.start()]);
+    assert.equal(probe.timers.size, 1);
+    assert.deepEqual(voices.slice(0, opening).map(voice => voice.end), stopped);
+    assert.ok(voices.slice(opening).every(voice => voice.start >= .08));
+    advance(1);
+    assert.ok(probe.events.filter(event => event.bus === 0 && event.method === 'ramp').every(event => event.value <= .12));
+    assert.equal(probe.contexts(), 1);
+  }, { ...settings, music: 0, effects: .6 });
+});
+
+test('mute stops both buses and async background/resume uses the latest zero setting', async () => {
+  await withAudio('game', async (voices, advance, visibility, audio, probe) => {
+    audio.play('win'); advance(.2);
+    audio.setSettings({ ...settings, muted: true });
+    assert.ok(voices.every(voice => voice.end <= .215 + 1e-9));
+    const before = voices.length;
+    audio.play('win'); advance(2);
+    assert.equal(voices.length, before);
+    assert.equal(probe.timers.size, 0);
+    const releaseSuspend = probe.defer('suspend');
+    await visibility(true); await visibility(false);
+    audio.setSettings({ ...settings, music: 0, effects: .6 });
+    releaseSuspend(); await audio.start();
+    assert.equal(probe.timers.size, 0);
+    const releaseResume = probe.defer('resume');
+    const starting = Promise.all([audio.start(), audio.start()]);
+    await visibility(true);
+    audio.setSettings({ ...settings, music: 0, effects: .6 });
+    releaseResume(); await starting;
+    advance(4); assert.equal(voices.length, before);
+    await visibility(false); await audio.start();
+    audio.play('click');
+    assert.equal(voices.length, before + 1);
+    assert.equal(probe.timers.size, 0);
+    assert.equal(probe.contexts(), 1);
+  });
+});
+
+test('audio settings round-trip through the existing save without replacing zero or changing progress', () => {
+  const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  let stored = JSON.stringify({ version: 1, completed: [15], current: 31, progress: {}, settings });
+  Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: { getItem: () => stored, setItem: (_key: string, value: string) => { stored = value; } } });
+  try {
+    for (const audioSettings of [{ music: 0, effects: .6, muted: false }, { music: .4, effects: 0, muted: false }, { music: 0, effects: .6, muted: true }]) {
+      const save = readSave(); save.settings = { ...save.settings, ...audioSettings };
+      assert.equal(writeSave(save), true);
+      const restored = readSave();
+      assert.deepEqual({ music: restored.settings.music, effects: restored.settings.effects, muted: restored.settings.muted }, audioSettings);
+      assert.deepEqual(restored.completed, [15]); assert.equal(restored.current, 31);
+      assert.deepEqual(restored.progress, save.progress);
+    }
+  } finally {
+    if (previous) Object.defineProperty(globalThis, 'localStorage', previous);
+    else Reflect.deleteProperty(globalThis, 'localStorage');
+  }
 });
 

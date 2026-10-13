@@ -160,8 +160,9 @@ app.whenReady().then(async () => {
       assert.equal(await js(`document.querySelectorAll('.placed-facility-art[data-kind="picnic"]').length`), 1);
       assert.equal(await js(`document.querySelector('.rule-dock')`), null);
       await click('.game-title [aria-label="返回营地日记"]', viewport.touch);
-      await js(`document.querySelector('.level-grid').scrollTop=9999`);
-      assert.ok(await js(`document.querySelector('.level-grid').scrollTop>0`));
+      assert.equal(await js(`document.querySelectorAll('.level-card').length`), 15);
+      assert.equal(await js(`document.querySelector('.level-card').dataset.level`), '16');
+      await click('.levels-page .back-link', viewport.touch);
       await click('.levels-page .back-link', viewport.touch);
       await click('.menu-buttons button:last-child', viewport.touch);
       assert.ok(await js(`document.querySelector('.manual-content').textContent.includes('黄色短杠') && document.querySelector('.manual-content').textContent.includes('林间木屋') && document.querySelector('.manual-content').textContent.includes('点击卡片旋转')`));

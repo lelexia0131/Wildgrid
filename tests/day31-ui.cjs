@@ -24,9 +24,15 @@ app.whenReady().then(async () => {
   try {
     await load({completed:[15],current:31});
     await click('.menu-buttons .secondary');
+    assert.equal(await js(`document.querySelectorAll('.chapter-card').length`),3);
+    assert.equal(await js(`document.querySelector('[data-chapter="2"]').disabled`),false);
+    await click('[data-chapter="2"]');
     const locks=await js(`Array.from(document.querySelectorAll('.level-card')).map(el=>({disabled:el.disabled,text:el.textContent}))`);
-    assert.equal(locks.length,45);assert.equal(locks[30].disabled,false);assert.equal(locks[31].disabled,true);
-    assert.equal(locks[15].disabled,false);assert.equal(locks[16].disabled,true);assert.ok(locks[30].text.includes('8 × 8'));
+    assert.equal(locks.length,15);assert.equal(locks[0].disabled,false);assert.equal(locks[1].disabled,true);
+    assert.equal(locks[0].text.trim(),'31');
+    await click('.levels-page .back-link');await click('[data-chapter="1"]');
+    assert.equal(await js(`document.querySelector('[data-level="16"]').disabled`),false);
+    assert.equal(await js(`document.querySelector('[data-level="17"]').disabled`),true);
     const level=levels.find(level=>level.id===41), newKinds=['foodTruck','powerTower','pool'];
     const remaining=level.pieces.filter(p=>newKinds.includes(p.kind));
     const progress=answers[41].filter(at=>!remaining.some(p=>p.id===at.id));

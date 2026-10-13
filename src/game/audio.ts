@@ -11,15 +11,21 @@ export class WildernessAudio {
   private next = 0;
   private scene: 'menu' | 'game' = 'menu';
   private effectTimes: number[] = [];
+  private musicVoices = new Set<OscillatorNode>();
+  private effectVoices = new Set<OscillatorNode>();
+  private syncing?: Promise<void>;
+  private visibilityVersion = 0;
   private onVisibility = () => {
     if (!this.ctx) return;
+    this.visibilityVersion++;
     if (document.hidden) {
-      if (this.timer !== undefined) clearInterval(this.timer);
-      this.timer = undefined;
-      void this.ctx.suspend().catch(() => {});
-    } else void this.start();
+      this.stopTimer();
+      // Finish a mute before suspending the clock, rather than freezing its fade.
+      this.setSettings(this.settings);
+    }
+    void this.syncContext();
   };
-  private settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false };
+  private settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true };
   // Original 352-step theme plus a 32-step F–G bridge back into C.
   // 130.56 seconds in-game, 145.92 seconds in the menu.
   private melody = [
@@ -56,11 +62,71 @@ export class WildernessAudio {
   ];
   setScene(scene: 'menu' | 'game') { this.scene = scene; }
   setSettings(settings: Settings) {
-    this.settings = settings;
+    this.settings = { ...settings };
     if (this.ctx && this.music && this.effects) {
-      this.music.gain.setTargetAtTime(settings.muted ? 0 : settings.music * .3, this.ctx.currentTime, .08);
-      this.effects.gain.setTargetAtTime(settings.muted ? 0 : settings.effects * .35, this.ctx.currentTime, .03);
+      const music = settings.muted ? 0 : settings.music * .3;
+      const effects = settings.muted ? 0 : settings.effects * .35;
+      this.setGain(this.music.gain, music);
+      this.setGain(this.effects.gain, effects);
+      if (!music) {
+        this.stopTimer();
+        this.stopVoices(this.musicVoices);
+        this.next = this.ctx.currentTime + .08;
+      }
+      if (!effects) { this.stopVoices(this.effectVoices); this.effectTimes = []; }
+      this.syncMusic();
     }
+  }
+  private setGain(gain: AudioParam, value: number) {
+    const now = this.ctx!.currentTime;
+    if (typeof gain.cancelAndHoldAtTime === 'function') gain.cancelAndHoldAtTime(now);
+    else {
+      const current = gain.value;
+      gain.cancelScheduledValues(now);
+      gain.setValueAtTime(current, now);
+    }
+    if (this.ctx!.state === 'running' && !document.hidden) gain.linearRampToValueAtTime(value, now + (value ? .04 : .015));
+    else gain.setValueAtTime(value, now);
+  }
+  private stopVoices(voices: Set<OscillatorNode>) {
+    const end = this.ctx!.currentTime + (this.ctx!.state === 'running' && !document.hidden ? .015 : 0);
+    for (const voice of voices) voice.stop(end);
+    voices.clear();
+  }
+  private stopTimer() {
+    if (this.timer !== undefined) clearInterval(this.timer);
+    this.timer = undefined;
+  }
+  private syncMusic() {
+    if (!this.ctx || document.hidden || this.ctx.state !== 'running' || this.settings.muted || !this.settings.music) {
+      this.stopTimer(); return;
+    }
+    if (this.timer === undefined) {
+      this.next = Math.max(this.next, this.ctx.currentTime + .08);
+      this.timer = window.setInterval(() => this.schedule(), 100);
+    }
+    this.schedule();
+  }
+  private syncContext() {
+    if (this.syncing) return this.syncing;
+    const ctx = this.ctx!;
+    let visibilityVersion = this.visibilityVersion;
+    this.syncing = (async () => {
+      // Coalesce starts and reconcile the latest visibility after each async transition.
+      while (this.ctx === ctx && ctx.state !== 'closed') {
+        visibilityVersion = this.visibilityVersion;
+        const hidden = document.hidden;
+        if (hidden) { if (ctx.state !== 'suspended') await ctx.suspend(); }
+        else if (ctx.state !== 'running') await ctx.resume();
+        if (hidden !== document.hidden) continue;
+        this.syncMusic();
+        break;
+      }
+    })().catch(() => { /* A later user gesture can retry browser audio unlock. */ }).finally(() => {
+      this.syncing = undefined;
+      if (this.ctx === ctx && visibilityVersion !== this.visibilityVersion) return this.syncContext();
+    });
+    return this.syncing;
   }
   async start() {
     try {
@@ -70,15 +136,12 @@ export class WildernessAudio {
         this.effects = this.ctx.createGain(); this.effects.connect(this.ctx.destination);
         this.music.gain.setValueAtTime(0, this.ctx.currentTime);
         this.effects.gain.setValueAtTime(0, this.ctx.currentTime);
-        this.setSettings(this.settings);
         this.next = this.ctx.currentTime + .08;
+        this.setSettings(this.settings);
         document.addEventListener('visibilitychange', this.onVisibility);
       }
       if (document.hidden) return;
-      if (this.ctx.state === 'suspended') await this.ctx.resume();
-      if (document.hidden) return;
-      if (this.timer === undefined) this.timer = window.setInterval(() => this.schedule(), 100);
-      this.schedule();
+      await this.syncContext();
     } catch { /* Browsers without Web Audio can still play the game. */ }
   }
   private note(midi: number, time: number, duration: number, gain: number, bus: GainNode, type: OscillatorType = 'sine') {
@@ -89,11 +152,13 @@ export class WildernessAudio {
     envelope.gain.linearRampToValueAtTime(gain, time + .012);
     envelope.gain.exponentialRampToValueAtTime(.001, time + duration);
     oscillator.connect(envelope); envelope.connect(bus);
+    const voices = bus === this.music ? this.musicVoices : this.effectVoices;
+    voices.add(oscillator);
     oscillator.start(time); oscillator.stop(time + duration + .03);
-    oscillator.onended = () => { oscillator.disconnect(); envelope.disconnect(); };
+    oscillator.onended = () => { voices.delete(oscillator); oscillator.disconnect(); envelope.disconnect(); };
   }
   private schedule() {
-    if (!this.ctx || !this.music || this.ctx.state !== 'running') return;
+    if (!this.ctx || !this.music || this.ctx.state !== 'running' || document.hidden || this.settings.muted || !this.settings.music) return;
     const beat = this.scene === 'menu' ? .38 : .34;
     if (this.next < this.ctx.currentTime) this.next = this.ctx.currentTime + .03;
     while (this.next < this.ctx.currentTime + .22) {
@@ -118,6 +183,10 @@ export class WildernessAudio {
     const notes: Record<Sound, number[]> = { place: [79,84], pickup: [79,72], rotate: [76,81], win: [72,76,79,84,88], click: [76], select: [81], error: [55,53] };
     notes[sound].forEach((note, i) => this.note(note, now + i * (sound === 'win' ? .14 : .045), sound === 'win' ? .75 : .18, gain, this.effects!));
   }
-  dispose() { if (this.timer !== undefined) clearInterval(this.timer); document.removeEventListener('visibilitychange', this.onVisibility); void this.ctx?.close(); }
+  dispose() {
+    this.stopTimer(); document.removeEventListener('visibilitychange', this.onVisibility);
+    if (this.ctx) { this.stopVoices(this.musicVoices); this.stopVoices(this.effectVoices); void this.ctx.close(); }
+    this.ctx = undefined; this.music = undefined; this.effects = undefined;
+  }
 }
 export const audio = new WildernessAudio();

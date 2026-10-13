@@ -141,13 +141,14 @@ app.whenReady().then(async () => {
       await click('.menu-buttons button:last-child'); await english('manual');
       assert.equal(await js(`getComputedStyle(document.querySelector('.manual-content p')).fontFamily.includes('Wildgrid')`), false);
       await close(); await click('.menu-buttons button:nth-child(2)'); await english('levels');
-      await click('.level-grid .level-card:nth-child(41)'); await english('game'); await tools();
+      await click('[data-chapter="2"]'); await english('chapter levels');
+      await click('[data-level="41"]'); await english('game'); await tools();
       await click('.blueprint-button'); await english('blueprint');
       assert.equal(await js(`document.querySelector('.blueprint-content h2').textContent`), 'Blueprint');
       await close(); await click('[data-facility="foodTruck"]'); await english('facility rule feedback');
       await tools();
       writeFileSync(path.join(output, `english-tools-${viewport.width}.png`), (await contents.capturePage()).toPNG());
-      await click('.game-title .icon-button'); await click('.levels-page .back-link');
+      await click('.game-title .icon-button'); await click('.levels-page .back-link'); await click('.levels-page .back-link');
       await click('.menu-buttons .primary'); await english('modes'); await click('.survival-entry'); await english('survival');
       await click('.survival-bottom .secondary'); await english('records'); await click('.survival-records .modal-close'); await click('.survival-heading .back-link');
       await click('.sandbox-choice:nth-child(4)'); await english('local maps'); await click('.sandbox-back');

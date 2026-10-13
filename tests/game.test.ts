@@ -8,7 +8,7 @@ import type { Level, Placement } from '../src/game/types';
 import { progressForPlay, readSave, writeSave } from '../src/game/storage';
 
 test('reopening a solved level starts fresh while unfinished play resumes', () => {
-  const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false } };
+  const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true } };
   assert.deepEqual(progressForPlay(save, getLevelById(1)!), []);
   assert.deepEqual(progressForPlay(save, getLevelById(2)!), solutions[2].slice(0, 1));
   assert.deepEqual(save.completed, [1, 2]);

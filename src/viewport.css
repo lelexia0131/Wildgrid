@@ -219,7 +219,7 @@ input[type=range] { height: 22px; }
 .operations button:disabled { opacity: .4; }
 .guide-strip { height: 56px; min-height: 56px; overflow: auto; }
 .game-title h1 { white-space: nowrap; }
-.level-grid { grid-template-rows: none; grid-auto-rows: minmax(138px, auto); overflow-y: auto; padding: 3px 3px 8px; align-content: start; scrollbar-width: thin; }
+.level-grid { grid-template-rows: none; grid-auto-rows: minmax(138px, auto); overflow-y: auto; padding: 3px 3px 8px; align-content: start; scrollbar-width: none; }
 .menu-buttons { flex-wrap: wrap; }
 .tile .terrain-label { position: absolute; left: 50%; top: 0; transform: translate(-50%, -65%); z-index: 9; display: flex; align-items: center; gap: 3px; width: max-content; padding: 3px 7px; border-radius: 20px; box-shadow: 0 2px 6px #304a4020; font-size: 10px; line-height: 16px; pointer-events: none; opacity: 0; transition: opacity .12s; }
 .tile:has(.terrain-label):hover, .tile:has(.terrain-label):focus-visible { z-index: 5; }
@@ -303,10 +303,6 @@ input[type=range] { height: 22px; }
 .game-heading .status-pill { position: absolute; right: 0; }
 @media(max-width:600px) { .game-title h1 { font-size: 28px; } .game-heading .status-pill { font-size: 8px; padding: 5px; } }
 @media(max-height:500px) { .game-heading { min-height: 38px; } .game-title h1 { font-size: 26px; } }
-.level-art-cluster { display: flex; justify-content: center; align-items: center; height: 55px; margin: 0 auto; }
-.level-art-cluster .art { width: 42px; height: 48px; margin: 0 -6px; }
-.level-card.locked .level-art-cluster { opacity: .27; filter: grayscale(.6); }
-@media(max-width:560px) { .level-art-cluster .art { width: 32px; height: 42px; } }
 .operations { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-content: start; gap: 5px 8px; }
 .operations h2 { grid-column: 1 / -1; margin-bottom: 4px; }
 .operations .history-buttons { margin: 0; }
@@ -444,4 +440,132 @@ input[type=range] { height: 22px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .app :is(.primary, .secondary, .icon-button, .facility-card, .sandbox-choice, .survival-difficulty, .level-card, .camp-tool):enabled:active { transform: none; }
+}
+
+/* The journal has one camp selection, then fifteen touchable level buttons. */
+.camp-diary { max-width: 960px; gap: 16px; }
+.camp-diary.chapter-levels { position: relative; isolation: isolate; max-width: 1120px; padding: 4px 12px 20px; gap: 14px; }
+.journal-chapter-background { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; border-radius: 28px; pointer-events: none; opacity: .85; }
+.chapter-levels > .back-link, .chapter-levels > .page-heading { position: relative; z-index: 1; }
+.camp-diary .back-link { min-height: 44px; height: auto; font-size: 16px; }
+.camp-diary .page-heading { height: auto; min-height: 42px; justify-content: center; }
+.camp-diary .page-heading h1 { font-size: 32px; margin: 0; }
+.chapter-levels .page-heading { min-height: 52px; margin: 2px 0 10px; }
+.chapter-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; gap: 24px; padding: 12px 5px 24px; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; scrollbar-width: none; }
+.camp-diary :is(.chapter-grid, .journal-level-stage, .level-grid)::-webkit-scrollbar { display: none; }
+.chapter-card { position: relative; isolation: isolate; display: flex; flex-direction: column; min-width: 0; padding: 18px 12px 22px; aspect-ratio: .79; max-height: 430px; border: 3px solid #acba91; border-radius: 26px; background: radial-gradient(ellipse at 50% 15%, #fff9e7, transparent 65%), linear-gradient(#f4eed6, #d7e2bc); box-shadow: inset 0 3px 0 #fffdf0, inset 0 0 0 5px #dbe6c9, 0 7px 0 #91a17b, 0 13px 20px #49614616; transition: transform .18s, box-shadow .18s; }
+.chapter-card.chapter-1 { background: radial-gradient(ellipse at 50% 15%, #f6f4da, transparent 65%), linear-gradient(#dce8d2, #adc4a2); border-color: #8aa385; }
+.chapter-card.chapter-2 { background: radial-gradient(ellipse at 50% 15%, #faf1d6, transparent 65%), linear-gradient(#e5ede4, #b8cebf); border-color: #a6ae94; }
+.chapter-card::before { content: ''; position: absolute; z-index: -1; inset: 8px; border: 1px solid #fffbea99; border-radius: 17px; pointer-events: none; box-shadow: inset 0 0 0 1px #83946a20; }
+.chapter-art { flex: 1; min-height: 0; width: 100%; filter: drop-shadow(0 3px 1px #65764c12); }
+.chapter-art .art { width: 100%; height: 100%; }
+.chapter-state { position: absolute; top: 15px; right: 15px; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: #607d55; background: #faf8e1ba; box-shadow: inset 0 1px 0 #fffdf3; }
+.chapter-caption { display: flex; flex-direction: column; align-items: center; gap: 9px; position: relative; padding-top: 14px; }
+.chapter-caption::before { content: ''; position: absolute; top: 0; width: 65%; height: 1px; background: linear-gradient(90deg, transparent, #9dab7b80, transparent); }
+.chapter-caption strong { font-family: var(--heading-font); font-weight: 400; font-size: clamp(21px, 2.8vw, 29px); color: #4e684c; }
+.chapter-caption > span { font-family: var(--number-font); font-size: 21px; color: #71825d; }
+.chapter-card.recommended { border-color: #b9a25f; box-shadow: inset 0 3px 0 #fff8d4, inset 0 0 0 5px #eadba178, 0 7px 0 #9b976d, 0 13px 20px #49614616; }
+.chapter-card:enabled:hover { transform: translateY(-3px); }
+.chapter-card:focus-visible { outline: 3px solid #526e54; outline-offset: 5px; }
+.chapter-card:enabled:active { transform: translateY(5px) scale(.99); box-shadow: inset 0 2px 0 #fffdf0, 0 2px 0 #91a17b; }
+.chapter-card.locked { background: linear-gradient(#e4e6dc, #cfd3c4); border-color: #b7bdab; box-shadow: inset 0 2px 0 #f7f6ea, 0 5px 0 #b0b6a3; }
+.chapter-card.locked .chapter-art { opacity: .48; filter: grayscale(.65); }
+.chapter-card.locked .chapter-caption strong, .chapter-card.locked .chapter-caption > span, .chapter-card.locked .chapter-state { color: #8a9280; }
+.app:has(.diary-creek) { background: radial-gradient(ellipse at 8% 90%, #bfdfd080, transparent 55%), linear-gradient(145deg, #f0f7ee, #dfeef3); }
+.app:has(.diary-woodland) { background: radial-gradient(ellipse at 95% 15%, #dbd5ad80, transparent 55%), linear-gradient(145deg, #faf1dc, #e9e5ce); }
+.app:has(.diary-highland) { background: radial-gradient(ellipse at 12% 90%, #e4d4b580, transparent 55%), linear-gradient(145deg, #edf3f5, #d9e3e8); }
+.diary-creek { --diary-ink: #466e69; }
+.diary-woodland { --diary-ink: #777451; }
+.diary-highland { --diary-ink: #597580; }
+.chapter-levels .page-heading h1, .chapter-levels .back-link { color: var(--diary-ink); }
+.journal-level-stage { position: relative; z-index: 1; flex: 1; min-height: 0; min-width: 0; width: 100%; container-type: size; display: flex; justify-content: center; align-items: flex-start; padding: 12px 8px 22px; overflow: auto; scrollbar-width: none; overscroll-behavior: contain; touch-action: pan-y; }
+/* Five columns and three rows fit the remaining space after the real header and title. */
+.camp-diary .level-grid { --journal-card-ratio: 1.12; --journal-grid-gap: 22px; --journal-grid-width: min(880px, 100cqw, calc((100cqh - var(--journal-grid-gap) * 2) / 3 * var(--journal-card-ratio) * 5 + var(--journal-grid-gap) * 4)); flex: none; min-height: 0; min-width: 0; width: var(--journal-grid-width); height: calc((var(--journal-grid-width) - var(--journal-grid-gap) * 4) / 5 / var(--journal-card-ratio) * 3 + var(--journal-grid-gap) * 2); grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); grid-auto-rows: 0; align-content: start; gap: var(--journal-grid-gap); padding: 0; overflow: visible; }
+.camp-diary .level-card { isolation: isolate; width: 100%; height: 100%; min-height: 0; aspect-ratio: var(--journal-card-ratio); padding: 8px 5px 5px; gap: 1px; border: 2px solid color-mix(in srgb, var(--cover-edge) 60%, var(--cover-paper)); border-radius: 16px; background: var(--cover-paper); box-shadow: inset 0 2px 0 #ffffff99, 0 2px 0 color-mix(in srgb, var(--cover-edge) 40%, transparent), 0 7px 12px #45605b0b; }
+.camp-diary .level-card-top { padding: 0 7px; font-family: var(--number-font); font-size: 24px; line-height: 1.1; letter-spacing: 0; color: var(--cover-ink); position: relative; z-index: 2; }
+.camp-diary .level-card-top > svg { flex: none; width: 21px; height: 21px; padding: 3px; border-radius: 50%; background: #fffaf080; }
+.camp-diary .level-card > .level-cover-art { flex: 1 1 0; width: 100%; height: 0; max-height: none; min-height: 0; margin: 0; border-radius: 9px; }
+.camp-diary .level-card.completed .level-card-top > svg { color: #fff9e8; background: var(--cover-ink); }
+.camp-diary .level-card.recommended { border-color: #bd994b; box-shadow: inset 0 0 0 2px #fff2c9, 0 5px 0 #b89755, 0 0 16px #e6bc6355; }
+.camp-diary .level-card.recommended .level-card-top > svg { color: #fff8df; background: #b18a3e; }
+.camp-diary .level-card.locked { background: #e7ebe3; border-color: #c7cec4; box-shadow: inset 0 2px 0 #ffffff88, 0 2px 0 #b4bcb240; }
+.camp-diary .level-card.locked::after { content: ''; position: absolute; inset: 0; z-index: 1; border-radius: inherit; background: #e1e3dc50; pointer-events: none; }
+.camp-diary .level-card.locked .level-card-top { color: #6f7b76; }
+.camp-diary .level-card.locked .level-card-top > svg { background: #f5f4eadd; }
+.camp-diary .level-card:enabled:hover { background: var(--cover-paper); filter: brightness(1.025); }
+.camp-diary .level-card:focus-visible { outline: 3px solid var(--cover-ink); outline-offset: 5px; }
+.camp-diary .level-card:enabled:active { transform: translateY(4px) scale(.98); box-shadow: inset 0 2px 0 #fffdf5, 0 1px 0 var(--cover-edge); }
+.header .rules-toggle.active { color: #436c48; border-color: #91ae7d; background: #dce9c7; box-shadow: inset 0 1px 0 #f4f9e8, 0 2px 0 #91a77f40; }
+.tile[data-rule-hint='valid'] { --rule-tint: #5caa8052; }
+.tile[data-rule-hint='incomplete'] { --rule-tint: #e1b34759; }
+.tile[data-rule-hint='invalid'] { --rule-tint: #cc77665c; }
+.rule-tint { position: absolute; inset: 0; border-radius: inherit; background: var(--rule-tint); pointer-events: none; }
+.tile.ghost .rule-tint { opacity: .2; }
+.tile .ghost-dot { z-index: 1; }
+@media (max-width: 760px) {
+  .camp-diary .level-grid { --journal-grid-width: min(480px, 100cqw); --journal-grid-gap: 18px; height: auto; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: max-content; }
+  .camp-diary .level-card { height: auto; }
+}
+@media (max-width: 600px) {
+  .camp-diary { gap: 10px; }
+  .camp-diary.chapter-levels { width: calc(100% - 16px); padding: 2px 6px 12px; gap: 10px; }
+  .chapter-levels .page-heading { min-height: 40px; margin: 0 0 4px; }
+  .journal-chapter-background { border-radius: 20px; }
+  .camp-diary .page-heading h1 { font-size: 27px; }
+  .chapter-grid { grid-template-columns: minmax(0, 1fr); align-content: center; gap: 15px; padding-top: 5px; }
+  .chapter-card { aspect-ratio: auto; min-height: 155px; height: clamp(155px, 22dvh, 220px); padding: 10px 22px 10px 8px; flex-direction: row; align-items: center; border-radius: 23px; }
+  .chapter-art { flex: 1 1 60%; height: 100%; width: 60%; }
+  .chapter-caption { flex: 1 1 40%; min-width: 0; gap: 10px; }
+  .chapter-caption strong { font-size: 24px; white-space: nowrap; }
+  .chapter-caption > span { font-size: 20px; }
+  .chapter-state { top: 10px; right: 10px; width: 29px; height: 29px; }
+  .chapter-state svg { width: 19px; }
+  .journal-level-stage { padding: 9px 6px 22px; }
+  .camp-diary .level-grid { --journal-card-ratio: 1.05; gap: 16px 10px; }
+  .camp-diary .level-card { padding: 5px 3px 3px; border-width: 1.5px; border-radius: 12px; }
+  .camp-diary .level-card-top { padding: 0 3px; font-size: 20px; }
+  .camp-diary .level-card-top > svg { width: 18px; height: 18px; padding: 2px; }
+}
+@media (max-width: 359px) { .camp-diary .level-grid { --journal-grid-width: min(320px, 100cqw); grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-height: 650px) {
+  .chapter-grid { align-content: start; }
+  .chapter-card { max-height: 330px; }
+}
+@media (max-height: 500px) and (min-width: 601px) {
+  .camp-diary { gap: 5px; }
+  .camp-diary.chapter-levels { gap: 6px; padding-top: 0; padding-bottom: 12px; }
+  .camp-diary .back-link { min-height: 36px; }
+  .camp-diary .page-heading { min-height: 30px; }
+  .camp-diary .page-heading h1 { font-size: 25px; }
+  .chapter-grid { padding-top: 6px; align-items: stretch; }
+  .chapter-card { aspect-ratio: auto; min-height: 170px; max-height: none; padding: 10px 8px 15px; }
+  .chapter-caption { gap: 5px; }
+  .chapter-caption strong { font-size: 22px; }
+  .chapter-caption > span { font-size: 17px; }
+  .chapter-levels .page-heading { margin: 0; }
+  .journal-level-stage { padding-top: 10px; }
+  .camp-diary .level-grid { gap: 16px 18px; }
+}
+@media (max-height: 500px) and (min-width: 761px) {
+  .camp-diary .level-grid { --journal-grid-width: min(880px, 100cqw); height: auto; grid-template-rows: none; grid-auto-rows: max-content; }
+  .camp-diary .level-card { height: auto; }
+}
+@media (pointer: coarse) and (max-height: 500px) and (min-width: 601px) { .screen-game:has(.rules-toggle) .game-heading { padding-right: 160px; } }
+[lang='en'] .chapter-caption strong { font-size: clamp(19px, 2.3vw, 26px); line-height: 1.1; }
+@media (max-width: 600px) { [lang='en'] .chapter-caption strong { font-size: 23px; white-space: normal; } }
+@media (prefers-reduced-motion: reduce) { .chapter-card:enabled:hover, .chapter-card:enabled:active { transform: none; } }
+
+.level-cover-art { display: block; pointer-events: none; overflow: visible; }
+.journal-scene-art { overflow: hidden; }
+.camp-diary .level-card.locked > .level-cover-art { opacity: .9; filter: grayscale(.85) saturate(.25); }
+.chapter-card:enabled .chapter-cloud { animation: chapter-drift 7s ease-in-out infinite alternate; }
+.chapter-card:enabled .chapter-ripples { animation: chapter-breathe 4s ease-in-out infinite alternate; }
+@keyframes chapter-drift { to { transform: translateX(6px); } }
+@keyframes chapter-breathe { to { opacity: .5; } }
+@media (max-width: 600px) {
+  .chapter-caption { padding-top: 0; }
+  .chapter-caption::before { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapter-card :is(.chapter-cloud, .chapter-ripples) { animation: none !important; }
 }
