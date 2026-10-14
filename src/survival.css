@@ -22,7 +22,7 @@
 .difficulty-band-3 { --difficulty-bg: #f3e5c1; --difficulty-border: #c1a06b; }
 .difficulty-band-4 { --difficulty-bg: #eae3ef; --difficulty-border: #a195b3; }
 .survival-bottom { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 26px; }
-.survival-bottom button, .survival-generating button { min-height: 50px; height: auto; font-size: 16px; padding: 12px 20px; white-space: normal; }
+.survival-bottom button, .survival-generation-page button { min-height: 50px; height: auto; font-size: 16px; padding: 12px 20px; white-space: normal; }
 .modal.survival-records { width: min(700px, calc(100% - 24px)); margin: auto; padding: 20px; border: 1px solid #cbd5bc; border-radius: 20px; background: #f7f6e9; }
 .survival-records h2 { font-size: 22px; margin: 0; }
 .survival-record-table { margin-top: 18px; border: 1px solid #d4ddc7; border-radius: 10px; overflow: hidden; }
@@ -36,9 +36,25 @@
 .record-unfinished { color: #a17e52; }
 .survival-records p { font-size: 16px; margin: 12px 0; }
 .survival-records > div > p { display: flex; flex-direction: column; gap: 6px; margin: 0; border-top: 1px solid #dde2cc; padding-top: 10px; }
-.survival-generating { position: fixed; z-index: 12; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(420px, calc(100% - 32px)); padding: 28px; border: 2px solid #afc199; border-radius: 24px; background: #faf9ef; box-shadow: 0 8px 40px #344d4140; text-align: center; }
-.survival-generating p { font-size: 18px; margin: 16px 0; }
-.survival-spinner { display: inline-block; width: 36px; height: 36px; border: 4px solid #dce3cc; border-top-color: #668c61; border-radius: 50%; animation: survival-spin 1s linear infinite; }
+.survival-generation-page { position: relative; isolation: isolate; flex: 1; min-height: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 20px; overflow-y: auto; text-align: center; }
+.generation-background { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.generation-background > .journal-chapter-background { border-radius: 0; opacity: .9; }
+.generation-background::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, #f7f7e8ed 0, #f7f7e8d4 26%, #f7f7e86b 48%, #f7f7e810 76%); }
+.survival-generation-page h1 { font-size: 30px; color: #365d47; line-height: 1.25; }
+.survival-generation-page p { font-size: 16px; color: #71845c; }
+.generation-map { flex: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; width: min(230px, 45vw, 32dvh); aspect-ratio: 1; padding: 7px; border: 2px solid #81976b; border-radius: 12px; background: #a6b78a; box-shadow: 0 5px 0 #81976b; }
+.generation-map > span { aspect-ratio: 1; min-width: 0; min-height: 0; border-radius: 4px; background: #d5dfb4; animation: generation-cell 600ms var(--cell-delay) both ease-out; }
+.generation-map > span:nth-child(3n) { background: #d1dcb0; }
+.generation-map > span:nth-child(5n) { background: #d9e2bb; }
+.generation-progress { flex: none; width: min(340px, 100%); height: 20px; padding: 3px; border: 2px solid #81976b; border-radius: 5px; background: #d8dfc7; overflow: hidden; }
+.generation-progress > i { display: block; width: 35%; height: 100%; background: repeating-linear-gradient(90deg, #73976c 0 12px, #95b278 12px 15px); animation: generation-progress 1.6s linear infinite; }
+@keyframes generation-cell { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
+@keyframes generation-progress { from { transform: translateX(-110%); } to { transform: translateX(300%); } }
+@media (max-height: 500px) {
+  .survival-generation-page { gap: 10px; padding: 12px; }
+  .generation-map { width: min(120px, 25dvh); }
+  .survival-generation-page h1 { font-size: 26px; }
+}
 .survival-error { font-size: 16px; line-height: 1.6; color: #9b4e39; background: #fbede3; border-radius: 12px; padding: 12px 16px; margin: 12px 0; overflow-wrap: anywhere; }
 .survival-error button { font-size: 16px; min-height: 48px; margin-left: 12px; }
 .modal.survival-modal { width: min(500px, calc(100% - 24px)); font-size: 16px; }
@@ -61,7 +77,6 @@
 .manual-survival h4 { font-size: 18px; }
 .manual-survival table { width: 100%; border-collapse: collapse; font-size: 16px; }
 .manual-survival th, .manual-survival td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #dce1ce; }
-@keyframes survival-spin { to { transform: rotate(360deg); } }
 @keyframes survival-arrive { from { transform: scale(.7); opacity: .2; } to { transform: scale(1); opacity: 1; } }
 @media (max-width: 760px) {
   .survival-difficulties { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
@@ -83,7 +98,7 @@
   .local-maps-page:has(.survival-card-state) .local-map-browser { grid-template-rows: 150px minmax(0, 1fr); }
   .local-maps-page:has(.survival-card-state) .local-map-list { grid-auto-rows: minmax(92px, auto); }
 }
-@media (prefers-reduced-motion: reduce) { .survival-spinner, .survival-badge { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .survival-badge, .generation-map > span, .generation-progress > i { animation: none; } .generation-progress > i { width: 100%; } }
 
 .survival-identity-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .survival-identity-title p { margin: 0; }
@@ -124,7 +139,7 @@
 .local-map-items ul { grid-auto-rows: minmax(56px, auto); }
 .local-map-card { min-height: 76px; }
 .local-map-list { grid-auto-rows: minmax(80px, auto); }
-.survival-records p, .survival-generating p, .survival-error, .survival-modal > p, .survival-modal .win-content p, .local-map-modal p { font-size: 14px; }
+.survival-records p, .survival-error, .survival-modal > p, .survival-modal .win-content p, .local-map-modal p { font-size: 14px; }
 .survival-modal .primary, .survival-modal .secondary, .survival-modal .text-button, .local-map-modal button, .local-map-modal input { font-size: 14px; }
 @media (max-width: 760px) { .sandbox-menu-page, .survival-page { --mode-title-size: 28px; } }
 

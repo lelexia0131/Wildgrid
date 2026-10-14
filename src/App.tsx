@@ -1,4 +1,5 @@
 import { createTranslator, LanguageContext, useI18n } from './i18n/context';
+import { Capacitor } from '@capacitor/core';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookOpen, Check, ChevronRight, Compass, Eye, Grid2X2, Leaf, Map, Megaphone, MousePointer2, RotateCcw, Save, ScrollText, Settings2, Tags, Volume2, VolumeX, X } from 'lucide-react';
 import { CampToolIcon } from './components/CampToolIcon';
@@ -80,6 +81,7 @@ export default function App() {
   const playerIdStarted = useRef(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [winOpen, setWinOpen] = useState(false);
+  const [generationScene, setGenerationScene] = useState(2);
   const [celebration, setCelebration] = useState<'board' | 'dialog' | null>(null);
   const celebrationContext = useRef<{ level: typeof level; placements: Placement[]; mode: typeof mode } | null>(null);
   const [blueprintOpen, setBlueprintOpen] = useState(false);
@@ -117,6 +119,7 @@ export default function App() {
     invalidateCheck: sandbox.invalidateCheck, resetSandboxContext: sandbox.resetSandboxContext, refreshLocalMaps: sandbox.refreshLocalMaps, setNotice, sound,
   });
   const { survival, challenge, survivalReward, survivalError, generating, replaceChallenge, abandonOpen, openSurvivalMenu, continueSurvival, cancelGeneration, requestSurvival, abandonSurvival, collectSurvival, settleSurvival } = survivalController;
+  useEffect(() => { if (generating !== null) setGenerationScene(scene => (scene + 1) % 3); }, [generating]);
   const sandboxName = replay ? `${replay.difficulty}难 · 复盘` : localMaps.find(map => map.id === localMapId)?.name || '自定义地图';
   const sandboxIcon = localMaps.find(map => map.id === localMapId)?.icon;
   const sandboxArtwork = level.pieces.find(piece => piece.kind !== 'camp') || level.pieces[0];
@@ -207,6 +210,32 @@ export default function App() {
     if (settingsOpen || winOpen || manualOpen || blueprintOpen || leaveOpen || mapCode || replaceChallenge !== null || abandonOpen) { if (!dialog?.open) dialog?.showModal(); closeRef.current?.focus(); }
     else dialog?.close();
   }, [settingsOpen, winOpen, manualOpen, blueprintOpen, leaveOpen, mapCode, replaceChallenge, abandonOpen]);
+  useLayoutEffect(() => {
+    const dialog = dialogRef.current, content = dialog?.querySelector<HTMLElement>('.win-content');
+    const emblem = content?.querySelector<HTMLElement>('.completion-emblem');
+    if (!winOpen || !dialog || !content || !emblem) return;
+    const fit = () => {
+      // Measure wrapped text and notices; reserve 8px for shadows and pixel rounding.
+      dialog.style.removeProperty('--completion-emblem-height');
+      const css = getComputedStyle(dialog);
+      const chrome = [css.paddingTop, css.paddingBottom, css.borderTopWidth, css.borderBottomWidth].reduce((sum, value) => sum + parseFloat(value), 0);
+      const overflow = content.getBoundingClientRect().height + chrome + 8 - parseFloat(css.maxHeight);
+      if (overflow > 0) dialog.style.setProperty('--completion-emblem-height', `${Math.max(40, emblem.getBoundingClientRect().height - overflow)}px`);
+    };
+    fit();
+    let frame = 0;
+    const scheduleFit = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(fit); };
+    const observer = new ResizeObserver(scheduleFit);
+    observer.observe(content);
+    observer.observe(dialog);
+    window.addEventListener('resize', scheduleFit);
+    window.visualViewport?.addEventListener('resize', scheduleFit);
+    return () => {
+      observer.disconnect(); cancelAnimationFrame(frame); window.removeEventListener('resize', scheduleFit);
+      window.visualViewport?.removeEventListener('resize', scheduleFit);
+      dialog.style.removeProperty('--completion-emblem-height');
+    };
+  }, [winOpen]);
 
   function sound(name: Parameters<typeof audio.play>[0] = 'click') { audio.feedback(name); }
   function commit(next: Placement[], nextLevel = level) {
@@ -277,7 +306,7 @@ export default function App() {
     setCelebration(null); setSettingsOpen(false); setWinOpen(false); setManualOpen(false); setBlueprintOpen(false); setLeaveOpen(false); sandbox.closeMapCode(); survivalController.closeSurvivalDialogs();
   }
 
-  return <LanguageContext.Provider value={tutorial.state.language}><div lang={tutorial.state.language === 'zh' ? 'zh-CN' : 'en'} className={`app screen-${screen} ${homeEntering ? 'home-entering' : ''} ${screen === 'game' && mode === 'survival' ? 'survival-game' : replay ? 'replay-game' : ''}`} onPointerDown={() => { void audio.start(); }} onClick={event => {
+  return <LanguageContext.Provider value={tutorial.state.language}><div data-android={Capacitor.getPlatform() === 'android' || /Android/i.test(navigator.userAgent) ? '' : undefined} lang={tutorial.state.language === 'zh' ? 'zh-CN' : 'en'} className={`app screen-${screen} ${homeEntering ? 'home-entering' : ''} ${screen === 'game' && mode === 'survival' ? 'survival-game' : replay ? 'replay-game' : ''}`} onPointerDown={() => { void audio.start(); }} onClick={event => {
     const button = (event.target as Element).closest<HTMLElement>('button, a[href]');
     if (!button || button instanceof HTMLButtonElement && button.disabled || button.dataset.sound === 'handled' || button.dataset.sound === 'none') return;
     const name = button.dataset.sound as Parameters<typeof audio.play>[0] | undefined;
@@ -300,7 +329,7 @@ export default function App() {
 
     {(screen === 'adventure' || screen === 'sandbox' || screen === 'sandbox-size' || screen === 'sandbox-import' || screen === 'local-maps') && <SandboxMenu key={screen} screen={screen} localMaps={localMaps} onOpenLocalMap={openLocalMap} onEditLocalMap={editLocalMap} onSurvival={openSurvivalMenu} onLocalMapsChange={sandbox.refreshLocalMaps} onBack={() => { setScreen(screen === 'adventure' ? 'menu' : screen === 'sandbox' || screen === 'local-maps' ? 'adventure' : 'sandbox'); }} onContinue={() => start(continueId)} onNavigate={setScreen} onCreate={openSandbox} onImport={importSandbox}/>}
 
-    {screen === 'survival' && <SurvivalMenu save={survival} generating={generating} error={survivalError} onStart={requestSurvival} onContinue={continueSurvival} onCancel={cancelGeneration} onBack={() => { setScreen('adventure'); }} onReview={reviewSurvival} canReview={record => !!record.code || localMaps.some(map => map.survival?.challengeId === record.id)}/> }
+    {screen === 'survival' && <SurvivalMenu save={survival} generating={generating} generationScene={generationScene} error={survivalError} onStart={requestSurvival} onContinue={continueSurvival} onCancel={cancelGeneration} onBack={() => { setScreen('adventure'); }} onReview={reviewSurvival} canReview={record => !!record.code || localMaps.some(map => map.survival?.challengeId === record.id)}/> }
 
 
     {screen === 'levels' && <CampDiary completed={save.completed} currentId={continueId} chapter={diaryChapter} onChapter={setDiaryChapter} onStart={id => start(id)} onBack={() => { setScreen('menu'); }}/>}

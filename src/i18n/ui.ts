@@ -64,7 +64,7 @@ export const uiEnglish = {
   '{0}难': 'Level {0}', '难度 {0} · 通关 {1} 次': 'Level {0} · {1} clears',
   '通关 {0} 次': 'Clears: {0}', '继续挑战 · {0}难': 'Continue · Level {0}', '通关记录 · 共 {0} 次': 'Records · {0} total',
   '总通关 {0} 次 · 累计经验 {1}': 'Total clears: {0} · Total XP: {1}', '{0}难 · {1} 次': 'Level {0} · {1} clears',
-  '每次 +{0} 经验': '+{0} XP per clear', '正在生成 {0}难地图并验证唯一解…': 'Generating a level {0} map and verifying its unique solution…',
+  '每次 +{0} 经验': '+{0} XP per clear', '地图生成中': 'Generating map', '难度 {0}': 'Difficulty {0}', '地图生成进度': 'Map generation progress',
   '营地': 'Camp', '篝火': 'Campfire', '瞭望塔': 'Lookout Tower', '野餐桌': 'Picnic Table', '林间木屋': 'Woodland Cabin', '餐车': 'Food Truck', '电塔': 'Power Tower', '泳池': 'Pool',
   '单格': 'Single-cell', '双格': 'Two-cell', '三格': 'Three-cell', 'L 形': 'L-shaped', '水源': 'Water', '森林': 'Forest', '山地': 'Mountain',
   '荒野新人': 'Wildland Rookie', '露营学徒': 'Camp Apprentice', '荒野探索者': 'Wildland Explorer', '资深生存家': 'Survival Veteran', '荒野传奇': 'Wildland Legend',

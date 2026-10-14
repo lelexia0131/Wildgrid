@@ -56,6 +56,14 @@ export function useBoardFeedback(board: RefObject<HTMLElement | null>, level: Le
       if (!original || !piece) return;
       // Move a short-lived copy into a grid-relative layer, never pixel coordinates.
       const copy = original.cloneNode(true) as HTMLElement, cells = occupied(piece, at);
+      // A departure must resolve its own SVG clip, even if the facility is restored immediately.
+      const clip = copy.querySelector('clipPath');
+      if (clip) {
+        const id = clip.id; clip.id = `${id}-departure`;
+        copy.querySelectorAll('[clip-path]').forEach(node => {
+          if (node.getAttribute('clip-path') === `url(#${id})`) node.setAttribute('clip-path', `url(#${clip.id})`);
+        });
+      }
       const row = Math.min(...cells.map(c => c.r)), column = Math.min(...cells.map(c => c.c));
       copy.removeAttribute('data-art-id'); copy.className = 'departing-facility'; copy.setAttribute('aria-hidden', 'true');
       copy.style.gridRow = `${row + 1} / span ${Math.max(...cells.map(c => c.r)) - row + 1}`;

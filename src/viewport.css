@@ -250,19 +250,23 @@ input[type=range] { height: 22px; }
 .label-pool { background: #d4eceb; color: #3a737b; }
 .placed-picnic { background: #e9dfbd; }
 .placed-cabin { background: #e7dab0; }
+.tile.placed { border-width: 2px; }
 .tile.placed.placed-multi, .tile.placed.placed-multi:hover { background: transparent; border-color: transparent; box-shadow: none; }
 .tile.placed-multi::before, .tile.placed-multi::after { display: none; }
-.placed-facility-art { position: relative; --footprint-color: #e7dab0; --footprint-border: #b6a16b; }
+.placed-facility-art { position: relative; --footprint-color: #e7dab0; --footprint-border: #b6a16b88; }
 .placed-facility-art[data-kind="picnic"] { --footprint-color: #e9dfbd; }
 .placed-facility-art.hovered { --footprint-color: #efdfae; }
 .placed-facility-art.invalid { --footprint-color: #ead2b1; --footprint-border: #cb8570; }
 .placed-facility-art.incomplete { --footprint-border: #c5ad65; }
-.facility-footprint { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 5px; }
+/* Centre the 2px stroke one CSS pixel inside the footprint, including concave shapes. */
+.facility-footprint { position: absolute; inset: 1px; width: calc(100% - 2px); height: calc(100% - 2px); overflow: visible; }
 .facility-footprint[data-shape="el"] { --footprint-color: #dce0b7; }
 .invalid > .facility-footprint, .hovered > .facility-footprint { --footprint-color: inherit; }
 .footprint-fill { fill: var(--footprint-color); }
 .footprint-outline { stroke: var(--footprint-border); }
 .placed-facility-art > .art { position: relative; }
+/* Android keeps the artwork but avoids a filtered surface for every board SVG. */
+[data-android] .board .art { filter: none; }
 @media (max-width: 600px) and (min-height: 501px) {
   .screen-game { overflow-y: auto; }
   .game-page { flex: none; gap: 12px; padding-bottom: 20px; }

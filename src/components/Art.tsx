@@ -12,14 +12,15 @@ export function FootprintSurface({ shape, rotation }: { shape: Shape; rotation: 
     const after = { x:p.x+Math.sign(next.x-p.x)*8, y:p.y+Math.sign(next.y-p.y)*8 };
     return `${i ? 'L' : 'M'}${before.x} ${before.y}Q${p.x} ${p.y} ${after.x} ${after.y}`;
   }).join('')+'Z';
-  return <svg className="facility-footprint" data-shape={shape} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><path className="footprint-fill" d={outline}/><path className="footprint-outline" d={outline} fill="none" strokeWidth="1.5" vectorEffect="non-scaling-stroke"/></svg>;
+  return <svg className="facility-footprint" data-shape={shape} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><path className="footprint-fill" d={outline}/><path className="footprint-outline" d={outline} fill="none" strokeWidth="2" vectorEffect="non-scaling-stroke"/></svg>;
 }
 
 function FootprintArt({ shape, rotation, children }: { shape: Shape; rotation: number; children: React.ReactNode }) {
-  const clip = useId(), cells = offsets(shape, rotation);
+  const clip = `footprint-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`, cells = offsets(shape, rotation);
   const width = (Math.max(...cells.map(p => p.c)) + 1) * 100, height = (Math.max(...cells.map(p => p.r)) + 1) * 100;
-  return <svg className="art footprint-art" viewBox={`0 0 ${width} ${height}`} fill="none" aria-hidden="true">
-    <defs><clipPath id={clip}>{cells.map(p => <rect key={`${p.r},${p.c}`} x={p.c * 100} y={p.r * 100} width="100" height="100"/>)}</clipPath></defs>
+  const boundary = `M${footprintCorners(cells).map(p => `${p.x} ${p.y}`).join('L')}Z`;
+  return <svg key={`${shape}-${rotation}`} className="art footprint-art" viewBox={`0 0 ${width} ${height}`} fill="none" aria-hidden="true">
+    <defs><clipPath id={clip} clipPathUnits="userSpaceOnUse"><path d={boundary}/></clipPath></defs>
     <g clipPath={`url(#${clip})`}>{children}</g>
   </svg>;
 }
