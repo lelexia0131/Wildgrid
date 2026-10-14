@@ -42,18 +42,19 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
   useEffect(() => () => checkerRef.current?.terminate(), []);
 
   function openSandbox(size: 6 | 8) {
-    sound(); invalidateCheck(); resetSandboxContext();
+    sound('confirm'); invalidateCheck(); resetSandboxContext();
     enterGame('sandbox-editor', createSandbox(size));
     setCheck(null); setChecking(false); setEditorDirty(false);
   }
-  function openSandboxPlay(draft: SandboxDraft, progress: Placement[] = [], id?: number) {
-    sound(); invalidateCheck(); setSandboxDraft(draft); setLocalMapId(id); setTerrainBrush(null);
+  function openSandboxPlay(draft: SandboxDraft, progress: Placement[] = [], id?: number, playSound = true) {
+    if (playSound) sound('confirm');
+    invalidateCheck(); setSandboxDraft(draft); setLocalMapId(id); setTerrainBrush(null);
     enterGame('sandbox-play', { level: draft.level, placements: progress });
   }
-  function importSandbox(code: string) { openSandboxPlay(decodeMap(code)); }
+  function importSandbox(code: string) { openSandboxPlay(decodeMap(code), [], undefined, false); sound('success'); }
   function openLocalMap(map: LocalMap) { openSandboxPlay(map.draft, map.progress, map.id); }
   function editLocalMap(map: LocalMap) {
-    if (map.survival && !map.survival.blueprintUnlocked) { setNotice('通关或放弃挑战后才能编辑这张地图'); return; }
+    if (map.survival && !map.survival.blueprintUnlocked) { setNotice('通关或放弃挑战后才能编辑这张地图'); sound('error'); return; }
     openSandbox(map.draft.level.size as 6 | 8);
     setLocalMapId(map.id); enterGame('sandbox-editor', structuredClone(map.draft));
     resetPieceIds(map.draft);
@@ -63,7 +64,6 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
     if (checking || checkerRef.current) return;
     const draft = mode === 'sandbox-editor' ? present : sandboxDraft;
     if (!draft) return;
-    sound();
     const revision = revisionRef.current;
     setChecking(true); setCheck(null); setNotice('正在进行营地质检…');
     try {
@@ -79,35 +79,47 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
         try {
           const map = saveLocalMap(draft, mode === 'sandbox-editor' ? [] : placements, localMapId);
           refreshLocalMaps(); setLocalMapId(map.id); setEditorDirty(false);
-          setNotice(`已保存到${map.name}`); sound('place');
+          setNotice(`已保存到${map.name}`); sound('success');
         } catch (error) { setNotice(error instanceof Error ? error.message : '本地地图保存失败，请重试'); sound('error'); }
       };
       worker.onerror = () => {
         worker.terminate();
         if (revision !== revisionRef.current || checkerRef.current !== worker) return;
-        checkerRef.current = null; setChecking(false); setCheck(null); setNotice('营地质检未能完成，请重试');
+        checkerRef.current = null; setChecking(false); setCheck(null); setNotice('营地质检未能完成，请重试'); sound('error');
       };
       worker.postMessage(draft);
-    } catch { checkerRef.current?.terminate(); checkerRef.current = null; setChecking(false); setNotice('营地质检未能启动，请重试'); }
+    } catch { checkerRef.current?.terminate(); checkerRef.current = null; setChecking(false); setNotice('营地质检未能启动，请重试'); sound('error'); }
   }
   async function exportSandbox(draft: SandboxDraft, revision: number) {
     try {
       const code = encodeMap(draft);
       await writeClipboard(code);
       if (revision !== revisionRef.current) return;
-      sound('place'); setMapCode(code); setNotice('地图代码已复制到剪贴板');
+      sound('success'); setMapCode(code); setNotice('地图代码已复制到剪贴板');
     } catch (error) {
       if (revision !== revisionRef.current) return;
       setNotice(error instanceof Error ? error.message : '暂时无法复制地图代码，请重试'); sound('error');
     } finally { if (revision === revisionRef.current) setChecking(false); }
   }
+  function exportReplayMap() {
+    if (mode !== 'sandbox-play' || !sandboxDraft || checking) return;
+    setChecking(true);
+    void exportSandbox(sandboxDraft, revisionRef.current);
+  }
   function copyMapCode() {
-    void writeClipboard(mapCode).then(() => setNotice('地图代码已复制到剪贴板')).catch(() => setNotice('暂时无法复制，请重试'));
+    const revision = revisionRef.current;
+    void writeClipboard(mapCode).then(() => {
+      if (revision !== revisionRef.current) return;
+      setNotice('地图代码已复制到剪贴板'); sound('success');
+    }).catch(() => {
+      if (revision !== revisionRef.current) return;
+      setNotice('暂时无法复制，请重试'); sound('error');
+    });
   }
 
   return {
     localMaps, localMapId, sandboxDraft, mapCode, check, checking, editorDirty, terrainBrush, setTerrainBrush,
-    openSandbox, openSandboxPlay, importSandbox, openLocalMap, editLocalMap, runSandboxAction, copyMapCode,
+    openSandbox, openSandboxPlay, importSandbox, openLocalMap, editLocalMap, runSandboxAction, exportReplayMap, copyMapCode,
     closeMapCode: () => setMapCode(''), invalidateCheck, cancelCheck, markEditorDirty, resetSandboxContext, refreshLocalMaps,
   };
 }

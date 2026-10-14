@@ -1,11 +1,19 @@
 /* Completion shares the journal's original artwork and the camp's warm palette. */
 .app .modal.win-modal {
+  --completion-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px);
+  --completion-emblem-height: clamp(40px, calc(var(--completion-height) - 270px), 192px);
   width: min(410px, calc(100% - var(--safe-left) - var(--safe-right) - 24px));
-  padding: 26px 30px 22px; border: 3px solid #b6be91; border-radius: 30px;
+  max-height: var(--completion-height); inset: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+  padding: clamp(12px, 2.8dvh, 22px) 26px clamp(12px, 2.2dvh, 18px); border: 3px solid #b6be91; border-radius: 30px;
   background: radial-gradient(ellipse at 50% 13%, #fff6d4, transparent 60%), linear-gradient(#fffbed, #f4f1dc);
   box-shadow: inset 0 2px 0 #fffef5, inset 0 0 0 5px #e9e4c880, 0 7px 0 #758966, 0 24px 65px #1a352d66;
-  overflow-x: hidden; scrollbar-width: thin; scrollbar-color: #bdc99e transparent;
+  overflow: visible;
 }
+.win-content { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(4px, .9dvh, 8px); }
+.win-content > * { min-width: 0; }
+.app .win-modal:has(.survival-win) { --completion-emblem-height: clamp(40px, calc(var(--completion-height) - 350px), 170px); }
+.survival-win { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.survival-win > :not(.secondary, .text-button) { grid-column: 1 / -1; }
 .win-modal::backdrop { background: #20382f80; backdrop-filter: blur(3px); }
 .win-modal::before, .win-modal::after {
   content: ''; position: absolute; width: 44px; height: 72px; bottom: 12px; pointer-events: none; opacity: .45;
@@ -18,14 +26,14 @@
   color: #6b8057; border: 1.5px solid #cbd2ac; background: linear-gradient(#fffbee, #eae9cf);
   box-shadow: inset 0 2px 0 #fffdf5, 0 2px 0 #b6c09c;
 }
-.completion-emblem { position: relative; width: 280px; max-width: 100%; height: 210px; margin: 0 auto 10px; }
+.completion-emblem { position: relative; width: min(280px, 100%, calc(var(--completion-emblem-height) * 4 / 3)); height: auto; aspect-ratio: 4 / 3; margin: 0 auto; }
 .completion-landscape { width: 100%; height: 100%; filter: drop-shadow(0 5px 3px #708a5a18); }
 .completion-art {
   position: absolute; inset: 22% 25% 16%; display: flex; align-items: center; justify-content: center;
   filter: drop-shadow(0 5px 3px #496b4826);
 }
 .completion-art > .art { width: 100%; height: 100%; }
-.completion-emblem:has(.level-cover-art) { width: 300px; height: 236px; }
+.completion-emblem:has(.level-cover-art) { width: min(300px, 100%, calc(var(--completion-emblem-height) * 300 / 236)); aspect-ratio: 300 / 236; }
 .completion-art:has(> .level-cover-art) {
   inset: 14px 5px 24px; overflow: hidden; border-radius: 18px; filter: none;
   box-shadow: 0 0 0 2px #fdf7df, 0 0 0 4px #b6c59f, 0 7px 12px #496b4826;
@@ -43,29 +51,30 @@
   box-shadow: 0 0 0 2px #d4b974, inset 0 2px 0 #c3d59b, 0 4px 6px #5a784b33;
 }
 .app .win-modal .win-content > h2 {
-  margin: 6px 0 10px; padding: 0; color: #496b43; font-size: 36px; line-height: 1.2; letter-spacing: 1px;
+  margin: 0; padding: 0; color: #496b43; font-size: clamp(28px, 4.5dvh, 36px); line-height: 1.2; letter-spacing: 1px;
   -webkit-text-stroke: 1.2px #fff6d5; paint-order: stroke fill;
   text-shadow: 0 2px 0 #cfb979, 0 4px 0 #e9dba9, 0 0 16px #f0cf7a80;
 }
-.app .win-modal .win-level { margin: 0 0 20px; font-size: 19px; color: #819166; line-height: 1.3; }
+.app .win-modal .win-level { margin: 0; font-size: 18px; color: #819166; line-height: 1.3; overflow-wrap: anywhere; }
 .app .win-modal .win-content > .primary {
-  position: relative; min-height: 52px; height: auto; padding: 13px 18px; gap: 12px; border-radius: 16px;
-  border: 2px solid #456747; background: linear-gradient(#88a66a, #5f8758); color: #fff8dd; font-size: 21px;
+  position: relative; min-height: 48px; height: auto; padding: 10px 12px; gap: 8px; border-radius: 16px;
+  border: 2px solid #456747; background: linear-gradient(#88a66a, #5f8758); color: #fff8dd; font-size: 19px;
   box-shadow: inset 0 2px 0 #c2d6a1, inset 0 -2px 0 #51764c, 0 5px 0 #3d5e40, 0 8px 12px #4d6b4026;
   text-shadow: 0 1px 0 #41663b; white-space: normal; line-height: 1.2;
 }
 .win-content > .primary > svg { flex: none; stroke-width: 2.5; filter: drop-shadow(0 1px 0 #41663b); }
 .app .win-modal .win-content > .primary:enabled:hover { background: linear-gradient(#94b176, #6a915f); }
 .app .win-modal .win-content > .primary:enabled:active { transform: translateY(3px); box-shadow: inset 0 2px 0 #b5ca94, 0 2px 0 #3d5e40; }
-.app .win-modal .text-button { position: relative; min-height: 40px; margin: 16px auto 0; padding: 8px 12px; font-size: 16px; color: #7c8d64; }
+.app .win-modal .text-button { position: relative; min-height: 42px; height: auto; margin: 0; padding: 8px; gap: 6px; font-size: 16px; color: #7c8d64; white-space: normal; line-height: 1.2; }
 .app .win-modal .text-button:hover { color: #426645; }
-.completion-art > .survival-badge { width: 118px; height: 132px; margin: 0; }
-.app .win-modal .survival-win h3 { margin: 8px 0; font-size: 22px; color: #7b8b5b; }
-.app .win-modal .survival-win p { font-size: 14px; line-height: 1.4; margin: 6px 0; }
-.app .win-modal .survival-reward { margin: 12px 0 18px; padding: 10px 14px; border: 1px solid #d7d9b3; background: #e9edcf; box-shadow: inset 0 1px 0 #fbf9e3; }
-.app .win-modal .survival-win > .secondary { min-height: 42px; padding: 8px 12px; font-size: 16px; background: #faf7e6; border-color: #cdd4af; color: #71845c; box-shadow: none; }
-[lang='en'] .win-modal .win-content > h2 { font-size: 33px; letter-spacing: .3px; }
-[lang='en'] .win-modal .win-content > .primary { font-size: 20px; }
+.completion-art > .survival-badge { width: auto; height: 100%; max-width: 100%; max-height: 132px; aspect-ratio: 118 / 132; margin: 0; }
+.app .win-modal .survival-win h3 { margin: 0; font-size: clamp(18px, 2.8dvh, 22px); line-height: 1.25; color: #7b8b5b; }
+.app .win-modal .survival-win p { font-size: 14px; line-height: 1.4; margin: 0; overflow-wrap: anywhere; }
+.app .win-modal .survival-reward { display: grid; gap: 4px; margin: 0; padding: 8px 12px; border: 1px solid #d7d9b3; background: #e9edcf; box-shadow: inset 0 1px 0 #fbf9e3; }
+.app .win-modal .survival-win > .secondary { min-height: 42px; height: auto; margin: 0; padding: 8px; gap: 6px; font-size: 16px; line-height: 1.2; background: #faf7e6; border-color: #cdd4af; color: #71845c; box-shadow: none; }
+.app .win-modal .survival-win > .survival-error { padding: 6px 8px; }
+[lang='en'] .win-modal .win-content > h2 { font-size: clamp(27px, 4.3dvh, 33px); letter-spacing: .3px; }
+[lang='en'] .win-modal .win-content > .primary { font-size: 18px; }
 .win-modal[open] .completion-art { animation: reward-bounce 500ms ease-out; }
 .win-modal[open] .completion-check { animation: reward-bounce 500ms 140ms both; }
 .win-modal[open] .completion-sparkles { animation: completion-twinkle 850ms 140ms ease-out; }
@@ -80,32 +89,27 @@
   [lang='en'] .win-modal .win-content > h2 { font-size: 29px; }
 }
 @media (max-height: 650px) {
-  .app .modal.win-modal { padding: 18px 26px 14px; border-radius: 24px; }
-  .completion-emblem { width: 224px; height: 168px; margin-bottom: 4px; }
-  .completion-emblem:has(.level-cover-art) { width: 248px; height: 191px; }
+  .app .modal.win-modal { border-radius: 24px; }
   .completion-art:has(> .level-cover-art) { inset: 8px 5px 19px; border-radius: 14px; }
-  .completion-art > .survival-badge { width: 94px; height: 105px; }
   .completion-check { width: 38px; height: 38px; left: calc(50% - 19px); }
-  .app .win-modal .win-content > h2 { font-size: 29px; margin: 4px 0 8px; }
-  [lang='en'] .win-modal .win-content > h2 { font-size: 28px; }
-  .app .win-modal .win-level { margin-bottom: 16px; font-size: 17px; }
-  .app .win-modal .text-button { margin-top: 12px; }
-  .app .win-modal .survival-reward { margin: 8px 0 14px; padding: 6px 10px; }
+  .app .win-modal .win-level { font-size: 17px; }
 }
-@media (max-height: 450px) and (min-width: 600px) {
-  .app .modal.win-modal { width: min(600px, calc(100% - var(--safe-left) - var(--safe-right) - 24px)); padding: 24px; }
-  .win-content { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 12px 20px; align-items: center; }
-  .completion-emblem { grid-column: 1; grid-row: 1 / span 4; margin: 0; width: 220px; height: 180px; }
-  .completion-emblem:has(.level-cover-art) { width: 220px; height: 180px; }
-  .win-content > :not(.completion-emblem) { grid-column: 2; }
-  .app .win-modal .win-content > h2, .app .win-modal .win-level, .app .win-modal .text-button { margin: 0; }
-  .app .win-modal .win-content > .primary { min-height: 48px; padding: 10px 12px; }
-  .survival-win .completion-emblem { grid-row: 1 / span 7; align-self: center; }
-  .app .win-modal .survival-win { gap: 6px 20px; }
-  .app .win-modal .survival-win > :is(h3, p, .survival-reward, .secondary) { margin: 0; }
-  .app .win-modal .survival-win h3 { font-size: 18px; }
-  .app .win-modal .survival-win p { font-size: 12px; margin: 4px 0; }
-  .app .win-modal .survival-reward { padding: 4px 8px; }
+@media (max-height: 500px) {
+  .app .modal.win-modal { padding: 12px 20px; }
+  .win-content { gap: 4px; }
+  .app .win-modal .win-content > .primary { min-height: 44px; padding: 8px 10px; font-size: 17px; }
+  .app .win-modal .survival-win > :is(.secondary, .text-button) { min-height: 40px; padding: 6px; font-size: 14px; }
+  .app .win-modal .survival-win p { font-size: 13px; line-height: 1.35; }
+  .app .win-modal .survival-reward { gap: 3px; padding: 6px 10px; }
+}
+@media (max-height: 560px) and (min-width: 560px) {
+  .app .modal.win-modal { --completion-emblem-height: clamp(80px, 42dvh, 190px); width: min(680px, calc(100% - var(--safe-left) - var(--safe-right) - 24px)); }
+  .win-content { grid-template-columns: minmax(0, .9fr) repeat(2, minmax(0, 1fr)); column-gap: 12px; align-items: center; }
+  .app .win-modal .completion-emblem { grid-column: 1; grid-row: 1 / span 5; align-self: center; }
+  .win-content > :not(.completion-emblem), .survival-win > :not(.completion-emblem, .secondary, .text-button) { grid-column: 2 / -1; }
+  .survival-win > .secondary { grid-column: 2; }
+  .survival-win > .text-button { grid-column: 3; }
+  .app .win-modal .survival-win .completion-emblem { grid-row: 1 / span 6; }
 }
 @media (prefers-reduced-motion: reduce) {
   .win-modal[open], .win-modal[open] *, .win-modal[open] *::after { animation: none !important; }

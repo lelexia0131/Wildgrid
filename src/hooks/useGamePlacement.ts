@@ -3,7 +3,7 @@ import { evaluate, key, occupied, placementBlock, rotateAround } from '../game/r
 import { withEditorPlacements } from '../game/sandbox';
 import type { SandboxDraft } from '../game/sandbox';
 import type { Cell, FacilityKind, GameMode, Level, Piece, Placement, Shape, TerrainKind } from '../game/types';
-import { audio } from '../game/audio';
+import type { audio } from '../game/audio';
 import { terrainNames } from '../game/facilityRegistry';
 import type { TutorialEvent } from '../game/tutorial';
 
@@ -26,15 +26,15 @@ export function useGamePlacement({ mode, level, placements, continuousPlacement,
   const rotate = useCallback(() => {
     if (!selected || selected.shape === 'single') return;
     const nextRotation = ((rotations[selected.shape] || 0) + 1) % 4;
-    setRotations(s => ({ ...s, [selected.shape]: nextRotation })); audio.play('rotate');
+    setRotations(s => ({ ...s, [selected.shape]: nextRotation })); sound('rotate');
     onAction?.({ type: 'rotate', kind: selected.kind, pieceId: selected.id, rotation: nextRotation });
-  }, [selected, rotations, onAction]);
+  }, [selected, rotations, onAction, sound]);
   function resetPieceIds(draft: SandboxDraft) {
     nextPieceId.current = Math.max(0, ...draft.level.pieces.map(piece => Number(/^custom-(\d+)$/.exec(piece.id)?.[1]) || 0));
   }
   function choose(kind: FacilityKind, shape: Shape) {
     clearTerrainBrush();
-    if (selected?.kind === kind && selected.shape === shape) { if (shape !== 'single') rotate(); else setSelected(null); return; }
+    if (selected?.kind === kind && selected.shape === shape) { if (shape !== 'single') rotate(); else { setSelected(null); sound('close'); } return; }
     const piece = mode === 'sandbox-editor' ? { id: `custom-${++nextPieceId.current}`, kind, shape } : level.pieces.find(p => p.kind === kind && p.shape === shape && !placements.some(at => at.id === p.id));
     if (piece) { setSelected(piece); setNotice(''); sound('select'); onAction?.({ type: 'select', kind: piece.kind, pieceId: piece.id }); }
   }
@@ -66,7 +66,7 @@ export function useGamePlacement({ mode, level, placements, continuousPlacement,
       commit(placements, { ...level, terrain: level.terrain.filter(t => key(t) !== key(cell)) });
       setNotice(''); sound('pickup'); return;
     }
-    if (!selected) { setNotice(terrain ? terrainNames[terrain.kind] : '先从右侧选择一个设施'); return; }
+    if (!selected) { setNotice(terrain ? terrainNames[terrain.kind] : '先从右侧选择一个设施'); sound(terrain ? 'click' : 'error'); return; }
     const candidate = { ...cell, id: selected.id, rotation };
     const placementLevel = mode === 'sandbox-editor' ? { ...level, pieces: [...level.pieces, selected] } : level;
     const block = placementBlock(placementLevel, placements, candidate);

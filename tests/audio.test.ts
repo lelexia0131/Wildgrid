@@ -6,17 +6,18 @@ import { readSave, writeSave } from '../src/game/storage';
 
 type Voice = { midi: number; start: number; end: number; type: string; bus: number; release: number; gain: number };
 type GainEvent = { bus: number; method: string; value: number; time: number };
-type Probe = { events: GainEvent[]; timers: Set<number>; contexts: () => number; defer: (operation: 'resume' | 'suspend') => () => void };
+type Probe = { events: GainEvent[]; timers: Set<number>; contexts: () => number; buffers: () => number; defer: (operation: 'resume' | 'suspend') => () => void };
 const settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true };
 
 async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advance: (time: number) => void, visibility: (hidden: boolean) => Promise<void>, audio: WildernessAudio, probe: Probe) => void | Promise<void>, initialSettings = settings) {
   const voices: Voice[] = [];
   const events: GainEvent[] = [], timers = new Set<number>();
-  let tick = () => {}, visibilityChange = () => {}, bus = 0, timerId = 0, contexts = 0;
+  let tick = () => {}, visibilityChange = () => {}, bus = 0, timerId = 0, contexts = 0, buffers = 0;
   let resumeGate: Promise<void> | undefined, suspendGate: Promise<void> | undefined;
   const documentStub = { hidden: false, addEventListener: (_name: string, callback: () => void) => { visibilityChange = callback; }, removeEventListener: () => {} };
   class Context {
     currentTime = 0;
+    sampleRate = 8000;
     state = 'running';
     destination = {};
     createGain() {
@@ -43,6 +44,25 @@ async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advanc
       };
       return oscillator;
     }
+    createBuffer(_channels: number, length: number) {
+      buffers++;
+      const data = new Float32Array(length);
+      return { getChannelData: () => data };
+    }
+    createBiquadFilter() {
+      const filter = { type: '', Q: { value: 0 }, frequency: { setValueAtTime: () => {}, exponentialRampToValueAtTime: () => {} }, target: undefined as ReturnType<Context['createGain']> | undefined,
+        connect: (node: ReturnType<Context['createGain']>) => { filter.target = node; }, disconnect: () => {},
+      };
+      return filter;
+    }
+    createBufferSource() {
+      let filter: ReturnType<Context['createBiquadFilter']>;
+      const voice: Voice = { midi: 0, start: 0, end: 0, type: 'paper', bus: -1, release: 0, gain: 0 };
+      return { buffer: undefined, onended: () => {}, connect: (node: typeof filter) => { filter = node; }, disconnect: () => {},
+        start: (time: number) => { Object.assign(voice, { start: time, bus: filter.target!.target, release: filter.target!.release, gain: filter.target!.peak }); voices.push(voice); },
+        stop: (time: number) => { voice.end = time; },
+      };
+    }
     async resume() { if (resumeGate) await resumeGate; this.state = 'running'; }
     async suspend() { if (suspendGate) await suspendGate; this.state = 'suspended'; }
     async close() { this.state = 'closed'; }
@@ -61,7 +81,7 @@ async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advanc
     await audio.start();
     await check(voices, time => { context.currentTime = time; tick(); }, async hidden => {
       documentStub.hidden = hidden; visibilityChange(); await new Promise<void>(resolve => setImmediate(resolve));
-    }, audio, { events, timers, contexts: () => contexts, defer: operation => {
+    }, audio, { events, timers, contexts: () => contexts, buffers: () => buffers, defer: operation => {
       if (operation === 'resume') context.state = 'suspended';
       let release!: () => void;
       const gate = new Promise<void>(resolve => { release = resolve; });
@@ -147,6 +167,34 @@ test('rapid effects remain distinct with restrained gain; mute and hidden pages 
     audio.setSettings({ music: .35, effects: .65, muted: true, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true });
     audio.play('place');
     assert.equal(voices.filter(voice => voice.bus === 1).length, 6);
+  });
+});
+
+test('close, confirmation, success and paper feedback are distinct and respect the effects bus', async () => {
+  await withAudio('menu', (voices, advance, _visibility, audio, probe) => {
+    audio.feedback('close'); advance(.2); audio.feedback('confirm'); advance(.4); audio.feedback('success');
+    const tones = voices.filter(voice => voice.bus === 1);
+    assert.deepEqual(tones.map(voice => voice.midi), [74,67,76,84,79,84,88]);
+    assert.ok(tones[0].end - tones[0].start < .15, 'Closing has a short tail');
+    advance(.8); audio.feedback('page'); audio.feedback('page');
+    const paper = voices.filter(voice => voice.type === 'paper');
+    assert.equal(paper.length, 2, 'Every successful turn gets one paper sound, including rapid turns');
+    assert.equal(probe.buffers(), 1, 'Reuse the locally synthesized paper buffer');
+    assert.ok(paper.every(voice => voice.bus === 1 && voice.end - voice.start <= .141));
+    assert.ok(paper[1].gain < paper[0].gain, 'Rapid turns reduce gain instead of growing louder');
+    audio.setSettings({ ...settings, effects: 0 }); audio.feedback('page'); audio.feedback('close');
+    assert.equal(voices.filter(voice => voice.bus === 1).length, 9);
+    assert.ok(paper.every(voice => voice.end <= .815 + 1e-9), 'Turning effects off also stops paper tails');
+  });
+});
+
+test('audio unlock coalesces rapid feedback without queuing stale clicks', async () => {
+  await withAudio('game', async (voices, _advance, _visibility, audio, probe) => {
+    const release = probe.defer('resume');
+    audio.feedback('click'); audio.feedback('select'); audio.feedback('close');
+    assert.equal(voices.filter(voice => voice.bus === 1).length, 0);
+    release(); await new Promise<void>(resolve => setImmediate(resolve));
+    assert.deepEqual(voices.filter(voice => voice.bus === 1).map(voice => voice.midi), [74,67]);
   });
 });
 

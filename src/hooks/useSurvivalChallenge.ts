@@ -49,9 +49,10 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
 
   function openSurvivalMenu() { sound(); setSurvival(readSurvival()); setSurvivalError(''); openMenu(); }
   function persistSurvival(next: SurvivalSave) { writeSurvival(next); setSurvival(next); }
-  function playSurvival(current: SurvivalChallenge) {
+  function playSurvival(current: SurvivalChallenge, feedback = true) {
     const latest = readSurvival(), progress = latest.challenge?.id === current.id ? latest.progress : null;
-    sound(); invalidateCheck(); setChallenge(current); resetSandboxContext();
+    if (feedback) sound('confirm');
+    invalidateCheck(); setChallenge(current); resetSandboxContext();
     setSurvivalReward(null); setSurvivalError(''); enterGame(current, progress);
   }
   function continueSurvival() {
@@ -63,7 +64,7 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
     window.clearTimeout(generatorTimer.current); setGenerating(null);
   }
   function requestSurvival(difficulty: number) {
-    sound(); setSurvivalError('');
+    sound('confirm'); setSurvivalError('');
     const latest = readSurvival(); setSurvival(latest);
     if (latest.challenge) { setReplaceChallenge(difficulty); return; }
     generateChallenge(difficulty);
@@ -76,7 +77,7 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
     try {
       const worker = new Worker(new URL('../game/survival.worker.ts', import.meta.url), { type: 'module' });
       generatorRef.current = worker;
-      const fail = (message: string) => { if (generatorRef.current !== worker) return; cancelGeneration(); setSurvivalError(message); };
+      const fail = (message: string) => { if (generatorRef.current !== worker) return; cancelGeneration(); setSurvivalError(message); sound('error'); };
       generatorTimer.current = window.setTimeout(() => fail('生成已超时，旧挑战仍然保留，请重试。'), survivalGenerationTimeout);
       worker.onerror = () => fail('地图生成失败，旧挑战仍然保留，请重试。');
       worker.onmessage = (event: MessageEvent<{ challenge?: SurvivalChallenge; error?: string }>) => {
@@ -89,11 +90,11 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
           if (latest.challenge) archiveSurvival(latest, latest.challenge, latest.progress?.placements || []);
           persistSurvival({ ...latest, recent: [...latest.recent, current.fingerprint].slice(-40), challenge: current, progress: emptySurvivalProgress(current.id) });
           refreshLocalMaps();
-          playSurvival(current);
-        } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '新挑战保存失败，旧挑战仍然保留'); }
+          playSurvival(current, false);
+        } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '新挑战保存失败，旧挑战仍然保留'); sound('error'); }
       };
       worker.postMessage({ difficulty, seed, id, recent: readSurvival().recent });
-    } catch { cancelGeneration(); setSurvivalError('地图生成未能启动，请重试。'); }
+    } catch { cancelGeneration(); setSurvivalError('地图生成未能启动，请重试。'); sound('error'); }
   }
   function abandonSurvival() {
     try {
@@ -103,8 +104,8 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
         persistSurvival({ ...latest, challenge: null, progress: null });
       }
       refreshLocalMaps();
-      setAbandonOpen(false); returnToMenu();
-    } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '未能清除挑战进度，请重试'); }
+      setAbandonOpen(false); returnToMenu(); sound('close');
+    } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '未能清除挑战进度，请重试'); sound('error'); }
   }
   function collectSurvival() {
     if (!challenge) return;
@@ -112,8 +113,8 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
       const completed = readSurvivalForWrite().completed.some(c => c.id === challenge.id);
       const existing = readLocalMaps().find(map => map.survival?.challengeId === challenge.id);
       const map = saveLocalMap(challenge.draft, [], existing?.id, { challengeId: challenge.id, difficulty: challenge.difficulty, seed: challenge.seed, completed, blueprintUnlocked: completed });
-      refreshLocalMaps(); setNotice(`已收藏到${map.name}`); sound('place');
-    } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '收藏失败，请重试'); }
+      refreshLocalMaps(); setNotice(`已收藏到${map.name}`); sound('success');
+    } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '收藏失败，请重试'); sound('error'); }
   }
   function settleSurvival(current: SurvivalChallenge) {
     try {
@@ -122,7 +123,7 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
       onSettled();
       try { unlockSurvivalMaps(current.id); } catch { setSurvivalError('奖励已保存，收藏图纸已解锁；收藏记录写入失败，重新进入本地地图可恢复。'); }
       refreshLocalMaps();
-    } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '结算保存失败，请重试'); }
+    } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '结算保存失败，请重试'); sound('error'); }
   }
   function prepareRestart() {
     if (!challenge) return true;
@@ -130,7 +131,7 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
       const latest = readSurvivalForWrite();
       if (latest.challenge?.id !== challenge.id) persistSurvival({ ...latest, challenge, progress: emptySurvivalProgress(challenge.id) });
       return true;
-    } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '重新挑战保存失败'); return false; }
+    } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '重新挑战保存失败'); sound('error'); return false; }
   }
   function confirmReplacement() {
     if (replaceChallenge === null) return;

@@ -7,6 +7,7 @@ import { MenuIcon } from './MenuIcon';
 import { offsets } from '../game/rules';
 import { facilities } from '../game/facilityRegistry';
 import { survivalDifficulties, survivalRanks } from '../game/survival';
+import { audio } from '../game/audio';
 import type { FacilityKind, Shape, TerrainKind } from '../game/types';
 
 type Kind = FacilityKind | TerrainKind;
@@ -67,6 +68,7 @@ export function Manual() {
   const current = pages[page];
   function turn(next: number) {
     if (next < 0 || next >= pages.length || next === page) return;
+    audio.feedback('page');
     setDirection(next > page ? 1 : -1); setPage(next);
   }
   useEffect(() => { contentRef.current?.scrollTo(0, 0); }, [page]);
@@ -76,7 +78,7 @@ export function Manual() {
   }}>
     <div className="notebook-binding" aria-hidden="true">{Array.from({ length: 7 }, (_, i) => <i key={i}/>)}</div>
     <div className="notebook-ribbon" aria-hidden="true"/>
-    <header className="notebook-heading"><h2>{t("野外手册")}</h2><label><span className="sr-only">{t("目录")}</span><select aria-label={t("目录")} value={page} onChange={event => turn(Number(event.target.value))}>{pages.map((entry,i)=><option key={entry.id} value={i}>{String(i+1).padStart(2,'0')} · {entry.title}</option>)}</select></label></header>
+    <header className="notebook-heading"><h2>{t("野外手册")}</h2><label><span className="sr-only">{t("目录")}</span><select data-sound="handled" aria-label={t("目录")} value={page} onChange={event => turn(Number(event.target.value))}>{pages.map((entry,i)=><option key={entry.id} value={i}>{String(i+1).padStart(2,'0')} · {entry.title}</option>)}</select></label></header>
     <div key={current.id} className={`manual-content manual-page ${direction > 0 ? 'turn-forward' : 'turn-back'}`} ref={contentRef} data-page={current.id} onPointerDown={event => { swipeRef.current = { x: event.clientX, y: event.clientY }; }} onPointerUp={event => {
       const start = swipeRef.current; swipeRef.current = null;
       if (start && Math.abs(event.clientX - start.x) > 60 && Math.abs(event.clientY - start.y) < 40) turn(page + (event.clientX < start.x ? 1 : -1));
@@ -84,6 +86,6 @@ export function Manual() {
       <div className="manual-page-heading"><MenuIcon kind={current.icon}/><h3>{current.title}</h3></div>
       {current.content}
     </div>
-    <footer className="notebook-footer"><button disabled={page===0} aria-label={t("上一页")} onClick={() => turn(page-1)}><ArrowLeft size={18}/><span>{t("上一页")}</span></button><span aria-live="polite" aria-label={t("第 {0} 页，共 {1} 页", page+1, pages.length)}>{String(page+1).padStart(2,'0')} / {pages.length}</span><button disabled={page===pages.length-1} aria-label={t("下一页")} onClick={() => turn(page+1)}><span>{t("下一页")}</span><ArrowRight size={18}/></button></footer>
+    <footer className="notebook-footer"><button data-sound="handled" disabled={page===0} aria-label={t("上一页")} onClick={() => turn(page-1)}><ArrowLeft size={18}/><span>{t("上一页")}</span></button><span aria-live="polite" aria-label={t("第 {0} 页，共 {1} 页", page+1, pages.length)}>{String(page+1).padStart(2,'0')} / {pages.length}</span><button data-sound="handled" disabled={page===pages.length-1} aria-label={t("下一页")} onClick={() => turn(page+1)}><span>{t("下一页")}</span><ArrowRight size={18}/></button></footer>
   </div>;
 }

@@ -1,5 +1,5 @@
 import type { Settings } from './types';
-type Sound = 'place' | 'pickup' | 'rotate' | 'win' | 'click' | 'select' | 'error';
+export type Sound = 'place' | 'pickup' | 'rotate' | 'win' | 'click' | 'select' | 'close' | 'page' | 'confirm' | 'success' | 'error';
 // Original pentatonic melody and chord progression, synthesized locally.
 // No recordings, samples, network requests, or third-party audio assets.
 export class WildernessAudio {
@@ -12,7 +12,11 @@ export class WildernessAudio {
   private scene: 'menu' | 'game' = 'menu';
   private effectTimes: number[] = [];
   private musicVoices = new Set<OscillatorNode>();
-  private effectVoices = new Set<OscillatorNode>();
+  private effectVoices = new Set<AudioScheduledSourceNode>();
+  private paper?: AudioBuffer;
+  private lastUiSound?: Sound;
+  private lastUiEffect = -Infinity;
+  private feedbackVersion = 0;
   private syncing?: Promise<void>;
   private visibilityVersion = 0;
   private onVisibility = () => {
@@ -88,7 +92,7 @@ export class WildernessAudio {
     if (this.ctx!.state === 'running' && !document.hidden) gain.linearRampToValueAtTime(value, now + (value ? .04 : .015));
     else gain.setValueAtTime(value, now);
   }
-  private stopVoices(voices: Set<OscillatorNode>) {
+  private stopVoices(voices: Set<AudioScheduledSourceNode>) {
     const end = this.ctx!.currentTime + (this.ctx!.state === 'running' && !document.hidden ? .015 : 0);
     for (const voice of voices) voice.stop(end);
     voices.clear();
@@ -174,19 +178,57 @@ export class WildernessAudio {
       this.step = (this.step + 1) % this.melody.length; this.next += beat;
     }
   }
+  private turnPage(time: number, gain: number) {
+    const ctx = this.ctx!;
+    if (!this.paper) {
+      this.paper = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * .14), ctx.sampleRate);
+      const data = this.paper.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    }
+    const source = ctx.createBufferSource(), filter = ctx.createBiquadFilter(), envelope = ctx.createGain();
+    source.buffer = this.paper;
+    filter.type = 'bandpass'; filter.Q.value = .7;
+    filter.frequency.setValueAtTime(1800, time);
+    filter.frequency.exponentialRampToValueAtTime(700, time + .14);
+    envelope.gain.setValueAtTime(0, time);
+    envelope.gain.linearRampToValueAtTime(gain, time + .018);
+    envelope.gain.exponentialRampToValueAtTime(.001, time + .14);
+    source.connect(filter); filter.connect(envelope); envelope.connect(this.effects!);
+    this.effectVoices.add(source);
+    source.start(time); source.stop(time + .14);
+    source.onended = () => { this.effectVoices.delete(source); source.disconnect(); filter.disconnect(); envelope.disconnect(); };
+  }
   play(sound: Sound) {
     if (!this.ctx || !this.effects || this.ctx.state !== 'running' || document.hidden || this.settings.muted || !this.settings.effects) return;
-    const now = this.ctx.currentTime;
-    this.effectTimes = this.effectTimes.filter(time => now - time < .22);
-    this.effectTimes.push(now);
-    const gain = (sound === 'error' ? .14 : .32) / Math.sqrt(this.effectTimes.length);
-    const notes: Record<Sound, number[]> = { place: [79,84], pickup: [79,72], rotate: [76,81], win: [72,76,79,84,88], click: [76], select: [81], error: [55,53] };
-    notes[sound].forEach((note, i) => this.note(note, now + i * (sound === 'win' ? .14 : .045), sound === 'win' ? .75 : .18, gain, this.effects!));
+    try {
+      const now = this.ctx.currentTime;
+      if (!['place', 'pickup', 'rotate', 'win', 'page'].includes(sound)) {
+        if (this.lastUiSound === sound && now - this.lastUiEffect < .035) return;
+        this.lastUiSound = sound; this.lastUiEffect = now;
+      }
+      this.effectTimes = this.effectTimes.filter(time => now - time < .22);
+      this.effectTimes.push(now);
+      const gain = (sound === 'error' ? .14 : sound === 'close' || sound === 'page' ? .2 : .32) / Math.sqrt(this.effectTimes.length);
+      if (sound === 'page') { this.turnPage(now, gain); return; }
+      const notes: Record<Exclude<Sound, 'page'>, number[]> = { place: [79,84], pickup: [79,72], rotate: [76,81], win: [72,76,79,84,88], click: [76], select: [81], close: [74,67], confirm: [76,84], success: [79,84,88], error: [55,53] };
+      notes[sound].forEach((note, i) => this.note(note, now + i * (sound === 'win' ? .14 : .045), sound === 'win' ? .75 : sound === 'close' ? .1 : sound === 'success' ? .24 : .18, gain, this.effects!));
+    } catch { /* Audio feedback must never interrupt an interaction. */ }
+  }
+  feedback(sound: Sound = 'click') {
+    const version = ++this.feedbackVersion;
+    if (document.hidden || this.settings.muted || !this.settings.effects) return;
+    if (this.ctx?.state === 'running') { this.play(sound); return; }
+    const requested = performance.now();
+    void this.start().then(() => {
+      if (version === this.feedbackVersion && performance.now() - requested < 250) this.play(sound);
+    }).catch(() => { /* A failed browser audio unlock must not block the control. */ });
   }
   dispose() {
+    this.feedbackVersion++;
     this.stopTimer(); document.removeEventListener('visibilitychange', this.onVisibility);
     if (this.ctx) { this.stopVoices(this.musicVoices); this.stopVoices(this.effectVoices); void this.ctx.close(); }
-    this.ctx = undefined; this.music = undefined; this.effects = undefined;
+    this.ctx = undefined; this.music = undefined; this.effects = undefined; this.paper = undefined;
+    this.lastUiSound = undefined; this.lastUiEffect = -Infinity; this.effectTimes = [];
   }
 }
 export const audio = new WildernessAudio();

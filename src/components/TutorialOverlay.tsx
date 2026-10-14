@@ -5,6 +5,7 @@ import type { Language } from '../i18n';
 import type { TutorialLesson, TutorialStep, TutorialTarget } from '../game/tutorial';
 import './tutorial.css';
 import { Art } from './Art';
+import { audio } from '../game/audio';
 
 type Rect = { x: number; y: number; width: number; height: number };
 const uiSelectors = { board: '.board', facilities: '.facility-list', undo: '[data-tutorial="undo"]', feedback: '.rule-dock, .guide-strip', goal: '.board-with-clues', win: '.win-content, .board' };
@@ -101,7 +102,7 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
       blockPointer(event);
       if (step.advance === 'click' && (inFocus(event) || targetElements(step.target).some(el => el.contains(event.target as Node)))) {
         if (boardCompletion(event)) block(event);
-        if (performance.now() - pointerAdvance.current > 400) onNext();
+        if (performance.now() - pointerAdvance.current > 400) { audio.feedback('confirm'); onNext(); }
       }
     };
     const pointerup = (event: PointerEvent) => {
@@ -110,6 +111,7 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
       if (step.advance === 'click' && inFocus(event)) {
         if (boardCompletion(event)) block(event);
         pointerAdvance.current = performance.now();
+        audio.feedback('confirm');
         requestAnimationFrame(onNext);
       }
     };
@@ -117,8 +119,8 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
       if (!step.blockInteraction) return;
       if (event.key === 'Tab' || allowed(event.target) && !event.ctrlKey && !event.metaKey && event.key !== 'Escape') return;
       event.preventDefault(); event.stopPropagation();
-      if (event.key === 'Escape' && step.allowSkip) onSkip();
-      else if ((event.key === 'Enter' || event.key === ' ') && step.advance !== 'action') onNext();
+      if (event.key === 'Escape' && step.allowSkip) { audio.feedback('close'); onSkip(); }
+      else if ((event.key === 'Enter' || event.key === ' ') && step.advance !== 'action') { audio.feedback('confirm'); onNext(); }
     };
     document.addEventListener('pointerdown', blockPointer, true);
     document.addEventListener('pointerup', pointerup, true);
@@ -148,7 +150,7 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
       <p aria-live="polite">{copy.text}</p>
       {step.example && <svg className="tutorial-example" viewBox="0 0 156 90" role="img" aria-label={copy.title}><g fill="#d5dfb4" stroke="#a6b78a" strokeWidth="2">{[0,1,2,3].map(i => <rect key={i} x={8+i%2*40} y={5+Math.floor(i/2)*40} width="36" height="36" rx="5"/>)}</g><svg x="8" y="5" width="36" height="36"><Art kind="water"/></svg><svg x="48" y={step.example === 'wrong' ? 45 : 5} width="36" height="36"><Art kind="camp"/></svg><path d={step.example === 'wrong' ? 'M107 30l23 23m0-23-23 23' : 'm101 44 12 12 26-30'} fill="none" stroke={step.example === 'wrong' ? '#bb735b' : '#678c60'} strokeWidth="6" strokeLinecap="round"/></svg>}
       <small>{step.advance === 'action' ? dictionary.controls.action : dictionary.controls.continue}</small>
-      <div className="tutorial-controls">{step.allowSkip && <button className="tutorial-skip" onClick={onSkip}>{dictionary.controls.skip}</button>}<button disabled={index === 0 || step.advance === 'action' || lesson.steps[index - 1]?.advance === 'action'} onClick={onBack}>{dictionary.controls.back}</button><button className="tutorial-next" disabled={step.advance === 'action'} onClick={onNext}>{index + 1 === lesson.steps.length ? lesson.facility ? dictionary.controls.understood : dictionary.controls.finish : dictionary.controls.next}</button></div>
+      <div className="tutorial-controls">{step.allowSkip && <button className="tutorial-skip" data-sound="close" onClick={onSkip}>{dictionary.controls.skip}</button>}<button data-sound="close" disabled={index === 0 || step.advance === 'action' || lesson.steps[index - 1]?.advance === 'action'} onClick={onBack}>{dictionary.controls.back}</button><button className="tutorial-next" data-sound="confirm" disabled={step.advance === 'action'} onClick={onNext}>{index + 1 === lesson.steps.length ? lesson.facility ? dictionary.controls.understood : dictionary.controls.finish : dictionary.controls.next}</button></div>
     </div>
   </div>;
   return createPortal(content, portal || document.body);

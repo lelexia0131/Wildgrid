@@ -23,6 +23,7 @@ export const uiEnglish = {
   '{0}难 · {1}': 'Level {0} · {1}',
   '开始时间': 'Started', '完成时间': 'Finished', '未完成': 'Unfinished', '复盘': 'Review',
   '历史地图未保存': 'Historical map unavailable', '暂无记录': 'No records yet',
+  '导出': 'Export',
   '{0}难 · 复盘': 'Level {0} · Review',
   ...manualEnglish, ...feedbackEnglish,
   '需占 {0} 格，已占 {1} 格{2}': 'Target: {0} cells. Filled: {1}{2}',

@@ -2,6 +2,7 @@ import { useCallback, useLayoutEffect, useState } from 'react';
 import { getLevelById } from '../game/levels';
 import { progressForPlay, readSave, writeSave } from '../game/storage';
 import type { Placement, Settings } from '../game/types';
+import { audio } from '../game/audio';
 
 export function useAdventureProgress() {
   const [save, setSave] = useState(() => readSave());
@@ -20,5 +21,5 @@ export function useAdventureProgress() {
     const level = getLevelById(id)!;
     return { level, placements: reset ? [] : progressForPlay(save, level) };
   }
-  return { save, saved, recordProgress, completeLevel, updateSettings, getStartSnapshot, retrySave: () => setSaved(writeSave(save)) };
+  return { save, saved, recordProgress, completeLevel, updateSettings, getStartSnapshot, retrySave: () => { const result = writeSave(save); setSaved(result); audio.feedback(result ? 'success' : 'error'); } };
 }
