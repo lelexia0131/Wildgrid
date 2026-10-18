@@ -250,7 +250,8 @@ input[type=range] { height: 22px; }
 .label-pool { background: #d4eceb; color: #3a737b; }
 .placed-picnic { background: #e9dfbd; }
 .placed-cabin { background: #e7dab0; }
-.tile.placed { border-width: 2px; }
+:root { --facility-border-width: 2px; }
+.tile.placed { border-width: var(--facility-border-width); }
 .tile.placed.placed-multi, .tile.placed.placed-multi:hover { background: transparent; border-color: transparent; box-shadow: none; }
 .tile.placed-multi::before, .tile.placed-multi::after { display: none; }
 .placed-facility-art { position: relative; --footprint-color: #e7dab0; --footprint-border: #b6a16b88; }
@@ -258,12 +259,12 @@ input[type=range] { height: 22px; }
 .placed-facility-art.hovered { --footprint-color: #efdfae; }
 .placed-facility-art.invalid { --footprint-color: #ead2b1; --footprint-border: #cb8570; }
 .placed-facility-art.incomplete { --footprint-border: #c5ad65; }
-/* Centre the 2px stroke one CSS pixel inside the footprint, including concave shapes. */
-.facility-footprint { position: absolute; inset: 1px; width: calc(100% - 2px); height: calc(100% - 2px); overflow: visible; }
+/* Clip a double-width stroke inward, matching CSS borders even at fractional cell sizes. */
+.facility-footprint { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .facility-footprint[data-shape="el"] { --footprint-color: #dce0b7; }
 .invalid > .facility-footprint, .hovered > .facility-footprint { --footprint-color: inherit; }
 .footprint-fill { fill: var(--footprint-color); }
-.footprint-outline { stroke: var(--footprint-border); }
+.footprint-outline { stroke: var(--footprint-border); stroke-width: calc(2 * var(--facility-border-width)); }
 .placed-facility-art > .art { position: relative; }
 /* Android keeps the artwork but avoids a filtered surface for every board SVG. */
 [data-android] .board .art { filter: none; }
@@ -392,13 +393,13 @@ input[type=range] { height: 22px; }
 /* Shared tactile finish; retain the illustrated home buttons and tool colours. */
 .app { --panel-edge: #c7d1b7; --panel-shadow: 0 4px 0 #cbd4b34d, 0 8px 18px #344e420a; }
 .app :is(.primary, .secondary):not(.menu-adventure, .menu-journal, .menu-guide) {
-  border: 2px solid #a9b99b; border-radius: 14px; gap: 10px;
-  box-shadow: inset 0 2px 0 #ffffff40, 0 4px 0 #b5c1a4;
+  border: 2px solid var(--button-edge, #a9b99b); border-radius: 14px; gap: 10px;
+  box-shadow: inset 0 2px 0 #ffffff40, 0 4px 0 var(--button-depth, #b5c1a4);
   line-height: 1.25; white-space: normal; min-width: 0;
 }
-.app .primary:not(.menu-adventure) { border-color: #294e3e; box-shadow: inset 0 2px 0 #ffffff20, 0 4px 0 #244539; }
+.app .primary:not(.menu-adventure) { border-color: var(--button-edge, #294e3e); box-shadow: inset 0 2px 0 #ffffff20, 0 4px 0 var(--button-depth, #244539); }
 .app :is(.primary, .secondary):not(.menu-adventure, .menu-journal, .menu-guide):enabled:active {
-  transform: translateY(3px) scale(.99); box-shadow: inset 0 1px 0 #ffffff30, 0 1px 0 #859779;
+  transform: translateY(3px) scale(.99); box-shadow: inset 0 1px 0 #ffffff30, 0 1px 0 var(--button-depth, #859779);
 }
 .app :is(.icon-button, .facility-card, .sandbox-choice, .survival-difficulty, .level-card, .camp-tool):enabled:active { transform: translateY(2px) scale(.98); }
 .app :is(.primary, .secondary, .icon-button):disabled { opacity: .45; transform: none; }

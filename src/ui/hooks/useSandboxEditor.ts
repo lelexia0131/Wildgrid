@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import type { audio } from '../../platform/audio/WildernessAudio';
 import { writeClipboard } from '../../platform/clipboard';
 import { readLocalMaps, saveLocalMap } from '../../save-system/localMapStorage';
@@ -40,7 +40,7 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
     setLocalMapId(undefined); setSandboxDraft(null); setTerrainBrush(null);
   }, []);
   const markEditorDirty = useCallback(() => setEditorDirty(true), []);
-  useEffect(() => () => checkerRef.current.cancel(), []);
+  useLayoutEffect(() => () => { checkerRef.current.cancel(); revisionRef.current++; }, []);
 
   function openSandbox(size: 6 | 8) {
     sound('confirm'); invalidateCheck(); resetSandboxContext();
@@ -62,7 +62,7 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
   }
   function runSandboxAction(action: 'save' | 'export') {
     if (mode === 'survival') return;
-    if (checking || checkerRef.current.isRunning()) return;
+    if (checking || checkerRef.current.isRunning()) { cancelCheck(); setCheck(null); setNotice('已取消营地质检'); sound('close'); return; }
     const draft = mode === 'sandbox-editor' ? present : sandboxDraft;
     if (!draft) return;
     const revision = revisionRef.current;

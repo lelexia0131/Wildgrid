@@ -9,6 +9,7 @@ import { mapFingerprint } from './mapBlueprint';
 import type { Cell, FacilityKind, Level, MutableData, Placement, TerrainKind } from './types';
 
 export const MAP_GENERATION_TIMEOUT = 25000;
+export class MapGenerationSearchError extends Error {}
 export type MapGenerationSpec = { readonly min: number; readonly max: number; readonly bases: readonly number[]; readonly multi: number };
 function seeded(seed: number) {
   let value = seed >>> 0;
@@ -129,5 +130,5 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
       if (legal(next)) { draft = next; changes++; }
     }
   }
-  throw new Error('本次未能在时限内找到合适的唯一解地图，请重试。');
+  throw new MapGenerationSearchError('本次未能在时限内找到合适的唯一解地图，请重试。');
 }

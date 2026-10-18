@@ -57,7 +57,7 @@ export function useBoardFeedback(board: RefObject<HTMLElement | null>, level: Le
       // Move a short-lived copy into a grid-relative layer, never pixel coordinates.
       const copy = original.cloneNode(true) as HTMLElement, cells = occupied(piece, at);
       // A departure must resolve its own SVG clip, even if the facility is restored immediately.
-      const clip = copy.querySelector('clipPath');
+      const clip = copy.querySelector('.footprint-art clipPath');
       if (clip) {
         const id = clip.id; clip.id = `${id}-departure`;
         copy.querySelectorAll('[clip-path]').forEach(node => {

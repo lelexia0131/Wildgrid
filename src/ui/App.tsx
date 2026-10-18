@@ -96,7 +96,7 @@ export default function App() {
     ? placementHints(level, placements, selected, rotation, result.issues) : undefined,
   [playingBoard, save.settings.ruleDisplay, level, placements, selected, rotation, result.issues]);
   const survivalController = useSurvivalChallenge({
-    active: screen === 'game' && mode === 'survival', history, rotations, selected,
+    active: screen === 'game' && mode === 'survival', menuOpen: screen === 'survival', history, rotations, selected,
     enterGame: enterSurvival, openMenu: () => setScreen('survival'), returnToMenu,
     onSettled: () => { wonRef.current = true; beginCelebration(); },
     invalidateCheck: sandbox.invalidateCheck, resetSandboxContext: sandbox.resetSandboxContext, refreshLocalMaps: sandbox.refreshLocalMaps, setNotice, sound,
@@ -335,8 +335,8 @@ export default function App() {
       <section className="operations camp-tools"><h2>{t("营地工具")}</h2><div className="camp-tool-grid">
         <button data-sound="handled" className="camp-tool tool-undo" disabled={!history.past.length} data-tutorial="undo" aria-label={t("撤销")} title={t("撤销")} onClick={undo}><CampToolIcon kind="undo"/><span className="sr-only">{t("撤销")}</span></button>
         {mode === 'sandbox-editor' ? <>
-          <button data-sound="handled" className="camp-tool tool-save sandbox-save" disabled={checking} aria-label={t("保存")} title={checking ? t("正在质检…") : t("保存")} onClick={() => runSandboxAction('save')}><CampToolIcon kind="save"/><span className="sr-only">{t("保存")}</span></button>
-          <button data-sound="handled" className="camp-tool tool-export sandbox-export" disabled={checking} aria-label={t("导出地图")} title={checking ? t("正在质检…") : t("导出地图")} onClick={() => runSandboxAction('export')}><CampToolIcon kind="export"/><span className="sr-only">{t("导出地图")}</span></button>
+          <button data-sound="handled" className="camp-tool tool-save sandbox-save" aria-label={checking ? t("取消") : t("保存")} title={checking ? t("取消") : t("保存")} onClick={() => runSandboxAction('save')}><CampToolIcon kind="save"/><span className="sr-only">{t("保存")}</span></button>
+          <button data-sound="handled" className="camp-tool tool-export sandbox-export" aria-label={checking ? t("取消") : t("导出地图")} title={checking ? t("取消") : t("导出地图")} onClick={() => runSandboxAction('export')}><CampToolIcon kind="export"/><span className="sr-only">{t("导出地图")}</span></button>
         </> : <>
           {(mode === 'adventure' || replay || localMapId !== undefined) && <button className="camp-tool tool-blueprint blueprint-button" disabled={!blueprintUnlocked} aria-label={t("图纸")} title={blueprintUnlocked ? t("查看图纸") : mode === 'adventure' ? t("通关后解锁") : t("通关或放弃荒野求生挑战后解锁")} onClick={() => { setBlueprintOpen(true); }}><CampToolIcon kind="blueprint"/><span className="sr-only">{t("图纸")}</span></button>}
           <button data-sound="handled" className="camp-tool tool-restart" aria-label={t("重新游玩")} title={t("重新游玩")} onClick={restart}><CampToolIcon kind="restart"/><span className="sr-only">{t("重新游玩")}</span></button>
@@ -344,7 +344,7 @@ export default function App() {
           {mode === 'survival' ? <>
             <button data-sound="handled" className="camp-tool tool-save survival-collect" aria-label={t("保存")} title={t("保存")} onClick={collectSurvival}><CampToolIcon kind="save"/><span className="sr-only">{t("保存")}</span></button>
             <button data-sound="handled" className="camp-tool tool-abandon" aria-label={t("放弃")} title={t("放弃")} onClick={survivalController.openAbandon}><CampToolIcon kind="abandon"/><span className="sr-only">{t("放弃")}</span></button>
-          </> : mode === 'sandbox-play' && !replay ? <button data-sound="handled" className="camp-tool tool-save sandbox-save" disabled={checking} aria-label={t("保存")} title={checking ? t("正在质检…") : t("保存")} onClick={() => runSandboxAction('save')}><CampToolIcon kind="save"/><span className="sr-only">{t("保存")}</span></button> : !replay && <button data-sound="close" className="camp-tool tool-journal" aria-label={t("营地日记")} title={t("营地日记")} onClick={returnToMenu}><CampToolIcon kind="journal"/><span className="sr-only">{t("营地日记")}</span></button>}
+          </> : mode === 'sandbox-play' && !replay ? <button data-sound="handled" className="camp-tool tool-save sandbox-save" aria-label={checking ? t("取消") : t("保存")} title={checking ? t("取消") : t("保存")} onClick={() => runSandboxAction('save')}><CampToolIcon kind="save"/><span className="sr-only">{t("保存")}</span></button> : !replay && <button data-sound="close" className="camp-tool tool-journal" aria-label={t("营地日记")} title={t("营地日记")} onClick={returnToMenu}><CampToolIcon kind="journal"/><span className="sr-only">{t("营地日记")}</span></button>}
         </>}
       </div></section>
       </aside></div>

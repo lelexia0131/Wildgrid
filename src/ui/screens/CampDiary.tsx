@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight, Check, LockKeyhole } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { ChapterArtwork } from '../components/ChapterArtwork';
 import { JournalChapterBackground } from '../components/JournalChapterBackground';
+import { MenuLandscapeBackground } from '../components/MenuLandscapeBackground';
 import { JOURNAL_CHAPTERS, JOURNAL_LEVEL_COVERS, JOURNAL_PALETTES } from '../components/journalArt';
 import { JournalLevelSceneArt } from '../components/JournalLevelSceneArt';
 import { useI18n } from '../../localization/LanguageContext';
@@ -22,7 +23,7 @@ export function CampDiary({ completed, currentId, chapter, onChapter, onStart, o
     if (next === chapter) return;
     audio.feedback('page'); onChapter(next);
   }
-  return <main className={`levels-page camp-diary ${chapter === null ? 'chapter-selection' : `chapter-levels diary-${JOURNAL_CHAPTERS[chapter].theme}`}`}>
+  return <>{chapter === null && <MenuLandscapeBackground scene="diary"/>}<main className={`levels-page camp-diary ${chapter === null ? 'chapter-selection' : `chapter-levels diary-${JOURNAL_CHAPTERS[chapter].theme}`}`}>
     {chapter !== null && <JournalChapterBackground chapter={chapter}/>}
     <button className="back-link" data-sound={chapter === null ? 'close' : 'handled'} onClick={() => chapter === null ? onBack() : turnChapter(null)}><ArrowLeft size={18}/>{chapter === null ? t('返回营地') : t('返回板块选择')}</button>
     <div className="page-heading"><h1>{chapter === null ? t('营地日记') : t(JOURNAL_CHAPTERS[chapter].name)}</h1></div>
@@ -42,5 +43,5 @@ export function CampDiary({ completed, currentId, chapter, onChapter, onStart, o
         <JournalLevelSceneArt id={l.id}/>
       </button>;
     })}</div></div>}
-  </main>;
+  </main></>;
 }

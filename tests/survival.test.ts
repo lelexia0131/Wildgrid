@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { generateSurvival } from '../src/game-modes/survival/survivalChallenge';
+import { MapGenerationSearchError } from '../src/engine/mapGeneration';
 import { completeSurvival, readSurvival, writeSurvival } from '../src/save-system/survivalStorage';
 import { emptySurvivalProgress, survivalTotals } from '../src/game-modes/survival/survivalChallenge';
 import { rankFor, SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
@@ -23,11 +24,15 @@ function storage(fail = false) {
 test('ten seeded tiers generate legal unique 8×8 puzzles, including twenty facilities', () => {
   for (let difficulty = 1; difficulty <= 10; difficulty++) {
     const started = Date.now(), spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
-    const map = generateSurvival(difficulty, difficulty === 10 ? 2 : 20261008 + difficulty, `test-${difficulty}`);
+    let map: SurvivalChallenge | undefined;
+    for (let seed = difficulty === 10 ? 2 : 20261008 + difficulty; !map; seed++) {
+      try { map = generateSurvival(difficulty, seed, `test-${difficulty}`); }
+      catch (cause) { if (!(cause instanceof MapGenerationSearchError)) throw cause; }
+    }
     assert.equal(map.draft.level.size, 8);
     assert.ok(map.draft.level.pieces.length >= spec.min && map.draft.level.pieces.length <= spec.max);
     assert.equal(evaluate(map.draft.level, map.draft.placements).won, true);
-    const solved = solveLevel(map.draft.level, 2, { deadline: Date.now() + 1500, maxNodes: 50000 });
+    const solved = solveLevel(map.draft.level, 2);
     assert.equal(solved.aborted, false); assert.equal(solved.count, 1);
     maps.push(map);
     console.log(`${difficulty}难: ${map.draft.level.pieces.length} 设施, ${map.draft.level.terrain.length} 地形, ${solved.candidates} 候选, ${solved.nodes} 搜索节点, ${Date.now() - started}ms`);

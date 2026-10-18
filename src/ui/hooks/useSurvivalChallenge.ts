@@ -10,6 +10,7 @@ import type { SurvivalChallenge, SurvivalProgress, SurvivalReward, SurvivalSave 
 
 type Options = {
   active: boolean;
+  menuOpen: boolean;
   history: GameSession;
   rotations: Partial<Record<Shape, number>>;
   selected: Piece | null;
@@ -24,7 +25,7 @@ type Options = {
   sound: (name?: Parameters<typeof audio.play>[0]) => void;
 };
 
-export function useSurvivalChallenge({ active, history, rotations, selected, enterGame, openMenu, returnToMenu, onSettled, invalidateCheck, resetSandboxContext, refreshLocalMaps, setNotice, sound }: Options) {
+export function useSurvivalChallenge({ active, menuOpen, history, rotations, selected, enterGame, openMenu, returnToMenu, onSettled, invalidateCheck, resetSandboxContext, refreshLocalMaps, setNotice, sound }: Options) {
   const [survival, setSurvival] = useState(readSurvival);
   const [challenge, setChallenge] = useState<SurvivalChallenge | null>(null);
   const [survivalReward, setSurvivalReward] = useState<SurvivalReward | null>(null);
@@ -45,7 +46,25 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
     }
     catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '挑战进度保存失败'); }
   }, [active, challenge, history, placements, rotations, selected]);
-  useEffect(() => () => generatorRef.current.cancel(), []);
+  useLayoutEffect(() => {
+    if (!menuOpen) { generatorRef.current.cancel(); setGenerating(null); }
+    return () => generatorRef.current.cancel();
+  }, [menuOpen]);
+  useEffect(() => {
+    const task = generatorRef.current;
+    const sync = () => task.setPaused(document.hidden);
+    const hide = () => task.setPaused(true);
+    sync();
+    document.addEventListener('visibilitychange', sync);
+    window.addEventListener('pagehide', hide);
+    window.addEventListener('pageshow', sync);
+    return () => {
+      task.cancel();
+      document.removeEventListener('visibilitychange', sync);
+      window.removeEventListener('pagehide', hide);
+      window.removeEventListener('pageshow', sync);
+    };
+  }, []);
 
   function openSurvivalMenu() { sound(); setSurvival(readSurvival()); setSurvivalError(''); openMenu(); }
   function persistSurvival(next: SurvivalSave) { writeSurvival(next); setSurvival(next); }
@@ -63,23 +82,23 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
     generatorRef.current.cancel(); setGenerating(null);
   }
   function requestSurvival(difficulty: number) {
+    if (!menuOpen || generatorRef.current.isRunning()) return;
     sound('confirm'); setSurvivalError('');
     const latest = readSurvival(); setSurvival(latest);
     if (latest.challenge) { setReplaceChallenge(difficulty); return; }
     generateChallenge(difficulty);
   }
   function generateChallenge(difficulty: number) {
-    if (generatorRef.current.isRunning()) return;
+    if (!menuOpen || generatorRef.current.isRunning()) return;
     setReplaceChallenge(null); setGenerating(difficulty); setSurvivalError('');
-    const seed = crypto.getRandomValues(new Uint32Array(1))[0];
-    const id = `wild-${Date.now().toString(36)}-${Array.from(crypto.getRandomValues(new Uint32Array(2)), n => n.toString(36)).join('-')}`;
     try {
+      const seed = crypto.getRandomValues(new Uint32Array(1))[0];
+      const id = `wild-${Date.now().toString(36)}-${Array.from(crypto.getRandomValues(new Uint32Array(2)), n => n.toString(36)).join('-')}`;
       const fail = (message: string) => { cancelGeneration(); setSurvivalError(message); sound('error'); };
       generatorRef.current.start({ difficulty, seed, id, recent: readSurvival().recent }, {
-        onError: reason => fail(reason === 'timeout' ? '生成已超时，旧挑战仍然保留，请重试。' : '地图生成失败，旧挑战仍然保留，请重试。'),
+        onError: () => fail('地图生成失败，旧挑战仍然保留，请重试。'),
         onResult: result => {
-          if (!result.challenge) { fail(result.error || '地图生成失败，请重试'); return; }
-          const current = { ...result.challenge, startedAt: Date.now() };
+          const current = { ...result, startedAt: Date.now() };
           cancelGeneration();
           try {
             const latest = readSurvivalForWrite();

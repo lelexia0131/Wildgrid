@@ -54,6 +54,35 @@ test('Day 1 has one fixed sequence with a welcome, wrong/right examples and a ve
   assert.equal(matchesAction({ type: 'place', kind: 'camp' }, { type: 'place', kind: 'camp' }), true);
   assert.equal(matchesAction({ type: 'rotate' }, { type: 'select' }), false);
 });
+
+test('tutorial writes recheck v1 compatibility and preserve future, corrupt and unreadable saves', t => {
+  const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  let stored: string | null = null, readFails = false, writeFails = false, writes = 0;
+  Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: {
+    getItem: () => { if (readFails) throw new Error('denied'); return stored; },
+    setItem: (_key: string, value: string) => { if (writeFails) throw new Error('quota'); writes++; stored = value; },
+  } });
+  t.after(() => { if (previous) Object.defineProperty(globalThis, 'localStorage', previous); else Reflect.deleteProperty(globalThis, 'localStorage'); });
+  assert.equal(writeTutorial(readTutorial(false)), true); assert.equal(writes, 1);
+  assert.equal(JSON.parse(stored!).version, 1);
+  stored = '{"version":1,"enabled":false,"language":"en"}';
+  const state = readTutorial(false); assert.equal(state.enabled, false); assert.equal(state.language, 'en');
+  assert.equal(writeTutorial({ ...state, enabled: true }), true);
+  assert.equal(readTutorial(false).enabled, true);
+  for (const raw of ['{"version":2}', '{broken', '', 'null', '[]', '{}', '{"version":1,"enabled":"yes"}', '{"version":1,"basicSeen":{}}', '{"version":1,"facilitiesSeen":["unknown"]}', '{"version":1,"daysSeen":[999]}', '{"version":1,"activeStep":null}', '{"version":1,"unknown":true}']) {
+    stored = raw; const before: number = writes;
+    assert.equal(writeTutorial(readTutorial(false)), false, raw);
+    assert.equal(stored, raw); assert.equal(writes, before);
+  }
+  stored = '{"version":1,"enabled":false}'; readFails = true;
+  const fallback = readTutorial(false);
+  assert.equal(writeTutorial(freshTutorial()), false); assert.equal(stored, '{"version":1,"enabled":false}');
+  readFails = false;
+  assert.equal(writeTutorial(fallback), false); assert.equal(stored, '{"version":1,"enabled":false}');
+  assert.equal(readTutorial(false).enabled, false);
+  writeFails = true;
+  assert.equal(writeTutorial(freshTutorial()), false); assert.equal(stored, '{"version":1,"enabled":false}');
+});
 test('tutorials appear only on scheduled Adventure days and keep their steps fixed', () => {
   const introduced = new Set<FacilityKind>();
   for (const mode of ['adventure', 'survival', 'sandbox-play', 'sandbox-editor'] as const) {

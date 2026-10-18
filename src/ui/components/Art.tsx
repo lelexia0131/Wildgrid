@@ -3,6 +3,7 @@ import { offsets } from '../../engine';
 import type { FacilityKind, Shape, TerrainKind } from '../../engine';
 
 export function FootprintSurface({ shape, rotation }: { shape: Shape; rotation: number }) {
+  const clip = `surface-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const cells = offsets(shape, rotation);
   const width = (Math.max(...cells.map(p => p.c)) + 1) * 100, height = (Math.max(...cells.map(p => p.r)) + 1) * 100;
   const corners = footprintCorners(cells);
@@ -12,7 +13,7 @@ export function FootprintSurface({ shape, rotation }: { shape: Shape; rotation: 
     const after = { x:p.x+Math.sign(next.x-p.x)*8, y:p.y+Math.sign(next.y-p.y)*8 };
     return `${i ? 'L' : 'M'}${before.x} ${before.y}Q${p.x} ${p.y} ${after.x} ${after.y}`;
   }).join('')+'Z';
-  return <svg className="facility-footprint" data-shape={shape} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><path className="footprint-fill" d={outline}/><path className="footprint-outline" d={outline} fill="none" strokeWidth="2" vectorEffect="non-scaling-stroke"/></svg>;
+  return <svg className="facility-footprint" data-shape={shape} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><defs><clipPath id={clip}><path d={outline}/></clipPath></defs><path className="footprint-fill" d={outline}/><path className="footprint-outline" d={outline} fill="none" vectorEffect="non-scaling-stroke" clipPath={`url(#${clip})`}/></svg>;
 }
 
 function FootprintArt({ shape, rotation, children }: { shape: Shape; rotation: number; children: React.ReactNode }) {

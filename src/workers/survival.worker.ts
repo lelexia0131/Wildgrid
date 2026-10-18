@@ -1,5 +1,9 @@
 import { generateSurvival } from '../game-modes/survival/survivalChallenge';
-self.onmessage = (event: MessageEvent<{ difficulty: number; seed: number; id: string; recent: string[] }>) => {
-  try { self.postMessage({ challenge: generateSurvival(event.data.difficulty, event.data.seed, event.data.id, event.data.recent) }); }
-  catch (cause) { self.postMessage({ error: cause instanceof Error ? cause.message : '地图生成失败，请重试' }); }
+import { MapGenerationSearchError } from '../engine/mapGeneration';
+import type { SurvivalGenerationRequest, SurvivalGenerationResult } from './workerTasks';
+self.onmessage = (event: MessageEvent<SurvivalGenerationRequest>) => {
+  let result: SurvivalGenerationResult;
+  try { result = { status: 'success', challenge: generateSurvival(event.data.difficulty, event.data.seed, event.data.id, event.data.recent) }; }
+  catch (cause) { result = { status: cause instanceof MapGenerationSearchError ? 'search-failed' : 'error', error: cause instanceof Error ? cause.message : '地图生成失败，请重试' }; }
+  self.postMessage(result);
 };

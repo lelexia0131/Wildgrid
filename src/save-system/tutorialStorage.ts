@@ -12,6 +12,7 @@ export type TutorialState = {
   daysSeen: number[]; activeStep?: { day: number; index: number };
 };
 const FACILITY_KINDS: FacilityKind[] = ['camp', 'fire', 'tower', 'picnic', 'cabin', 'foodTruck', 'powerTower', 'pool'];
+let readFailed = false;
 export function freshTutorial(experienced = false, language: Language = 'zh'): TutorialState {
   return { version: 1, enabled: true, language, basicComplete: experienced, basicSeen: experienced ? [...BASIC_LESSONS] : [], facilitiesSeen: [], skipped: [], daysSeen: [] };
 }
@@ -36,6 +37,7 @@ export function readTutorial(experienced = hasPlayedBefore()): TutorialState {
   }
   try {
     const raw = JSON.parse(localStorage.getItem(TUTORIAL_STORAGE_KEY) || 'null');
+    readFailed = false;
     if (raw?.version !== 1) return fallback;
     const basicSeen = BASIC_LESSONS.filter(id => Array.isArray(raw.basicSeen) && raw.basicSeen.includes(id));
     return { version: 1, enabled: raw.enabled !== false, language: raw.language === 'en' ? 'en' : 'zh',
@@ -45,8 +47,26 @@ export function readTutorial(experienced = hasPlayedBefore()): TutorialState {
       daysSeen: Array.isArray(raw.daysSeen) ? TUTORIAL_DAYS.filter(day => raw.daysSeen.includes(day)) : fallback.daysSeen,
       activeStep: raw.activeStep && TUTORIAL_DAYS.some(day => day === raw.activeStep.day) && Number.isInteger(raw.activeStep.index) && raw.activeStep.index >= 0 ? raw.activeStep : undefined,
     };
-  } catch { return fallback; }
+  } catch { readFailed = true; return fallback; }
+}
+function canOverwriteTutorial(stored: string | null): boolean {
+  if (stored === null) return true;
+  const raw = JSON.parse(stored);
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw) || raw.version !== 1) return false;
+  // Older v1 saves may omit fields. Present fields must still be readable v1 data.
+  if (Object.keys(raw).some(key => !['version', 'enabled', 'language', 'basicComplete', 'basicSeen', 'facilitiesSeen', 'skipped', 'daysSeen', 'activeStep'].includes(key))) return false;
+  if (['enabled', 'basicComplete'].some(key => key in raw && typeof raw[key] !== 'boolean')) return false;
+  if ('language' in raw && raw.language !== 'zh' && raw.language !== 'en') return false;
+  if (['basicSeen', 'facilitiesSeen', 'skipped'].some(key => key in raw && (!Array.isArray(raw[key]) || raw[key].some((value: unknown) => typeof value !== 'string')))) return false;
+  if (raw.basicSeen?.some((id: string) => !BASIC_LESSONS.includes(id as BasicLesson)) || raw.facilitiesSeen?.some((kind: string) => !FACILITY_KINDS.includes(kind as FacilityKind))) return false;
+  if ('daysSeen' in raw && (!Array.isArray(raw.daysSeen) || raw.daysSeen.some((day: number) => !TUTORIAL_DAYS.some(known => known === day)))) return false;
+  if ('activeStep' in raw && (!raw.activeStep || typeof raw.activeStep !== 'object' || !TUTORIAL_DAYS.some(day => day === raw.activeStep.day) || !Number.isInteger(raw.activeStep.index) || raw.activeStep.index < 0)) return false;
+  return true;
 }
 export function writeTutorial(state: TutorialState): boolean {
-  try { localStorage.setItem(TUTORIAL_STORAGE_KEY, JSON.stringify(state)); return true; } catch { return false; }
+  if (readFailed) return false;
+  try {
+    if (!canOverwriteTutorial(localStorage.getItem(TUTORIAL_STORAGE_KEY))) return false;
+    localStorage.setItem(TUTORIAL_STORAGE_KEY, JSON.stringify(state)); return true;
+  } catch { return false; }
 }

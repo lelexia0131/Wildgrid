@@ -79,7 +79,8 @@
 .local-map-actions { display: grid; flex: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
 .local-map-actions > button { width: 100%; height: 44px; padding: 0 8px; gap: 8px; font-size: 13px; }
 .local-map-actions .local-map-edit { background: linear-gradient(#d5e5ce, #bed1b2); border: 1px solid #a3b994; color: #466448; box-shadow: 0 4px 0 #92a77e; }
-.local-map-actions .local-map-icon-edit { background: linear-gradient(#e7deeb, #d6c9df); border: 1px solid #b9a8c5; color: #6e567e; box-shadow: 0 4px 0 #aa97b7; }
+.local-map-actions .local-map-icon-edit { --button-edge: #786188; --button-depth: #6e567e; background: linear-gradient(#e7deeb, #d6c9df); border: 1px solid #b9a8c5; color: #6e567e; box-shadow: 0 4px 0 #aa97b7; }
+.local-map-actions .local-map-delete { --button-edge: #85473d; --button-depth: #763e35; }
 .local-map-actions .local-map-edit:hover:enabled { background: #dcead5; }
 .local-map-actions .local-map-icon-edit:hover:enabled { background: #ece3ef; }
 .local-map-actions .local-map-edit:disabled { opacity: .5; }
