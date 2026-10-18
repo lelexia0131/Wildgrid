@@ -96,4 +96,16 @@ test('session history caps at 80, keeps restored snapshots and discards redo aft
   assert.equal(restored.past.length, 80);
   assert.equal(restored.future.length, 80);
   assert.equal(restored.present, session.present);
+  // Compile-time contract checks; these mutations must never type-check.
+  if (false) {
+    const state = getState(session);
+    // @ts-expect-error Session history is owned by the Engine.
+    session.past.push(present);
+    // @ts-expect-error Snapshot placements are read-only.
+    state.placements.push({ id: 'a', r: 0, c: 0, rotation: 0 });
+    // @ts-expect-error Nested level data is read-only too.
+    state.level.terrain[0].r = 1;
+    // @ts-expect-error Placement records cannot be changed in place.
+    state.placements[0].rotation = 1;
+  }
 });

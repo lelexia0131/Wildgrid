@@ -2,7 +2,7 @@
 // Run only when editing the level pack; the game loads the resulting static JSON.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tsImport } from 'tsx/esm/api';
-const { occupied } = await tsImport('../src/engine/index.ts', import.meta.url);
+const { occupied } = await tsImport("../src/engine/index.ts", import.meta.url);
 const levels = [], solutions = {};
 function level(name, chapter, tip, terrain, pieces) {
   const id = levels.length + 1, rows = Array(6).fill(0), cols = Array(6).fill(0);
@@ -29,12 +29,12 @@ level('长长的周末', '把营地展开', '这座营地需要更多空地，�
 level('转角的风景', '把营地展开', 'L 形营地占三格。旋转四个方向，试试贴合这片草地。', [['water',1,1],['forest',0,4],['forest',4,1],['mountain',4,4]], [['camp','el',1,2],['fire','single',2,4],['tower','single',4,3]]);
 level('林野协奏', '荒野成章', '把学到的规则串起来。点已放设施可拿起，再放到新的位置。', [['water',1,1],['water',4,5],['mountain',0,4],['mountain',5,1],['forest',3,0],['forest',0,0]], [['camp','domino',1,2],['camp','el',3,3],['fire','single',2,2],['tower','single',1,4],['tower','single',5,2]]);
 level('我们的旷野', '荒野成章', '这片熟悉的营地图。所有设施放完后，仍然可以自由调整。', [['water',1,1],['water',4,5],['mountain',0,4],['mountain',5,1],['forest',0,0],['forest',5,5]], [['camp','long',1,2],['camp','el',3,3],['camp','single',2,1],['fire','single',2,3],['fire','single',4,2],['tower','single',0,3],['tower','single',5,2]]);
-mkdirSync('src/data', { recursive: true });
-const expansion = JSON.parse(readFileSync('src/data/levels.json', 'utf8')).filter(l => l.id > 15);
-const expansionAnswers = Object.fromEntries(Object.entries(JSON.parse(readFileSync('src/data/solutions.json', 'utf8'))).filter(([id]) => Number(id) > 15));
+mkdirSync('src/game-data', { recursive: true });
+const expansion = JSON.parse(readFileSync('src/game-data/levels.json', 'utf8')).filter(l => l.id > 15);
+const expansionAnswers = Object.fromEntries(Object.entries(JSON.parse(readFileSync('src/game-data/solutions.json', 'utf8'))).filter(([id]) => Number(id) > 15));
 levels.push(...expansion);
 for (const l of levels) { l.name = `第${l.id}关`; l.chapter = ''; }
 Object.assign(solutions, expansionAnswers);
-writeFileSync('src/data/levels.json', JSON.stringify(levels, null, 2) + '\n');
-writeFileSync('src/data/solutions.json', JSON.stringify(solutions, null, 2) + '\n');
+writeFileSync('src/game-data/levels.json', JSON.stringify(levels, null, 2) + '\n');
+writeFileSync('src/game-data/solutions.json', JSON.stringify(solutions, null, 2) + '\n');
 console.log(`Authored ${levels.length} fixed levels.`);

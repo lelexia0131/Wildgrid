@@ -6,7 +6,7 @@ for Chinese handwriting and Caveat for Latin handwriting.
 The local LXGW WenKai supplement supplies characters missing from Ma Shan Zheng,
 including 瞭. The Chinese font and supplement are stored as WOFF2.
 
-The bilingual home logo in `components/GameTitle.tsx` is original SVG path lettering,
+The bilingual home logo in `ui/components/GameTitle.tsx` is original SVG path lettering,
 drawn for Wildgrid (not outlines extracted from these or other fonts). Both versions
 share carved edges, warm painted faces, wood-grain marks and a leaf sprig.
 

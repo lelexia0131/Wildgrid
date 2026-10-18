@@ -1,4 +1,5 @@
-import { key, occupied, placementBlock } from './rules';
+import { key, occupied } from './boardGeometry';
+import { placementBlock } from './placementRules';
 import type { Level, Placement } from './types';
 
 export type PlacementValidationError = {

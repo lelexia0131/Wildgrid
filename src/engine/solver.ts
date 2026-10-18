@@ -1,4 +1,5 @@
-import { campConnections, campRequirements, evaluate, facilityConflict, occupied, offsets } from './rules';
+import { campConnections, CAMP_REQUIREMENTS, evaluate, facilityConflict } from './placementRules';
+import { occupied, offsets } from './boardGeometry';
 import type { Cell, FacilityKind, Level, Piece, Placement } from './types';
 
 type Candidate = { at: Placement; cells: Cell[]; mask: bigint; rows: number[]; cols: number[]; connections: { camp: bigint; gap: bigint }[]; forbidden: { kind: FacilityKind; mask: bigint }[] };
@@ -56,7 +57,7 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
     if (stats.nodes > (budget.maxNodes ?? Infinity) || (stats.nodes % 64 === 1 && Date.now() >= (budget.deadline ?? Infinity))) { stats.aborted = true; return; }
     if (chosen.length === level.pieces.length) {
       if (rows.some((v, i) => v !== level.rows[i]) || cols.some((v, i) => v !== level.cols[i])) return;
-      if (chosen.some(({ g, p }) => campRequirements[groups[g].piece.kind] && !supports(p, camps, used))) return;
+      if (chosen.some(({ g, p }) => CAMP_REQUIREMENTS[groups[g].piece.kind] && !supports(p, camps, used))) return;
       const indices = groups.map(() => 0);
       const solution = chosen.map(({ g, p }) => ({ ...p.at, id: groups[g].ids[indices[g]++] }));
       if (!evaluate(level, solution).won) return;
@@ -78,14 +79,14 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
       if (valid.length < remaining[g]) return;
       if (best < 0 || valid.length < choices.length) { best = g; choices = valid; }
     }
-    if (chosen.some(({ g, p }) => campRequirements[groups[g].piece.kind] && !supports(p, possibleCamps, used))) return;
+    if (chosen.some(({ g, p }) => CAMP_REQUIREMENTS[groups[g].piece.kind] && !supports(p, possibleCamps, used))) return;
     const capacityR = Array<number>(n).fill(0), capacityC = Array<number>(n).fill(0);
     for (const p of board) if (possible & bit(p)) { capacityR[p.r]++; capacityC[p.c]++; }
     if (rows.some((v, r) => v + capacityR[r] < level.rows[r]) || cols.some((v, c) => v + capacityC[c] < level.cols[c])) return;
     const group = groups[best], previous = last[best];
     for (const i of choices) {
       const p = group.domain[i], kind = group.piece.kind;
-      if (campRequirements[kind] && !supports(p, possibleCamps, used | p.mask)) continue;
+      if (CAMP_REQUIREMENTS[kind] && !supports(p, possibleCamps, used | p.mask)) continue;
       last[best] = i; remaining[best]--; chosen.push({ g: best, p });
       for (let j = 0; j < n; j++) { rows[j] += p.rows[j]; cols[j] += p.cols[j]; }
       search(used | p.mask, { ...byKind, [kind]: (byKind[kind] ?? 0n) | p.mask });

@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readSave, writeSave } from '../src/game/storage';
-import { readSurvival, writeSurvival } from '../src/game/survival';
-import { saveLocalMap } from '../src/game/localMaps';
+import { readSave, writeSave } from '../src/save-system/adventureStorage';
+import { readSurvival, writeSurvival } from '../src/save-system/survivalStorage';
+import { saveLocalMap } from '../src/save-system/localMapStorage';
 import { getLevelById, getSolution } from '../src/engine';
 
 test('unreadable and incompatible saves survive attempted adventure, map and reward writes', () => {

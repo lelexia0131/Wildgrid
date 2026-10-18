@@ -36,20 +36,25 @@ npm run test:ui  # 多格插画、实时提示开关和手机触摸回归
 ## 文件结构
 
 ```text
-src/App.tsx                 页面组装、展示与事件绑定
-src/components/             棋盘插画、图纸、手册与模式菜单
-src/hooks/                  Engine session、输入反馈、导航及异步/存储协调
+src/ui/App.tsx              页面组装、展示与事件绑定
+src/ui/components/          棋盘渲染、插画、图纸、手册与教学覆盖层
+src/ui/screens/             日记、沙盒和求生菜单页面
+src/ui/hooks/               Engine Session、输入反馈、导航及任务/存储协调
 src/engine/index.ts         Wildgrid Engine 唯一公共入口
-src/engine/session.ts       棋盘命令、模式、80步历史与操作结果
-src/engine/rules.ts         唯一规则、几何、三态与通关
-src/engine/{solver,survivalGenerator}.ts 求解与既有随机生成
-src/engine/{adventure,sandbox,survival,localMaps}.ts 模式与存档纯业务
-src/game/                   存储/音频/剪贴板/身份适配器、Worker与UI教程
-src/data/{levels,solutions}.json 原45关与参考答案
-src/assets/、src/*.css       原有资源、布局与样式
+src/engine/gameSession.ts   棋盘命令、80步历史与操作结果
+src/engine/{boardGeometry,placementRules}.ts 唯一几何、规则、三态与通关
+src/engine/{solver,mapGeneration,mapBlueprint}.ts 求解、生成与地图蓝图/WG1
+src/game-modes/             冒险进度、沙盒地图业务、求生难度及生命周期
+src/save-system/            四种v1存档的解析、恢复、防覆盖及持久化
+src/platform/              音频、剪贴板、匿名设备身份及运行环境适配
+src/workers/               后台任务创建、消息、取消、超时和过期保护
+src/localization/          中英文、日期和翻译上下文
+src/game-data/             原45关与参考答案JSON
+src/assets/、src/ui/styles/ 原有资源、布局与样式
 electron/、android/、server/ 原生容器与玩家ID服务
 scripts/、tests/            维护脚本与回归验证
 reports/engine-*.md         全项目审计、文件职责与引擎迁移/验证报告
+reports/phase2-*.md         第二阶段实际迁移映射与验证报告
 ARCHITECTURE.md             API、状态所有权、依赖方向和扩展约定
 ```
 
@@ -73,7 +78,7 @@ Windows 和 Android 启动时异步读取独立的玩家 ID 缓存；没有缓�
 
 设置的第一项只读显示玩家 ID；获取期间显示“获取中…”，请求失败显示“暂未获取”，重新进入设置会重试。ID 请求不阻止启动和游玩，不修改冒险存档、地图或设置。浏览器预览不申请设备身份。
 
-API 地址集中在 `src/game/playerId.ts`。正式 HTTPS API 已部署，与现有 REALITY 节点通过 Nginx stream 共用公网 443；Windows 和 Android 均已验证真实申请、缓存读取及删除独立 ID 缓存后的服务器恢复。网络不可用时仍显示“暂未获取”，游戏继续正常运行。部署结构见 `server/README.md`。
+API 地址集中在 `src/platform/playerId.ts`。正式 HTTPS API 已部署，与现有 REALITY 节点通过 Nginx stream 共用公网 443；Windows 和 Android 均已验证真实申请、缓存读取及删除独立 ID 缓存后的服务器恢复。网络不可用时仍显示“暂未获取”，游戏继续正常运行。部署结构见 `server/README.md`。
 
 ## Day 31–45
 

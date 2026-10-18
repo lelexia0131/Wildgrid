@@ -1,0 +1,111 @@
+.phase2-build.log
+
+> wildgrid@1.0.0 build
+> tsc -b && vite build
+
+vite v6.4.3 building for production...
+transforming...
+✓ 1664 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                     0.57 kB │ gzip:   0.36 kB
+dist/assets/LilitaOne-Regular-DWEPn4H6.ttf         28.09 kB
+dist/assets/sandbox.worker-ByXvAFMo.js             55.33 kB
+dist/assets/survival.worker-KTWOL6pP.js            69.52 kB
+dist/assets/Caveat-Variable-8jBGxy3y.ttf          403.65 kB
+dist/assets/ZCOOLKuaiLe-Regular-CvIfguNK.ttf    1,514.97 kB
+dist/assets/MaShanZheng-Regular-DlgjubcT.woff2  3,250.30 kB
+dist/assets/index-DOHjPI19.css                    134.55 kB │ gzip:  29.50 kB
+dist/assets/index-BBoh07r2.js                     649.68 kB │ gzip: 202.40 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.50s
+npm notice
+npm notice New major version of npm available! 11.17.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+
+
+.phase2-final-focused.log
+✔ Engine stays independent; every layer uses public APIs without reverse dependencies or cycles (169.3641ms)
+✔ adventure engine preserves v1 progress and unlocks without platform storage (1.5967ms)
+✔ survival transitions and local blueprint access use explicit snapshots and preserve their inputs (4.263ms)
+✔ sessions retain editable rule mistakes, reject geometry, and use the level inventory (2.3371ms)
+✔ editor terrain, clues, facility removal and clear restore through the same history (0.6497ms)
+✔ placed rotation preserves pivot behavior and blocked rotations keep their snapshot (0.3484ms)
+✔ session history caps at 80, keeps restored snapshots and discards redo after a branch (0.3245ms)
+✔ sandbox library covers adventure definitions and map codes restore both sizes exactly (6.4295ms)
+✔ self-check distinguishes unique, multiple, no solution and specific illegal placements (1.817ms)
+✔ map import rejects corrupt, unsupported and unsafe payload data (1.3623ms)
+✔ unreadable and incompatible saves survive attempted adventure, map and reward writes (1.613ms)
+✔ tutorial migration uses play records and leaves all three existing saves intact (1.1757ms)
+✔ Day 1 has one fixed sequence with a welcome, wrong/right examples and a verified placement (0.3444ms)
+✔ tutorials appear only on scheduled Adventure days and keep their steps fixed (0.5197ms)
+✔ basic completion waits for every lesson; both languages cover every tutorial (0.1298ms)
+✔ English covers every facility rule and level hint; early guidance introduces only present concepts (1.0474ms)
+✔ worker tasks cancel, ignore stale/duplicate replies, release errors and clean up failed posts (1.4614ms)
+✔ survival worker keeps the existing deadline and cannot publish after timeout (0.7732ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 834.3562
+
+
+.phase2-levels.log
+
+> wildgrid@1.0.0 levels:check
+> tsx scripts/check-levels.ts
+
+Level 16 ✅ unique | terrain=11 pieces=8 cells=11 placements=72 nodes=68 rotated=7
+Level 17 ✅ unique | terrain=12 pieces=9 cells=13 placements=83 nodes=71 rotated=11
+Level 18 ✅ unique | terrain=12 pieces=10 cells=13 placements=98 nodes=102 rotated=9
+Level 19 ✅ unique | terrain=13 pieces=10 cells=15 placements=160 nodes=2498 rotated=34
+Level 20 ✅ unique | terrain=13 pieces=11 cells=16 placements=162 nodes=1008 rotated=33
+Level 21 ✅ unique | terrain=14 pieces=12 cells=17 placements=174 nodes=1736 rotated=45
+Level 22 ✅ unique | terrain=14 pieces=12 cells=17 placements=153 nodes=607 rotated=49
+Level 23 ✅ unique | terrain=15 pieces=13 cells=19 placements=221 nodes=12861 rotated=72
+Level 24 ✅ unique | terrain=15 pieces=13 cells=20 placements=251 nodes=7430 rotated=78
+Level 25 ✅ unique | terrain=16 pieces=14 cells=22 placements=328 nodes=68381 rotated=103
+Level 26 ✅ unique | terrain=17 pieces=15 cells=23 placements=310 nodes=32158 rotated=98
+Level 27 ✅ unique | terrain=18 pieces=16 cells=24 placements=323 nodes=52390 rotated=93
+Level 28 ✅ unique | terrain=18 pieces=17 cells=25 placements=363 nodes=249231 rotated=106
+Level 29 ✅ unique | terrain=19 pieces=18 cells=26 placements=326 nodes=8550 rotated=84
+Level 30 ✅ unique | terrain=18 pieces=18 cells=28 placements=310 nodes=64141 rotated=117
+Level 31 ✅ unique | terrain=1 pieces=2 cells=2 placements=3 nodes=3 rotated=0
+Level 32 ✅ unique | terrain=2 pieces=3 cells=4 placements=12 nodes=5 rotated=1
+Level 33 ✅ unique | terrain=4 pieces=6 cells=8 placements=44 nodes=11 rotated=2
+Level 34 ✅ unique | terrain=2 pieces=3 cells=3 placements=12 nodes=5 rotated=0
+Level 35 ✅ unique | terrain=3 pieces=5 cells=6 placements=64 nodes=24 rotated=2
+Level 36 ✅ unique | terrain=5 pieces=6 cells=8 placements=53 nodes=26 rotated=2
+Level 37 ✅ unique | terrain=4 pieces=5 cells=7 placements=56 nodes=14 rotated=1
+Level 38 ✅ unique | terrain=1 pieces=3 cells=3 placements=9 nodes=6 rotated=0
+Level 39 ✅ unique | terrain=2 pieces=3 cells=4 placements=8 nodes=7 rotated=1
+Level 40 ✅ unique | terrain=3 pieces=6 cells=9 placements=47 nodes=23 rotated=6
+Level 41 ✅ unique | terrain=22 pieces=15 cells=23 placements=334 nodes=36519 rotated=84
+Level 42 ✅ unique | terrain=20 pieces=16 cells=24 placements=354 nodes=9871 rotated=76
+Level 43 ✅ unique | terrain=24 pieces=17 cells=25 placements=354 nodes=98834 rotated=75
+Level 44 ✅ unique | terrain=21 pieces=18 cells=26 placements=344 nodes=6648 rotated=85
+Level 45 ✅ unique | terrain=25 pieces=18 cells=28 placements=288 nodes=5642 rotated=84
+npm notice
+npm notice New major version of npm available! 11.17.0 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice
+
+
+.phase2-preservation.log
+Preserved 45 levels, 779 rule evaluations, 45 complete solver outputs and 45 WG1 codes. Days 16–45 remain unique; baseline tutorial levels with multiple solutions: 12, 14, 15.
+
+
+.phase2-render.log
+{"cases":97,"exactMarkupMatch":true,"sha256":"5064d42810e73b9e4643730d1d26a0c916cf4bf5fc3445ce655ccd7cf042cafb","referenceDirectory":".desktop-smoke/phase2-reference-20261018-01a14e68-2"}
+
+Electron quality-ui: native startup exit -2147483645, empty log; no UI assertion or screenshot result.

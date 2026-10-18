@@ -1,13 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import {
-  abandonSurvivalChallenge, adventureSaveWritable, completeAdventureLevel, createAdventureSave, createSurvivalSave,
-  emptySurvivalProgress, getLevelById, getSolution, levelUnlocked, parseAdventureSave, parseLocalMapsForWrite,
-  parseLocalMapsSave, parseSurvivalForWrite, progressForPlay, recordAdventureProgress, replaceSurvivalChallenge,
-  serializeLocalMaps, serializeSurvivalSave, settleSurvival, survivalCollectionTarget, updateSurvivalProgress,
-  upsertLocalMap, withEditorPlacements,
-} from '../src/engine';
-import type { SurvivalChallenge } from '../src/engine';
+import { abandonSurvivalChallenge, createSurvivalSave, emptySurvivalProgress, replaceSurvivalChallenge, settleSurvival, updateSurvivalProgress } from '../src/game-modes/survival/survivalChallenge';
+import { adventureSaveWritable, createAdventureSave, parseAdventureSave } from '../src/save-system/adventureSaveCodec';
+import { completeAdventureLevel, levelUnlocked, progressForPlay, recordAdventureProgress } from '../src/game-modes/adventure/adventureProgress';
+import { getLevelById, getSolution, withEditorPlacements } from '../src/engine';
+import { parseLocalMapsForWrite, parseLocalMapsSave, serializeLocalMaps } from '../src/save-system/localMapSaveCodec';
+import { parseSurvivalForWrite, serializeSurvivalSave } from '../src/save-system/survivalSaveCodec';
+import { survivalCollectionTarget, upsertLocalMap } from '../src/game-modes/sandbox/localMapCollection';
+import type { SurvivalChallenge } from '../src/game-modes/survival/survivalChallenge';
 
 test('adventure engine preserves v1 progress and unlocks without platform storage', () => {
   const original = createAdventureSave(), level = getLevelById(1)!, solution = getSolution(1)!;

@@ -6,7 +6,7 @@ import { checkSandbox, createSandbox, decodeMap, encodeMap, withEditorPlacements
 import type { SandboxDraft } from '../src/engine';
 
 function camps(): SandboxDraft {
-  const draft = createSandbox(6);
+  const initial = createSandbox(6), draft = { ...initial, level: { ...initial.level } };
   draft.level.terrain = [1, 2].flatMap(c => [0, 3].map(r => ({ kind: 'water' as const, r, c })));
   draft.level.pieces = ['a', 'b'].map(id => ({ id, kind: 'camp', shape: 'single' }));
   return withEditorPlacements(draft, [{ id: 'a', r: 1, c: 1, rotation: 0 }, { id: 'b', r: 1, c: 2, rotation: 0 }]);
@@ -14,7 +14,7 @@ function camps(): SandboxDraft {
 
 test('sandbox library covers adventure definitions and map codes restore both sizes exactly', () => {
   assert.deepEqual(new Set(facilityLibrary.map(p => `${p.kind}_${p.shape}`)), new Set(levels.flatMap(l => l.pieces.map(p => `${p.kind}_${p.shape}`))));
-  const eight = createSandbox(8);
+  const initial = createSandbox(8), eight = { ...initial, level: { ...initial.level } };
   eight.level.terrain = [{ kind: 'water', r: 3, c: 1 }, { kind: 'forest', r: 7, c: 7 }, { kind: 'mountain', r: 0, c: 6 }];
   eight.level.pieces = [{ id: 'rotated-camp', kind: 'camp', shape: 'domino' }];
   const rotated = withEditorPlacements(eight, [{ id: 'rotated-camp', r: 3, c: 2, rotation: 1 }]);

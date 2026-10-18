@@ -1,17 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Capacitor } from '@capacitor/core';
-import App from './App';
-import './styles.css';
-import './viewport.css';
-import './sandbox.css';
-import './survival.css';
-import './fonts.css';
-import './hero.css';
-import './notebook.css';
-import './completion.css';
+import { registerOfflineCache } from './platform/runtime';
+import App from './ui/App';
+import './ui/styles/styles.css';
+import './ui/styles/viewport.css';
+import './ui/styles/sandbox.css';
+import './ui/styles/survival.css';
+import './ui/styles/fonts.css';
+import './ui/styles/hero.css';
+import './ui/styles/notebook.css';
+import './ui/styles/completion.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
-if (import.meta.env.PROD && !Capacitor.isNativePlatform() && ['http:', 'https:'].includes(location.protocol) && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => { void navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {}); });
-}
+registerOfflineCache();

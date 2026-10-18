@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require('electron');
 const assert = require('node:assert/strict');
 const { mkdirSync, writeFileSync } = require('node:fs');
 const path = require('node:path');
-const levels = require('../src/data/levels.json');
+const levels = require("../src/game-data/levels.json");
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, '.desktop-smoke', 'tutorial');
 mkdirSync(output, { recursive: true });

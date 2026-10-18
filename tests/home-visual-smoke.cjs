@@ -78,7 +78,7 @@ app.whenReady().then(async () => {
       await click('.menu-buttons .primary'); await click('.sandbox-choice:first-child');
       await layout(); await shot(`game-${language}-320`);
       await click('.facility-card');
-      const answer = require('../src/data/solutions.json')['1'][0];
+      const answer = require("../src/game-data/solutions.json")['1'][0];
       await click(`[data-cell="${answer.r},${answer.c}"]`);
       assert.equal(await js(`!!document.querySelector('dialog[open] .win-content')`), true);
       await layout(); await shot(`win-${language}-320`);

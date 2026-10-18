@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { WildernessAudio } from '../src/game/audio';
+import { WildernessAudio } from '../src/platform/audio/WildernessAudio';
 import type { Settings } from '../src/engine';
-import { readSave, writeSave } from '../src/game/storage';
+import { readSave, writeSave } from '../src/save-system/adventureStorage';
 
 type Voice = { midi: number; start: number; end: number; type: string; bus: number; release: number; gain: number };
 type GainEvent = { bus: number; method: string; value: number; time: number };

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { placementHints } from '../src/engine';
 import { evaluate } from '../src/engine';
-import { readSave, writeSave } from '../src/game/storage';
+import { readSave, writeSave } from '../src/save-system/adventureStorage';
 import { getLevelById, solutions } from '../src/engine';
 import type { Level, Piece, Placement } from '../src/engine';
 

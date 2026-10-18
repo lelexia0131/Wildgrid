@@ -3,8 +3,8 @@ const assert = require('node:assert/strict');
 const { appendFileSync, mkdirSync, writeFileSync } = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
-const levels = require('../src/data/levels.json');
-const solutions = require('../src/data/solutions.json');
+const levels = require("../src/game-data/levels.json");
+const solutions = require("../src/game-data/solutions.json");
 
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, '.desktop-smoke', 'local-maps');

@@ -2,8 +2,8 @@ const { app, BrowserWindow } = require('electron');
 const assert = require('node:assert/strict');
 const { mkdirSync, writeFileSync } = require('node:fs');
 const path = require('node:path');
-const levels = require('../src/data/levels.json');
-const solutions = require('../src/data/solutions.json');
+const levels = require("../src/game-data/levels.json");
+const solutions = require("../src/game-data/solutions.json");
 const level30 = levels.find(level => level.id === 30);
 
 const root = path.resolve(__dirname, '..');

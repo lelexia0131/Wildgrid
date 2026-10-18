@@ -1,11 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { deleteLocalMap, readLocalMaps, renameLocalMap, saveLocalMap } from '../src/game/localMaps';
+import { deleteLocalMap, readLocalMaps, renameLocalMap, saveLocalMap } from '../src/save-system/localMapStorage';
 import { createSandbox, encodeMap, withEditorPlacements } from '../src/engine';
 import type { Placement } from '../src/engine';
 
 function draft() {
-  const map = createSandbox(6);
+  const initial = createSandbox(6), map = { ...initial, level: { ...initial.level } };
   map.level.terrain = [{ kind: 'water', r: 0, c: 1 }, { kind: 'water', r: 0, c: 2 }];
   map.level.pieces = [{ id: 'a', kind: 'camp', shape: 'single' }, { id: 'b', kind: 'camp', shape: 'domino' }];
   return withEditorPlacements(map, [{ id: 'a', r: 1, c: 1, rotation: 0 }, { id: 'b', r: 1, c: 2, rotation: 0 }]);

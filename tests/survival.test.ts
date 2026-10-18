@@ -1,14 +1,15 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { generateSurvival } from '../src/engine';
-import { completeSurvival, readSurvival, writeSurvival } from '../src/game/survival';
-import { emptySurvivalProgress, rankFor, survivalDifficulties, survivalTotals } from '../src/engine';
-import type { SurvivalChallenge } from '../src/engine';
+import { generateSurvival } from '../src/game-modes/survival/survivalChallenge';
+import { completeSurvival, readSurvival, writeSurvival } from '../src/save-system/survivalStorage';
+import { emptySurvivalProgress, survivalTotals } from '../src/game-modes/survival/survivalChallenge';
+import { rankFor, SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
+import type { SurvivalChallenge } from '../src/game-modes/survival/survivalChallenge';
 import { evaluate } from '../src/engine';
 import { solveLevel } from '../src/engine';
 import { encodeMap } from '../src/engine';
-import { readLocalMaps, saveLocalMap, unlockSurvivalMaps } from '../src/game/localMaps';
+import { readLocalMaps, saveLocalMap, unlockSurvivalMaps } from '../src/save-system/localMapStorage';
 
 const maps: SurvivalChallenge[] = [];
 const values = new Map<string, string>();
@@ -21,7 +22,7 @@ function storage(fail = false) {
 
 test('ten seeded tiers generate legal unique 8×8 puzzles, including twenty facilities', () => {
   for (let difficulty = 1; difficulty <= 10; difficulty++) {
-    const started = Date.now(), spec = survivalDifficulties[difficulty - 1];
+    const started = Date.now(), spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
     const map = generateSurvival(difficulty, difficulty === 10 ? 2 : 20261008 + difficulty, `test-${difficulty}`);
     assert.equal(map.draft.level.size, 8);
     assert.ok(map.draft.level.pieces.length >= spec.min && map.draft.level.pieces.length <= spec.max);
@@ -65,7 +66,7 @@ test('collections keep the original answer, block locked edits and unlock every 
   writeSurvival({ ...readSurvival(), challenge, progress: emptySurvivalProgress(challenge.id) });
   const first = saveLocalMap(challenge.draft, [], undefined, info), second = saveLocalMap(challenge.draft, [], undefined, info);
   assert.deepEqual(first.draft.placements, challenge.draft.placements); assert.deepEqual(first.progress, []);
-  const changed = structuredClone(challenge.draft); changed.level.terrain.push({ r: 7, c: 7, kind: 'mountain' });
+  const changed = { ...challenge.draft, level: { ...challenge.draft.level, terrain: [...challenge.draft.level.terrain, { r: 7, c: 7, kind: 'mountain' as const }] } };
   assert.throws(() => saveLocalMap(changed, [], first.id), /通关或放弃挑战后才能编辑/);
   completeSurvival(challenge, challenge.draft.placements);
   unlockSurvivalMaps(challenge.id);
@@ -82,7 +83,7 @@ test('abandoning a saved challenge unlocks local blueprints and edits without aw
   const challenge = maps[0], info = { challengeId: challenge.id, difficulty: 1, seed: challenge.seed, completed: false, blueprintUnlocked: false };
   writeSurvival({ ...readSurvival(), challenge, progress: emptySurvivalProgress(challenge.id) });
   const first = saveLocalMap(challenge.draft, [], undefined, info), second = saveLocalMap(challenge.draft, [], undefined, info);
-  const changed = structuredClone(challenge.draft); changed.level.terrain.push({ r: 7, c: 7, kind: 'mountain' });
+  const changed = { ...challenge.draft, level: { ...challenge.draft.level, terrain: [...challenge.draft.level.terrain, { r: 7, c: 7, kind: 'mountain' as const }] } };
   const localBefore = values.get('wildgrid-local-maps-v1');
   assert.equal(readLocalMaps().every(map => map.survival?.blueprintUnlocked === false), true);
   writeSurvival({ ...readSurvival(), challenge: null, progress: null });

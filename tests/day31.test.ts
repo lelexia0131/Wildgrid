@@ -7,17 +7,17 @@ import { evaluate, occupied } from '../src/engine';
 import { solveLevel } from '../src/engine';
 import { checkSandbox, decodeMap, encodeMap, withEditorPlacements } from '../src/engine';
 import { facilities, facilityLibrary } from '../src/engine';
-import { readSave, writeSave } from '../src/game/storage';
-import { levelUnlocked } from '../src/engine';
-import { readLocalMaps, saveLocalMap } from '../src/game/localMaps';
-import { completeSurvival, readSurvival, writeSurvival } from '../src/game/survival';
-import { emptySurvivalProgress, survivalTotals } from '../src/engine';
-import { generateSurvival } from '../src/engine';
+import { readSave, writeSave } from '../src/save-system/adventureStorage';
+import { levelUnlocked } from '../src/game-modes/adventure/adventureProgress';
+import { readLocalMaps, saveLocalMap } from '../src/save-system/localMapStorage';
+import { completeSurvival, readSurvival, writeSurvival } from '../src/save-system/survivalStorage';
+import { emptySurvivalProgress, survivalTotals } from '../src/game-modes/survival/survivalChallenge';
+import { generateSurvival } from '../src/game-modes/survival/survivalChallenge';
 import type { FacilityKind, Level, Placement, TerrainKind } from '../src/engine';
 
 const values = new Map<string, string>();
 Object.defineProperty(globalThis, 'localStorage', {configurable:true,value:{getItem:(k:string)=>values.get(k)??null,setItem:(k:string,v:string)=>values.set(k,v)}});
-function fixture(pieces: Level['pieces'], placements: Placement[], terrain: Level['terrain']) {
+function fixture(pieces: Level['pieces'], placements: readonly Placement[], terrain: Level['terrain']) {
   return withEditorPlacements({level:{id:0,name:'test',chapter:'',tip:'',size:8,pieces,terrain,rows:[],cols:[]},placements:[]},placements);
 }
 const single = (id:string, kind:FacilityKind) => ({id,kind,shape:'single' as const});
@@ -76,7 +76,7 @@ test('manual examples satisfy the stated new rules, including each forbidden rel
   const symbols:Record<string,FacilityKind|TerrainKind>={W:'water',C:'camp',B:'fire',V:'foodTruck',E:'powerTower',S:'pool'};
   for(const f of facilities.filter(f=>['foodTruck','powerTower','pool'].includes(f.kind))) {
     for(const example of [{map:f.good,good:true},{map:f.bad,good:false},...(f.extra??[]).map(e=>({...e,good:false}))]) {
-      const terrain:Level['terrain']=[],pieces:Level['pieces']=[],placements:Placement[]=[];
+      const terrain:Level['terrain'][number][]=[],pieces:Level['pieces'][number][]=[],placements:Placement[]=[];
       const camps=example.map.flatMap((row,r)=>[...row].flatMap((s,c)=>s==='C'?[{r,c}]:[]));
       if(camps.length) {
         const shape=camps.length===1?'single':'domino';pieces.push({id:'c',kind:'camp',shape});placements.push(at('c',camps[0].r,camps[0].c));

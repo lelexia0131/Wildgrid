@@ -1,10 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { completeSurvival, readSurvival, writeSurvival } from '../src/game/survival';
-import { archiveSurvivalRecord, emptySurvivalProgress, survivalTotals } from '../src/engine';
+import { completeSurvival, readSurvival, writeSurvival } from '../src/save-system/survivalStorage';
+import { archiveSurvivalRecord, emptySurvivalProgress, survivalTotals } from '../src/game-modes/survival/survivalChallenge';
 import { getLevelById, getSolution } from '../src/engine';
 import { withEditorPlacements } from '../src/engine';
-import type { SurvivalChallenge } from '../src/engine';
+import type { SurvivalChallenge } from '../src/game-modes/survival/survivalChallenge';
 
 test('completed and abandoned history retains exact map snapshots without duplicate rewards', () => {
   const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');

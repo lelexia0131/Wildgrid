@@ -1,10 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { basicLessons, finishLesson, freshTutorial, matchesAction, readTutorial, resolveTutorial, tutorialDays, tutorialStorageKey, writeTutorial } from '../src/game/tutorial';
+import { BASIC_LESSONS, freshTutorial, readTutorial, TUTORIAL_DAYS, TUTORIAL_STORAGE_KEY, writeTutorial } from '../src/save-system/tutorialStorage';
+import { finishLesson, matchesAction, resolveTutorial } from '../src/ui/tutorial/tutorialLessons';
 import { getLevelById, levels } from '../src/engine';
-import { dictionaries } from '../src/i18n';
+import { DICTIONARIES } from '../src/localization/index';
 import type { FacilityKind } from '../src/engine';
-import { createTranslator } from '../src/i18n/context';
+import { createTranslator } from '../src/localization/LanguageContext';
 import { facilities } from '../src/engine';
 
 test('tutorial migration uses play records and leaves all three existing saves intact', () => {
@@ -27,10 +28,10 @@ test('tutorial migration uses play records and leaves all three existing saves i
     assert.equal(readTutorial().enabled, false);
     assert.equal(readTutorial().language, 'en');
     for (const [key, value] of original) assert.equal(storage.get(key), value);
-    storage.set(tutorialStorageKey, '{"version":1,"basicSeen":["invalid"],"facilitiesSeen":["pool","invalid"],"language":"bad"}');
+    storage.set(TUTORIAL_STORAGE_KEY, '{"version":1,"basicSeen":["invalid"],"facilitiesSeen":["pool","invalid"],"language":"bad"}');
     assert.deepEqual(readTutorial().facilitiesSeen, ['pool']);
     assert.equal(readTutorial().language, 'zh');
-    storage.set(tutorialStorageKey, '{broken');
+    storage.set(TUTORIAL_STORAGE_KEY, '{broken');
     assert.equal(readTutorial().basicComplete, true);
   } finally { if (previous) Object.defineProperty(globalThis, 'localStorage', previous); else Reflect.deleteProperty(globalThis, 'localStorage'); }
 });
@@ -62,7 +63,7 @@ test('tutorials appear only on scheduled Adventure days and keep their steps fix
       let lesson;
       while ((lesson = resolveTutorial(state, context))) {
         assert.equal(mode, 'adventure');
-        assert.ok(tutorialDays.some(day => day === level.id));
+        assert.ok(TUTORIAL_DAYS.some(day => day === level.id));
         if (lesson.facility) introduced.add(lesson.facility);
         const progress = { ...state, activeStep: { day: level.id, index: Math.min(1, lesson.steps.length - 1) } };
         assert.deepEqual(resolveTutorial(progress, { ...context, selected: level.pieces[0] })?.steps, lesson.steps);
@@ -73,16 +74,16 @@ test('tutorials appear only on scheduled Adventure days and keep their steps fix
     assert.equal(state.facilitiesSeen.length, mode === 'adventure' ? 8 : 0);
     assert.equal(resolveTutorial({ ...state, facilitiesSeen: [], enabled: false }, { mode, level: levels[0], placements: [], selected: null, won: false }), null);
   }
-  assert.deepEqual([...introduced].sort(), Object.keys(dictionaries.zh.facilities).sort());
+  assert.deepEqual([...introduced].sort(), Object.keys(DICTIONARIES.zh.facilities).sort());
   assert.equal(resolveTutorial(freshTutorial(), { mode: 'sandbox-editor', level: levels[0], placements: [], selected: null, won: false }), null);
 });
 test('basic completion waits for every lesson; both languages cover every tutorial', () => {
   let state = freshTutorial();
-  for (const basic of basicLessons) state = finishLesson(state, { id: basic, basic, steps: [] });
+  for (const basic of BASIC_LESSONS) state = finishLesson(state, { id: basic, basic, steps: [] });
   assert.equal(state.basicComplete, true);
   for (const language of ['zh', 'en'] as const) {
-    for (const entry of [...Object.values(dictionaries[language].basics), ...Object.values(dictionaries[language].facilities)]) assert.ok(entry.title && entry.text);
-    assert.deepEqual(Object.keys(dictionaries[language].basics), Object.keys(dictionaries.zh.basics));
+    for (const entry of [...Object.values(DICTIONARIES[language].basics), ...Object.values(DICTIONARIES[language].facilities)]) assert.ok(entry.title && entry.text);
+    assert.deepEqual(Object.keys(DICTIONARIES[language].basics), Object.keys(DICTIONARIES.zh.basics));
   }
 });
 test('English covers every facility rule and level hint; early guidance introduces only present concepts', () => {
@@ -90,11 +91,11 @@ test('English covers every facility rule and level hint; early guidance introduc
   for (const level of levels) assert.equal(/\p{Script=Han}/u.test(localize(level.tip)), false, level.tip);
   for (const facility of facilities) {
     for (const text of [facility.name, ...facility.tips, facility.require, facility.forbid, facility.why, ...facility.extra?.map(e => e.why) || []]) assert.equal(/\p{Script=Han}/u.test(localize(text)), false, text);
-    assert.ok(dictionaries.zh.facilities[facility.kind].text.includes(facility.name));
+    assert.ok(DICTIONARIES.zh.facilities[facility.kind].text.includes(facility.name));
   }
-  assert.equal(/森林|山地/.test(dictionaries.zh.basics.board.text), false);
-  assert.equal(/餐车|电塔/.test(dictionaries.zh.facilities.camp.text), false);
-  assert.equal(/电塔/.test(dictionaries.zh.facilities.fire.text), false);
-  assert.equal(/Ctrl|Cmd/.test(dictionaries.zh.basics.undo.text), false);
+  assert.equal(/森林|山地/.test(DICTIONARIES.zh.basics.board.text), false);
+  assert.equal(/餐车|电塔/.test(DICTIONARIES.zh.facilities.camp.text), false);
+  assert.equal(/电塔/.test(DICTIONARIES.zh.facilities.fire.text), false);
+  assert.equal(/Ctrl|Cmd/.test(DICTIONARIES.zh.basics.undo.text), false);
   assert.equal(/\p{Script=Han}/u.test(localize('营地：所在行或列的占格数超出提示；营地至少有一格需要上下左右挨着水')), false);
 });
