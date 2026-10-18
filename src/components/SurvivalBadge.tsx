@@ -4,7 +4,7 @@ import apprentice from '../assets/survival-badges/apprentice.svg';
 import explorer from '../assets/survival-badges/explorer.svg';
 import veteran from '../assets/survival-badges/veteran.svg';
 import legend from '../assets/survival-badges/legend.svg';
-import { survivalRanks } from '../game/survival';
+import { survivalRanks } from '../engine';
 
 const badges = [newcomer, apprentice, explorer, veteran, legend];
 export function SurvivalBadge({ rank }: { rank: number }) {

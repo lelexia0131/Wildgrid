@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react';
 import type { RefObject } from 'react';
-import type { Cell, Level, Placement } from '../game/types';
-import { occupied } from '../game/rules';
+import type { Cell, Level, Placement } from '../engine';
+import { occupied } from '../engine';
 
 // Animate artwork only: hit targets, grid tracks and saved placements never move.
 export function useBoardFeedback(board: RefObject<HTMLElement | null>, level: Level, placements: Placement[], active: boolean) {

@@ -1,4 +1,4 @@
-import type { Cell, FacilityKind, Issue, Level, Piece, Placement, Shape, Status } from './types';
+import type { Cell, FacilityKind, Issue, Level, Piece, Placement, Shape, Status, Terrain } from './types';
 
 const shapes: Record<Shape, Cell[]> = {
   single: [{ r: 0, c: 0 }], domino: [{ r: 0, c: 0 }, { r: 0, c: 1 }],
@@ -13,11 +13,20 @@ export const campRequirements: Partial<Record<FacilityKind, string>> = {
   fire: '篝火需要上下左右挨着营地', picnic: '野餐桌需要上下左右挨着营地',
   foodTruck: '餐车需要与营地上下左右间隔一格空草地', pool: '泳池周围八格内需要至少一个营地占用格',
 };
+const picnicConflictMessage = '野餐桌不能邻近篝火，包括斜角';
+const towerConflictMessage = '瞭望塔之间不能相邻，包括斜角';
 export function facilityConflict(kind: FacilityKind, cells: Cell[], other: FacilityKind, otherCells: Cell[]): string | null {
   const pair = [kind, other];
   if (pair.includes('powerTower') && pair.includes('fire') && cells.some(p => otherCells.some(q => adjacent(p, q, true)))) return '电塔不能邻近篝火，包括斜角';
   if (pair.includes('powerTower') && pair.includes('camp') && cells.some(p => otherCells.some(q => adjacent(p, q)))) return '电塔不能上下左右挨着营地';
   if (pair.includes('foodTruck') && pair.includes('camp') && cells.some(p => otherCells.some(q => adjacent(p, q)))) return '餐车不能上下左右直接挨着营地';
+  if (pair.includes('picnic') && pair.includes('fire') && cells.some(p => otherCells.some(q => adjacent(p, q, true)))) return picnicConflictMessage;
+  if (kind === 'tower' && other === 'tower' && cells.some(p => otherCells.some(q => adjacent(p, q, true)))) return towerConflictMessage;
+  return null;
+}
+export function terrainConflict(kind: FacilityKind, cells: Cell[], terrain: Terrain): string | null {
+  if (kind === 'fire' && terrain.kind === 'forest' && cells.some(cell => adjacent(cell, terrain, true))) return '篝火不能邻近森林，包括斜角';
+  if (kind === 'cabin' && terrain.kind === 'water' && cells.some(cell => adjacent(cell, terrain))) return '林间木屋不能上下左右挨着水';
   return null;
 }
 // Connections describe actual camp cells, including the empty gap for a truck.
@@ -75,7 +84,10 @@ export function evaluate(level: Level, placements: Placement[], options: { stati
     const nearTerrain = (kind: string, diagonal = false) => e.cells.some(p => level.terrain.some(t => t.kind === kind && adjacent(p, t, diagonal)));
     if (e.piece.kind === 'camp' && !nearTerrain('water')) reasons.push('营地至少有一格需要上下左右挨着水');
     if (campRequirements[e.piece.kind]) {
-      if (e.piece.kind === 'fire' && nearTerrain('forest', true)) reasons.push('篝火不能邻近森林，包括斜角');
+      if (e.piece.kind === 'fire') {
+        const conflict = level.terrain.map(terrain => terrainConflict(e.piece.kind, e.cells, terrain)).find(Boolean);
+        if (conflict) reasons.push(conflict);
+      }
       const connections = campConnections(e.piece.kind, e.cells, board, blocked);
       const connected = (footprint: Cell[]) => connections.some(link => {
         const gap = link.gap ? key(link.gap) : null;
@@ -95,21 +107,23 @@ export function evaluate(level: Level, placements: Placement[], options: { stati
       }
     }
     if (e.piece.kind === 'pool' && !nearTerrain('water')) reasons.push('泳池需要上下左右挨着至少一格水源');
+    let picnicBlocked = false, towerBlocked = false;
     if (!options.staticOnly) for (const other of cells) {
+      if (other.at.id === e.at.id) continue;
       const conflict = facilityConflict(e.piece.kind, e.cells, other.piece.kind, other.cells);
-      if (conflict && !reasons.includes(conflict)) reasons.push(conflict);
+      if (conflict === picnicConflictMessage) picnicBlocked = true;
+      else if (conflict === towerConflictMessage) towerBlocked = true;
+      else if (conflict && !reasons.includes(conflict)) reasons.push(conflict);
     }
-    if (!options.staticOnly && (e.piece.kind === 'picnic' || e.piece.kind === 'fire')) {
-      const otherKind = e.piece.kind === 'picnic' ? 'fire' : 'picnic';
-      if (cells.some(other => other.piece.kind === otherKind && e.cells.some(p => other.cells.some(q => adjacent(p, q, true))))) reasons.push('野餐桌不能邻近篝火，包括斜角');
-    }
+    if (picnicBlocked) reasons.push(picnicConflictMessage);
     if (e.piece.kind === 'cabin') {
       if (!nearTerrain('forest')) reasons.push('林间木屋至少有一格需要上下左右挨着森林');
-      if (nearTerrain('water')) reasons.push('林间木屋不能上下左右挨着水');
+      const conflict = level.terrain.map(terrain => terrainConflict(e.piece.kind, e.cells, terrain)).find(Boolean);
+      if (conflict) reasons.push(conflict);
     }
     if (e.piece.kind === 'tower') {
       if (!nearTerrain('mountain')) reasons.push('瞭望塔需要上下左右挨着山地');
-      if (!options.staticOnly && cells.some(other => other.piece.kind === 'tower' && other.at.id !== e.at.id && e.cells.some(p => other.cells.some(q => adjacent(p, q, true))))) reasons.push('瞭望塔之间不能相邻，包括斜角');
+      if (towerBlocked) reasons.push(towerConflictMessage);
     }
     if (e.cells.some(p => rows[p.r] > level.rows[p.r] || cols[p.c] > level.cols[p.c])) reasons.push('所在行或列的占格数超出提示');
     issues[e.at.id] = { status: reasons.length ? 'INVALID' : pending ? 'INCOMPLETE' : 'VALID', reasons: reasons.length ? reasons : pending ? [campRequirements[e.piece.kind]!] : [] };

@@ -1,6 +1,6 @@
 import { useId } from 'react';
-import { offsets } from '../game/rules';
-import type { FacilityKind, Shape, TerrainKind } from '../game/types';
+import { offsets } from '../engine';
+import type { FacilityKind, Shape, TerrainKind } from '../engine';
 
 export function FootprintSurface({ shape, rotation }: { shape: Shape; rotation: number }) {
   const cells = offsets(shape, rotation);

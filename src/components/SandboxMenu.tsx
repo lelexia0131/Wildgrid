@@ -6,12 +6,12 @@ import { MenuIcon } from './MenuIcon';
 import { SandboxArt } from './SandboxArt';
 import { readClipboard } from '../game/clipboard';
 import { audio } from '../game/audio';
-import { key } from '../game/rules';
-import { facilityNames, shapeNames } from '../game/facilityRegistry';
+import { key } from '../engine';
+import { facilityNames, shapeNames } from '../engine';
 import type { LocalMap } from '../game/localMaps';
 import { deleteLocalMap, renameLocalMap, setLocalMapIcon } from '../game/localMaps';
-import { mapIconChoices } from '../game/mapIcons';
-import type { MapIconId } from '../game/mapIcons';
+import { mapIconChoices } from '../engine';
+import type { MapIconId } from '../engine';
 
 function ModeLettering({ children }: { children: string }) {
   return <strong className="mode-lettering" aria-label={children}>{[...children].map((letter, i) => <span key={i} aria-hidden="true">{letter}</span>)}</strong>;

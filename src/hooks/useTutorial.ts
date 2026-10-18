@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { finishLesson, freshTutorial, matchesAction, readTutorial, resolveTutorial, writeTutorial } from '../game/tutorial';
 import type { TutorialEvent, TutorialLesson, TutorialState } from '../game/tutorial';
-import type { GameMode, Level, Piece, Placement, Shape } from '../game/types';
+import type { GameMode, Level, Piece, Placement, Shape } from '../engine';
 import { dictionaries } from '../i18n';
 
 type Options = { screen: string; mode: GameMode; level: Level; placements: Placement[]; selected: Piece | null; rotations: Partial<Record<Shape, number>>; undoAvailable: boolean; won: boolean; paused: boolean; winOpen: boolean };

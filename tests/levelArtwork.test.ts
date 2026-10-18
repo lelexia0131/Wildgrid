@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { LevelArtwork } from '../src/components/LevelArtwork';
-import { levels } from '../src/game/levels';
+import { levels } from '../src/engine';
 import { journalLevelCovers, journalPalettes } from '../src/components/journalArt';
 
 test('all 45 cover briefs use facilities and terrain available in their level', () => {

@@ -1,11 +1,12 @@
-import { countSolutions } from '../src/game/solver';
+import { countSolutions } from '../src/engine';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { getLevelById, levels, solutions } from '../src/game/levels';
-import { evaluate, occupied, offsets, placementBlock, rotateAround } from '../src/game/rules';
-import { validatePlacements } from '../src/game/placementValidation';
-import type { Level, Placement } from '../src/game/types';
-import { progressForPlay, readSave, writeSave } from '../src/game/storage';
+import { getLevelById, levels, solutions } from '../src/engine';
+import { evaluate, occupied, offsets, placementBlock, rotateAround } from '../src/engine';
+import { validatePlacements } from '../src/engine';
+import type { Level, Placement } from '../src/engine';
+import { readSave, writeSave } from '../src/game/storage';
+import { progressForPlay } from '../src/engine';
 
 test('reopening a solved level starts fresh while unfinished play resumes', () => {
   const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true } };

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { WildernessAudio } from '../src/game/audio';
-import type { Settings } from '../src/game/types';
+import type { Settings } from '../src/engine';
 import { readSave, writeSave } from '../src/game/storage';
 
 type Voice = { midi: number; start: number; end: number; type: string; bus: number; release: number; gain: number };

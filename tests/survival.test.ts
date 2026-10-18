@@ -1,12 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { generateSurvival } from '../src/game/survivalGenerator';
-import { completeSurvival, emptySurvivalProgress, rankFor, readSurvival, survivalDifficulties, survivalTotals, writeSurvival } from '../src/game/survival';
-import type { SurvivalChallenge } from '../src/game/survival';
-import { evaluate } from '../src/game/rules';
-import { solveLevel } from '../src/game/solver';
-import { encodeMap } from '../src/game/sandbox';
+import { generateSurvival } from '../src/engine';
+import { completeSurvival, readSurvival, writeSurvival } from '../src/game/survival';
+import { emptySurvivalProgress, rankFor, survivalDifficulties, survivalTotals } from '../src/engine';
+import type { SurvivalChallenge } from '../src/engine';
+import { evaluate } from '../src/engine';
+import { solveLevel } from '../src/engine';
+import { encodeMap } from '../src/engine';
 import { readLocalMaps, saveLocalMap, unlockSurvivalMaps } from '../src/game/localMaps';
 
 const maps: SurvivalChallenge[] = [];

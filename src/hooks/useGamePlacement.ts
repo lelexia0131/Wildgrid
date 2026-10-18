@@ -1,27 +1,27 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { evaluate, key, occupied, placementBlock, rotateAround } from '../game/rules';
-import { withEditorPlacements } from '../game/sandbox';
-import type { SandboxDraft } from '../game/sandbox';
-import type { Cell, FacilityKind, GameMode, Level, Piece, Placement, Shape, TerrainKind } from '../game/types';
+import { dispatch as previewCommand, getAvailableActions, getState, key, occupied } from '../engine';
+import type { SandboxDraft } from '../engine';
+import type { Cell, FacilityKind, GameSession, Piece, Placement, Shape, TerrainKind } from '../engine';
 import type { audio } from '../game/audio';
-import { terrainNames } from '../game/facilityRegistry';
+import { terrainNames } from '../engine';
 import type { TutorialEvent } from '../game/tutorial';
 
 type Options = {
-  mode: GameMode; level: Level; placements: Placement[]; continuousPlacement: boolean;
+  session: GameSession; continuousPlacement: boolean;
   terrainBrush: TerrainKind | null; clearTerrainBrush: () => void;
-  commit: (placements: Placement[], level?: Level) => void;
+  dispatch: (command: Parameters<typeof previewCommand>[1]) => ReturnType<typeof previewCommand>;
   setNotice: (notice: string) => void;
   sound: (name?: Parameters<typeof audio.play>[0]) => void;
   onAction?: (event: TutorialEvent) => void;
   onReject: (cells: Cell[]) => void;
 };
-export function useGamePlacement({ mode, level, placements, continuousPlacement, terrainBrush, clearTerrainBrush, commit, setNotice, sound, onAction, onReject }: Options) {
+export function useGamePlacement({ session, continuousPlacement, terrainBrush, clearTerrainBrush, dispatch, setNotice, sound, onAction, onReject }: Options) {
+  const { mode } = session;
+  const { level, placements, result } = useMemo(() => getState(session), [session]);
   const [selected, setSelected] = useState<Piece | null>(null);
   const [rotations, setRotations] = useState<Partial<Record<Shape, number>>>({});
   const [hover, setHover] = useState<Cell | null>(null);
   const nextPieceId = useRef(0);
-  const result = useMemo(() => evaluate(level, placements), [level, placements]);
   const rotation = selected ? rotations[selected.shape] || 0 : 0;
   const rotate = useCallback(() => {
     if (!selected || selected.shape === 'single') return;
@@ -35,54 +35,50 @@ export function useGamePlacement({ mode, level, placements, continuousPlacement,
   function choose(kind: FacilityKind, shape: Shape) {
     clearTerrainBrush();
     if (selected?.kind === kind && selected.shape === shape) { if (shape !== 'single') rotate(); else { setSelected(null); sound('close'); } return; }
-    const piece = mode === 'sandbox-editor' ? { id: `custom-${++nextPieceId.current}`, kind, shape } : level.pieces.find(p => p.kind === kind && p.shape === shape && !placements.some(at => at.id === p.id));
+    const piece = mode === 'sandbox-editor' ? { id: `custom-${++nextPieceId.current}`, kind, shape } : getAvailableActions(session).pieces.find(p => p.kind === kind && p.shape === shape);
     if (piece) { setSelected(piece); setNotice(''); sound('select'); onAction?.({ type: 'select', kind: piece.kind, pieceId: piece.id }); }
   }
   function rotatePlaced(at: Placement, pivot: Cell) {
     const piece = level.pieces.find(p => p.id === at.id)!;
-    const next = rotateAround(piece, at, pivot);
-    const block = placementBlock(level, placements, next);
-    if (block) { onReject([...occupied(piece, next), pivot]); setNotice(block); sound('error'); return; }
-    commit(placements.map(p => p.id === at.id ? next : p)); setNotice(''); sound('rotate');
+    const outcome = dispatch({ type: 'rotate', id: at.id, pivot });
+    if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
+    setNotice(''); sound('rotate');
     onAction?.({ type: 'rotate', kind: piece.kind, pieceId: piece.id });
   }
   function clickCell(cell: Cell) {
     if (mode === 'sandbox-editor' && terrainBrush) {
-      if (placements.some(at => occupied(level.pieces.find(p => p.id === at.id)!, at).some(p => key(p) === key(cell)))) { onReject([cell]); setNotice('先拿起这里的设施，再修改地形'); sound('error'); return; }
-      const current = level.terrain.find(t => key(t) === key(cell));
-      const terrain = level.terrain.filter(t => key(t) !== key(cell));
-      if (current?.kind !== terrainBrush) terrain.push({ ...cell, kind: terrainBrush });
-      commit(placements, { ...level, terrain }); setNotice(''); sound('place'); return;
+      const outcome = dispatch({ type: 'terrain', cell, kind: terrainBrush });
+      if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
+      setNotice(''); sound('place'); return;
     }
     const placed = placements.find(at => occupied(level.pieces.find(p => p.id === at.id)!, at).some(p => key(p) === key(cell)));
     if (placed) {
       const piece = level.pieces.find(p => p.id === placed.id)!;
-      commit(placements.filter(at => at.id !== placed.id)); setSelected(piece); setRotations(s => ({ ...s, [piece.shape]: placed.rotation }));
+      const outcome = dispatch({ type: 'remove', id: placed.id });
+      if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
+      setSelected(piece); setRotations(s => ({ ...s, [piece.shape]: placed.rotation }));
       setNotice('');
       sound('pickup'); onAction?.({ type: 'pickup', kind: piece.kind, pieceId: piece.id }); return;
     }
     const terrain = level.terrain.find(t => key(t) === key(cell));
     if (mode === 'sandbox-editor' && terrain && !selected) {
-      commit(placements, { ...level, terrain: level.terrain.filter(t => key(t) !== key(cell)) });
+      const outcome = dispatch({ type: 'terrain', cell });
+      if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
       setNotice(''); sound('pickup'); return;
     }
     if (!selected) { setNotice(terrain ? terrainNames[terrain.kind] : '先从右侧选择一个设施'); sound(terrain ? 'click' : 'error'); return; }
-    const candidate = { ...cell, id: selected.id, rotation };
-    const placementLevel = mode === 'sandbox-editor' ? { ...level, pieces: [...level.pieces, selected] } : level;
-    const block = placementBlock(placementLevel, placements, candidate);
-    if (block) { onReject(occupied(selected, candidate)); setNotice(block); sound('error'); return; }
-    const next = [...placements, candidate];
-    commit(next, placementLevel);
-    const issue = evaluate(mode === 'sandbox-editor' ? withEditorPlacements({ level: placementLevel, placements }, next).level : level, next).issues[candidate.id];
+    const outcome = dispatch({ type: 'place', piece: selected, cell, rotation });
+    if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
+    const issue = getState(outcome.session).result.issues[selected.id];
     sound(issue.status === 'INVALID' ? 'error' : 'place');
-    if (issue.status === 'INVALID') onReject(occupied(selected, candidate));
+    if (issue.status === 'INVALID') onReject(occupied(selected, { ...cell, id: selected.id, rotation }));
     const nextPiece = !continuousPlacement ? null : mode === 'sandbox-editor'
       ? { ...selected, id: `custom-${++nextPieceId.current}` }
-      : level.pieces.find(p => p.kind === selected.kind && p.shape === selected.shape && !next.some(at => at.id === p.id)) || null;
+      : getAvailableActions(outcome.session).pieces.find(p => p.kind === selected.kind && p.shape === selected.shape) || null;
     setNotice(issue.status === 'INVALID' ? issue.reasons.join('；') : ''); setSelected(nextPiece); setHover(null);
     onAction?.({ type: 'place', kind: selected.kind, pieceId: selected.id, r: cell.r, c: cell.c, rotation });
   }
   const ghost = selected && hover ? occupied(selected, { ...hover, id: selected.id, rotation }) : [];
-  const ghostBlocked = selected && hover ? Boolean(placementBlock(mode === 'sandbox-editor' ? { ...level, pieces: [...level.pieces, selected] } : level, placements, { ...hover, id: selected.id, rotation })) : false;
+  const ghostBlocked = selected && hover ? Boolean(previewCommand(session, { type: 'place', piece: selected, cell: hover, rotation }).error) : false;
   return { selected, setSelected, rotations, setRotations, hover, setHover, rotation, result, choose, rotatePlaced, clickCell, ghost, ghostBlocked, resetPieceIds };
 }

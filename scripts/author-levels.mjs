@@ -1,16 +1,15 @@
 // Hand-authored layouts and reference solutions. No random generation.
 // Run only when editing the level pack; the game loads the resulting static JSON.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { tsImport } from 'tsx/esm/api';
+const { occupied } = await tsImport('../src/engine/index.ts', import.meta.url);
 const levels = [], solutions = {};
 function level(name, chapter, tip, terrain, pieces) {
   const id = levels.length + 1, rows = Array(6).fill(0), cols = Array(6).fill(0);
-  const forms = { single: [[0, 0]], domino: [[0, 0], [0, 1]], long: [[0, 0], [0, 1], [0, 2]], el: [[0, 0], [1, 0], [1, 1]] };
   const answer = pieces.map(([kind, shape, r, c, rotation = 0], i) => {
-    let cells = forms[shape];
-    for (let n = 0; n < rotation; n++) cells = cells.map(([y, x]) => [x, -y]);
-    const minR = Math.min(...cells.map(p => p[0])), minC = Math.min(...cells.map(p => p[1]));
-    for (const [y, x] of cells) { rows[r + y - minR]++; cols[c + x - minC]++; }
-    return { id: `${kind}-${i + 1}`, r, c, rotation };
+    const at = { id: `${kind}-${i + 1}`, r, c, rotation };
+    for (const cell of occupied({ id: at.id, kind, shape }, at)) { rows[cell.r]++; cols[cell.c]++; }
+    return at;
   });
   levels.push({ id, name, chapter, tip, size: 6, terrain: terrain.map(([kind, r, c]) => ({ kind, r, c })), pieces: pieces.map(([kind, shape], i) => ({ id: `${kind}-${i + 1}`, kind, shape })), rows, cols });
   solutions[id] = answer;

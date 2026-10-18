@@ -1,9 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { archiveSurvival, completeSurvival, emptySurvivalProgress, readSurvival, survivalTotals, writeSurvival } from '../src/game/survival';
-import { getLevelById, getSolution } from '../src/game/levels';
-import { withEditorPlacements } from '../src/game/sandbox';
-import type { SurvivalChallenge } from '../src/game/survival';
+import { completeSurvival, readSurvival, writeSurvival } from '../src/game/survival';
+import { archiveSurvivalRecord, emptySurvivalProgress, survivalTotals } from '../src/engine';
+import { getLevelById, getSolution } from '../src/engine';
+import { withEditorPlacements } from '../src/engine';
+import type { SurvivalChallenge } from '../src/engine';
 
 test('completed and abandoned history retains exact map snapshots without duplicate rewards', () => {
   const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
@@ -24,8 +25,7 @@ test('completed and abandoned history retains exact map snapshots without duplic
     assert.deepEqual(readSurvival().records, [record]);
     const abandoned = { ...challenge, id: 'history-abandoned', startedAt: Date.now() };
     const save = readSurvival(), totals = survivalTotals(save);
-    archiveSurvival(save, abandoned, placements.slice(0, 1));
-    writeSurvival(save);
+    writeSurvival(archiveSurvivalRecord(save, abandoned, placements.slice(0, 1)));
     assert.deepEqual(survivalTotals(readSurvival()), totals);
     assert.equal(readSurvival().records[1].finishedAt, undefined);
     assert.deepEqual(readSurvival().records[1].placements, placements.slice(0, 1));

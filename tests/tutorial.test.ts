@@ -1,11 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { basicLessons, finishLesson, freshTutorial, matchesAction, readTutorial, resolveTutorial, tutorialDays, tutorialStorageKey, writeTutorial } from '../src/game/tutorial';
-import { getLevelById, levels } from '../src/game/levels';
+import { getLevelById, levels } from '../src/engine';
 import { dictionaries } from '../src/i18n';
-import type { FacilityKind } from '../src/game/types';
+import type { FacilityKind } from '../src/engine';
 import { createTranslator } from '../src/i18n/context';
-import { facilities } from '../src/game/facilityRegistry';
+import { facilities } from '../src/engine';
 
 test('tutorial migration uses play records and leaves all three existing saves intact', () => {
   const previous = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');

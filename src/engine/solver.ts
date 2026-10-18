@@ -1,7 +1,7 @@
-import { adjacent, campConnections, campRequirements, evaluate, facilityConflict, occupied, offsets } from './rules';
+import { campConnections, campRequirements, evaluate, facilityConflict, occupied, offsets } from './rules';
 import type { Cell, FacilityKind, Level, Piece, Placement } from './types';
 
-type Candidate = { at: Placement; cells: Cell[]; mask: bigint; around: bigint; rows: number[]; cols: number[]; connections: { camp: bigint; gap: bigint }[]; forbidden: Partial<Record<FacilityKind, bigint>> };
+type Candidate = { at: Placement; cells: Cell[]; mask: bigint; rows: number[]; cols: number[]; connections: { camp: bigint; gap: bigint }[]; forbidden: { kind: FacilityKind; mask: bigint }[] };
 export type SolverResult = { count: number; solutions: Placement[][]; terrain: number; pieces: number; occupied: number; candidates: number; rotationCandidates: number; nodes: number; aborted: boolean; forced: number };
 
 // One domain per kind + shape. Increasing placement indices remove ID permutations.
@@ -10,6 +10,7 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
   const bits = Array.from({ length: n * n }, (_, i) => 1n << BigInt(i));
   const bit = (p: Cell) => bits[p.r * n + p.c];
   const board = Array.from({ length: n * n }, (_, i) => ({ r: Math.floor(i / n), c: i % n }));
+  const kinds = [...new Set(level.pieces.map(piece => piece.kind))];
   const groups: { piece: Piece; ids: string[]; domain: Candidate[] }[] = [];
   const stats: SolverResult = { count: 0, solutions: [], terrain: level.terrain.length, pieces: level.pieces.length, occupied: 0, candidates: 0, rotationCandidates: 0, nodes: 0, aborted: false, forced: 0 };
   for (const piece of level.pieces) {
@@ -31,12 +32,12 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
         if (rows.some((v, i) => v > level.rows[i]) || cols.some((v, i) => v > level.cols[i])) continue;
         const mask = cells.reduce((m, p) => m | bit(p), 0n);
         const connections = campConnections(piece.kind, cells, board, level.terrain).map(link => ({ camp: bit(link.camp), gap: link.gap ? bit(link.gap) : 0n }));
-        const forbidden: Candidate['forbidden'] = {};
-        for (const kind of ['camp', 'fire', 'foodTruck', 'powerTower'] as const) {
+        const forbidden: Candidate['forbidden'] = [];
+        for (const kind of kinds) {
           const banned = board.filter(p => facilityConflict(piece.kind, cells, kind, [p])).reduce((m, p) => m | bit(p), 0n);
-          if (banned) forbidden[kind] = banned;
+          if (banned) forbidden.push({ kind, mask: banned });
         }
-        domain.push({ at, cells, mask, rows, cols, connections, forbidden, around: board.filter(p => cells.some(q => adjacent(p, q, true))).reduce((m, p) => m | bit(p), 0n) });
+        domain.push({ at, cells, mask, rows, cols, connections, forbidden });
       }
     }
     groups.push({ piece, ids: [piece.id], domain });
@@ -49,7 +50,7 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
   const chosen: { g: number; p: Candidate }[] = [];
   const supports = (p: Candidate, camps: bigint, used: bigint) => p.connections.some(link => (link.camp & camps) && !(link.gap & used));
   function search(used: bigint, byKind: Partial<Record<FacilityKind, bigint>>) {
-    const camps = byKind.camp ?? 0n, towers = byKind.tower ?? 0n, fire = byKind.fire ?? 0n, picnic = byKind.picnic ?? 0n;
+    const camps = byKind.camp ?? 0n;
     if (stats.count >= limit || stats.aborted) return;
     stats.nodes++;
     if (stats.nodes > (budget.maxNodes ?? Infinity) || (stats.nodes % 64 === 1 && Date.now() >= (budget.deadline ?? Infinity))) { stats.aborted = true; return; }
@@ -70,8 +71,7 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
       for (let i = last[g] + 1; i < group.domain.length; i++) {
         const p = group.domain[i];
         if (p.mask & used || p.rows.some((v, r) => rows[r] + v > level.rows[r]) || p.cols.some((v, c) => cols[c] + v > level.cols[c])) continue;
-        if (group.piece.kind === 'tower' && (p.around & towers) || group.piece.kind === 'fire' && (p.around & picnic) || group.piece.kind === 'picnic' && (p.around & fire)) continue;
-        if (Object.entries(p.forbidden).some(([kind, mask]) => mask & (byKind[kind as FacilityKind] ?? 0n))) continue;
+        if (p.forbidden.some(({ kind, mask }) => mask & (byKind[kind] ?? 0n))) continue;
         valid.push(i); possible |= p.mask;
         if (group.piece.kind === 'camp') possibleCamps |= p.mask;
       }

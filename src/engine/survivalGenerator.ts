@@ -1,6 +1,6 @@
 import { getLevelById, getSolution } from './levels';
 import { facilityLibrary } from './facilityRegistry';
-import { adjacent, evaluate, key, occupied, offsets } from './rules';
+import { evaluate, key, occupied, offsets, terrainConflict } from './rules';
 import { withEditorPlacements } from './sandbox';
 import type { SandboxDraft } from './sandbox';
 import { solveLevel } from './solver';
@@ -122,7 +122,10 @@ export function generateSurvival(difficulty: number, seed: number, id: string, r
       if (!alternative.length || draft.level.terrain.length >= maxTerrain) break;
       const next = structuredClone(draft), cell = pick(alternative);
       // Forest/water affect facility relationships too; accept only a legal answer.
-      const kinds: TerrainKind[] = ['forest', 'water', 'mountain'].filter(kind => kind !== 'forest' || !draft.placements.some(at => draft.level.pieces.find(p => p.id === at.id)!.kind === 'fire' && occupied(draft.level.pieces.find(p => p.id === at.id)!, at).some(p => adjacent(p, cell, true)))) as TerrainKind[];
+      const kinds: TerrainKind[] = ['forest', 'water', 'mountain'].filter(kind => kind !== 'forest' || !draft.placements.some(at => {
+        const piece = draft.level.pieces.find(p => p.id === at.id)!;
+        return terrainConflict(piece.kind, occupied(piece, at), { ...cell, kind: 'forest' });
+      })) as TerrainKind[];
       next.level.terrain.push({ ...cell, kind: pick(kinds) });
       if (legal(next)) { draft = next; changes++; }
     }

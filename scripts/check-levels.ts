@@ -1,6 +1,6 @@
-import { solveLevel } from '../src/game/solver';
-import { evaluate } from '../src/game/rules';
-import { getSolution, levels } from '../src/game/levels';
+import { solveLevel } from '../src/engine';
+import { evaluate } from '../src/engine';
+import { getSolution, levels } from '../src/engine';
 let failed = false;
 for (const level of levels.filter(l => l.id >= 16)) {
   const result = solveLevel(level);

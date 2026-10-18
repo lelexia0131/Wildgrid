@@ -1,0 +1,1362 @@
+{
+  "title": "Wildgrid Engine rule/solver behavior equivalence",
+  "date": "2026-10-18",
+  "baselineCommit": "ea4981ee70bb045468920d00132a113004a9d647",
+  "baselineFiles": [
+    "src/game/rules.ts",
+    "src/game/solver.ts"
+  ],
+  "migratedFiles": [
+    "src/engine/rules.ts",
+    "src/engine/solver.ts",
+    "src/engine/survivalGenerator.ts"
+  ],
+  "inputs": "Unchanged src/data/levels.json and src/data/solutions.json",
+  "solver": {
+    "limit": 2,
+    "budget": {
+      "maxNodes": 350000
+    },
+    "levelCount": 45,
+    "fullResultsEqual": true,
+    "comparedFields": [
+      "count",
+      "solutions (including order)",
+      "terrain",
+      "pieces",
+      "occupied",
+      "candidates",
+      "rotationCandidates",
+      "nodes",
+      "aborted",
+      "forced"
+    ],
+    "levels": [
+      {
+        "id": 1,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 1,
+          "count": 1,
+          "terrain": 1,
+          "pieces": 1,
+          "occupied": 1,
+          "candidates": 1,
+          "rotationCandidates": 0,
+          "nodes": 2,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 1,
+          "count": 1,
+          "terrain": 1,
+          "pieces": 1,
+          "occupied": 1,
+          "candidates": 1,
+          "rotationCandidates": 0,
+          "nodes": 2,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 2,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 2,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 2,
+          "occupied": 2,
+          "candidates": 4,
+          "rotationCandidates": 0,
+          "nodes": 4,
+          "aborted": false,
+          "forced": 2
+        },
+        "after": {
+          "id": 2,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 2,
+          "occupied": 2,
+          "candidates": 4,
+          "rotationCandidates": 0,
+          "nodes": 4,
+          "aborted": false,
+          "forced": 2
+        }
+      },
+      {
+        "id": 3,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 3,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 12,
+          "rotationCandidates": 0,
+          "nodes": 8,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 3,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 12,
+          "rotationCandidates": 0,
+          "nodes": 8,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 4,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 4,
+          "count": 1,
+          "terrain": 6,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 9,
+          "rotationCandidates": 0,
+          "nodes": 7,
+          "aborted": false,
+          "forced": 3
+        },
+        "after": {
+          "id": 4,
+          "count": 1,
+          "terrain": 6,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 9,
+          "rotationCandidates": 0,
+          "nodes": 7,
+          "aborted": false,
+          "forced": 3
+        }
+      },
+      {
+        "id": 5,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 5,
+          "count": 1,
+          "terrain": 3,
+          "pieces": 2,
+          "occupied": 2,
+          "candidates": 3,
+          "rotationCandidates": 0,
+          "nodes": 3,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 5,
+          "count": 1,
+          "terrain": 3,
+          "pieces": 2,
+          "occupied": 2,
+          "candidates": 3,
+          "rotationCandidates": 0,
+          "nodes": 3,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 6,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 6,
+          "count": 1,
+          "terrain": 5,
+          "pieces": 4,
+          "occupied": 4,
+          "candidates": 12,
+          "rotationCandidates": 0,
+          "nodes": 7,
+          "aborted": false,
+          "forced": 2
+        },
+        "after": {
+          "id": 6,
+          "count": 1,
+          "terrain": 5,
+          "pieces": 4,
+          "occupied": 4,
+          "candidates": 12,
+          "rotationCandidates": 0,
+          "nodes": 7,
+          "aborted": false,
+          "forced": 2
+        }
+      },
+      {
+        "id": 7,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 7,
+          "count": 1,
+          "terrain": 5,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 8,
+          "rotationCandidates": 0,
+          "nodes": 5,
+          "aborted": false,
+          "forced": 2
+        },
+        "after": {
+          "id": 7,
+          "count": 1,
+          "terrain": 5,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 8,
+          "rotationCandidates": 0,
+          "nodes": 5,
+          "aborted": false,
+          "forced": 2
+        }
+      },
+      {
+        "id": 8,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 8,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 2,
+          "occupied": 2,
+          "candidates": 4,
+          "rotationCandidates": 0,
+          "nodes": 4,
+          "aborted": false,
+          "forced": 2
+        },
+        "after": {
+          "id": 8,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 2,
+          "occupied": 2,
+          "candidates": 4,
+          "rotationCandidates": 0,
+          "nodes": 4,
+          "aborted": false,
+          "forced": 2
+        }
+      },
+      {
+        "id": 9,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 9,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 7,
+          "rotationCandidates": 0,
+          "nodes": 6,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 9,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 7,
+          "rotationCandidates": 0,
+          "nodes": 6,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 10,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 10,
+          "count": 1,
+          "terrain": 3,
+          "pieces": 1,
+          "occupied": 2,
+          "candidates": 1,
+          "rotationCandidates": 0,
+          "nodes": 2,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 10,
+          "count": 1,
+          "terrain": 3,
+          "pieces": 1,
+          "occupied": 2,
+          "candidates": 1,
+          "rotationCandidates": 0,
+          "nodes": 2,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 11,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 11,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 3,
+          "occupied": 5,
+          "candidates": 11,
+          "rotationCandidates": 2,
+          "nodes": 5,
+          "aborted": false,
+          "forced": 2
+        },
+        "after": {
+          "id": 11,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 3,
+          "occupied": 5,
+          "candidates": 11,
+          "rotationCandidates": 2,
+          "nodes": 5,
+          "aborted": false,
+          "forced": 2
+        }
+      },
+      {
+        "id": 12,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 12,
+          "count": 2,
+          "terrain": 4,
+          "pieces": 3,
+          "occupied": 5,
+          "candidates": 13,
+          "rotationCandidates": 1,
+          "nodes": 7,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 12,
+          "count": 2,
+          "terrain": 4,
+          "pieces": 3,
+          "occupied": 5,
+          "candidates": 13,
+          "rotationCandidates": 1,
+          "nodes": 7,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 13,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 13,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 3,
+          "occupied": 5,
+          "candidates": 7,
+          "rotationCandidates": 0,
+          "nodes": 4,
+          "aborted": false,
+          "forced": 2
+        },
+        "after": {
+          "id": 13,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 3,
+          "occupied": 5,
+          "candidates": 7,
+          "rotationCandidates": 0,
+          "nodes": 4,
+          "aborted": false,
+          "forced": 2
+        }
+      },
+      {
+        "id": 14,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 14,
+          "count": 2,
+          "terrain": 6,
+          "pieces": 5,
+          "occupied": 8,
+          "candidates": 30,
+          "rotationCandidates": 8,
+          "nodes": 9,
+          "aborted": false,
+          "forced": 2
+        },
+        "after": {
+          "id": 14,
+          "count": 2,
+          "terrain": 6,
+          "pieces": 5,
+          "occupied": 8,
+          "candidates": 30,
+          "rotationCandidates": 8,
+          "nodes": 9,
+          "aborted": false,
+          "forced": 2
+        }
+      },
+      {
+        "id": 15,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 15,
+          "count": 2,
+          "terrain": 6,
+          "pieces": 7,
+          "occupied": 11,
+          "candidates": 63,
+          "rotationCandidates": 10,
+          "nodes": 28,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 15,
+          "count": 2,
+          "terrain": 6,
+          "pieces": 7,
+          "occupied": 11,
+          "candidates": 63,
+          "rotationCandidates": 10,
+          "nodes": 28,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 16,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 16,
+          "count": 1,
+          "terrain": 11,
+          "pieces": 8,
+          "occupied": 11,
+          "candidates": 72,
+          "rotationCandidates": 7,
+          "nodes": 68,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 16,
+          "count": 1,
+          "terrain": 11,
+          "pieces": 8,
+          "occupied": 11,
+          "candidates": 72,
+          "rotationCandidates": 7,
+          "nodes": 68,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 17,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 17,
+          "count": 1,
+          "terrain": 12,
+          "pieces": 9,
+          "occupied": 13,
+          "candidates": 83,
+          "rotationCandidates": 11,
+          "nodes": 71,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 17,
+          "count": 1,
+          "terrain": 12,
+          "pieces": 9,
+          "occupied": 13,
+          "candidates": 83,
+          "rotationCandidates": 11,
+          "nodes": 71,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 18,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 18,
+          "count": 1,
+          "terrain": 12,
+          "pieces": 10,
+          "occupied": 13,
+          "candidates": 98,
+          "rotationCandidates": 9,
+          "nodes": 102,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 18,
+          "count": 1,
+          "terrain": 12,
+          "pieces": 10,
+          "occupied": 13,
+          "candidates": 98,
+          "rotationCandidates": 9,
+          "nodes": 102,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 19,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 19,
+          "count": 1,
+          "terrain": 13,
+          "pieces": 10,
+          "occupied": 15,
+          "candidates": 160,
+          "rotationCandidates": 34,
+          "nodes": 2498,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 19,
+          "count": 1,
+          "terrain": 13,
+          "pieces": 10,
+          "occupied": 15,
+          "candidates": 160,
+          "rotationCandidates": 34,
+          "nodes": 2498,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 20,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 20,
+          "count": 1,
+          "terrain": 13,
+          "pieces": 11,
+          "occupied": 16,
+          "candidates": 162,
+          "rotationCandidates": 33,
+          "nodes": 1008,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 20,
+          "count": 1,
+          "terrain": 13,
+          "pieces": 11,
+          "occupied": 16,
+          "candidates": 162,
+          "rotationCandidates": 33,
+          "nodes": 1008,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 21,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 21,
+          "count": 1,
+          "terrain": 14,
+          "pieces": 12,
+          "occupied": 17,
+          "candidates": 174,
+          "rotationCandidates": 45,
+          "nodes": 1736,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 21,
+          "count": 1,
+          "terrain": 14,
+          "pieces": 12,
+          "occupied": 17,
+          "candidates": 174,
+          "rotationCandidates": 45,
+          "nodes": 1736,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 22,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 22,
+          "count": 1,
+          "terrain": 14,
+          "pieces": 12,
+          "occupied": 17,
+          "candidates": 153,
+          "rotationCandidates": 49,
+          "nodes": 607,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 22,
+          "count": 1,
+          "terrain": 14,
+          "pieces": 12,
+          "occupied": 17,
+          "candidates": 153,
+          "rotationCandidates": 49,
+          "nodes": 607,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 23,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 23,
+          "count": 1,
+          "terrain": 15,
+          "pieces": 13,
+          "occupied": 19,
+          "candidates": 221,
+          "rotationCandidates": 72,
+          "nodes": 12861,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 23,
+          "count": 1,
+          "terrain": 15,
+          "pieces": 13,
+          "occupied": 19,
+          "candidates": 221,
+          "rotationCandidates": 72,
+          "nodes": 12861,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 24,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 24,
+          "count": 1,
+          "terrain": 15,
+          "pieces": 13,
+          "occupied": 20,
+          "candidates": 251,
+          "rotationCandidates": 78,
+          "nodes": 7430,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 24,
+          "count": 1,
+          "terrain": 15,
+          "pieces": 13,
+          "occupied": 20,
+          "candidates": 251,
+          "rotationCandidates": 78,
+          "nodes": 7430,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 25,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 25,
+          "count": 1,
+          "terrain": 16,
+          "pieces": 14,
+          "occupied": 22,
+          "candidates": 328,
+          "rotationCandidates": 103,
+          "nodes": 68381,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 25,
+          "count": 1,
+          "terrain": 16,
+          "pieces": 14,
+          "occupied": 22,
+          "candidates": 328,
+          "rotationCandidates": 103,
+          "nodes": 68381,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 26,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 26,
+          "count": 1,
+          "terrain": 17,
+          "pieces": 15,
+          "occupied": 23,
+          "candidates": 310,
+          "rotationCandidates": 98,
+          "nodes": 32158,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 26,
+          "count": 1,
+          "terrain": 17,
+          "pieces": 15,
+          "occupied": 23,
+          "candidates": 310,
+          "rotationCandidates": 98,
+          "nodes": 32158,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 27,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 27,
+          "count": 1,
+          "terrain": 18,
+          "pieces": 16,
+          "occupied": 24,
+          "candidates": 323,
+          "rotationCandidates": 93,
+          "nodes": 52390,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 27,
+          "count": 1,
+          "terrain": 18,
+          "pieces": 16,
+          "occupied": 24,
+          "candidates": 323,
+          "rotationCandidates": 93,
+          "nodes": 52390,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 28,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 28,
+          "count": 1,
+          "terrain": 18,
+          "pieces": 17,
+          "occupied": 25,
+          "candidates": 363,
+          "rotationCandidates": 106,
+          "nodes": 249231,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 28,
+          "count": 1,
+          "terrain": 18,
+          "pieces": 17,
+          "occupied": 25,
+          "candidates": 363,
+          "rotationCandidates": 106,
+          "nodes": 249231,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 29,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 29,
+          "count": 1,
+          "terrain": 19,
+          "pieces": 18,
+          "occupied": 26,
+          "candidates": 326,
+          "rotationCandidates": 84,
+          "nodes": 8550,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 29,
+          "count": 1,
+          "terrain": 19,
+          "pieces": 18,
+          "occupied": 26,
+          "candidates": 326,
+          "rotationCandidates": 84,
+          "nodes": 8550,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 30,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 30,
+          "count": 1,
+          "terrain": 18,
+          "pieces": 18,
+          "occupied": 28,
+          "candidates": 310,
+          "rotationCandidates": 117,
+          "nodes": 64141,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 30,
+          "count": 1,
+          "terrain": 18,
+          "pieces": 18,
+          "occupied": 28,
+          "candidates": 310,
+          "rotationCandidates": 117,
+          "nodes": 64141,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 31,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 31,
+          "count": 1,
+          "terrain": 1,
+          "pieces": 2,
+          "occupied": 2,
+          "candidates": 3,
+          "rotationCandidates": 0,
+          "nodes": 3,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 31,
+          "count": 1,
+          "terrain": 1,
+          "pieces": 2,
+          "occupied": 2,
+          "candidates": 3,
+          "rotationCandidates": 0,
+          "nodes": 3,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 32,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 32,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 3,
+          "occupied": 4,
+          "candidates": 12,
+          "rotationCandidates": 1,
+          "nodes": 5,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 32,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 3,
+          "occupied": 4,
+          "candidates": 12,
+          "rotationCandidates": 1,
+          "nodes": 5,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 33,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 33,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 6,
+          "occupied": 8,
+          "candidates": 44,
+          "rotationCandidates": 2,
+          "nodes": 11,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 33,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 6,
+          "occupied": 8,
+          "candidates": 44,
+          "rotationCandidates": 2,
+          "nodes": 11,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 34,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 34,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 12,
+          "rotationCandidates": 0,
+          "nodes": 5,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 34,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 12,
+          "rotationCandidates": 0,
+          "nodes": 5,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 35,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 35,
+          "count": 1,
+          "terrain": 3,
+          "pieces": 5,
+          "occupied": 6,
+          "candidates": 64,
+          "rotationCandidates": 2,
+          "nodes": 24,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 35,
+          "count": 1,
+          "terrain": 3,
+          "pieces": 5,
+          "occupied": 6,
+          "candidates": 64,
+          "rotationCandidates": 2,
+          "nodes": 24,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 36,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 36,
+          "count": 1,
+          "terrain": 5,
+          "pieces": 6,
+          "occupied": 8,
+          "candidates": 53,
+          "rotationCandidates": 2,
+          "nodes": 26,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 36,
+          "count": 1,
+          "terrain": 5,
+          "pieces": 6,
+          "occupied": 8,
+          "candidates": 53,
+          "rotationCandidates": 2,
+          "nodes": 26,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 37,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 37,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 5,
+          "occupied": 7,
+          "candidates": 56,
+          "rotationCandidates": 1,
+          "nodes": 14,
+          "aborted": false,
+          "forced": 1
+        },
+        "after": {
+          "id": 37,
+          "count": 1,
+          "terrain": 4,
+          "pieces": 5,
+          "occupied": 7,
+          "candidates": 56,
+          "rotationCandidates": 1,
+          "nodes": 14,
+          "aborted": false,
+          "forced": 1
+        }
+      },
+      {
+        "id": 38,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 38,
+          "count": 1,
+          "terrain": 1,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 9,
+          "rotationCandidates": 0,
+          "nodes": 6,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 38,
+          "count": 1,
+          "terrain": 1,
+          "pieces": 3,
+          "occupied": 3,
+          "candidates": 9,
+          "rotationCandidates": 0,
+          "nodes": 6,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 39,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 39,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 3,
+          "occupied": 4,
+          "candidates": 8,
+          "rotationCandidates": 1,
+          "nodes": 7,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 39,
+          "count": 1,
+          "terrain": 2,
+          "pieces": 3,
+          "occupied": 4,
+          "candidates": 8,
+          "rotationCandidates": 1,
+          "nodes": 7,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 40,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 40,
+          "count": 1,
+          "terrain": 3,
+          "pieces": 6,
+          "occupied": 9,
+          "candidates": 47,
+          "rotationCandidates": 6,
+          "nodes": 23,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 40,
+          "count": 1,
+          "terrain": 3,
+          "pieces": 6,
+          "occupied": 9,
+          "candidates": 47,
+          "rotationCandidates": 6,
+          "nodes": 23,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 41,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 41,
+          "count": 1,
+          "terrain": 22,
+          "pieces": 15,
+          "occupied": 23,
+          "candidates": 334,
+          "rotationCandidates": 84,
+          "nodes": 36519,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 41,
+          "count": 1,
+          "terrain": 22,
+          "pieces": 15,
+          "occupied": 23,
+          "candidates": 334,
+          "rotationCandidates": 84,
+          "nodes": 36519,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 42,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 42,
+          "count": 1,
+          "terrain": 20,
+          "pieces": 16,
+          "occupied": 24,
+          "candidates": 354,
+          "rotationCandidates": 76,
+          "nodes": 9871,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 42,
+          "count": 1,
+          "terrain": 20,
+          "pieces": 16,
+          "occupied": 24,
+          "candidates": 354,
+          "rotationCandidates": 76,
+          "nodes": 9871,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 43,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 43,
+          "count": 1,
+          "terrain": 24,
+          "pieces": 17,
+          "occupied": 25,
+          "candidates": 354,
+          "rotationCandidates": 75,
+          "nodes": 98834,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 43,
+          "count": 1,
+          "terrain": 24,
+          "pieces": 17,
+          "occupied": 25,
+          "candidates": 354,
+          "rotationCandidates": 75,
+          "nodes": 98834,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 44,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 44,
+          "count": 1,
+          "terrain": 21,
+          "pieces": 18,
+          "occupied": 26,
+          "candidates": 344,
+          "rotationCandidates": 85,
+          "nodes": 6648,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 44,
+          "count": 1,
+          "terrain": 21,
+          "pieces": 18,
+          "occupied": 26,
+          "candidates": 344,
+          "rotationCandidates": 85,
+          "nodes": 6648,
+          "aborted": false,
+          "forced": 0
+        }
+      },
+      {
+        "id": 45,
+        "equal": true,
+        "solutionsEqual": true,
+        "before": {
+          "id": 45,
+          "count": 1,
+          "terrain": 25,
+          "pieces": 18,
+          "occupied": 28,
+          "candidates": 288,
+          "rotationCandidates": 84,
+          "nodes": 5642,
+          "aborted": false,
+          "forced": 0
+        },
+        "after": {
+          "id": 45,
+          "count": 1,
+          "terrain": 25,
+          "pieces": 18,
+          "occupied": 28,
+          "candidates": 288,
+          "rotationCandidates": 84,
+          "nodes": 5642,
+          "aborted": false,
+          "forced": 0
+        }
+      }
+    ]
+  },
+  "evaluation": {
+    "caseCount": 779,
+    "referenceAnswers": 45,
+    "removeEachFacility": 367,
+    "moveEachFacilityOneRowWithWrap": 367,
+    "outputsEqual": true,
+    "beforeSha256": "1c91483cb752b4adf6bc5ca172002f15e978012261e0f363740049eddb86b42c",
+    "afterSha256": "1c91483cb752b4adf6bc5ca172002f15e978012261e0f363740049eddb86b42c",
+    "comparedOutput": "Complete JSON.stringify(evaluate(...)) including rows, cols, issue status, ordered reasons, won and status"
+  },
+  "notes": [
+    "Results were captured before and after conflict-rule consolidation. The reproduction script was also executed after the final forbidden-mask array optimization and shared terrainConflict helper extraction and confirmed all 45 solver outputs and all 779 evaluation outputs still match the Git baseline.",
+    "The survival generator retains its forest-only prefilter and identical random calls. It now asks the shared terrainConflict helper about forest near each footprint; water and mountain selection and final evaluate checks are unchanged. This report compares rule/solver outputs, not all possible generated maps.",
+    "One before/after timing comparison, without deadline, measured 4178 ms and 4385 ms before the mask-array optimization; wall-clock time is environment-dependent and is not a cross-platform guarantee."
+  ],
+  "reproduction": {
+    "command": "Run the following ES module from repository root using node --import tsx --input-type=module. It reads baseline sources from Git without writing files.",
+    "lastRunOutput": { "solverLevels": 45, "evaluationCases": 779, "evaluationSha256": "1c91483cb752b4adf6bc5ca172002f15e978012261e0f363740049eddb86b42c", "passed": true },
+    "script": "import { execFileSync } from 'node:child_process';\nimport { createHash } from 'node:crypto';\nimport assert from 'node:assert/strict';\nimport ts from 'typescript';\nimport { levels, solutions } from './src/engine/levels.ts';\nconst commit = 'ea4981ee70bb045468920d00132a113004a9d647';\nconst asModule = source => 'data:text/javascript;base64,' + Buffer.from(ts.transpile(source, { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext })).toString('base64');\nconst oldRulesUrl = asModule(execFileSync('git', ['show', commit + ':src/game/rules.ts'], { encoding: 'utf8' }));\nconst oldRules = await import(oldRulesUrl);\nconst oldSolver = await import(asModule(execFileSync('git', ['show', commit + ':src/game/solver.ts'], { encoding: 'utf8' }).replace(\"from './rules'\", \"from '\" + oldRulesUrl + \"'\")));\nconst currentRules = await import('./src/engine/rules.ts');\nconst currentSolver = await import('./src/engine/solver.ts');\nconst solve = engine => levels.map(level => ({ id: level.id, ...engine.solveLevel(level, 2, { maxNodes: 350000 }) }));\nconst evaluateAll = engine => levels.flatMap(level => [solutions[level.id], ...solutions[level.id].map(at => solutions[level.id].filter(p => p.id !== at.id)), ...solutions[level.id].map(at => solutions[level.id].map(p => p.id === at.id ? { ...p, r: (p.r + 1) % level.size } : p))].map(placements => engine.evaluate(level, placements)));\nconst before = solve(oldSolver), after = solve(currentSolver);\nassert.deepEqual(after, before);\nconst beforeEvaluation = evaluateAll(oldRules), afterEvaluation = evaluateAll(currentRules);\nassert.deepEqual(afterEvaluation, beforeEvaluation);\nconsole.log(JSON.stringify({ solverLevels: after.length, evaluationCases: afterEvaluation.length, evaluationSha256: createHash('sha256').update(JSON.stringify(afterEvaluation)).digest('hex'), passed: true }));\n"
+  }
+}

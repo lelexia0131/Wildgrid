@@ -1,5 +1,5 @@
-import { checkSandbox } from './sandbox';
-import type { SandboxDraft } from './sandbox';
+import { checkSandbox } from '../engine';
+import type { SandboxDraft } from '../engine';
 
 self.onmessage = (event: MessageEvent<SandboxDraft>) => {
   try { self.postMessage(checkSandbox(event.data)); }

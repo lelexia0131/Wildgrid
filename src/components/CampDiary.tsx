@@ -5,8 +5,8 @@ import { JournalChapterBackground } from './JournalChapterBackground';
 import { journalChapters, journalLevelCovers, journalPalettes } from './journalArt';
 import { LevelArtwork } from './LevelArtwork';
 import { useI18n } from '../i18n/context';
-import { levels } from '../game/levels';
-import { levelUnlocked } from '../game/storage';
+import { levels } from '../engine';
+import { levelUnlocked } from '../engine';
 import { audio } from '../game/audio';
 
 type Props = {

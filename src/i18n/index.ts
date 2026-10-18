@@ -1,4 +1,4 @@
-import type { FacilityKind } from '../game/types';
+import type { FacilityKind } from '../engine';
 
 export type Language = 'zh' | 'en';
 type LessonCopy = { title: string; text: string };

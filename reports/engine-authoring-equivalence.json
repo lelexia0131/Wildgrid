@@ -1,0 +1,13 @@
+{
+  "command": "node scripts/author-levels.mjs (isolated cwd, copied input data)",
+  "before": {
+    "levels": "6387a18523e6fcf210965ba25fadbcd345e37ded81bb1ab7eeff79defb9b3e41",
+    "solutions": "7b3d3ca1da1699fcb7c000ecb37aa09169362c22430a28988130bfee9e0a5242"
+  },
+  "after": {
+    "levels": "6387a18523e6fcf210965ba25fadbcd345e37ded81bb1ab7eeff79defb9b3e41",
+    "solutions": "7b3d3ca1da1699fcb7c000ecb37aa09169362c22430a28988130bfee9e0a5242"
+  },
+  "equivalent": true,
+  "workspaceDataUnchanged": true
+}

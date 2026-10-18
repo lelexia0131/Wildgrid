@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readSave, writeSave } from '../src/game/storage';
 import { readSurvival, writeSurvival } from '../src/game/survival';
 import { saveLocalMap } from '../src/game/localMaps';
-import { getLevelById, getSolution } from '../src/game/levels';
+import { getLevelById, getSolution } from '../src/engine';
 
 test('unreadable and incompatible saves survive attempted adventure, map and reward writes', () => {
   const original = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');

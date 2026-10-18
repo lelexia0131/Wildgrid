@@ -1,10 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { placementHints } from '../src/game/placementHints';
-import { evaluate } from '../src/game/rules';
+import { placementHints } from '../src/engine';
+import { evaluate } from '../src/engine';
 import { readSave, writeSave } from '../src/game/storage';
-import { getLevelById, solutions } from '../src/game/levels';
-import type { Level, Piece, Placement } from '../src/game/types';
+import { getLevelById, solutions } from '../src/engine';
+import type { Level, Piece, Placement } from '../src/engine';
 
 const piece = (id: string, kind: Piece['kind'], shape: Piece['shape'] = 'single'): Piece => ({ id, kind, shape });
 const at = (id: string, r: number, c: number): Placement => ({ id, r, c, rotation: 0 });

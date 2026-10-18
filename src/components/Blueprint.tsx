@@ -1,7 +1,7 @@
 import { useI18n } from '../i18n/context';
 import { Art, FacilityArt, FootprintSurface } from './Art';
-import { key, occupied } from '../game/rules';
-import type { Level, Placement } from '../game/types';
+import { key, occupied } from '../engine';
+import type { Level, Placement } from '../engine';
 
 export function Blueprint({ level, placements, name = `day ${level.id}` }: { level: Level; placements: Placement[]; name?: string }) {
   const { localize, t } = useI18n();

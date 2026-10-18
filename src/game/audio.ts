@@ -1,4 +1,4 @@
-import type { Settings } from './types';
+import type { Settings } from '../engine';
 export type Sound = 'place' | 'pickup' | 'rotate' | 'win' | 'click' | 'select' | 'close' | 'page' | 'confirm' | 'success' | 'error';
 // Original pentatonic melody and chord progression, synthesized locally.
 // No recordings, samples, network requests, or third-party audio assets.

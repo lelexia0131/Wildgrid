@@ -5,8 +5,8 @@ import { ArrowLeft, ArrowRight, Flag, X } from 'lucide-react';
 import { SurvivalBadge } from './SurvivalBadge';
 import { Art } from './Art';
 import { JournalChapterBackground } from './JournalChapterBackground';
-import { rankFor, survivalDifficulties, survivalRanks, survivalTotals } from '../game/survival';
-import type { SurvivalRecord, SurvivalSave } from '../game/survival';
+import { rankFor, survivalDifficulties, survivalRanks, survivalTotals } from '../engine';
+import type { SurvivalRecord, SurvivalSave } from '../engine';
 import { audio } from '../game/audio';
 
 export function SurvivalMenu({ save, generating, generationScene, error, onStart, onContinue, onBack, onCancel, onReview, canReview }: {

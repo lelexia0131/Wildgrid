@@ -2,9 +2,9 @@ import { evaluate, occupied, offsets } from './rules';
 import { facilityLibrary, facilityNames as names } from './facilityRegistry';
 import { validatePlacements } from './placementValidation';
 import { solveLevel } from './solver';
-import type { Level, Placement, TerrainKind } from './types';
+import type { Placement, Snapshot, TerrainKind } from './types';
 
-export type SandboxDraft = { level: Level; placements: Placement[] };
+export type SandboxDraft = Snapshot;
 export type SandboxCheck = { status: 'unique' | 'multiple' | 'none' | 'invalid'; message: string };
 
 const terrainKinds: TerrainKind[] = ['water', 'forest', 'mountain'];

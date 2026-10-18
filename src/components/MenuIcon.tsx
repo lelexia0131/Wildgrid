@@ -1,7 +1,7 @@
 import { Art } from './Art';
-import { facilityNames, terrainNames } from '../game/facilityRegistry';
-import type { FacilityKind, TerrainKind } from '../game/types';
-import type { MapIconId } from '../game/mapIcons';
+import { facilityNames, terrainNames } from '../engine';
+import type { FacilityKind, TerrainKind } from '../engine';
+import type { MapIconId } from '../engine';
 
 export function MenuIcon({ kind }: { kind: MapIconId | 'check' | 'share' | 'edit' | 'badge' | 'archive' | 'resume' | 'tools' | 'difficulty' | 'overview' | 'clues' | 'rotate' | 'settings' }) {
   if (kind in facilityNames || kind in terrainNames) return <Art kind={kind as FacilityKind | TerrainKind}/>;

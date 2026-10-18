@@ -16,18 +16,18 @@ import { CampDiary } from './components/CampDiary';
 import { LevelArtwork } from './components/LevelArtwork';
 import { CompletionEmblem } from './components/CompletionEmblem';
 import { MenuIcon } from './components/MenuIcon';
-import { survivalRanks } from './game/survival';
-import type { SurvivalChallenge, SurvivalProgress, SurvivalRecord } from './game/survival';
-import { key, occupied } from './game/rules';
-import { placementHints } from './game/placementHints';
-import { levelUnlocked } from './game/storage';
-import { levels, getLevelById, getSolution } from './game/levels';
-import { facilityLibrary, facilityNames, facilityTips, shapeNames, terrainNames } from './game/facilityRegistry';
+import { survivalRanks } from './engine';
+import type { SurvivalChallenge, SurvivalProgress, SurvivalRecord } from './engine';
+import { key, occupied } from './engine';
+import { placementHints } from './engine';
+import { levelUnlocked } from './engine';
+import { levels, getLevelById, getSolution } from './engine';
+import { facilityLibrary, facilityNames, facilityTips, shapeNames, terrainNames } from './engine';
 import { audio } from './game/audio';
-import { decodeMap, withEditorPlacements } from './game/sandbox';
-import type { SandboxDraft } from './game/sandbox';
+import { decodeMap } from './engine';
+import type { SandboxDraft } from './engine';
 import { resolvePlayerId } from './game/playerId';
-import type { FacilityKind, Placement, Shape } from './game/types';
+import type { FacilityKind, Placement, Shape } from './engine';
 import { useAdventureProgress } from './hooks/useAdventureProgress';
 import { useGameHistory } from './hooks/useGameHistory';
 import { useGameNavigation } from './hooks/useGameNavigation';
@@ -106,7 +106,7 @@ export default function App() {
   const feedback = useBoardFeedback(boardRef, level, placements, screen === 'game');
   const sandbox = useSandboxEditor({ mode, present: history.present, placements, enterGame: enterSandbox, resetPieceIds: draft => gamePlacement.resetPieceIds(draft), setNotice, sound });
   const { localMaps, localMapId, sandboxDraft, mapCode, check, checking, editorDirty, terrainBrush, setTerrainBrush, openSandbox, importSandbox, openLocalMap, editLocalMap, runSandboxAction } = sandbox;
-  const gamePlacement = useGamePlacement({ mode, level, placements, continuousPlacement: save.settings.continuousPlacement, terrainBrush, clearTerrainBrush: () => setTerrainBrush(null), commit, setNotice, sound, onAction: onTutorialAction, onReject: feedback.reject });
+  const gamePlacement = useGamePlacement({ session: history, continuousPlacement: save.settings.continuousPlacement, terrainBrush, clearTerrainBrush: () => setTerrainBrush(null), dispatch: historyController.dispatch, setNotice, sound, onAction: onTutorialAction, onReject: feedback.reject });
   const { selected, setSelected, rotations, setRotations, rotation, hover, setHover, result, choose, rotatePlaced, clickCell, ghost, ghostBlocked } = gamePlacement;
   const playingBoard = screen === 'game' && mode !== 'sandbox-editor';
   const ruleHints = useMemo(() => playingBoard && save.settings.ruleDisplay && selected
@@ -238,10 +238,6 @@ export default function App() {
   }, [winOpen]);
 
   function sound(name: Parameters<typeof audio.play>[0] = 'click') { audio.feedback(name); }
-  function commit(next: Placement[], nextLevel = level) {
-    const present = mode === 'sandbox-editor' ? withEditorPlacements({ level: nextLevel, placements }, next) : { level: nextLevel, placements: next };
-    historyController.commit(present);
-  }
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (screen !== 'game' || settingsOpen || winOpen || manualOpen || blueprintOpen || leaveOpen || mapCode || abandonOpen || replaceChallenge !== null || (event.target instanceof HTMLElement && ['INPUT', 'TEXTAREA'].includes(event.target.tagName))) return;
@@ -258,24 +254,24 @@ export default function App() {
     if (winOpen) onTutorialAction({ type: 'closeHint' });
     sound('confirm'); setSelected(null); setRotations({}); setHover(null); setNotice(''); setWinOpen(false);
     wonRef.current = false; setTerrainBrush(null); setTipGroup(null);
-    historyController.restore({ past: [], present: adventure.getStartSnapshot(id, reset), future: [] });
+    historyController.restore({ mode: 'adventure', present: adventure.getStartSnapshot(id, reset) });
     navigation.enterGame('adventure', id);
   }
   function restart() {
     if (mode === 'survival' && !survivalController.prepareRestart()) return;
     if (winOpen) onTutorialAction({ type: 'closeHint' });
     wonRef.current = false;
-    sound('confirm'); commit([]); setSelected(null); setRotations({}); setNotice(''); setWinOpen(false); survivalController.resetReward();
+    sound('confirm'); historyController.dispatch({ type: 'clear' }); setSelected(null); setRotations({}); setNotice(''); setWinOpen(false); survivalController.resetReward();
   }
   function enterSandbox(mode: 'sandbox-editor' | 'sandbox-play', present: SandboxDraft) {
     setReplay(null); setBlueprintOpen(false);
-    historyController.restore({ past: [], present, future: [] });
+    historyController.restore({ mode, present });
     setSelected(null); setRotations({}); setHover(null); setTipGroup(null); setNotice('');
     setWinOpen(false); wonRef.current = false; navigation.enterGame(mode);
   }
   function enterSurvival(current: SurvivalChallenge, progress: SurvivalProgress | null) {
     setReplay(null);
-    historyController.restore({ past: progress?.past.map(placements => ({ level: current.draft.level, placements })) || [], present: { level: current.draft.level, placements: progress?.placements || [] }, future: progress?.future.map(placements => ({ level: current.draft.level, placements })) || [] });
+    historyController.restore({ mode: 'survival', past: progress?.past.map(placements => ({ level: current.draft.level, placements })) || [], present: { level: current.draft.level, placements: progress?.placements || [] }, future: progress?.future.map(placements => ({ level: current.draft.level, placements })) || [] });
     setSelected(current.draft.level.pieces.find(piece => piece.id === progress?.selectedId && !progress.placements.some(at => at.id === piece.id)) || null);
     setRotations(progress?.rotations || {}); setHover(null); setTipGroup(null); setNotice('');
     setWinOpen(false); setBlueprintOpen(false); wonRef.current = false; navigation.enterGame('survival');

@@ -4,11 +4,11 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useI18n } from '../i18n/context';
 import { Art, CampArt, FacilityArt, FootprintSurface } from './Art';
 import { MenuIcon } from './MenuIcon';
-import { offsets } from '../game/rules';
-import { facilities } from '../game/facilityRegistry';
-import { survivalDifficulties, survivalRanks } from '../game/survival';
+import { offsets } from '../engine';
+import { facilities } from '../engine';
+import { survivalDifficulties, survivalRanks } from '../engine';
 import { audio } from '../game/audio';
-import type { FacilityKind, Shape, TerrainKind } from '../game/types';
+import type { FacilityKind, Shape, TerrainKind } from '../engine';
 
 type Kind = FacilityKind | TerrainKind;
 const symbols: Record<string, Kind> = { W:'water', F:'forest', M:'mountain', C:'camp', B:'fire', T:'tower', P:'picnic', H:'cabin', V:'foodTruck', E:'powerTower', S:'pool' };

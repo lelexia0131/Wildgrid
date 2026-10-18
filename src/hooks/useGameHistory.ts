@@ -1,25 +1,29 @@
-import { useCallback, useState } from 'react';
-import type { Level, Placement } from '../game/types';
-
-export type Snapshot = { level: Level; placements: Placement[] };
-export type GameHistory = { past: Snapshot[]; present: Snapshot; future: Snapshot[] };
+import { useCallback, useRef, useState } from 'react';
+import { createSession, dispatch } from '../engine';
+import type { Snapshot } from '../engine';
 
 export function useGameHistory(initial: () => Snapshot, onChange: () => void, onRestore: () => void, onAction?: (type: 'undo' | 'redo') => void) {
-  const [history, setHistory] = useState<GameHistory>(() => ({ past: [], present: initial(), future: [] }));
-  const commit = useCallback((present: Snapshot) => {
-    onChange();
-    setHistory(h => ({ past: [...h.past.slice(-79), h.present], present, future: [] }));
+  const [history, setHistory] = useState(() => createSession({ mode: 'adventure', present: initial() }));
+  const current = useRef(history);
+  const execute = useCallback((command: Parameters<typeof dispatch>[1]) => {
+    const outcome = dispatch(current.current, command);
+    if (outcome.session !== current.current) {
+      onChange(); current.current = outcome.session; setHistory(outcome.session);
+    }
+    return outcome;
   }, [onChange]);
   const undo = useCallback(() => {
-    if (history.past.length) { onChange(); onAction?.('undo'); }
-    setHistory(h => h.past.length ? { past: h.past.slice(0, -1), present: h.past[h.past.length - 1], future: [h.present, ...h.future] } : h);
+    const before = current.current;
+    if (execute({ type: 'undo' }).session !== before) onAction?.('undo');
     onRestore();
-  }, [history.past.length, onChange, onRestore, onAction]);
+  }, [execute, onRestore, onAction]);
   const redo = useCallback(() => {
-    if (history.future.length) { onChange(); onAction?.('redo'); }
-    setHistory(h => h.future.length ? { past: [...h.past, h.present], present: h.future[0], future: h.future.slice(1) } : h);
+    const before = current.current;
+    if (execute({ type: 'redo' }).session !== before) onAction?.('redo');
     onRestore();
-  }, [history.future.length, onChange, onRestore, onAction]);
-  const restore = useCallback((next: GameHistory) => setHistory(next), []);
-  return { history, commit, undo, redo, restore };
+  }, [execute, onRestore, onAction]);
+  const restore = useCallback((config: Parameters<typeof createSession>[0]) => {
+    const next = createSession(config); current.current = next; setHistory(next);
+  }, []);
+  return { history, dispatch: execute, undo, redo, restore };
 }

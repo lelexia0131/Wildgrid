@@ -3,9 +3,9 @@ import type { audio } from '../game/audio';
 import { writeClipboard } from '../game/clipboard';
 import { readLocalMaps, saveLocalMap } from '../game/localMaps';
 import type { LocalMap } from '../game/localMaps';
-import { createSandbox, decodeMap, encodeMap } from '../game/sandbox';
-import type { SandboxCheck, SandboxDraft } from '../game/sandbox';
-import type { GameMode, Placement, TerrainKind } from '../game/types';
+import { createSandbox, decodeMap, encodeMap } from '../engine';
+import type { SandboxCheck, SandboxDraft } from '../engine';
+import type { GameMode, Placement, TerrainKind } from '../engine';
 
 type Options = {
   mode: GameMode;

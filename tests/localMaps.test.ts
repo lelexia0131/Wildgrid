@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { deleteLocalMap, readLocalMaps, renameLocalMap, saveLocalMap } from '../src/game/localMaps';
-import { createSandbox, encodeMap, withEditorPlacements } from '../src/game/sandbox';
-import type { Placement } from '../src/game/types';
+import { createSandbox, encodeMap, withEditorPlacements } from '../src/engine';
+import type { Placement } from '../src/engine';
 
 function draft() {
   const map = createSandbox(6);

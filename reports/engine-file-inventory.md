@@ -1,0 +1,283 @@
+# 全项目文件职责清单
+
+审计基线：ea4981ee70bb045468920d00132a113004a9d647；正式维护文件201个、JS/TS源码97个。每行是实际盘点文件；生成资源按资源管理方式审查。迁移目标列用于追踪原路径。
+
+| 审计时文件 | 职责与引用用途 | 迁移后路径 |
+|---|---|---|
+| `.gitignore` | 依赖/构建/日志/平台生成物忽略规则 | `.gitignore` |
+| `ARCHITECTURE.md` | 架构说明 | `ARCHITECTURE.md` |
+| `README.md` | 运行、玩法、平台、维护说明 | `README.md` |
+| `android/.gitignore` | Android构建、主题、资源或权限配置 | `android/.gitignore` |
+| `android/app/.gitignore` | Android构建、主题、资源或权限配置 | `android/app/.gitignore` |
+| `android/app/build.gradle` | Android构建、主题、资源或权限配置 | `android/app/build.gradle` |
+| `android/app/capacitor.build.gradle` | Gradle wrapper/Capacitor同步配置，检查管理及调用入口 | `android/app/capacitor.build.gradle` |
+| `android/app/proguard-rules.pro` | Android构建、主题、资源或权限配置 | `android/app/proguard-rules.pro` |
+| `android/app/src/main/AndroidManifest.xml` | Android构建、主题、资源或权限配置 | `android/app/src/main/AndroidManifest.xml` |
+| `android/app/src/main/java/com/wildgrid/game/ClipboardPlugin.java` | 自维护Android原生入口/剪贴板/匿名身份插件 | `android/app/src/main/java/com/wildgrid/game/ClipboardPlugin.java` |
+| `android/app/src/main/java/com/wildgrid/game/MainActivity.java` | 自维护Android原生入口/剪贴板/匿名身份插件 | `android/app/src/main/java/com/wildgrid/game/MainActivity.java` |
+| `android/app/src/main/java/com/wildgrid/game/PlayerIdPlugin.java` | 自维护Android原生入口/剪贴板/匿名身份插件 | `android/app/src/main/java/com/wildgrid/game/PlayerIdPlugin.java` |
+| `android/app/src/main/res/layout/activity_main.xml` | Android构建、主题、资源或权限配置 | `android/app/src/main/res/layout/activity_main.xml` |
+| `android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml` | Android构建、主题、资源或权限配置 | `android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml` |
+| `android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml` | Android构建、主题、资源或权限配置 | `android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml` |
+| `android/app/src/main/res/mipmap-hdpi/ic_launcher.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-hdpi/ic_launcher.png` |
+| `android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png` |
+| `android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png` |
+| `android/app/src/main/res/mipmap-mdpi/ic_launcher.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-mdpi/ic_launcher.png` |
+| `android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png` |
+| `android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png` |
+| `android/app/src/main/res/mipmap-xhdpi/ic_launcher.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-xhdpi/ic_launcher.png` |
+| `android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png` |
+| `android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png` |
+| `android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png` |
+| `android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png` |
+| `android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png` |
+| `android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` |
+| `android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png` |
+| `android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png` | 密度图标；由build-android-icons生成 | `android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png` |
+| `android/app/src/main/res/values/ic_launcher_background.xml` | Android构建、主题、资源或权限配置 | `android/app/src/main/res/values/ic_launcher_background.xml` |
+| `android/app/src/main/res/values/strings.xml` | Android构建、主题、资源或权限配置 | `android/app/src/main/res/values/strings.xml` |
+| `android/app/src/main/res/values/styles.xml` | Android构建、主题、资源或权限配置 | `android/app/src/main/res/values/styles.xml` |
+| `android/app/src/main/res/xml/file_paths.xml` | Android构建、主题、资源或权限配置 | `android/app/src/main/res/xml/file_paths.xml` |
+| `android/build.gradle` | Android构建、主题、资源或权限配置 | `android/build.gradle` |
+| `android/capacitor.settings.gradle` | Gradle wrapper/Capacitor同步配置，检查管理及调用入口 | `android/capacitor.settings.gradle` |
+| `android/gradle.properties` | Android构建、主题、资源或权限配置 | `android/gradle.properties` |
+| `android/gradle/wrapper/gradle-wrapper.jar` | Gradle wrapper/Capacitor同步配置，检查管理及调用入口 | `android/gradle/wrapper/gradle-wrapper.jar` |
+| `android/gradle/wrapper/gradle-wrapper.properties` | Gradle wrapper/Capacitor同步配置，检查管理及调用入口 | `android/gradle/wrapper/gradle-wrapper.properties` |
+| `android/gradlew` | Gradle wrapper/Capacitor同步配置，检查管理及调用入口 | `android/gradlew` |
+| `android/gradlew.bat` | Gradle wrapper/Capacitor同步配置，检查管理及调用入口 | `android/gradlew.bat` |
+| `android/settings.gradle` | Android构建、主题、资源或权限配置 | `android/settings.gradle` |
+| `android/variables.gradle` | Android构建、主题、资源或权限配置 | `android/variables.gradle` |
+| `build/icon.ico` | Windows图标打包资源；SVG衍生 | `build/icon.ico` |
+| `build/icon.png` | Windows图标打包资源；SVG衍生 | `build/icon.png` |
+| `build/installer.nsh` | 安装向导快捷方式选项 | `build/installer.nsh` |
+| `capacitor.config.ts` | Android包名与dist入口 | `capacitor.config.ts` |
+| `electron-builder.yml` | Windows安装包、资源及输出 | `electron-builder.yml` |
+| `electron/main.cjs` | 窗口/协议/CSP/IPC/身份缓存 | `electron/main.cjs` |
+| `electron/preload.cjs` | 最小剪贴板/身份桥 | `electron/preload.cjs` |
+| `index.html` | Vite HTML与PWA入口 | `index.html` |
+| `package-lock.json` | npm依赖锁定 | `package-lock.json` |
+| `package.json` | 运行/构建/测试脚本和依赖 | `package.json` |
+| `public/font-licenses/Caveat-OFL.txt` | 随包分发字体许可/字体日志 | `public/font-licenses/Caveat-OFL.txt` |
+| `public/font-licenses/LXGWWenKai-OFL.txt` | 随包分发字体许可/字体日志 | `public/font-licenses/LXGWWenKai-OFL.txt` |
+| `public/font-licenses/LilitaOne-FONTLOG.txt` | 随包分发字体许可/字体日志 | `public/font-licenses/LilitaOne-FONTLOG.txt` |
+| `public/font-licenses/LilitaOne-OFL.txt` | 随包分发字体许可/字体日志 | `public/font-licenses/LilitaOne-OFL.txt` |
+| `public/font-licenses/MaShanZheng-OFL.txt` | 随包分发字体许可/字体日志 | `public/font-licenses/MaShanZheng-OFL.txt` |
+| `public/font-licenses/ZCOOLKuaiLe-OFL.txt` | 随包分发字体许可/字体日志 | `public/font-licenses/ZCOOLKuaiLe-OFL.txt` |
+| `public/icon-192.png` | PWA manifest或图标；HTML/SW/构建使用 | `public/icon-192.png` |
+| `public/icon-512.png` | PWA manifest或图标；HTML/SW/构建使用 | `public/icon-512.png` |
+| `public/icon.svg` | PWA manifest或图标；HTML/SW/构建使用 | `public/icon.svg` |
+| `public/manifest.webmanifest` | PWA manifest或图标；HTML/SW/构建使用 | `public/manifest.webmanifest` |
+| `reports/day31-45.md` | 设计、搜索结果或截图记录；保留 | `reports/day31-45.md` |
+| `reports/day31-baseline.json` | day31测试实际读取的基准/保全fixture | `reports/day31-baseline.json` |
+| `reports/day31-levels.json` | 设计、搜索结果或截图记录；保留 | `reports/day31-levels.json` |
+| `reports/day31-preservation.json` | day31测试实际读取的基准/保全fixture | `reports/day31-preservation.json` |
+| `reports/survival-badges/apprentice.png` | 设计、搜索结果或截图记录；保留 | `reports/survival-badges/apprentice.png` |
+| `reports/survival-badges/badge-designs.png` | 设计、搜索结果或截图记录；保留 | `reports/survival-badges/badge-designs.png` |
+| `reports/survival-badges/difficulty-desktop.png` | 设计、搜索结果或截图记录；保留 | `reports/survival-badges/difficulty-desktop.png` |
+| `reports/survival-badges/explorer.png` | 设计、搜索结果或截图记录；保留 | `reports/survival-badges/explorer.png` |
+| `reports/survival-badges/game-desktop.png` | 设计、搜索结果或截图记录；保留 | `reports/survival-badges/game-desktop.png` |
+| `reports/survival-badges/legend.png` | 设计、搜索结果或截图记录；保留 | `reports/survival-badges/legend.png` |
+| `reports/survival-badges/newcomer.png` | 设计、搜索结果或截图记录；保留 | `reports/survival-badges/newcomer.png` |
+| `reports/survival-badges/veteran.png` | 设计、搜索结果或截图记录；保留 | `reports/survival-badges/veteran.png` |
+| `reports/survival-ui-update.md` | 设计、搜索结果或截图记录；保留 | `reports/survival-ui-update.md` |
+| `reports/tutorial-plan.md` | 设计、搜索结果或截图记录；保留 | `reports/tutorial-plan.md` |
+| `scripts/author-levels.mjs` | 前15关手工创作并保留16–45关 | `scripts/author-levels.mjs` |
+| `scripts/build-android-icons.mjs` | 生成Android密度图标 | `scripts/build-android-icons.mjs` |
+| `scripts/build-android.mjs` | 查找JDK并调用Gradle生成APK | `scripts/build-android.mjs` |
+| `scripts/build-icons.mjs` | SVG生成Windows/Web图标 | `scripts/build-icons.mjs` |
+| `scripts/check-levels.ts` | 16–45关唯一解及参考解检查 | `scripts/check-levels.ts` |
+| `scripts/deploy-downloads.mjs` | 构建/上传/校验/发布安装包（mjs编排，py远端操作） | `scripts/deploy-downloads.mjs` |
+| `scripts/deploy-downloads.py` | 构建/上传/校验/发布安装包（mjs编排，py远端操作） | `scripts/deploy-downloads.py` |
+| `server/README.md` | 服务部署与身份协议 | `server/README.md` |
+| `server/package-lock.json` | 服务依赖锁定 | `server/package-lock.json` |
+| `server/package.json` | 服务运行依赖 | `server/package.json` |
+| `server/server.js` | 匿名ID API、SQLite事务/唯一约束/配额 | `server/server.js` |
+| `server/wildgrid-id-https.conf` | HTTPS代理配置 | `server/wildgrid-id-https.conf` |
+| `server/wildgrid-id.service` | systemd服务配置 | `server/wildgrid-id.service` |
+| `src/App.tsx` | 页面组合、棋盘绘制、模式入口、弹窗和输入绑定 | `src/App.tsx` |
+| `src/assets/fonts/Caveat-Variable.ttf` | 本地字体/子集及来源说明；fonts.css使用 | `src/assets/fonts/Caveat-Variable.ttf` |
+| `src/assets/fonts/LilitaOne-Regular.ttf` | 本地字体/子集及来源说明；fonts.css使用 | `src/assets/fonts/LilitaOne-Regular.ttf` |
+| `src/assets/fonts/MaShanZheng-Regular.woff2` | 本地字体/子集及来源说明；fonts.css使用 | `src/assets/fonts/MaShanZheng-Regular.woff2` |
+| `src/assets/fonts/README.md` | 本地字体/子集及来源说明；fonts.css使用 | `src/assets/fonts/README.md` |
+| `src/assets/fonts/Wildgrid-Hand-Supplement.woff2` | 本地字体/子集及来源说明；fonts.css使用 | `src/assets/fonts/Wildgrid-Hand-Supplement.woff2` |
+| `src/assets/fonts/ZCOOLKuaiLe-Regular.ttf` | 本地字体/子集及来源说明；fonts.css使用 | `src/assets/fonts/ZCOOLKuaiLe-Regular.ttf` |
+| `src/assets/survival-badges/apprentice.svg` | 徽章SVG；SurvivalBadge资源数组动态使用 | `src/assets/survival-badges/apprentice.svg` |
+| `src/assets/survival-badges/explorer.svg` | 徽章SVG；SurvivalBadge资源数组动态使用 | `src/assets/survival-badges/explorer.svg` |
+| `src/assets/survival-badges/legend.svg` | 徽章SVG；SurvivalBadge资源数组动态使用 | `src/assets/survival-badges/legend.svg` |
+| `src/assets/survival-badges/newcomer.svg` | 徽章SVG；SurvivalBadge资源数组动态使用 | `src/assets/survival-badges/newcomer.svg` |
+| `src/assets/survival-badges/veteran.svg` | 徽章SVG；SurvivalBadge资源数组动态使用 | `src/assets/survival-badges/veteran.svg` |
+| `src/completion.css` | 现有视觉/响应式/动效样式，保留内容 | `src/completion.css` |
+| `src/components/Art.tsx` | 共享地形/设施SVG与占地绘制 | `src/components/Art.tsx` |
+| `src/components/Blueprint.tsx` | 只读答案棋盘 | `src/components/Blueprint.tsx` |
+| `src/components/CampDiary.tsx` | 章节/关卡选择及解锁展示 | `src/components/CampDiary.tsx` |
+| `src/components/CampToolIcon.tsx` | 营地工具SVG | `src/components/CampToolIcon.tsx` |
+| `src/components/ChapterArtwork.tsx` | 章节卡片插画 | `src/components/ChapterArtwork.tsx` |
+| `src/components/CompletionEmblem.tsx` | 完成奖章装饰 | `src/components/CompletionEmblem.tsx` |
+| `src/components/GameTitle.tsx` | 原创中英SVG标题 | `src/components/GameTitle.tsx` |
+| `src/components/HeroArt.tsx` | 首页SVG与动效连接 | `src/components/HeroArt.tsx` |
+| `src/components/JournalChapterBackground.tsx` | 章节/生成页背景 | `src/components/JournalChapterBackground.tsx` |
+| `src/components/JournalLevelSceneArt.tsx` | 关卡场景组合及kind动态组件映射 | `src/components/JournalLevelSceneArt.tsx` |
+| `src/components/JournalSceneObjects.tsx` | 场景绘制原语 | `src/components/JournalSceneObjects.tsx` |
+| `src/components/LevelArtwork.tsx` | 关卡插画公共入口 | `src/components/LevelArtwork.tsx` |
+| `src/components/Manual.tsx` | 注册表驱动的分页手册 | `src/components/Manual.tsx` |
+| `src/components/MenuIcon.tsx` | 模式与地图图标 | `src/components/MenuIcon.tsx` |
+| `src/components/SandboxArt.tsx` | 模式菜单插画 | `src/components/SandboxArt.tsx` |
+| `src/components/SandboxMenu.tsx` | 模式导航、导入、本地地图CRUD界面 | `src/components/SandboxMenu.tsx` |
+| `src/components/SurvivalBadge.tsx` | rank到SVG徽章映射 | `src/components/SurvivalBadge.tsx` |
+| `src/components/SurvivalMenu.tsx` | 难度、经验、记录及生成界面 | `src/components/SurvivalMenu.tsx` |
+| `src/components/TutorialOverlay.tsx` | DOM目标定位、遮罩、旁白与portal | `src/components/TutorialOverlay.tsx` |
+| `src/components/TutorialSettings.tsx` | 教程设置、语言与重置反馈 | `src/components/TutorialSettings.tsx` |
+| `src/components/journalArt.ts` | 章节/配色/45关插画元数据 | `src/components/journalArt.ts` |
+| `src/components/journalSceneDesigns.ts` | 45关手工场景坐标与气氛 | `src/components/journalSceneDesigns.ts` |
+| `src/components/tutorial.css` | 现有视觉/响应式/动效样式，保留内容 | `src/components/tutorial.css` |
+| `src/data/levels.json` | 45固定关卡；423地形/367设施 | `src/data/levels.json` |
+| `src/data/solutions.json` | 45关参考解答；367条放置 | `src/data/solutions.json` |
+| `src/fonts.css` | 现有视觉/响应式/动效样式，保留内容 | `src/fonts.css` |
+| `src/game/audio.ts` | Web Audio合成、音效、音量和后台暂停 | `src/game/audio.ts` |
+| `src/game/clipboard.ts` | Web/Electron/Android剪贴板适配 | `src/game/clipboard.ts` |
+| `src/game/facilityRegistry.ts` | 稳定设施模板和描述元数据 | `src/engine/facilityRegistry.ts` |
+| `src/game/levels.ts` | 固定关卡与答案ID查询 | `src/engine/levels.ts` |
+| `src/game/localMaps.ts` | 地图收藏模型、校验/图纸权限及存储（迁移后拆分） | `src/game/localMaps.ts` |
+| `src/game/mapIcons.ts` | 稳定地图图标ID与校验 | `src/engine/mapIcons.ts` |
+| `src/game/placementHints.ts` | 调用权威规则预测落点提示 | `src/engine/placementHints.ts` |
+| `src/game/placementValidation.ts` | strict/recover放置格式与几何校验 | `src/engine/placementValidation.ts` |
+| `src/game/playerId.ts` | 原生匿名身份桥及请求合并 | `src/game/playerId.ts` |
+| `src/game/rules.ts` | 权威规则、几何、三态和通关判定 | `src/engine/rules.ts` |
+| `src/game/sandbox.ts` | 草稿、行列重建、自检与WG1编码 | `src/engine/sandbox.ts` |
+| `src/game/sandbox.worker.ts` | 沙盒质检Worker消息桥 | `src/game/sandbox.worker.ts` |
+| `src/game/solver.ts` | 位集合搜索、预算、唯一解 | `src/engine/solver.ts` |
+| `src/game/storage.ts` | 冒险协议、解锁/重入及存储（迁移后拆分） | `src/game/storage.ts` |
+| `src/game/survival.ts` | 求生难度/经验、账本、恢复/结算及存储（迁移后拆分） | `src/game/survival.ts` |
+| `src/game/survival.worker.ts` | 生成Worker消息桥 | `src/game/survival.worker.ts` |
+| `src/game/survivalGenerator.ts` | 保留既有随机序列、难度与搜索参数的挑战生成 | `src/engine/survivalGenerator.ts` |
+| `src/game/tutorial.ts` | UI教学模型、日程、存储兼容与触发 | `src/game/tutorial.ts` |
+| `src/game/types.ts` | 共享游戏数据契约 | `src/engine/types.ts` |
+| `src/hero.css` | 现有视觉/响应式/动效样式，保留内容 | `src/hero.css` |
+| `src/hooks/useAdventureProgress.ts` | 主线存档React适配、写入与设置 | `src/hooks/useAdventureProgress.ts` |
+| `src/hooks/useBoardFeedback.ts` | 操作动画与恢复标记 | `src/hooks/useBoardFeedback.ts` |
+| `src/hooks/useGameHistory.ts` | 迁移前核心历史与React状态；迁移后Session适配 | `src/hooks/useGameHistory.ts` |
+| `src/hooks/useGameNavigation.ts` | 页面/模式/返回目标 | `src/hooks/useGameNavigation.ts` |
+| `src/hooks/useGamePlacement.ts` | 迁移前棋盘操作；迁移后选择/悬停/音效和命令适配 | `src/hooks/useGamePlacement.ts` |
+| `src/hooks/useHeroMotion.ts` | 首页动效偏好及可见性 | `src/hooks/useHeroMotion.ts` |
+| `src/hooks/useHomeEntrance.ts` | 一次性入场动画 | `src/hooks/useHomeEntrance.ts` |
+| `src/hooks/useSandboxEditor.ts` | 草稿上下文、质检Worker、保存/导出及取消 | `src/hooks/useSandboxEditor.ts` |
+| `src/hooks/useSurvivalChallenge.ts` | 生成Worker、模式/存档协调和反馈 | `src/hooks/useSurvivalChallenge.ts` |
+| `src/hooks/useTutorial.ts` | 教学步骤、动作推进和可见性 | `src/hooks/useTutorial.ts` |
+| `src/i18n/context.tsx` | React语言context、模板翻译 | `src/i18n/context.tsx` |
+| `src/i18n/dateTime.ts` | 时区/语言日期展示 | `src/i18n/dateTime.ts` |
+| `src/i18n/feedback.ts` | 规则/存档/挑战反馈翻译 | `src/i18n/feedback.ts` |
+| `src/i18n/index.ts` | 中英教学字典及语言类型 | `src/i18n/index.ts` |
+| `src/i18n/manual.ts` | 手册翻译 | `src/i18n/manual.ts` |
+| `src/i18n/ui.ts` | 界面翻译 | `src/i18n/ui.ts` |
+| `src/main.tsx` | React启动、样式顺序与Web Service Worker注册 | `src/main.tsx` |
+| `src/notebook.css` | 现有视觉/响应式/动效样式，保留内容 | `src/notebook.css` |
+| `src/sandbox.css` | 现有视觉/响应式/动效样式，保留内容 | `src/sandbox.css` |
+| `src/styles.css` | 现有视觉/响应式/动效样式，保留内容 | `src/styles.css` |
+| `src/survival.css` | 现有视觉/响应式/动效样式，保留内容 | `src/survival.css` |
+| `src/viewport.css` | 现有视觉/响应式/动效样式，保留内容 | `src/viewport.css` |
+| `src/vite-env.d.ts` | Vite环境与原生桥声明 | `src/vite-env.d.ts` |
+| `tests/audio.test.ts` | 音频调度、可见性、音量及存档 | `tests/audio.test.ts` |
+| `tests/continuous-placement-ui.cjs` | 各模式连续放置/方向/库存（有旧选择器） | `tests/continuous-placement-ui.cjs` |
+| `tests/day31-ui.cjs` | 第三章节与新设施界面 | `tests/day31-ui.cjs` |
+| `tests/day31.test.ts` | 第三章节规则/解锁及旧关卡保全 | `tests/day31.test.ts` |
+| `tests/desktop-smoke.cjs` | 桌面协议、版本及外链 | `tests/desktop-smoke.cjs` |
+| `tests/diary-rules-ui.cjs` | 日记/规则着色/旋转撤销 | `tests/diary-rules-ui.cjs` |
+| `tests/game.test.ts` | 正式规则、45关解答、几何及恢复回归 | `tests/game.test.ts` |
+| `tests/home-visual-smoke.cjs` | 首页标题/字号/动画偏好 | `tests/home-visual-smoke.cjs` |
+| `tests/interface-ui.cjs` | 现有工具栏、手册、名称和复盘 | `tests/interface-ui.cjs` |
+| `tests/journal-art-ui.cjs` | 45封面及章节/完成布局 | `tests/journal-art-ui.cjs` |
+| `tests/levelArtwork.test.ts` | 45关插画元数据与SVG渲染 | `tests/levelArtwork.test.ts` |
+| `tests/local-map-preview-ui.cjs` | 地图预览/安全区/可达性 | `tests/local-map-preview-ui.cjs` |
+| `tests/local-maps-ui.cjs` | 本地地图CRUD与异步取消（有旧断言） | `tests/local-maps-ui.cjs` |
+| `tests/localMaps.test.ts` | 本地地图CRUD/进度/存储错误 | `tests/localMaps.test.ts` |
+| `tests/p0-ui.cjs` | 完成弹窗、命中、旋转/撤销与生成界面 | `tests/p0-ui.cjs` |
+| `tests/placementHints.test.ts` | 提示和规则增量错误回归 | `tests/placementHints.test.ts` |
+| `tests/quality-ui.cjs` | 庆祝、反馈、教学和损坏存档 | `tests/quality-ui.cjs` |
+| `tests/sandbox.test.ts` | WG1编解码、完整性与唯一解 | `tests/sandbox.test.ts` |
+| `tests/save-protection.test.ts` | 损坏及未来版本防覆盖 | `tests/save-protection.test.ts` |
+| `tests/survival-records.test.ts` | 历史、地图快照与奖励幂等 | `tests/survival-records.test.ts` |
+| `tests/survival-ui.cjs` | 挑战保存/替换/奖励/复盘（有旧工具栏断言） | `tests/survival-ui.cjs` |
+| `tests/survival.test.ts` | 十档生成、结算/收藏/进度兼容 | `tests/survival.test.ts` |
+| `tests/tutorial-ui.cjs` | 教学动作/恢复/翻译（有旧步骤断言） | `tests/tutorial-ui.cjs` |
+| `tests/tutorial.test.ts` | 教学阶段与旧进度兼容 | `tests/tutorial.test.ts` |
+| `tests/ui-smoke.cjs` | 基础界面/设置/完成/存档回归（有旧断言） | `tests/ui-smoke.cjs` |
+| `tests/viewport-fixture.ts` | 开发viewport模拟存档 | `tests/viewport-fixture.ts` |
+| `tests/viewport.html` | 开发viewport页面入口 | `tests/viewport.html` |
+| `tsconfig.json` | 严格TS/React编译设置 | `tsconfig.json` |
+| `vite.config.ts` | Web打包、资源清单与离线SW生成 | `vite.config.ts` |
+
+额外检查：`.desktop-smoke` 的67个非快照自维护脚本候选、39个历史源码快照候选；第三方font-tools等仅审查管理。`release`的安装包、恢复快照、截图和复制生成资源不视为当前源码。临时脚本不执行、不删除；详情见审计报告。
+
+## 被忽略但含自维护代码的67个历史脚本
+
+按实际内容、import/IO及调用入口审查。它们不属于正式package/src运行链；其中高影响脚本已有审计分级，不把忽略目录整体当作生成缓存。测试新建的临时runner及隔离创作副本不属于原始审计基线。
+
+| 文件 | 职责 | 处理 |
+|---|---|---|
+| `.desktop-smoke/android-id-smoke.cjs` | Android原生身份桥专项验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/android-live-id.cjs` | Android真实ID/缓存恢复专项验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/audio-before.ts` | 历史音频源码快照，不是当前运行入口 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/audio-interactions.cjs` | 音频交互专项回归 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/browser-adapter.cjs` | 历史浏览器检查适配；含用户缓存绝对路径 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/completion-layout.cjs` | 完成弹窗多视口布局检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/compose-preview.mjs` | 拼接已有预览图 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/deploy-inspect.py` | 检查历史部署状态 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/diagnose-locks.ps1` | Windows文件锁诊断 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/diary-rules/benchmark.ts` | 历史日记规则搜索/性能基准 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/final-live-check.py` | 历史线上部署最终检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/final-view-check.cjs` | 历史界面最终检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/followup-ui-check.cjs` | 历史界面跟进检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/home-entrance/verify.cjs` | 首页入场动效专项验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/home-refresh-check.cjs` | 首页刷新/恢复验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/backup.py` | 历史身份服务备份 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/deploy.py` | 历史身份服务部署 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/final-db.py` | 历史身份数据库检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/offline-startup.cjs` | 离线启动身份验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/reality-config.py` | 历史REALITY代理配置维护 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/reset.py` | 高影响历史入口：暂停服务、删除玩家/序号/配额 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/stage.ps1` | 历史身份强化文件分阶段准备 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/verify-android.mjs` | Android身份构建/包检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/verify-nginx.py` | 历史Nginx路由检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/verify-package.mjs` | 历史安装包内容检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/verify-protected.py` | 历史服务保护规则检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/verify-reality.mjs` | 历史REALITY连接检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/verify-server.py` | 历史身份服务检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/verify-slow.py` | 历史慢请求/超时检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/id-hardening/verify-windows.cjs` | Windows身份缓存/恢复检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/inspect-vps.py` | 历史VPS状态检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/install-runtime.py` | 历史运行环境安装准备 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/interface-browser.cjs` | 历史浏览器界面回归 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/l-art/gallery.cjs` | L形插画预览图库 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/l-art/verify.cjs` | L形插画/几何专项验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/localize.mjs` | 历史翻译生成，会修改src | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/manual-smoke.cjs` | 手册多视口检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/p0/loading-flow.cjs` | 历史生成/加载页面流检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/p0/probe.cjs` | 历史页面布局探针 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/p0-pixels.cjs` | 历史像素/命中验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/player-id-smoke.cjs` | 玩家ID桥专项验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/prepare-acme.py` | 历史ACME配置准备 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/prepare-backends.py` | 历史后端配置准备 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/prepare-certbot.py` | 历史证书维护准备 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/prepare-reality-client.py` | 历史REALITY客户端准备 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/prepare-rollback.py` | 历史部署回滚准备 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/quality-pages.cjs` | 历史页面质量检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/reality-smoke.cjs` | 历史代理连接冒烟 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/render-bgm.cjs` | 原创音频渲染/试听产物生成 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/repair-windows-install.ps1` | 高影响历史入口：停止进程、迁移安装、静默安装 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/replay-export.cjs` | 复盘地图导出专项验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/replay-layout-low.cjs` | 低高度复盘布局验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/replay-layout-two-column-en.cjs` | 英文双栏复盘布局验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/replay-layout-two-column-high-en.cjs` | 英文高屏双栏复盘布局验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/replay-layout-two-column.cjs` | 双栏复盘布局验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/replay-layout.cjs` | 复盘布局验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/replay-overflow-details.cjs` | 复盘溢出定位 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/repro-rename.nsi` | 历史NSIS长路径Rename/MoveFileW复现 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/run-p0-pixels.cjs` | 像素检查历史启动器 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/sandbox-performance.ts` | 沙盒求解/性能专项验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/sandbox-smoke.cjs` | 沙盒完整历史界面验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/subset-fonts.py` | 字体子集工具；依赖忽略目录fontTools | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/switch-443.py` | 高影响历史入口：修改面板数据库和Nginx路由 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/tutorial-refresh-check.cjs` | 教程刷新恢复验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/verify-completion.cjs` | 完成界面生命周期验证 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/verify-vps.py` | 历史VPS配置检查 | 历史/临时维护入口；本轮不运行、不清理 |
+| `.desktop-smoke/windows-live-id.cjs` | Windows真实身份缓存/恢复验证 | 历史/临时维护入口；本轮不运行、不清理 |

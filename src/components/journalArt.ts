@@ -1,4 +1,4 @@
-import type { FacilityKind, TerrainKind } from '../game/types';
+import type { FacilityKind, TerrainKind } from '../engine';
 
 export const journalChapters = [
   { name: '溪畔初营', theme: 'creek', sky: '#f8eac2', mist: '#dbe4bd', grass: '#cddd9b', edge: '#88a16c' },

@@ -1,6 +1,6 @@
 import type { BasicCopyKey, Language } from '../i18n';
-import type { Cell, FacilityKind, GameMode, Level, Piece, Placement, Shape } from './types';
-import { getLevelById } from './levels';
+import type { Cell, FacilityKind, GameMode, Level, Piece, Placement, Shape } from '../engine';
+import { getLevelById } from '../engine';
 
 export const tutorialStorageKey = 'wildgrid-tutorial-v1';
 export const basicLessons = ['orientation', 'placing', 'adjusting', 'rotation', 'completion'] as const;

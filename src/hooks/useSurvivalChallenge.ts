@@ -1,15 +1,13 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { audio } from '../game/audio';
 import { readLocalMaps, saveLocalMap, unlockSurvivalMaps } from '../game/localMaps';
-import { archiveSurvival, completeSurvival, emptySurvivalProgress, readSurvival, readSurvivalForWrite, writeSurvival } from '../game/survival';
-import type { SurvivalChallenge, SurvivalProgress, SurvivalReward, SurvivalSave } from '../game/survival';
-import { survivalGenerationTimeout } from '../game/survivalGenerator';
-import type { Piece, Shape } from '../game/types';
-import type { GameHistory } from './useGameHistory';
+import { completeSurvival, readSurvival, readSurvivalForWrite, writeSurvival } from '../game/survival';
+import { abandonSurvivalChallenge, replaceSurvivalChallenge, restartSurvivalChallenge, survivalCollectionTarget, survivalGenerationTimeout, updateSurvivalProgress } from '../engine';
+import type { GameSession, Piece, Shape, SurvivalChallenge, SurvivalProgress, SurvivalReward, SurvivalSave } from '../engine';
 
 type Options = {
   active: boolean;
-  history: GameHistory;
+  history: GameSession;
   rotations: Partial<Record<Shape, number>>;
   selected: Piece | null;
   enterGame: (challenge: SurvivalChallenge, progress: SurvivalProgress | null) => void;
@@ -39,8 +37,8 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
     if (!active || !challenge) return;
     try {
       const latest = readSurvivalForWrite();
-      if (latest.challenge?.id !== challenge.id) return;
-      const next: SurvivalSave = { ...latest, progress: { id: challenge.id, status: 'active', placements, past: history.past.map(h => h.placements), future: history.future.map(h => h.placements), rotations, selectedId: selected?.id || null } };
+      const next = updateSurvivalProgress(latest, challenge.id, { placements, past: history.past.map(h => h.placements), future: history.future.map(h => h.placements), rotations, selectedId: selected?.id || null });
+      if (next === latest) return;
       writeSurvival(next); setSurvival(next); setSurvivalError('');
     }
     catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '挑战进度保存失败'); }
@@ -87,8 +85,7 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
         cancelGeneration();
         try {
           const latest = readSurvivalForWrite();
-          if (latest.challenge) archiveSurvival(latest, latest.challenge, latest.progress?.placements || []);
-          persistSurvival({ ...latest, recent: [...latest.recent, current.fingerprint].slice(-40), challenge: current, progress: emptySurvivalProgress(current.id) });
+          persistSurvival(replaceSurvivalChallenge(latest, current));
           refreshLocalMaps();
           playSurvival(current, false);
         } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '新挑战保存失败，旧挑战仍然保留'); sound('error'); }
@@ -99,10 +96,8 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
   function abandonSurvival() {
     try {
       const latest = readSurvivalForWrite();
-      if (latest.challenge && latest.challenge.id === challenge?.id) {
-        archiveSurvival(latest, latest.challenge, latest.progress?.placements || []);
-        persistSurvival({ ...latest, challenge: null, progress: null });
-      }
+      const next = abandonSurvivalChallenge(latest, challenge?.id);
+      if (next !== latest) persistSurvival(next);
       refreshLocalMaps();
       setAbandonOpen(false); returnToMenu(); sound('close');
     } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '未能清除挑战进度，请重试'); sound('error'); }
@@ -110,9 +105,9 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
   function collectSurvival() {
     if (!challenge) return;
     try {
-      const completed = readSurvivalForWrite().completed.some(c => c.id === challenge.id);
-      const existing = readLocalMaps().find(map => map.survival?.challengeId === challenge.id);
-      const map = saveLocalMap(challenge.draft, [], existing?.id, { challengeId: challenge.id, difficulty: challenge.difficulty, seed: challenge.seed, completed, blueprintUnlocked: completed });
+      const latest = readSurvivalForWrite();
+      const target = survivalCollectionTarget(readLocalMaps(), latest, challenge);
+      const map = saveLocalMap(challenge.draft, [], target.existingId, target.survival);
       refreshLocalMaps(); setNotice(`已收藏到${map.name}`); sound('success');
     } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '收藏失败，请重试'); sound('error'); }
   }
@@ -129,7 +124,8 @@ export function useSurvivalChallenge({ active, history, rotations, selected, ent
     if (!challenge) return true;
     try {
       const latest = readSurvivalForWrite();
-      if (latest.challenge?.id !== challenge.id) persistSurvival({ ...latest, challenge, progress: emptySurvivalProgress(challenge.id) });
+      const next = restartSurvivalChallenge(latest, challenge);
+      if (next !== latest) persistSurvival(next);
       return true;
     } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '重新挑战保存失败'); sound('error'); return false; }
   }

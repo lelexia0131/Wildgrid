@@ -1,9 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { levels } from '../src/game/levels';
-import { facilityLibrary } from '../src/game/facilityRegistry';
-import { checkSandbox, createSandbox, decodeMap, encodeMap, withEditorPlacements } from '../src/game/sandbox';
-import type { SandboxDraft } from '../src/game/sandbox';
+import { levels } from '../src/engine';
+import { facilityLibrary } from '../src/engine';
+import { checkSandbox, createSandbox, decodeMap, encodeMap, withEditorPlacements } from '../src/engine';
+import type { SandboxDraft } from '../src/engine';
 
 function camps(): SandboxDraft {
   const draft = createSandbox(6);
