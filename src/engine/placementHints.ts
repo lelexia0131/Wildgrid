@@ -1,5 +1,5 @@
 import { evaluate, placementBlock } from './placementRules';
-import { key, occupied } from './boardGeometry';
+import { key, occupied, placementOrigin } from './boardGeometry';
 import type { Issue, Level, Piece, Placement, Status } from './types';
 
 // Predict only empty starting cells. The formal evaluator owns every rule.
@@ -7,7 +7,7 @@ export function placementHints(level: Level, placements: readonly Placement[], p
   const used = new Set([...level.terrain, ...placements.flatMap(at => occupied(level.pieces.find(p => p.id === at.id)!, at))].map(key));
   const hints: Record<string, Status> = {};
   for (let r = 0; r < level.size; r++) for (let c = 0; c < level.size; c++) {
-    const candidate = { id: piece.id, r, c, rotation }, cellKey = key(candidate);
+    const cell = { r, c }, candidate = { ...placementOrigin(piece.shape, rotation, cell), id: piece.id, rotation }, cellKey = key(cell);
     if (used.has(cellKey)) continue;
     if (placementBlock(level, placements, candidate)) { hints[cellKey] = 'INVALID'; continue; }
     const { issues } = evaluate(level, [...placements, candidate]);

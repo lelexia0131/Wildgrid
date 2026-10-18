@@ -16,6 +16,11 @@ export function offsets(shape: Shape, rotation: number): Cell[] {
   return cells.map(({ r, c }) => ({ r: r - minR, c: c - minC }));
 }
 export const occupied = (piece: Piece, at: Placement) => offsets(piece.shape, at.rotation).map(p => ({ r: p.r + at.r, c: p.c + at.c }));
+// Convert the pointer's occupied top-row cell to the stored bounding-box origin.
+export function placementOrigin(shape: Shape, rotation: number, cell: Cell): Cell {
+  const anchorC = Math.min(...offsets(shape, rotation).filter(p => p.r === 0).map(p => p.c));
+  return { r: cell.r, c: cell.c - anchorC };
+}
 export function rotateAround(piece: Piece, at: Placement, pivot: Cell): Placement {
   const cells = occupied(piece, at).map(p => ({ r: pivot.r + p.c - pivot.c, c: pivot.c - p.r + pivot.r }));
   return { id: at.id, rotation: (at.rotation + 1) % 4, r: Math.min(...cells.map(p => p.r)), c: Math.min(...cells.map(p => p.c)) };

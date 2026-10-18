@@ -645,7 +645,7 @@
       },
       {
         "kind": "forest",
-        "r": 0,
+        "r": 1,
         "c": 3
       },
       {
@@ -779,8 +779,8 @@
       },
       {
         "kind": "forest",
-        "r": 3,
-        "c": 0
+        "r": 2,
+        "c": 4
       },
       {
         "kind": "forest",
@@ -852,7 +852,7 @@
       {
         "kind": "mountain",
         "r": 0,
-        "c": 4
+        "c": 2
       },
       {
         "kind": "mountain",
@@ -862,7 +862,7 @@
       {
         "kind": "forest",
         "r": 0,
-        "c": 0
+        "c": 4
       },
       {
         "kind": "forest",

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { dispatch as previewCommand, getAvailableActions, getState, key, occupied } from '../../engine';
+import { dispatch as previewCommand, getAvailableActions, getState, key, occupied, placementOrigin } from '../../engine';
 import type { SandboxDraft } from '../../engine';
 import type { Cell, FacilityKind, GameSession, Piece, Placement, Shape, TerrainKind } from '../../engine';
 import type { audio } from '../../platform/audio/WildernessAudio';
@@ -67,18 +67,20 @@ export function useGamePlacement({ session, continuousPlacement, terrainBrush, c
       setNotice(''); sound('pickup'); return;
     }
     if (!selected) { setNotice(terrain ? terrainNames[terrain.kind] : '先从右侧选择一个设施'); sound(terrain ? 'click' : 'error'); return; }
-    const outcome = dispatch({ type: 'place', piece: selected, cell, rotation });
+    const origin = placementOrigin(selected.shape, rotation, cell);
+    const outcome = dispatch({ type: 'place', piece: selected, cell: origin, rotation });
     if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
     const issue = getState(outcome.session).result.issues[selected.id];
     sound(issue.status === 'INVALID' ? 'error' : 'place');
-    if (issue.status === 'INVALID') onReject(occupied(selected, { ...cell, id: selected.id, rotation }));
+    if (issue.status === 'INVALID') onReject(occupied(selected, { ...origin, id: selected.id, rotation }));
     const nextPiece = !continuousPlacement ? null : mode === 'sandbox-editor'
       ? { ...selected, id: `custom-${++nextPieceId.current}` }
       : getAvailableActions(outcome.session).pieces.find(p => p.kind === selected.kind && p.shape === selected.shape) || null;
     setNotice(issue.status === 'INVALID' ? issue.reasons.join('；') : ''); setSelected(nextPiece); setHover(null);
-    onAction?.({ type: 'place', kind: selected.kind, pieceId: selected.id, r: cell.r, c: cell.c, rotation });
+    onAction?.({ type: 'place', kind: selected.kind, pieceId: selected.id, r: origin.r, c: origin.c, rotation });
   }
-  const ghost = selected && hover ? occupied(selected, { ...hover, id: selected.id, rotation }) : [];
-  const ghostBlocked = selected && hover ? Boolean(previewCommand(session, { type: 'place', piece: selected, cell: hover, rotation }).error) : false;
+  const ghostOrigin = selected && hover ? placementOrigin(selected.shape, rotation, hover) : null;
+  const ghost = selected && ghostOrigin ? occupied(selected, { ...ghostOrigin, id: selected.id, rotation }) : [];
+  const ghostBlocked = selected && ghostOrigin ? Boolean(previewCommand(session, { type: 'place', piece: selected, cell: ghostOrigin, rotation }).error) : false;
   return { selected, setSelected, rotations, setRotations, hover, setHover, rotation, result, choose, rotatePlaced, clickCell, ghost, ghostBlocked, resetPieceIds };
 }

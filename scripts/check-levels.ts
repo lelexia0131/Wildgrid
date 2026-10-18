@@ -2,7 +2,7 @@ import { solveLevel } from '../src/engine';
 import { evaluate } from '../src/engine';
 import { getSolution, levels } from '../src/engine';
 let failed = false;
-for (const level of levels.filter(l => l.id >= 16)) {
+for (const level of levels.filter(l => [12, 14, 15].includes(l.id) || l.id >= 16)) {
   const result = solveLevel(level);
   const valid = evaluate(level, getSolution(level.id) || []).won;
   const unique = !result.aborted && result.count === 1 && valid;

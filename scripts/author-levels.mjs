@@ -25,10 +25,10 @@ level('登高望远', '山野远眺', '瞭望塔必须上下左右挨着山地�
 level('各自的天际线', '山野远眺', '两座瞭望塔不能相邻，斜角也要保持距离。', [['mountain',2,2],['mountain',3,3],['water',0,4],['forest',5,1]], [['tower','single',1,2],['tower','single',3,4],['camp','single',1,4]]);
 level('双人假日', '把营地展开', '这座营地占用两格。点击旋转；任意一格邻水即可。', [['water',2,1],['forest',0,4],['mountain',4,4]], [['camp','domino',2,2]]);
 level('沿溪而居', '把营地展开', '点击旋转。黄色短杠统计格子，不是建筑。', [['water',1,1],['water',4,4],['forest',0,4],['forest',3,0]], [['camp','domino',1,2,1],['camp','domino',4,2],['fire','single',3,2]]);
-level('长长的周末', '把营地展开', '这座营地需要更多空地，先看哪一行或列留下了足够的短杠。', [['water',2,1],['water',4,4],['forest',0,3],['mountain',1,5]], [['camp','long',2,2],['camp','single',4,3],['fire','single',3,3]]);
+level('长长的周末', '把营地展开', '这座营地需要更多空地，先看哪一行或列留下了足够的短杠。', [['water',2,1],['water',4,4],['forest',1,3],['mountain',1,5]], [['camp','long',2,2],['camp','single',4,3],['fire','single',3,3]]);
 level('转角的风景', '把营地展开', 'L 形营地占三格。旋转四个方向，试试贴合这片草地。', [['water',1,1],['forest',0,4],['forest',4,1],['mountain',4,4]], [['camp','el',1,2],['fire','single',2,4],['tower','single',4,3]]);
-level('林野协奏', '荒野成章', '把学到的规则串起来。点已放设施可拿起，再放到新的位置。', [['water',1,1],['water',4,5],['mountain',0,4],['mountain',5,1],['forest',3,0],['forest',0,0]], [['camp','domino',1,2],['camp','el',3,3],['fire','single',2,2],['tower','single',1,4],['tower','single',5,2]]);
-level('我们的旷野', '荒野成章', '这片熟悉的营地图。所有设施放完后，仍然可以自由调整。', [['water',1,1],['water',4,5],['mountain',0,4],['mountain',5,1],['forest',0,0],['forest',5,5]], [['camp','long',1,2],['camp','el',3,3],['camp','single',2,1],['fire','single',2,3],['fire','single',4,2],['tower','single',0,3],['tower','single',5,2]]);
+level('林野协奏', '荒野成章', '把学到的规则串起来。点已放设施可拿起，再放到新的位置。', [['water',1,1],['water',4,5],['mountain',0,4],['mountain',5,1],['forest',2,4],['forest',0,0]], [['camp','domino',1,2],['camp','el',3,3],['fire','single',2,2],['tower','single',1,4],['tower','single',5,2]]);
+level('我们的旷野', '荒野成章', '这片熟悉的营地图。所有设施放完后，仍然可以自由调整。', [['water',1,1],['water',4,5],['mountain',0,2],['mountain',5,1],['forest',0,4],['forest',5,5]], [['camp','long',1,2],['camp','el',3,3],['camp','single',2,1],['fire','single',2,3],['fire','single',4,2],['tower','single',0,3],['tower','single',5,2]]);
 mkdirSync('src/game-data', { recursive: true });
 const expansion = JSON.parse(readFileSync('src/game-data/levels.json', 'utf8')).filter(l => l.id > 15);
 const expansionAnswers = Object.fromEntries(Object.entries(JSON.parse(readFileSync('src/game-data/solutions.json', 'utf8'))).filter(([id]) => Number(id) > 15));

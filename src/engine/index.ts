@@ -3,7 +3,7 @@ export type { TerrainKind, GameMode, FacilityKind, Shape, Status, Cell, Terrain,
 export { facilities, facilityLibrary, facilityNames, facilityTips, shapeNames, terrainNames } from './facilityRegistry';
 export type { FacilityDefinition } from './facilityRegistry';
 export { levels, solutions, getLevelById, getSolution } from './levels';
-export { key, adjacent, offsets, occupied, rotateAround } from './boardGeometry';
+export { key, adjacent, offsets, occupied, placementOrigin, rotateAround } from './boardGeometry';
 export { placementBlock, evaluate } from './placementRules';
 export { validatePlacements } from './placementValidation';
 export type { PlacementValidationError, PlacementValidationResult } from './placementValidation';
