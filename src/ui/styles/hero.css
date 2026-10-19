@@ -10,6 +10,18 @@
 .title-lettering { inset: 0; width: 100%; height: 100%; }
 .camp-title-en .title-lettering { top: 50%; height: auto; transform: translateY(-50%); }
 .title-fallback { position: absolute; inset: 25% 10%; z-index: 1; color: #fff0c5; font-size: 48px; text-align: center; }
+/* Entrance stays on h1; interaction and idle motion each have their own layer. */
+.title-interaction, .title-float { position: absolute; inset: 0; display: block; pointer-events: none; }
+.title-interaction { transform-origin: 50% 60%; filter: drop-shadow(0 4px 4px #49311f00); transition: filter .35s ease-out; }
+.title-sign[data-hovered='true'] .title-interaction { filter: drop-shadow(0 6px 5px #49311f30); }
+@media (prefers-reduced-motion: no-preference) {
+  .title-sign[data-ready='true'] .title-float { animation: camp-title-float 4s ease-in-out infinite; }
+  .title-sign[data-motion='paused'] .title-float { animation-play-state: paused; }
+}
+@media (any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .title-sign[data-ready='true'] { pointer-events: auto; }
+}
+@keyframes camp-title-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
 .menu-page .hero-art { margin-top: -26px; flex: none; animation: camp-island-float 7s ease-in-out infinite; }
 @keyframes camp-island-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 .menu-copy { width: min(440px, 100%); }

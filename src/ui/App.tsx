@@ -303,7 +303,7 @@ export default function App() {
     </header>
 
     {screen === 'menu' && <main className="menu-page">
-      <div className="menu-art"><GameTitle/><HeroArt entering={homeEntering}/></div>
+      <div className="menu-art"><GameTitle entering={homeEntering}/><HeroArt entering={homeEntering}/></div>
       <div className="menu-copy"><div className="menu-buttons"><button className="primary menu-adventure" data-sound="confirm" onClick={() => { setScreen('adventure'); }}>{t("开始冒险")}<ArrowRight size={23}/></button><button className="secondary menu-journal" onClick={() => { setDiaryChapter(null); setScreen('levels'); }}><Map size={21}/>  {t("营地日记")}</button><button className="secondary menu-guide" onClick={() => { setManualOpen(true); }}><BookOpen size={21}/>  {t("野外手册")}</button></div></div>
     </main>}
 
