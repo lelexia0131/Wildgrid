@@ -1,12 +1,14 @@
+import { SurvivalFacilityDialog } from '../components/SurvivalFacilityDialog';
+import { SurvivalNotice } from '../components/SurvivalNotice';
 import { useI18n } from '../../localization/LanguageContext';
 import { formatDateTime } from '../../localization/dateTime';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Flag, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Ban, Flag, X } from 'lucide-react';
 import { SurvivalBadge } from '../components/SurvivalBadge';
 import { Art } from '../components/Art';
 import { JournalChapterBackground } from '../components/JournalChapterBackground';
 import { MenuLandscapeBackground } from '../components/MenuLandscapeBackground';
-import { rankFor, SURVIVAL_DIFFICULTIES, SURVIVAL_RANKS } from '../../game-modes/survival/survivalDifficulty';
+import { rankProgress, SURVIVAL_DIFFICULTIES, SURVIVAL_RANKS } from '../../game-modes/survival/survivalDifficulty';
 import { survivalTotals } from '../../game-modes/survival/survivalChallenge';
 import type { SurvivalRecord, SurvivalSave } from '../../game-modes/survival/survivalChallenge';
 import { audio } from '../../platform/audio/WildernessAudio';
@@ -17,6 +19,8 @@ export function SurvivalMenu({ save, generating, generationScene, error, onStart
   onReview: (record: SurvivalRecord) => void; canReview: (record: SurvivalRecord) => boolean;
 }) {
   const { t, localize, language } = useI18n();
+  const [facilities, setFacilities] = useState(false);
+  const [noticeKey, setNoticeKey] = useState(0);
   const [records, setRecords] = useState(false);
   const recordsRef = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (records) recordsRef.current?.showModal(); }, [records]);
@@ -27,8 +31,7 @@ export function SurvivalMenu({ save, generating, generationScene, error, onStart
     <div className="generation-progress" role="progressbar" aria-label={t("地图生成进度")}><i/></div>
     <button className="secondary" data-sound="close" onClick={onCancel}><X size={18}/>{t("取消生成")}</button>
   </main>;
-  const { counts, xp } = survivalTotals(save), rank = rankFor(xp), next = SURVIVAL_RANKS[rank + 1];
-  const progress = next ? (xp - SURVIVAL_RANKS[rank].xp) / (next.xp - SURVIVAL_RANKS[rank].xp) : 1;
+  const { counts, xp } = survivalTotals(save), { rank, next, fill: progress } = rankProgress(xp);
   const history = save.records.filter(record => record.id !== save.challenge?.id || record.finishedAt !== undefined).sort((a, b) => (b.startedAt ?? b.finishedAt ?? 0) - (a.startedAt ?? a.finishedAt ?? 0));
   return <><MenuLandscapeBackground scene="survival"/><main className="survival-page">
     <div className="survival-heading"><button className="back-link" data-sound="close" onClick={onBack} disabled={generating !== null}><ArrowLeft size={20}/>{t("返回")}</button><h1>{t("荒野求生")}</h1></div>
@@ -38,9 +41,10 @@ export function SurvivalMenu({ save, generating, generationScene, error, onStart
     <div className="survival-bottom">
       <button className="primary survival-continue" data-sound="handled" disabled={generating !== null || !save.challenge} title={save.challenge ? undefined : t("暂无未完成挑战")} onClick={onContinue}>{save.challenge ? t("继续挑战 · {0}难", save.challenge.difficulty) : t("继续挑战")}<ArrowRight size={20}/></button>
       <button className="secondary survival-records-button" data-sound={records ? 'close' : 'click'} onClick={() => setRecords(!records)} aria-expanded={records}><Flag size={20}/>{t("通关记录 · 共 {0} 次", history.length)}</button>
+      <button className="secondary survival-disabled-button" onClick={() => setFacilities(true)}><Ban size={20}/>{t("禁用设施")}</button>
     </div>
-    <div className="survival-difficulties" aria-label={t("选择难度")}>{SURVIVAL_DIFFICULTIES.map((_, i) => <button key={i} className={`survival-difficulty difficulty-band-${Math.floor(i / 2)}`} data-sound="handled" disabled={generating !== null} onClick={() => onStart(i + 1)}><strong>{t("{0}难", i + 1)}</strong><span>{t("通关 {0} 次", counts[i])}</span></button>)}</div>
+    {facilities && <SurvivalFacilityDialog onClose={() => setFacilities(false)}/>}
+    <div className="survival-difficulties" aria-label={t("选择难度")}>{SURVIVAL_DIFFICULTIES.map((_, i) => <button key={i} className={`survival-difficulty difficulty-band-${Math.floor(i / 2)}`} data-sound="handled" disabled={generating !== null} onClick={() => { setNoticeKey(key => key + 1); onStart(i + 1); }}><strong>{t("{0}难", i + 1)}</strong><span>{t("通关 {0} 次", counts[i])}</span></button>)}</div>
     {records && <dialog ref={recordsRef} className="modal survival-records record-sheet" aria-label={t("通关记录")} onCancel={event => { event.preventDefault(); audio.feedback('close'); setRecords(false); }}><button className="modal-close icon-button" data-sound="close" aria-label={t("关闭通关记录")} onClick={() => setRecords(false)}><X size={20}/></button><div className="record-sheet-heading"><Flag size={27}/><h2>{t("通关记录")}</h2></div><div className="survival-record-table" role="table" aria-label={t("通关记录")}><div className="survival-record-head" role="row"><span role="columnheader">{t("难度")}</span><span role="columnheader">{t("开始时间")}</span><span role="columnheader">{t("完成时间")}</span></div><div role="rowgroup">{history.map(record => <button className="survival-record-row" data-sound="handled" role="row" key={record.id} disabled={!canReview(record)} title={canReview(record) ? t("复盘") : t("历史地图未保存")} onClick={() => { setRecords(false); onReview(record); }}><strong role="cell">{t("{0}难", record.difficulty)}</strong><span role="cell">{formatDateTime(record.startedAt, language)}</span><span role="cell" className={record.finishedAt === undefined ? 'record-unfinished' : ''}>{record.finishedAt === undefined ? t("已放弃") : formatDateTime(record.finishedAt, language)}</span></button>)}</div></div>{history.length === 0 && <p>{t("暂无记录")}</p>}</dialog>}
-    {error && <p className="survival-error" role="alert">{localize(error)}</p>}
-  </main></>;
+  </main><div className="survival-notice-region">{error && <SurvivalNotice key={`${noticeKey}:${error}`} message={error}/>}</div></>;
 }

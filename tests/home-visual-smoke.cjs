@@ -44,7 +44,7 @@ app.whenReady().then(async () => {
         await layout();
         assert.equal(await js(`document.querySelector('.camp-title').getAttribute('aria-label')`), language === 'zh' ? '野格' : 'WILDGRID');
         assert.equal(await js(`[...document.querySelectorAll('.camp-title img')].every(img => img.complete && img.naturalWidth > 0)`), true);
-        assert.equal(await js(`document.querySelector('.title-lettering').src.includes('logo-${language}')`), true);
+        assert.equal(await js(`document.querySelector('.title-lettering').src.includes('logo-${language}') && document.querySelector('.title-lettering').src.endsWith('.png')`), true);
         assert.equal(await js(`(() => { const title = document.querySelector('.camp-title').getBoundingClientRect(); const buttons = document.querySelector('.menu-buttons').getBoundingClientRect(); return title.top >= 0 && buttons.bottom <= innerHeight && buttons.left >= 0 && buttons.right <= innerWidth; })()`), true);
         await shot(`home-${language}-${width}`);
         await click('.menu-buttons button:last-child'); await layout(); await shot(`manual-${language}-${width}`); await click('.modal-close');

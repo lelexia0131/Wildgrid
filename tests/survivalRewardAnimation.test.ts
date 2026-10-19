@@ -27,16 +27,16 @@ test('reward frames use lifetime thresholds and finish at the actual rank', () =
 
 test('exact thresholds show the full old rank, then zero at the new rank', () => {
   const segments = rewardSegments(100, 100);
-  assert.deepEqual(segments, [{ from: 0, to: 10, rank: 0 }, { from: 10, to: 100, rank: 1 }, { from: 100, to: 100, rank: 2 }]);
-  assert.equal(rewardFrame(segments, .32).fill, 1);
-  assert.equal(rewardFrame(segments, .65).fill, 1);
+  assert.deepEqual(segments, [{ from: 0, to: 10, rank: 0 }, { from: 10, to: 50, rank: 1 }, { from: 50, to: 100, rank: 2 }, { from: 100, to: 100, rank: 3 }]);
+  assert.equal(rewardFrame(segments, .23).fill, 1);
+  assert.equal(rewardFrame(segments, .48).fill, 1);
   assert.equal(rewardFrame(segments, 1).fill, 0);
 });
 
 test('highest rank stays full while its lifetime XP continues increasing', () => {
-  const segments = rewardSegments(1100, 100);
+  const segments = rewardSegments(80100, 100);
   const middle = rewardFrame(segments, .5);
-  assert.equal(middle.xp, 1050);
+  assert.equal(middle.xp, 80050);
   assert.equal(middle.fill, 1);
   assert.equal(middle.next, undefined);
 });

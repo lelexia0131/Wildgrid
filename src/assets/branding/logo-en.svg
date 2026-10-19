@@ -1,21 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="880" height="190" viewBox="0 0 880 190" fill="none">
   <title>WILDGRID · carved geometric wordmark</title>
   <defs>
+    <!-- Individually drawn capitals share the Chinese mark's clipped chisel ends. -->
     <g id="letters" fill-rule="evenodd">
-      <path d="m21 28 28-3 12 86 19-62h23l17 62 12-85 28 3-23 129-28 4-18-64-20 64-29-4Z"/>
-      <path d="m177 29 57-2v24l-15 2v82l16 1v25l-59-1v-24l15-1V53l-14 1Z"/>
-      <path d="m255 29 28-3v107l52-2-4 29-76 1Z"/>
-      <path d="m353 29 48-2 32 17 14 30v42l-16 29-29 15h-49ZM382 55v78h17l18-13 6-18V83l-7-17-17-11Z"/>
-      <path d="m496 27 49 1 17 14-14 21-13-9h-25l-17 14-6 24 6 27 16 16h25v-24h-22V87h50v59l-27 16h-36l-29-19-13-36V79l14-33Z"/>
-      <path d="m583 28 52-1 28 15 10 25-8 26-18 13 31 51-31 5-30-50h-6v48h-28ZM611 54v32h20l13-9V63l-13-9Z"/>
-      <path d="m694 29 57-2v24l-15 2v82l16 1v25l-59-1v-24l15-1V53l-14 1Z"/>
-      <path d="m771 29 47-2 31 17 14 30v42l-15 29-29 15h-48ZM799 55v78h17l18-13 6-18V83l-7-17-17-11Z"/>
+      <path d="M21 30 48 27 62 116 80 54 102 53 120 115 133 28 159 31 137 155 111 160 91 96 71 160 44 156Z"/>
+      <path d="M179 31 231 29V51L218 53V135L232 136V159L178 158V136L191 134V54L179 55Z"/>
+      <path d="M254 31 281 28V133L332 131 329 158 254 160Z"/>
+      <path d="M354 31 401 29 429 44 443 72V116L429 143 402 158H354ZM381 56V133H397L413 122 419 105V84L413 68 397 56Z"/>
+      <path d="M498 29H541L559 43 546 63 533 54H509L494 68 488 91 494 118 509 133H534V110H513V87H561V145L537 160H500L473 142 461 108V79L474 48Z"/>
+      <path d="M585 31 636 29 662 43 672 66 666 90 647 104 678 154 650 160 620 111H612V158H585ZM612 55V86H631L644 77V64L632 55Z"/>
+      <path d="M698 31 750 29V51L737 53V135L751 136V159L697 158V136L710 134V54L698 55Z"/>
+      <path d="M773 31 820 29 848 44 862 72V116L848 143 821 158H773ZM800 56V133H816L832 122 838 105V84L832 68 816 56Z"/>
     </g>
   </defs>
-  <use href="#letters" transform="translate(0 7)" fill="#604431" stroke="#604431" stroke-width="13" stroke-linejoin="round"/>
-  <use href="#letters" fill="#edcf8a" stroke="#493b2d" stroke-width="10" stroke-linejoin="round"/>
-  <use href="#letters" fill="#f5dfa4" stroke="#fff0c5" stroke-width="2" stroke-linejoin="bevel"/>
-  <g stroke="#b78c52" stroke-width="2" stroke-linecap="round" opacity=".7"><path d="m34 40 8 49m144-49 35-1m-154 94 6-19m198-73v73m98-74h22m90 18 14-12m62 60v26m51-91 21-1m72 1 34-1m44 0h21"/></g>
-  <g fill="#d2ae68"><path d="m139 34 12 1-18 115-10 3ZM321 135l8 1-2 16-40 1ZM427 64l12 14v31l-9 18 2-27ZM653 136l16 19-18 1-17-27ZM848 68l8 12v28l-8 18 2-28Z"/></g>
-  <path d="M520 91h13v13h-13Z" fill="#6f8960"/>
+  <use href="#letters" transform="translate(0 6)" fill="#765334" stroke="#765334" stroke-width="10" stroke-linejoin="round"/>
+  <use href="#letters" fill="#f5dfa4" stroke="#493b2d" stroke-width="8" stroke-linejoin="round"/>
+  <use href="#letters" fill="#f5dfa4" stroke="#fff0c5" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="#d7b574">
+    <path d="m141 35 10 1-19 113-12 4ZM314 139l10-1-1 14-40 1ZM428 64l8 12v36l-11 22 4-30ZM649 129l20 22-16 3-19-31ZM847 64l8 12v36l-11 22 4-30Z"/>
+  </g>
+  <g stroke="#fff0c5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m29 36 13-2m44 26 11-1m43-25 11 2M185 37l39-2M261 38l13-2m-13 104 2 11 46-1M361 38l38-2 20 10M487 56l14-20h35M592 38l41-2 20 11M705 37l38-2M780 38l38-2 20 10"/>
+  </g>
+  <g stroke="#bc965d" stroke-width="2" stroke-linecap="round">
+    <path d="m34 48 6 31m225-23v25m97-26v23m120 40 7 17m81-11v19m86-79v20m153-30v23"/>
+  </g>
 </svg>

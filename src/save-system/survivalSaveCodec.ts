@@ -1,3 +1,4 @@
+import { parseRecentMaps } from '../engine/mapNovelty';
 import { decodeMap, encodeMap, evaluate, validatePlacements, MAX_HISTORY_STEPS } from '../engine';
 import type { Placement, Shape } from '../engine';
 import { createSurvivalSave, emptySurvivalProgress } from '../game-modes/survival/survivalChallenge';
@@ -33,6 +34,7 @@ export function parseSurvivalSave(stored: string | null): SurvivalSave {
     }
     for (const entry of save.completed) if (!save.records.some(r => r.id === entry.id)) save.records.push({ id: entry.id, difficulty: entry.difficulty, seed: entry.seed, finishedAt: entry.at, placements: [] });
     save.recent = Array.isArray(raw.recent) ? raw.recent.filter((s: unknown) => typeof s === 'string').slice(-40) : [];
+    save.recentMaps = parseRecentMaps(raw.recentMaps);
     const c = raw.challenge, p = raw.progress;
     if (c && typeof c.id === 'string' && difficultyValid(c.difficulty) && Number.isInteger(c.seed) && typeof c.code === 'string' && p?.id === c.id && p.status === 'active') {
       try {

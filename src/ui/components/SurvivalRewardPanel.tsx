@@ -1,3 +1,5 @@
+import { SurvivalBadge } from './SurvivalBadge';
+import { CompletionEmblem } from './CompletionEmblem';
 import { art } from '../../assets/art';
 import { useLayoutEffect, useState } from 'react';
 import type { SurvivalReward } from '../../game-modes/survival/survivalChallenge';
@@ -17,8 +19,9 @@ export function SurvivalRewardPanel({ reward, difficulty, active }: { reward: Su
     if (!active || preference.matches || !earned) { finish(); return; }
     setFrame(rewardFrame(segments, 0));
     const start = performance.now() + 360;
+    const duration = Math.max(1200, segments.length * 420);
     const tick = (now: number) => {
-      const progress = Math.min(1, Math.max(0, (now - start) / 1200));
+      const progress = Math.min(1, Math.max(0, (now - start) / duration));
       setFrame(rewardFrame(segments, progress));
       if (progress < 1) animation = requestAnimationFrame(tick);
     };
@@ -30,7 +33,7 @@ export function SurvivalRewardPanel({ reward, difficulty, active }: { reward: Su
 
   const before = xp - earned;
   const base = frame.next === undefined ? 1 : Math.max(0, (before - frame.start) / (frame.next - frame.start));
-  return <div className="survival-reward">
+  return <><CompletionEmblem><SurvivalBadge key={frame.rank} rank={frame.rank} animate={active && frame.rank > reward.beforeRank}/></CompletionEmblem><h2>{frame.rank > reward.beforeRank ? t("身份升级！") : t("挑战完成")}</h2><h3>{localize(SURVIVAL_RANKS[frame.rank].name)}</h3><div className="survival-reward">
     <div className={`reward-xp ${earned && active ? frame.done ? 'is-complete' : 'is-growing' : ''}`}>
       <div className="reward-xp-track" role="progressbar" aria-label={t('身份经验进度')} aria-valuemin={frame.start} aria-valuemax={frame.next ?? frame.xp} aria-valuenow={frame.xp} aria-valuetext={t('累计经验 {0} · {1}', frame.xp, localize(SURVIVAL_RANKS[frame.rank].name))}>
         <div className="reward-xp-rail">
@@ -46,5 +49,5 @@ export function SurvivalRewardPanel({ reward, difficulty, active }: { reward: Su
       <div className="reward-mark"><img src={art.reward.difficulty} alt="" aria-hidden="true"/><div><strong>{difficulty}</strong><span>{t('挑战难度')}</span></div></div>
       <div className="reward-mark"><img src={art.reward.count} alt="" aria-hidden="true"/><div><strong>{reward.count}</strong><span>{t('通关次数')}</span></div></div>
     </div>
-  </div>;
+  </div></>;
 }

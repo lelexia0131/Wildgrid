@@ -21,23 +21,26 @@ function storage(fail = false) {
   } });
 }
 
-test('ten seeded tiers generate legal unique 8×8 puzzles, including twenty facilities', () => {
+test('ten seeded tiers generate legal unique 8×8 puzzles within their facility ranges', () => {
   for (let difficulty = 1; difficulty <= 10; difficulty++) {
     const started = Date.now(), spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
     let map: SurvivalChallenge | undefined;
-    for (let seed = difficulty === 10 ? 2 : 20261008 + difficulty; !map; seed++) {
+    for (let retry = 0; !map && Date.now() - started < 45000; retry++) {
+      const seed = (20261008 + difficulty + retry * 0x9e3779b9) >>> 0;
       try { map = generateSurvival(difficulty, seed, `test-${difficulty}`); }
       catch (cause) { if (!(cause instanceof MapGenerationSearchError)) throw cause; }
     }
+    assert.ok(map, `difficulty ${difficulty} failed within the 45s session budget`);
     assert.equal(map.draft.level.size, 8);
     assert.ok(map.draft.level.pieces.length >= spec.min && map.draft.level.pieces.length <= spec.max);
+    assert.ok(map.draft.level.pieces.some(p => p.kind === 'camp' && p.shape === 'single'), `difficulty ${difficulty} must include a single-cell camp without bans`);
     assert.equal(evaluate(map.draft.level, map.draft.placements).won, true);
     const solved = solveLevel(map.draft.level, 2);
     assert.equal(solved.aborted, false); assert.equal(solved.count, 1);
     maps.push(map);
     console.log(`${difficulty}难: ${map.draft.level.pieces.length} 设施, ${map.draft.level.terrain.length} 地形, ${solved.candidates} 候选, ${solved.nodes} 搜索节点, ${Date.now() - started}ms`);
   }
-  assert.equal(maps[9].draft.level.pieces.length, 20);
+
   assert.equal(generateSurvival(1, maps[0].seed, 'other-id').fingerprint, maps[0].fingerprint);
   assert.notEqual(generateSurvival(1, maps[0].seed, 'different', [maps[0].fingerprint]).fingerprint, maps[0].fingerprint);
   mkdirSync('.desktop-smoke/survival', { recursive: true });
@@ -61,7 +64,7 @@ test('progress, undo, selection and rotations survive reload; settlement is atom
   assert.equal(readSurvival().challenge, null); assert.equal(readSurvival().progress, null);
   assert.equal(completeSurvival(challenge, challenge.draft.placements).reward.earned, 0);
   assert.deepEqual(survivalTotals(readSurvival()), { counts: [0, 0, 0, 1, 0, 0, 0, 0, 0, 0], total: 1, xp: 10 });
-  assert.deepEqual([0, 9, 10, 99, 100, 499, 500, 999, 1000, 5000].map(rankFor), [0, 0, 1, 1, 2, 2, 3, 3, 4, 4]);
+  assert.deepEqual([0, 9, 10, 99, 100, 499, 500, 999, 1000, 5000].map(rankFor), [0, 0, 1, 2, 3, 4, 5, 5, 6, 8]);
   assert.equal(values.has('wildgrid-save-v1'), false);
 });
 
@@ -71,7 +74,7 @@ test('collections keep the original answer, block locked edits and unlock every 
   writeSurvival({ ...readSurvival(), challenge, progress: emptySurvivalProgress(challenge.id) });
   const first = saveLocalMap(challenge.draft, [], undefined, info), second = saveLocalMap(challenge.draft, [], undefined, info);
   assert.deepEqual(first.draft.placements, challenge.draft.placements); assert.deepEqual(first.progress, []);
-  const changed = { ...challenge.draft, level: { ...challenge.draft.level, terrain: [...challenge.draft.level.terrain, { r: 7, c: 7, kind: 'mountain' as const }] } };
+  const changed = maps[1].draft;
   assert.throws(() => saveLocalMap(changed, [], first.id), /通关或放弃挑战后才能编辑/);
   completeSurvival(challenge, challenge.draft.placements);
   unlockSurvivalMaps(challenge.id);
@@ -88,7 +91,7 @@ test('abandoning a saved challenge unlocks local blueprints and edits without aw
   const challenge = maps[0], info = { challengeId: challenge.id, difficulty: 1, seed: challenge.seed, completed: false, blueprintUnlocked: false };
   writeSurvival({ ...readSurvival(), challenge, progress: emptySurvivalProgress(challenge.id) });
   const first = saveLocalMap(challenge.draft, [], undefined, info), second = saveLocalMap(challenge.draft, [], undefined, info);
-  const changed = { ...challenge.draft, level: { ...challenge.draft.level, terrain: [...challenge.draft.level.terrain, { r: 7, c: 7, kind: 'mountain' as const }] } };
+  const changed = maps[1].draft;
   const localBefore = values.get('wildgrid-local-maps-v1');
   assert.equal(readLocalMaps().every(map => map.survival?.blueprintUnlocked === false), true);
   writeSurvival({ ...readSurvival(), challenge: null, progress: null });

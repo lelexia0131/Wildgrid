@@ -2,13 +2,13 @@
 .menu-page { gap: 12px; }
 .menu-art { width: min(680px, 100%, calc((100dvh - var(--safe-top) - var(--safe-bottom) - 355px) * 1.29)); display: flex; flex-direction: column; align-items: center; flex: none; pointer-events: none; }
 .camp-title { --title-height: clamp(108px, 21dvh, 184px); width: 100%; height: var(--title-height); min-width: 0; margin: 0; position: relative; z-index: 1; }
-.camp-title-en { --title-height: clamp(100px, 19dvh, 170px); }
 .camp-title { display: grid; place-items: center; }
-.title-sign { position: relative; display: block; width: min(100%, calc(var(--title-height) * 720 / 330)); aspect-ratio: 720 / 330; min-width: 0; }
+.title-sign { position: relative; display: block; width: min(100%, calc(var(--title-height) * 2079 / 756)); height: 100%; min-width: 0; }
+/* Match the visible artwork; the English PNG has extra transparent space above and below. */
+.camp-title-en .title-sign { width: min(95%, calc(var(--title-height) * 1774 / 699)); }
 .title-sign img { position: absolute; display: block; object-fit: contain; }
-.title-board { inset: 0; width: 100%; height: 100%; }
-.title-lettering { z-index: 1; left: 16%; top: 20%; width: 68%; height: 64%; }
-.camp-title-en .title-lettering { left: 14%; top: 30%; width: 72%; height: 43%; }
+.title-lettering { inset: 0; width: 100%; height: 100%; }
+.camp-title-en .title-lettering { top: 50%; height: auto; transform: translateY(-50%); }
 .title-fallback { position: absolute; inset: 25% 10%; z-index: 1; color: #fff0c5; font-size: 48px; text-align: center; }
 .menu-page .hero-art { margin-top: -26px; flex: none; animation: camp-island-float 7s ease-in-out infinite; }
 @keyframes camp-island-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }

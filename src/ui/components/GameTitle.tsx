@@ -8,7 +8,6 @@ export function GameTitle() {
   return <h1 className={`camp-title camp-title-${language}`} aria-label={t('野格')}>
     <span className="title-sign">
       {failed === language ? <span className="title-fallback">{t('野格')}</span> : <img className="title-lettering" src={art.branding[language]} alt="" draggable={false} onError={() => setFailed(language)}/>}
-      <img className="title-board" src={art.branding.sign} alt="" draggable={false}/>
     </span>
   </h1>;
 }

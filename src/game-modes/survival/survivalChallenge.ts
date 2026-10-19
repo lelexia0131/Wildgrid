@@ -1,3 +1,5 @@
+import { mapFeatures } from '../../engine/mapNovelty';
+import type { MapFeatures } from '../../engine/mapNovelty';
 import { encodeMap, evaluate, generateMap } from '../../engine';
 import type { Placement, Shape, SandboxDraft } from '../../engine';
 import { rankFor, SURVIVAL_DIFFICULTIES } from './survivalDifficulty';
@@ -6,19 +8,19 @@ export type SurvivalChallenge = { id: string; difficulty: number; seed: number; 
 export type SurvivalProgress = { id: string; status: 'active'; placements: readonly Placement[]; past: readonly (readonly Placement[])[]; future: readonly (readonly Placement[])[]; rotations: Partial<Record<Shape, number>>; selectedId: string | null };
 export type SurvivalCompletion = { id: string; difficulty: number; seed: number; at: number };
 export type SurvivalRecord = { id: string; difficulty: number; seed: number; startedAt?: number; finishedAt?: number; code?: string; placements: readonly Placement[] };
-export type SurvivalSave = { version: 1; completed: SurvivalCompletion[]; records: SurvivalRecord[]; recent: string[]; challenge: SurvivalChallenge | null; progress: SurvivalProgress | null };
+export type SurvivalSave = { version: 1; completed: SurvivalCompletion[]; records: SurvivalRecord[]; recent: string[]; recentMaps?: MapFeatures[]; challenge: SurvivalChallenge | null; progress: SurvivalProgress | null };
 export type SurvivalReward = { earned: number; xp: number; count: number; beforeRank: number; rank: number };
-export const createSurvivalSave = (): SurvivalSave => ({ version: 1, completed: [], records: [], recent: [], challenge: null, progress: null });
+export const createSurvivalSave = (): SurvivalSave => ({ version: 1, completed: [], records: [], recent: [], recentMaps: [], challenge: null, progress: null });
 export function survivalTotals(save: SurvivalSave) {
   const counts = SURVIVAL_DIFFICULTIES.map((_, i) => save.completed.filter(c => c.difficulty === i + 1).length);
   return { counts, total: save.completed.length, xp: counts.reduce((sum, count, i) => sum + count * SURVIVAL_DIFFICULTIES[i].xp, 0) };
 }
 export const emptySurvivalProgress = (id: string): SurvivalProgress => ({ id, status: 'active', placements: [], past: [], future: [], rotations: {}, selectedId: null });
 
-export function generateSurvival(difficulty: number, seed: number, id: string, recent: string[] = []): SurvivalChallenge {
+export function generateSurvival(difficulty: number, seed: number, id: string, recent: string[] = [], disabled: readonly string[] = [], history: readonly MapFeatures[] = []): SurvivalChallenge {
   const spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
   if (!spec) throw new Error('请选择 1难至10难');
-  return generateMap(difficulty, seed, id, recent, spec);
+  return generateMap(difficulty, seed, id, recent, spec, disabled, history);
 }
 
 
@@ -49,7 +51,11 @@ export function updateSurvivalProgress(save: SurvivalSave, challengeId: string, 
 }
 export function replaceSurvivalChallenge(save: SurvivalSave, challenge: SurvivalChallenge): SurvivalSave {
   const archived = save.challenge ? archiveSurvivalRecord(save, save.challenge, save.progress?.placements || []) : save;
-  return { ...archived, recent: [...archived.recent, challenge.fingerprint].slice(-40), challenge, progress: emptySurvivalProgress(challenge.id) };
+  const fullFeature = mapFeatures(challenge.draft, challenge.difficulty);
+  // Rotations and reflections are derived when comparing; store one view only.
+  const feature = { ...fullFeature, views: [fullFeature.views[0]] };
+  const recentMaps = [...(archived.recentMaps || []), feature].filter((map, index, all) => all.slice(index + 1).filter(other => other.difficulty === map.difficulty).length < 40);
+  return { ...archived, recentMaps, recent: [...archived.recent, challenge.fingerprint].slice(-40), challenge, progress: emptySurvivalProgress(challenge.id) };
 }
 export function abandonSurvivalChallenge(save: SurvivalSave, challengeId: string | undefined): SurvivalSave {
   if (!save.challenge || save.challenge.id !== challengeId) return save;

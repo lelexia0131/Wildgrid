@@ -43,26 +43,30 @@ test('worker tasks cancel, ignore stale/duplicate replies, release errors and cl
   assert.equal(task.isRunning(), false); assert.equal(FakeWorker.instances.at(-1)!.terminated, true);
 });
 
-test('survival retries search failures and 25s timeouts with new workers and seeds until success', t => {
+test('survival replaces each seed after 2s and accepts a later success only once', t => {
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'Worker');
   Object.defineProperty(globalThis, 'Worker', { configurable: true, value: FakeWorker });
   t.after(() => { if (descriptor) Object.defineProperty(globalThis, 'Worker', descriptor); else Reflect.deleteProperty(globalThis, 'Worker'); });
   const task = createSurvivalGenerationTask(), errors: string[] = [], results: unknown[] = [];
+  assert.equal(MAP_GENERATION_TIMEOUT, 2000);
   task.start({ difficulty: 1, seed: 2, id: 'retry', recent: [] }, { onError: reason => errors.push(reason), onResult: result => results.push(result) });
   const worker = FakeWorker.instances.at(-1)!;
-  t.mock.timers.tick(MAP_GENERATION_TIMEOUT - 1); assert.equal(task.isRunning(), true);
+  t.mock.timers.tick(1999); assert.equal(task.isRunning(), true); assert.equal(worker.terminated, false);
   t.mock.timers.tick(1); assert.equal(task.isRunning(), true); assert.equal(worker.terminated, true);
   worker.reply({ challenge: {} }); worker.onerror?.();
   assert.deepEqual(errors, []); assert.deepEqual(results, []);
   t.mock.timers.tick(1);
-  let previous = worker;
-  for (let i = 0; i < 30; i++) {
-    const next = FakeWorker.instances.at(-1)!;
-    assert.notEqual(next, previous); assert.equal(previous.terminated, true);
-    assert.notEqual((next.request as { seed: number }).seed, (previous.request as { seed: number }).seed);
-    next.reply({ status: 'search-failed', error: 'arbitrary message' });
-    previous = next; t.mock.timers.tick(1);
+  const next = FakeWorker.instances.at(-1)!;
+  assert.notEqual(next, worker); assert.equal(worker.terminated, true);
+  assert.equal((next.request as { seed: number }).seed, (2 + 0x9e3779b9) >>> 0);
+  for (let i = 0; i < 2; i++) {
+    const previous = FakeWorker.instances.at(-1)!;
+    t.mock.timers.tick(2000); t.mock.timers.tick(1);
+    assert.equal(previous.terminated, true);
+    assert.equal((FakeWorker.instances.at(-1)!.request as { seed: number }).seed, ((previous.request as { seed: number }).seed + 0x9e3779b9) >>> 0);
+    previous.reply({ status: 'success', challenge: {} });
+    assert.deepEqual(errors, []); assert.deepEqual(results, []);
   }
   const final = FakeWorker.instances.at(-1)!, request = final.request as { id: string; seed: number; difficulty: number };
   const level = { ...getLevelById(6)!, size: 8 }, placements = getSolution(6)!;
@@ -94,6 +98,32 @@ test('survival cancellation and background pause stop workers and all queued ret
   start(); const third = FakeWorker.instances.at(-1)!; task.setPaused(true); task.cancel(); task.setPaused(false);
   assert.equal(third.terminated, true); assert.equal(FakeWorker.instances.at(-1), third);
   start(); task.cancel(); assert.deepEqual(results, []); assert.deepEqual(errors, []);
+});
+
+test('successive search failures keep changing seeds within the 45s session budget', t => {
+  t.mock.timers.enable({ apis: ['setTimeout', 'Date'], now: 0 });
+  const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'Worker');
+  Object.defineProperty(globalThis, 'Worker', { configurable: true, value: FakeWorker });
+  t.after(() => { if (descriptor) Object.defineProperty(globalThis, 'Worker', descriptor); else Reflect.deleteProperty(globalThis, 'Worker'); });
+  const task = createSurvivalGenerationTask(), errors: string[] = [];
+  const before = FakeWorker.instances.length;
+  task.start({ difficulty: 10, seed: 2, id: 'bounded', recent: [] }, { onResult: () => assert.fail('unexpected result'), onError: reason => errors.push(reason) });
+  const seeds = new Set<number>();
+  for (let i = 0; i < 3; i++) {
+    const worker = FakeWorker.instances.at(-1)!;
+    seeds.add((worker.request as { seed: number }).seed);
+    worker.reply({ status: 'search-failed', error: 'exhausted' });
+    t.mock.timers.tick(1);
+    assert.equal(worker.terminated, true); assert.equal(task.isRunning(), true);
+    assert.deepEqual(errors, []);
+  }
+  assert.equal(seeds.size, 3); assert.equal(FakeWorker.instances.length - before, 4);
+  t.mock.timers.tick(45000);
+  assert.equal(task.isRunning(), false);
+  assert.deepEqual(errors, ['error']);
+  const after = FakeWorker.instances.length;
+  t.mock.timers.tick(45000);
+  assert.equal(FakeWorker.instances.length, after);
 });
 
 test('survival creation, posting, runtime and protocol errors stop without retrying', t => {
