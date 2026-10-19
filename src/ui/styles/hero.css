@@ -96,16 +96,17 @@
     background: linear-gradient(135deg, transparent 38%, #f4bd5308 43%, #fbd17b28 48%, #ffe9b338 50%, #fbd17b18 54%, transparent 62%);
     animation: home-sunlight .7s cubic-bezier(.25, .1, .35, 1) .5s both;
   }
-  .home-entering .camp-title { transform-origin: 50% 60%; animation: home-title .7s ease-out 1s both; }
-  .home-entering .home-fire-bloom { transform-box: view-box; transform-origin: 377px 400px; animation: home-fire-bloom .65s ease-in-out 1s both; }
-  .home-entering .menu-buttons button, .home-entering .header-actions button {
-    animation: home-button .46s ease-out var(--home-delay) both;
+  /* Hide the entire SVG from the first paint, including every nested image. */
+  .home-entering .camp-title, .home-entering .hero-art,
+  .home-entering .menu-buttons, .home-entering .header-actions { opacity: 0; }
+  .home-entering .camp-title { animation: home-title .45s ease-out both; }
+  .home-entering .hero-art {
+    transform-origin: 50% 60%;
+    animation: home-island .75s ease-out .45s both;
+    animation-play-state: running;
   }
-  .home-entering .menu-adventure { --home-delay: 1.5s; }
-  .home-entering .menu-journal { --home-delay: 1.62s; }
-  .home-entering .menu-guide { --home-delay: 1.74s; }
-  .home-entering .header-actions button:first-child { --home-delay: 1.68s; }
-  .home-entering .header-actions button:last-child { --home-delay: 1.74s; }
+  .home-entering .home-fire-bloom { transform-box: view-box; transform-origin: 377px 400px; animation: home-fire-bloom .65s ease-in-out .45s both; }
+  .home-entering .menu-buttons, .home-entering .header-actions { animation: home-button .45s ease-out 1.2s both; }
 }
 @keyframes home-dawn { 0% { opacity: 1; } 42% { opacity: .48; } 100% { opacity: 0; } }
 @keyframes home-sunlight {
@@ -115,10 +116,14 @@
   100% { transform: translate(45%, 45%); opacity: 0; }
 }
 @keyframes home-title {
-  0% { transform: scale(.88); opacity: 0; }
-  55% { transform: scale(1.035); opacity: 1; }
-  78% { transform: scale(.992); }
-  100% { transform: scale(1); opacity: 1; }
+  0% { transform: translateY(8px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes home-island {
+  0% { transform: translateY(14px) scale(.94); opacity: 0; }
+  65% { transform: translateY(-3px) scale(1.015); opacity: 1; }
+  82% { transform: translateY(1px) scale(.997); }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 @keyframes home-fire-bloom { 0%, 100% { transform: scale(.85); opacity: 0; } 45% { transform: scale(1.15); opacity: 1; } }
 @keyframes home-button {

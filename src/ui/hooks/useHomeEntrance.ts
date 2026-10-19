@@ -11,7 +11,7 @@ export function useHomeEntrance(onHome: boolean) {
     if (!onHome || preference.matches) { finish(); return; }
 
     const onPreference = () => { if (preference.matches) finish(); };
-    const timeout = window.setTimeout(finish, 2200);
+    const timeout = window.setTimeout(finish, 1650);
     // Observe input without consuming it; the same gesture still works normally.
     window.addEventListener('pointerdown', finish, { capture: true, passive: true });
     window.addEventListener('click', finish, true);
