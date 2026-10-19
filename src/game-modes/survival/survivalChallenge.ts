@@ -17,10 +17,11 @@ export function survivalTotals(save: SurvivalSave) {
 }
 export const emptySurvivalProgress = (id: string): SurvivalProgress => ({ id, status: 'active', placements: [], past: [], future: [], rotations: {}, selectedId: null });
 
-export function generateSurvival(difficulty: number, seed: number, id: string, recent: string[] = [], disabled: readonly string[] = [], history: readonly MapFeatures[] = []): SurvivalChallenge {
+export function generateSurvival(difficulty: number, seed: number, id: string, recent: string[] = [], disabled: readonly string[] = [], history: readonly MapFeatures[] = [], budgetMs?: number): SurvivalChallenge {
   const spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
   if (!spec) throw new Error('请选择 1难至10难');
-  return generateMap(difficulty, seed, id, recent, spec, disabled, history);
+  const { draft, fingerprint } = generateMap(difficulty, seed, id, recent, spec, disabled, history, budgetMs);
+  return { id, difficulty, seed, draft, fingerprint };
 }
 
 

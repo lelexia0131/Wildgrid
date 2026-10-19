@@ -7,6 +7,7 @@ import { MenuIcon } from './MenuIcon';
 import { offsets } from '../../engine';
 import { facilities } from '../../engine';
 import { SURVIVAL_DIFFICULTIES, SURVIVAL_RANKS } from '../../game-modes/survival/survivalDifficulty';
+import { MIN_ALLOWED_FACILITIES } from '../../game-modes/survival/survivalFacilities';
 import { audio } from '../../platform/audio/WildernessAudio';
 import type { FacilityKind, Shape, TerrainKind } from '../../engine';
 
@@ -49,10 +50,11 @@ export function Manual() {
     { id: 'share', title: t("分享与导入"), icon: 'share', content: <><p>{t("点击导出地图并通过质检后，WG1: 开头的地图代码会自动复制到剪贴板，也可以在弹窗中再次复制。")}</p><p>{t("回到沙盒菜单选择导入地图，粘贴地图代码后点击开始游玩。导入后从空棋盘放置设施，不能继续编辑地图；营地工具中的「保存」可以把地图和当前游玩进度存入本地地图。完成或返回都不会改变冒险存档和解锁进度。")}</p></> },
     { id: 'local', title: t("本地地图"), icon: 'archive', content: <><p>{t("模式选择中，沙盒模式下方的「本地地图」会列出已保存的地图，依次命名为「本地地图1、2、3……」。选择一个存档，右侧可以查看地图的固定地形和待放物品，不会提前显示设施答案，再点击「进入地图」开始游玩。")}</p><p>{t("创造地图保存后，从本地地图进入会从待放设施开始求解；导入地图游玩时保存的进度可以继续。普通沙盒地图进入后可以查看图纸；荒野求生收藏地图需先通关或放弃，才能查看图纸或编辑地图。重新进入已有本地地图后点击保存，会更新同一存档。可以重命名或删除地图；重命名时留空会恢复默认名称，删除前会提示确认。")}</p></> },
     { id: 'survival', title: t("荒野求生 · 随机推理挑战"), icon: 'binoculars', content: <><p>{t("在模式选择中点击「荒野求生」，选择 1难至10难。全部使用 8×8 地图，每次生成新的随机地图，并通过统一规则和唯一解验证。餐车、电塔、泳池随难度逐渐加入；高难度增加多格设施、复杂地形和相互依赖，需要结合行列提示推理。")}</p></> },
+    { id: 'disabled-facilities', title: t("禁用设施"), icon: 'tools', content: <><p>{t("在荒野求生菜单点击「禁用设施」，点击设施卡片切换允许或禁用。变暗并带红色斜线的设施已被禁用；同一种设施的不同形状可分别设置。")}</p><p>{t("设置会自动保存在本机，仅影响之后新生成的荒野求生地图，当前挑战和已收藏地图保持原样。点击「恢复默认」重新允许全部设施，点击右上角叉号关闭面板。")}</p><p>{t("至少保留一种营地，并满足所选难度要求的设施种类数（见难度表，同类型不同形状分别计算）。不符合要求时会提示调整；若生成超时或未找到唯一解地图，可减少禁用项或重试。")}</p></> },
     { id: 'resume', title: t("自动保存与继续挑战"), icon: 'resume', content: <><p>{t("每次放置、拿起、撤销和旋转后自动保存地图、操作历史和方向。刷新网页、关闭 Windows 或 Android 应用后，回到荒野求生点击「继续挑战」恢复。")}</p><p>{t("只有一个未完成挑战。选择新难度或另一张荒野收藏地图时，会先确认是否放弃旧进度；生成失败或取消时仍保留旧挑战。")}</p></> },
     { id: 'tools', title: t("挑战工具与图纸"), icon: 'tools', content: <><p>{t("「重新游玩」清空操作，继续同一张地图；「保存」只收藏原始关卡，不把已放设施存成答案。")}</p><p>{t("荒野求生挑战中不提供图纸。未通关的收藏可以进入挑战，在本地地图中图纸和地图编辑保持锁定。通关或放弃后，同一挑战 ID 的收藏永久解锁完整图纸和编辑。编辑后保存为普通沙盒地图。")}</p><p>{t("「放弃」清除自动进度并返回难度选择，已有经验和收藏保留；左上角返回会保留进度。")}</p></> },
     { id: 'xp', title: t("经验与身份"), icon: 'badge', content: <><p>{t("每张随机地图有独立挑战 ID，仅首次通关发放经验、增加该难度和总通关次数。重复触发结算、重新挑战或收藏地图重玩都不会重复奖励。")}</p><p>{t("经验永久累计，不消耗、不清零。达到门槛自动升级；结算展示获得经验、累计经验、该难度通关次数和当前徽章。")}</p></> },
-    { id: 'difficulty', title: t("难度"), icon: 'difficulty', content: <><table><thead><tr><th>{t("难度")}</th><th>{t("设施数量")}</th><th>{t("通关经验")}</th></tr></thead><tbody>{SURVIVAL_DIFFICULTIES.map((spec, i) => <tr key={i}><td>{t("{0}难", i + 1)}</td><td>{spec.min}–{spec.max}  {t("处")}</td><td>+{spec.xp}</td></tr>)}</tbody></table></> },
+    { id: 'difficulty', title: t("难度"), icon: 'difficulty', content: <><table><thead><tr><th>{t("难度")}</th><th>{t("设施数量")}</th><th>{t("至少保留种类")}</th><th>{t("通关经验")}</th></tr></thead><tbody>{SURVIVAL_DIFFICULTIES.map((spec, i) => <tr key={i}><td>{t("{0}难", i + 1)}</td><td>{spec.min}–{spec.max}  {t("处")}</td><td>{MIN_ALLOWED_FACILITIES[i]}</td><td>+{spec.xp}</td></tr>)}</tbody></table></> },
     { id: 'ranks', title: t("身份"), icon: 'flower', content: <><table><thead><tr><th>{t("身份")}</th><th>{t("累计经验")}</th></tr></thead><tbody>{SURVIVAL_RANKS.map((rank, i) => <tr key={rank.name}><td>{localize(rank.name)}</td><td>{localize(SURVIVAL_RANKS[i + 1] ? `${rank.xp}–${SURVIVAL_RANKS[i + 1].xp - 1}` : `≥${rank.xp}`)}</td></tr>)}</tbody></table></> },
     { id: 'review', title: t("通关记录与复盘"), icon: 'camera', content: <><p>{t("只有已完成或已放弃的荒野求生地图会进入通关记录。未完成的挑战保留在「继续挑战」中，返回菜单或关闭游戏不会把它加入记录。")}</p><p>{t("打开通关记录单，点击一条记录即可复盘，恢复结束时的设施布局；复盘中可以使用图纸查看完整答案，也可以拿起、放置、撤销或重新游玩。")}</p><p>{t("复盘不会改变原记录、当前挑战、经验或通关次数。旧记录若没有保存地图，只能查看时间，不能复盘。")}</p></> },
     { id: 'complete', title: t("一张完成的营地图"), icon: 'overview', content: <><div className="manual-complete"><div className="manual-finished-cols"><span>✓</span><span>✓</span><span>✓</span></div><div className="manual-finished-row"><span className="manual-row-checks">✓<br/>✓<br/>✓</span><Board map={['WCB','...','FMT']}/></div><p>{t("营地邻水、篝火邻营地、塔邻山；三行分别占 2 / 0 / 1 格，三列分别占 0 / 1 / 2 格。所有设施放完，行列提示全部变为 ✓。")}</p></div></> },

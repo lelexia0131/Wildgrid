@@ -53,8 +53,7 @@ src/game-data/             原45关与参考答案JSON
 src/assets/、src/ui/styles/ 原有资源、布局与样式
 electron/、android/、server/ 原生容器与玩家ID服务
 scripts/、tests/            维护脚本与回归验证
-reports/engine-*.md         全项目审计、文件职责与引擎迁移/验证报告
-reports/phase2-*.md         第二阶段实际迁移映射与验证报告
+tests/fixtures/            回归测试与引擎校验使用的历史基线
 ARCHITECTURE.md             API、状态所有权、依赖方向和扩展约定
 ```
 
@@ -84,7 +83,7 @@ API 地址集中在 `src/platform/playerId.ts`。正式 HTTPS API 已部署，�
 
 通关 Day 15 即可进入 Day 31；Day 31–45 顺序解锁，独立于 Day 16–30。旧关卡和答案保持不变。餐车、电塔、泳池均为单格设施，统一支持冒险、沙盒、本地地图和荒野求生；WG1 编码与三套 v1 存档保持兼容。餐车与营地正交间隔一格空草地，不能直接正交邻营地；电塔禁止八方向邻篝火、正交邻营地；泳池正交邻水且八方向邻营地。
 
-Day 31–40 教学，Day 41–45 对照 26–30 的占格与多格规模设计。设计基准和最终搜索数据见 `reports/day31-baseline.json`、`reports/day31-levels.json`。新增固定数据保存在 `levels.json` 和 `solutions.json` 中。
+Day 31–40 教学，Day 41–45 对照 26–30 的占格与多格规模设计。回归测试使用的设计基准见 `tests/fixtures/day31-baseline.json`。新增固定数据保存在 `levels.json` 和 `solutions.json` 中。
 
 ## 沙盒模式
 

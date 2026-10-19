@@ -6,12 +6,13 @@ Replace an existing image **at the same path**, keeping its viewBox, transparent
 
 | Folder | Use |
 | --- | --- |
-| `branding` | `logo-zh.svg` (600×260), `logo-en.svg` (880×190), shared text-free `title-sign.svg` (720×330) |
+| `branding` | `logo-zh.png` (2079×756), `logo-en.png` (1774×887), and the title flame displacement map |
 | `backgrounds` | Existing home/diary/survival WebPs, three chapter landscapes, quiet washes and vignettes |
 | `illustrations` | 45 `journal-01`–`journal-45` covers, chapter layers, hero island, two mode illustrations |
 | `objects` | Single-cell facility/terrain artwork and separated tree/fire animation parts |
 | `icons` | Illustrated menu and camp tool icons |
-| `survival-badges` | Five existing rank badges, preserved |
+| `survival-badges` | Five source badges used by `scripts/build-survival-badges.mjs`; excluded from the runtime registry |
+| `survival-ranks` | Fifteen bronze, silver and gold rank badges used in the game |
 | `achievements` | Completion scenery, check medallion, difficulty and clear-count marks |
 | `progress` | XP frame/fills, cursor leaf, generation stripe |
 | `panels` | Reusable panel skins, notebook cover/edge and ruled paper |
@@ -21,6 +22,4 @@ Most panels use 96×96 SVGs with a **16-unit nine-slice margin**. Keep important
 
 The full-size animation overlays share their base's viewBox. Do not trim their transparent canvas. Tree trunks/logs remain still while crown/flame image layers animate. Water dashes, board geometry, tutorial focus, placement feedback, particles and XP growth remain in code because they respond to state or time.
 
-`wildgrid-zh.webp` and `wildgrid-en.webp` are retained previous designs for comparison only. They are not registered or bundled. Existing backgrounds and rank badges are reused rather than redrawn.
-
-Run `node scripts/audit-art.mjs` to decode every image, check SVG references and regenerate `reports/art-inventory.json`. See `reports/art-refactor.md` for the migration and validation record.
+Run `node scripts/audit-art.mjs` to decode every image, check SVG references and regenerate the ignored `.desktop-smoke/art-inventory.json`.

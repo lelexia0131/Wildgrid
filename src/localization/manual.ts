@@ -1,4 +1,8 @@
 export const MANUAL_ENGLISH = {
+  '在荒野求生菜单点击「禁用设施」，点击设施卡片切换允许或禁用。变暗并带红色斜线的设施已被禁用；同一种设施的不同形状可分别设置。': 'Choose Disable facilities in the Survival menu, then tap a card to allow or disable it. Disabled facilities appear dimmed with a red slash. Different shapes of the same facility can be set separately.',
+  '设置会自动保存在本机，仅影响之后新生成的荒野求生地图，当前挑战和已收藏地图保持原样。点击「恢复默认」重新允许全部设施，点击右上角叉号关闭面板。': 'Preferences save automatically on this device and apply to new Survival maps. Your current challenge and saved maps stay unchanged. Choose Restore defaults to allow all facilities, or use the upper-right cross to close the panel.',
+  '至少保留一种营地，并满足所选难度要求的设施种类数（见难度表，同类型不同形状分别计算）。不符合要求时会提示调整；若生成超时或未找到唯一解地图，可减少禁用项或重试。': 'Keep at least one camp shape and enough facility types for your difficulty (see the difficulty table; each shape counts separately). A message explains any unmet requirement. If generation times out or cannot find a unique puzzle, allow more facilities or retry.',
+  '至少保留种类': 'Minimum allowed types',
   '通关记录与复盘': 'Records and review', '营地操作': 'Camp controls', '全局设置': 'Global settings', '语言与新手引导': 'Language and tutorials',
   '只有已完成或已放弃的荒野求生地图会进入通关记录。未完成的挑战保留在「继续挑战」中，返回菜单或关闭游戏不会把它加入记录。': 'Only completed or abandoned Survival maps enter the records. Unfinished challenges stay under Continue challenge. Leaving the board or closing the game does not add a record.',
   '打开通关记录单，点击一条记录即可复盘，恢复结束时的设施布局；复盘中可以使用图纸查看完整答案，也可以拿起、放置、撤销或重新游玩。': 'Open the record sheet and select an entry to review the final layout. Use the blueprint to see the complete solution. You can also pick up, place, undo or restart facilities.',

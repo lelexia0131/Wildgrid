@@ -48,8 +48,8 @@ test('new relationships use actual camp cells, work in either placement order an
 });
 
 test('Days 31–45 are unique, retain all old maps and answers, and stay within benchmark scale',()=>{
-  const baseline=JSON.parse(readFileSync('reports/day31-baseline.json','utf8'));
-  const preserved=JSON.parse(readFileSync('reports/day31-preservation.json','utf8'));
+  const baseline=JSON.parse(readFileSync('tests/fixtures/day31-baseline.json','utf8'));
+  const preserved=JSON.parse(readFileSync('tests/fixtures/day31-preservation.json','utf8'));
   const digest=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
   assert.equal(digest(levels.filter(l=>l.id<=30)),preserved.levels);
   assert.equal(digest(Object.fromEntries(Object.entries(solutions).filter(([id])=>+id<=30))),preserved.solutions);

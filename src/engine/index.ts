@@ -12,7 +12,7 @@ export { solveLevel, countSolutions } from './solver';
 export type { SolverResult } from './solver';
 export { createSandbox, withEditorPlacements, checkSandbox, encodeMap, decodeMap } from './mapBlueprint';
 export type { SandboxDraft, SandboxCheck } from './mapBlueprint';
-export { generateMap, MAP_GENERATION_TIMEOUT } from './mapGeneration';
+export { generateMap, MAP_GENERATION_TIMEOUT, generationBudget } from './mapGeneration';
 export type { MapGenerationSpec } from './mapGeneration';
 export { MAX_HISTORY_STEPS, createSession, dispatch, getState, getAvailableActions } from './gameSession';
 export type { GameSession, GameCommand, GameEvent, CommandResult } from './gameSession';

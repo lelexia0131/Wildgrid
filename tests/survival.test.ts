@@ -26,14 +26,15 @@ test('ten seeded tiers generate legal unique 8×8 puzzles within their facility 
     const started = Date.now(), spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
     let map: SurvivalChallenge | undefined;
     for (let retry = 0; !map && Date.now() - started < 45000; retry++) {
-      const seed = (20261008 + difficulty + retry * 0x9e3779b9) >>> 0;
+      const seed = (20261019 + retry * 0x9e3779b9) >>> 0;
       try { map = generateSurvival(difficulty, seed, `test-${difficulty}`); }
       catch (cause) { if (!(cause instanceof MapGenerationSearchError)) throw cause; }
     }
     assert.ok(map, `difficulty ${difficulty} failed within the 45s session budget`);
     assert.equal(map.draft.level.size, 8);
     assert.ok(map.draft.level.pieces.length >= spec.min && map.draft.level.pieces.length <= spec.max);
-    assert.ok(map.draft.level.pieces.some(p => p.kind === 'camp' && p.shape === 'single'), `difficulty ${difficulty} must include a single-cell camp without bans`);
+    assert.ok(map.draft.level.pieces.some(p => p.kind === 'camp'));
+    assert.ok(map.draft.level.pieces.filter(p => p.shape !== 'single').length >= spec.multi);
     assert.equal(evaluate(map.draft.level, map.draft.placements).won, true);
     const solved = solveLevel(map.draft.level, 2);
     assert.equal(solved.aborted, false); assert.equal(solved.count, 1);

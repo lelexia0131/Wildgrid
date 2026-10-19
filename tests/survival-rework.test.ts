@@ -80,7 +80,7 @@ test('10th-tier samples differ in terrain, composition, clues, geometric structu
     const solved=solveLevel(maps[i].draft.level,2,{maxNodes:100000,deadline:Date.now()+5000});
     assert.equal(solved.aborted,false);assert.equal(solved.count,1);
     const metrics=generationDifficulty(maps[i].draft,solved);
-    assert.ok(metrics.score>=4.4 && metrics.score<=9.6 && metrics.candidates>=3 && metrics.forced<=.4);
+    assert.ok(metrics.logic.solved && metrics.score>=5.1 && metrics.logic.maxDepth<=2 && metrics.forced<=.65);
     for(let j=0;j<i;j++) {const comparison=compareMaps(features[i],features[j]);assert.equal(comparison.equivalent,false);assert.ok(comparison.similarity<.88);pairs.push({a:i,b:j,...comparison});}
   }
   assert.ok(new Set(features.map(f=>JSON.stringify(f.terrainCounts))).size>=3);

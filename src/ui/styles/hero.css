@@ -9,6 +9,13 @@
 .title-sign img { position: absolute; display: block; object-fit: contain; }
 .title-lettering { inset: 0; width: 100%; height: 100%; }
 .camp-title-en .title-lettering { top: 50%; height: auto; transform: translateY(-50%); }
+.title-hit-image { visibility: hidden; }
+.title-artwork { position: absolute; display: block; overflow: visible; pointer-events: none; }
+.title-leaf, .title-lantern { transform-box: view-box; }
+.title-flame-hover { display: none; }
+.title-sign[data-hovered='true'] .title-flame-idle { display: none; }
+.title-sign[data-hovered='true'] .title-flame-hover { display: inline; }
+.title-firelight { opacity: 0; }
 .title-fallback { position: absolute; inset: 25% 10%; z-index: 1; color: #fff0c5; font-size: 48px; text-align: center; }
 /* Entrance stays on h1; interaction and idle motion each have their own layer. */
 .title-interaction, .title-float { position: absolute; inset: 0; display: block; pointer-events: none; }
@@ -17,6 +24,21 @@
 @media (prefers-reduced-motion: no-preference) {
   .title-sign[data-ready='true'] .title-float { animation: camp-title-float 4s ease-in-out infinite; }
   .title-sign[data-motion='paused'] .title-float { animation-play-state: paused; }
+  .title-sign { --leaf-sway: 2deg; --pendant-sway: 2.5deg; --fire-light: .09; }
+  .title-sign[data-hovered='true'] { --leaf-sway: 3.5deg; --pendant-sway: 4deg; --fire-light: .13; }
+  .title-firelight { animation: title-warmth 1.31s ease-in-out -.79s infinite; }
+  .title-leaf { animation: title-leaf-sway 3.7s ease-in-out -1.2s infinite; }
+  .title-leaf-1 { animation-duration: 4.3s; animation-delay: -2.8s; }
+  .title-leaf-2 { animation-duration: 2.9s; animation-delay: -.4s; }
+  .title-lantern { will-change: transform; animation: title-pendant-sway 2.6s cubic-bezier(.37, 0, .63, 1) -1.7s infinite; }
+  .title-sign:not([data-ready='true']) .title-artwork *, .title-sign[data-motion='paused'] .title-artwork * { animation-play-state: paused; }
+}
+@keyframes title-warmth { 0%, 100% { opacity: .02; } 38% { opacity: var(--fire-light); } 71% { opacity: .01; } }
+@keyframes title-leaf-sway { 0%, 100% { transform: rotate(calc(-1 * var(--leaf-sway))); } 43% { transform: rotate(var(--leaf-sway)); } }
+@keyframes title-pendant-sway { 0%, 100% { transform: rotate(calc(-1 * var(--pendant-sway))); } 50% { transform: rotate(var(--pendant-sway)); } }
+@media (prefers-reduced-motion: reduce) {
+  .title-hit-image { visibility: visible; }
+  .title-artwork { display: none; }
 }
 @media (any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
   .title-sign[data-ready='true'] { pointer-events: auto; }

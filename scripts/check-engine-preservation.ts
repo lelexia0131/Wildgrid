@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { levels, getSolution, solveLevel, evaluate, encodeMap } from '../src/engine';
 
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
-const baseline = JSON.parse(readFileSync('reports/phase2-engine-baseline.json', 'utf8')) as {
+const baseline = JSON.parse(readFileSync('tests/fixtures/phase2-engine-baseline.json', 'utf8')) as {
   dataHash: string;
   puzzles: { id: number; solverHash: string; evaluationHash: string; mapCodeHash: string }[];
 };

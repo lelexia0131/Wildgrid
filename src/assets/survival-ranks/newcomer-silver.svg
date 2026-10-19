@@ -11,7 +11,7 @@
   <path d="m78 59 25 16" stroke="#dbe2b5" stroke-width="3" stroke-linecap="round"/>
   <path d="M78 113h67c3 32-10 57-34 61-22-6-36-28-33-61Z" fill="url(#seed)" stroke="#805836" stroke-width="4"/>
   <path d="M96 133c-2 11 3 22 9 27" stroke="#fff0c4" stroke-width="5" stroke-linecap="round"/>
-  <path d="M74 112c0-18 16-31 37-31s38 13 38 31c-17 10-57 10-75 0Z" fill="url(#metal)" stroke="url(#metal)" stroke-width="4"/>
-  <path d="m81 104 10-12 10 12 10-15 12 15 10-12 9 12" stroke="url(#metal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M74 112c0-18 16-31 37-31s38 13 38 31c-17 10-57 10-75 0Z" fill="#947050" stroke="#674f37" stroke-width="4"/>
+  <path d="m81 104 10-12 10 12 10-15 12 15 10-12 9 12" stroke="#c7a37a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="63" cy="132" r="3" fill="#a49367"/><circle cx="152" cy="143" r="3" fill="#a49367"/>
 </svg>

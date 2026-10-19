@@ -28,6 +28,12 @@
 .manual-notebook table { width: 100%; border-collapse: collapse; font-size: 19px; }
 .manual-notebook th, .manual-notebook td { padding: 5px 8px; text-align: left; border-bottom: 1px solid #bfb08c70; }
 .manual-notebook th { color: #8b6e44; }
+.manual-page[data-page='difficulty'] table { table-layout: fixed; }
+.manual-page[data-page='difficulty'] th, .manual-page[data-page='difficulty'] td { padding: 5px 4px; overflow-wrap: anywhere; }
+@media (max-width: 360px) {
+  .manual-page[data-page='difficulty'] table { font-size: 14px; }
+  .manual-page[data-page='difficulty'] th, .manual-page[data-page='difficulty'] td { padding: 5px 2px; letter-spacing: 0; }
+}
 .manual-route { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 12px; margin: 30px 8px; }
 .manual-route span { min-width: 0; overflow-wrap: anywhere; }
 .manual-page-heading h3 { min-width: 0; overflow-wrap: anywhere; }

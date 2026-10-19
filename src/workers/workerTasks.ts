@@ -1,5 +1,5 @@
 import type { MapFeatures } from '../engine/mapNovelty';
-import { encodeMap, MAP_GENERATION_TIMEOUT } from '../engine';
+import { encodeMap, MAP_GENERATION_TIMEOUT, generationBudget } from '../engine';
 import { SURVIVAL_DIFFICULTIES } from '../game-modes/survival/survivalDifficulty';
 import type { SandboxCheck, SandboxDraft } from '../engine';
 import type { SurvivalChallenge } from '../game-modes/survival/survivalChallenge';
@@ -43,72 +43,62 @@ export function createSandboxCheckTask() {
 
 export function createSurvivalGenerationTask() {
   const attempt = createWorkerTask<SurvivalGenerationRequest, unknown>(
-    () => new Worker(new URL('./survival.worker.ts', import.meta.url), { type: 'module' }), MAP_GENERATION_TIMEOUT,
+    () => new Worker(new URL('./survival.worker.ts', import.meta.url), { type: 'module' }),
   );
-  let session: { request: SurvivalGenerationRequest; callbacks: TaskCallbacks<SurvivalChallenge>; attempts: number; elapsed: number; started: number | null; retrying: boolean } | null = null;
-  let retry: ReturnType<typeof setTimeout> | undefined;
-  let budgetTimer: ReturnType<typeof setTimeout> | undefined;
+  let session: { request: SurvivalGenerationRequest; callbacks: TaskCallbacks<SurvivalChallenge>; elapsed: number; started: number | null } | null = null;
+  let timer: ReturnType<typeof setTimeout> | undefined;
   let paused = false;
   function account() {
     if (session?.started !== null && session?.started !== undefined) { session.elapsed += Date.now() - session.started; session.started = null; }
-    clearTimeout(budgetTimer); budgetTimer = undefined;
+    clearTimeout(timer); timer = undefined;
   }
-  function cancel() {
-    account(); session = null; clearTimeout(retry); retry = undefined; attempt.cancel();
-  }
+  function cancel() { account(); session = null; attempt.cancel(); }
   function run() {
-    retry = undefined;
     const current = session;
     if (!current || paused || attempt.isRunning()) return;
-    const fail = (message?: string) => { if (session === current) { cancel(); current.callbacks.onError('error', message); } };
-    if (current.elapsed >= 45000) { fail('地图生成超时，请重试或调整禁用设施。'); return; }
-    if (current.retrying) {
-      if (current.attempts) current.request = { ...current.request, seed: (current.request.seed + 0x9e3779b9) >>> 0 };
-      current.attempts++; current.retrying = false;
-    }
-    const again = (message?: string) => {
-      account();
+    const fail = (reason: 'error' | 'timeout', message?: string) => {
       if (session !== current) return;
-      if (current.elapsed >= 45000) { fail(message || '地图生成超时，请重试或调整禁用设施。'); return; }
-      current.retrying = true;
-      if (!paused) retry = setTimeout(run, 0);
+      cancel(); current.callbacks.onError(reason, message);
     };
+    // All construction attempts and seeds belong to this single worker run.
+    // Pausing terminates CPU work; resuming keeps the seed and active-time budget.
+    const remaining = Math.min(MAP_GENERATION_TIMEOUT, generationBudget(current.request.difficulty) + 400) - current.elapsed;
+    if (remaining <= 0) { fail('timeout', '地图生成已用完计算预算，请重试或调整禁用设施。'); return; }
     try {
       current.started = Date.now();
-      budgetTimer = setTimeout(() => fail('地图生成超时，请重试或调整禁用设施。'), 45000 - current.elapsed);
-      const request = current.request;
+      timer = setTimeout(() => fail('timeout', '地图生成已用完计算预算，请重试或调整禁用设施。'), remaining);
+      const request = { ...current.request, budgetMs: Math.max(1, remaining - 200) };
       attempt.start(request, {
-        onError: reason => { if (session === current) { if (reason === 'timeout') again(); else fail(); } },
+        onError: reason => fail(reason),
         onResult: data => {
           if (session !== current) return;
           account();
-          if (!data || typeof data !== 'object' || !('status' in data)) { fail(); return; }
+          if (!data || typeof data !== 'object' || !('status' in data)) { fail('error'); return; }
           const result = data as SurvivalGenerationResult;
-          if (result.status === 'search-failed' && typeof result.error === 'string') { again(result.error); return; }
-          if (result.status !== 'success') { fail(result.error); return; }
+          if (result.status !== 'success') { fail('error', typeof result.error === 'string' ? result.error : undefined); return; }
           try {
             const c = result.challenge, spec = SURVIVAL_DIFFICULTIES[request.difficulty - 1];
-            if (!c || c.id !== request.id || c.seed !== request.seed || c.difficulty !== request.difficulty || typeof c.fingerprint !== 'string' || !spec || c.draft.level.size !== 8 || c.draft.level.pieces.length < spec.min || c.draft.level.pieces.length > spec.max || c.draft.level.pieces.some(p => request.disabled?.includes(`${p.kind}_${p.shape}`))) throw new Error('Invalid worker reply');
+            if (!c || c.id !== request.id || c.seed !== request.seed || c.difficulty !== request.difficulty || typeof c.fingerprint !== 'string' || !spec || c.draft.level.size !== 8 || c.draft.level.pieces.length < spec.min || c.draft.level.pieces.length > spec.max || c.draft.level.pieces.filter(p => p.shape !== 'single').length < spec.multi || c.draft.level.pieces.some(p => request.disabled?.includes(`${p.kind}_${p.shape}`))) throw new Error('Invalid worker reply');
             encodeMap(c.draft);
-          } catch { fail(); return; }
+          } catch { fail('error'); return; }
           cancel(); current.callbacks.onResult(result.challenge);
         },
       });
-    } catch { fail(); }
+    } catch { fail('error'); }
   }
   return {
     start(request: SurvivalGenerationRequest, callbacks: TaskCallbacks<SurvivalChallenge>) {
       if (session) return;
-      session = { request, callbacks, attempts: 0, elapsed: 0, started: null, retrying: true }; run();
+      session = { request, callbacks, elapsed: 0, started: null }; run();
     },
     cancel, isRunning: () => session !== null,
     setPaused(value: boolean) {
       paused = value;
-      if (paused) { account(); clearTimeout(retry); retry = undefined; attempt.cancel(); }
-      else if (session && !attempt.isRunning() && retry === undefined) run();
+      if (paused) { account(); attempt.cancel(); }
+      else run();
     },
   };
 }
 
-export type SurvivalGenerationRequest = { difficulty: number; seed: number; id: string; recent: string[]; disabled?: string[]; history?: MapFeatures[] };
+export type SurvivalGenerationRequest = { difficulty: number; seed: number; id: string; recent: string[]; disabled?: string[]; history?: MapFeatures[]; budgetMs?: number };
 export type SurvivalGenerationResult = { status: 'success'; challenge: SurvivalChallenge } | { status: 'search-failed' | 'error'; error: string };

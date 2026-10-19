@@ -3,6 +3,7 @@ import { useI18n } from '../../localization/LanguageContext';
 import { art } from '../../assets/art';
 import { useHeroMotion } from '../hooks/useHeroMotion';
 import { useTitleMotion } from '../hooks/useTitleMotion';
+import { TitleArtwork } from './TitleArtwork';
 
 export function GameTitle({ entering = false }: { entering?: boolean }) {
   const { language, t } = useI18n();
@@ -16,7 +17,10 @@ export function GameTitle({ entering = false }: { entering?: boolean }) {
   }}>
     <span ref={signRef} className="title-sign" data-ready={ready} data-motion={running ? 'running' : 'paused'}>
       <span ref={motionRef} className="title-interaction"><span className="title-float">
-        {failed === language ? <span className="title-fallback">{t('野格')}</span> : <img ref={imageRef} className="title-lettering" src={art.branding[language]} alt="" draggable={false} onError={() => setFailed(language)}/>}
+        {failed === language ? <span className="title-fallback">{t('野格')}</span> : <>
+          <img ref={imageRef} className="title-lettering title-hit-image" src={art.branding[language]} alt="" draggable={false} onError={() => setFailed(language)}/>
+          <TitleArtwork language={language} src={art.branding[language]} running={ready && running}/>
+        </>}
       </span></span>
     </span>
   </h1>;

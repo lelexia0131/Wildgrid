@@ -26,7 +26,7 @@ app.whenReady().then(async () => {
   const js = code => win.webContents.executeJavaScript(code);
   const wait = (ms = 100) => new Promise(resolve => setTimeout(resolve, ms));
   async function click(selector) { await js(`document.querySelector(${JSON.stringify(selector)}).click()`); await wait(); }
-  async function load() { await win.loadURL('wildgrid://game/index.html'); await wait(); }
+  async function load() { await win.loadURL(process.env.WILDGRID_TEST_URL || 'wildgrid://game/index.html'); await wait(); }
   async function modes() { await click('.menu-buttons .primary'); }
   async function local() { await load(); await modes(); await js(`[...document.querySelectorAll('.sandbox-choice')].at(-1).click()`); await wait(); }
   async function survival() { await load(); await modes(); await click('.survival-entry'); await wait(220); }
@@ -75,16 +75,38 @@ app.whenReady().then(async () => {
         const sizes = await js(`[...document.querySelectorAll('.survival-bottom button')].map(b=>{const r=b.getBoundingClientRect();return [r.width,r.height]})`);
         assert.ok(sizes.every(s=>Math.abs(s[0]-sizes[0][0])<1 && Math.abs(s[1]-sizes[0][1])<1),JSON.stringify(sizes));
         await click('.survival-disabled-button');
-        assert.equal(await js(`document.querySelectorAll('.survival-facility-grid button').length`),11);
-        const grid = await js(`(() => {const b=[...document.querySelectorAll('.survival-facility-grid button')];return {tops:b.slice(0,6).map(x=>x.getBoundingClientRect().top),overflow:b.filter(x=>x.scrollWidth>x.clientWidth+1).map(x=>x.textContent),scroll:document.querySelector('.survival-facilities').scrollHeight>document.querySelector('.survival-facilities').clientHeight+1};})()`);
-        assert.ok(grid.tops.slice(0,5).every(t=>t===grid.tops[0]) && grid.tops[5]>grid.tops[0],JSON.stringify(grid));
+        const frame = await js(`(async () => { const image=document.querySelector('.survival-facility-frame');await image.decode();const panel=image.parentElement.getBoundingClientRect(),r=image.getBoundingClientRect();return {loaded:image.naturalWidth>0,width:r.width,height:r.height,panelWidth:panel.width,panelHeight:panel.height,visible:r.top>=0 && r.left>=0 && r.bottom<=innerHeight+1 && r.right<=innerWidth+1}; })()`);
+        assert.equal(frame.loaded,true); assert.equal(frame.visible,true,JSON.stringify(frame));
+        assert.ok(frame.width>0 && Math.abs(frame.width/frame.height-4/3)<0.01 && Math.abs(frame.width-frame.panelWidth)<1 && Math.abs(frame.height-frame.panelHeight)<1,JSON.stringify(frame));
+        assert.equal(await js(`document.querySelectorAll('.survival-facility-grid button[aria-pressed]').length`),11);
+        const grid = await js(`(() => {const b=[...document.querySelectorAll('.survival-facility-grid button')];return {tops:b.slice(0,7).map(x=>x.getBoundingClientRect().top),overflow:b.filter(x=>x.scrollWidth>x.clientWidth+1).map(x=>x.textContent),scroll:document.querySelector('.survival-facilities').scrollHeight>document.querySelector('.survival-facilities').clientHeight+1};})()`);
+        assert.ok(grid.tops.slice(0,6).every(t=>t===grid.tops[0]) && grid.tops[6]>grid.tops[0],JSON.stringify(grid));
         assert.deepEqual(grid.overflow,[],`${width} ${language}: ${JSON.stringify(grid)}`);
         if (height>600) assert.equal(grid.scroll,false);
         await click('.survival-facility-grid button:first-child');
         assert.equal(await js(`document.querySelector('.survival-facility-grid button').getAttribute('aria-pressed')`),'true');
         assert.ok(await js(`getComputedStyle(document.querySelector('.is-disabled .disabled-facility-art'),'::after').backgroundColor.includes('196')`));
+        assert.ok(await js(`(() => { const art=document.querySelector('.is-disabled .disabled-facility-art > *'),style=getComputedStyle(art);return style.opacity==='0.4' && style.filter==='brightness(0.55)'; })()`));
+        assert.ok(await js(`(() => { const close=document.querySelector('.survival-facilities .modal-close'),r=close.getBoundingClientRect();return r.top>=0 && r.bottom<=innerHeight && r.left>=0 && r.right<=innerWidth && document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('.modal-close')===close; })()`));
         await capture(`toolbox-${language}-${width}x${height}`);
-        await click('.survival-facility-reset'); await click('.survival-facilities .modal-close');
+        await click('.survival-facility-reset');
+        assert.equal(await js(`document.querySelectorAll('.survival-facility-grid .is-disabled').length`),0);
+        await click('.survival-facilities .modal-close');
+        assert.equal(await js(`!!document.querySelector('.survival-facilities')`),false);
+      }
+    }
+    for (const language of ['zh','en']) {
+      await js(`const raw=JSON.parse(localStorage.getItem('wildgrid-tutorial-v1'));raw.language='${language}';localStorage.setItem('wildgrid-tutorial-v1',JSON.stringify(raw));`);
+      for (const [width,height] of [[1280,900],[390,844],[844,390],[320,640]]) {
+        await resize(width,height); await load(); await click('.menu-guide');
+        for (const [page,title] of [['disabled-facilities',language==='zh'?'禁用设施':'Disable facilities'],['difficulty',language==='zh'?'难度':'Difficulty']]) {
+          await js(`(() => { const select=document.querySelector('.notebook-heading select');select.value=[...select.options].find(option=>option.textContent.endsWith(${JSON.stringify(title)})).value;select.dispatchEvent(new Event('change',{bubbles:true})); })()`); await wait(300);
+          const state = await js(`(() => { const content=document.querySelector('.manual-content');return {page:content.dataset.page,text:content.textContent,overflow:content.scrollWidth>content.clientWidth+1,minimums:[...content.querySelectorAll('tbody tr')].map(row=>Number(row.children[2].textContent))}; })()`);
+          assert.equal(state.page,page); assert.equal(state.overflow,false,`${language} ${width}: ${JSON.stringify(state)}`);
+          if(page==='difficulty') assert.deepEqual(state.minimums,[3,3,4,4,5,5,6,7,8,9]);
+          else assert.ok(state.text.includes(language==='zh'?'右上角叉号':'upper-right cross'));
+          await capture(`manual-${page}-${language}-${width}x${height}`);
+        }
       }
     }
     // Notice is automatic, has no close icon, does not move or cover buttons.
@@ -101,7 +123,7 @@ app.whenReady().then(async () => {
     }
     await wait(4300); assert.equal(await js(`!!document.querySelector('.survival-notice')`),false);
     writeFileSync(path.join(output,'geometry.json'),JSON.stringify(states,null,2));
-    console.log('Local map layout/actions, 5-column toolbox, languages, equal buttons and automatic notice passed.');
+    console.log('Local map layout/actions, facility panel effects/reset/close, bilingual manual and difficulty limits, equal buttons and automatic notice passed.');
     clearTimeout(deadline);win.destroy();app.quit();
   } catch(error) { console.error(error); await capture('failure');clearTimeout(deadline);app.exit(1); }
 });

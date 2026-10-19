@@ -1,10 +1,9 @@
-import { campConnections, CAMP_REQUIREMENTS, evaluate, facilityConflict } from './placementRules';
-import { occupied, offsets } from './boardGeometry';
-import type { Cell, FacilityKind, Level, Piece, Placement } from './types';
+import { placementDomains } from './placementDomains';
+import type { Candidate } from './placementDomains';
+import { CAMP_REQUIREMENTS, evaluate } from './placementRules';
+import { offsets } from './boardGeometry';
+import type { Cell, FacilityKind, Level, Placement } from './types';
 
-type Candidate = { at: Placement; cells: Cell[]; mask: bigint; rows: number[]; cols: number[]; connections: { camp: bigint; gap: bigint }[]; forbidden: { kind: FacilityKind; mask: bigint }[] };
-// Shape geometry and pairwise exclusions do not change during terrain repair.
-const geometryCache = new Map<string, Omit<Candidate, 'connections'>[]>();
 export type SolverResult = { count: number; solutions: Placement[][]; terrain: number; pieces: number; occupied: number; candidates: number; rotationCandidates: number; nodes: number; branches: number; aborted: boolean; forced: number };
 
 // One domain per kind + shape. Increasing placement indices remove ID permutations.
@@ -13,49 +12,9 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
   const bits = Array.from({ length: n * n }, (_, i) => 1n << BigInt(i));
   const bit = (p: Cell) => bits[p.r * n + p.c];
   const board = Array.from({ length: n * n }, (_, i) => ({ r: Math.floor(i / n), c: i % n }));
-  const kinds: FacilityKind[] = ['camp', 'fire', 'tower', 'picnic', 'cabin', 'foodTruck', 'powerTower', 'pool'];
-  const groups: { piece: Piece; ids: string[]; domain: Candidate[] }[] = [];
+  const groups = placementDomains(level);
   const stats: SolverResult = { count: 0, solutions: [], terrain: level.terrain.length, pieces: level.pieces.length, occupied: 0, candidates: 0, rotationCandidates: 0, nodes: 0, branches: 0, aborted: false, forced: 0 };
-  for (const piece of level.pieces) {
-    stats.occupied += offsets(piece.shape, 0).length;
-    const group = groups.find(g => g.piece.kind === piece.kind && g.piece.shape === piece.shape);
-    if (group) { group.ids.push(piece.id); continue; }
-    const domain: Candidate[] = [], seen = new Set<string>();
-    const cacheKey = `${n}/${piece.kind}/${piece.shape}`;
-    let geometry = geometryCache.get(cacheKey);
-    if (!geometry) {
-      geometry = [];
-      for (let rotation = 0; rotation < 4; rotation++) {
-        const signature = offsets(piece.shape, rotation).map(p => `${p.r},${p.c}`).sort().join(';');
-        if (seen.has(signature)) continue;
-        seen.add(signature);
-        for (const origin of board) {
-          const at = { ...origin, id: piece.id, rotation }, cells = occupied(piece, at);
-          if (cells.some(p => p.r < 0 || p.c < 0 || p.r >= n || p.c >= n)) continue;
-          const rows = Array<number>(n).fill(0), cols = Array<number>(n).fill(0);
-          for (const p of cells) { rows[p.r]++; cols[p.c]++; }
-          const mask = cells.reduce((m, p) => m | bit(p), 0n);
-          const forbidden: Candidate['forbidden'] = [];
-          for (const kind of kinds) {
-            const banned = board.filter(p => facilityConflict(piece.kind, cells, kind, [p])).reduce((m, p) => m | bit(p), 0n);
-            if (banned) forbidden.push({ kind, mask: banned });
-          }
-          geometry.push({ at, cells, mask, rows, cols, forbidden });
-        }
-      }
-      geometryCache.set(cacheKey, geometry);
-    }
-    const terrainMask = level.terrain.reduce((mask, p) => mask | bit(p), 0n);
-    for (const position of geometry) {
-      if (position.mask & terrainMask || position.rows.some((v, i) => v > level.rows[i]) || position.cols.some((v, i) => v > level.cols[i])) continue;
-      const at = { ...position.at, id: piece.id };
-      // Keep the actual gameplay evaluator as the authority for static rules.
-      if (evaluate({ ...level, pieces: [piece] }, [at], { staticOnly: true }).status === 'INVALID') continue;
-      const connections = campConnections(piece.kind, position.cells, board, level.terrain).map(link => ({ camp: bit(link.camp), gap: link.gap ? bit(link.gap) : 0n }));
-      domain.push({ ...position, at, connections });
-    }
-    groups.push({ piece, ids: [piece.id], domain });
-  }
+  stats.occupied = level.pieces.reduce((sum, p) => sum + offsets(p.shape, 0).length, 0);
   stats.candidates = groups.reduce((s, g) => s + g.domain.length * g.ids.length, 0);
   stats.rotationCandidates = groups.reduce((s, g) => s + g.domain.filter(p => p.at.rotation !== 0).length * g.ids.length, 0);
   stats.forced = groups.reduce((s, g) => s + (g.domain.length === g.ids.length ? g.ids.length : 0), 0);

@@ -1,6 +1,6 @@
 # Wildgrid（野格）实际架构
 
-更新日期：2026-10-18（Asia/Shanghai）。本文描述第二阶段修改后的实际代码。第一阶段历史审计保留在 `reports/engine-*.md`；本轮新旧路径、清理依据和验证见 [第二阶段迁移报告](reports/phase2-migration.md) 与 [验证记录](reports/phase2-validation.json)。
+更新日期：2026-10-19（Asia/Shanghai）。本文描述第二阶段修改后的实际代码。回归测试与引擎校验仍使用的历史基线保存在 `tests/fixtures/`。
 
 ## 目录与入口
 
@@ -64,9 +64,9 @@ Wildgrid/
 ├── server/                            既有玩家ID服务与部署说明；本轮不修改
 ├── scripts/                           构建、关卡创作、校验及部署维护入口
 ├── tests/                             规则、模式、存档、边界、Worker和既有UI测试
-├── reports/                           历史证据、本轮映射与可复现基线
-├── release/                           忽略的发布/恢复历史；保留
-├── .desktop-smoke/                    忽略的维护脚本、截图和测试产物；保留
+├── tests/fixtures/                    回归测试与引擎校验使用的历史基线
+├── release/                           忽略的当前版本发布产物与存档恢复备份
+├── .desktop-smoke/                    忽略的截图、测试产物和图片审计清单
 └── 根配置                             Vite、TypeScript、Electron、Capacitor与npm入口
 ```
 
@@ -334,6 +334,6 @@ const { placements, result } = getState(session); // 不得原地修改placement
 
 `tests/engine-boundaries.test.ts`检查全部src层级、外部依赖、核心私有路径、静态/动态导入、require、Worker URL、UI创建Worker和模块循环。`tests/engine.test.ts`保留命令/历史测试，并用TypeScript预期错误验证嵌套只读契约。`tests/worker-tasks.test.ts`覆盖取消、迟到/重复结果、错误、postMessage失败和原25秒超时。
 
-`node --import tsx scripts/check-engine-preservation.ts`使用源码修改前记录的 `reports/phase2-engine-baseline.json`，比较45关完整Solver输出摘要、779次规则判定与45个WG1字节摘要。第12/14/15关在基线即有多个解；第16–45关要求并保持唯一解。没有通过修改关卡或规则消除这些基线特征。
+`node --import tsx scripts/check-engine-preservation.ts`使用源码修改前记录的 `tests/fixtures/phase2-engine-baseline.json`，比较45关完整Solver输出摘要、779次规则判定与45个WG1字节摘要。第12/14/15关在基线即有多个解；第16–45关要求并保持唯一解。没有通过修改关卡或规则消除这些基线特征。
 
-全量测试的4项既有失败、最高难度生成超时、Vite原大chunk提示和无法完成的平台/UI验证须按本轮验证报告阅读；构建通过不等于Windows安装/升级、Android真机或真实身份服务已验证。本轮未部署、未修改服务器/玩家数据，未执行Git提交/推送/reset/clean。
+运行 `npm test`、`npm run build` 和相关UI或平台测试获取当前验证结果；历史报告不能代表当前源码状态。构建通过不等于Windows安装/升级、Android真机或真实身份服务已验证。

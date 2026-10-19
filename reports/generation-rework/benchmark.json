@@ -1,0 +1,2677 @@
+{
+  "platform": "win32",
+  "node": "v24.19.0",
+  "seeds": [
+    20261019,
+    20261020
+  ],
+  "records": [
+    {
+      "difficulty": 1,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 40,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "camp_single",
+        "tower_single",
+        "tower_single"
+      ],
+      "metrics": {
+        "score": 1.6800000000000002,
+        "density": 0.0625,
+        "facilityDensity": 0.0625,
+        "candidates": 2.5,
+        "dependencies": 0,
+        "forced": 0.5,
+        "nodes": 7,
+        "branches": 2,
+        "logic": {
+          "solved": true,
+          "rounds": 2,
+          "deductions": 1,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 1,
+          "relationships": 1,
+          "initialForced": 2
+        }
+      },
+      "elapsed": 40,
+      "attempts": 8,
+      "proofs": 1,
+      "logicChecks": 3,
+      "failures": {
+        "logic stalled": 2,
+        "layout quality": 5
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.875,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 34,
+        "effectiveGrass": 33,
+        "fragmentation": 0,
+        "concentration": 0.4230769230769231,
+        "maxSameKind": 2,
+        "maxLine": 2,
+        "quadrants": [
+          2,
+          1,
+          1,
+          0
+        ],
+        "linked": 0,
+        "dependencies": 0,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNyw1XSxbIndhdGVyIiw2LDVdLFsid2F0ZXIiLDUsNV0sWyJ3YXRlciIsNCw1XSxbIndhdGVyIiwzLDVdLFsid2F0ZXIiLDIsNV0sWyJ3YXRlciIsMSw1XSxbIndhdGVyIiwxLDRdLFsid2F0ZXIiLDAsNF0sWyJmb3Jlc3QiLDMsNl0sWyJmb3Jlc3QiLDMsN10sWyJmb3Jlc3QiLDIsN10sWyJmb3Jlc3QiLDIsNl0sWyJmb3Jlc3QiLDEsNl0sWyJmb3Jlc3QiLDQsNl0sWyJmb3Jlc3QiLDQsN10sWyJtb3VudGFpbiIsNCw0XSxbIm1vdW50YWluIiw0LDNdLFsibW91bnRhaW4iLDQsMl0sWyJtb3VudGFpbiIsNCwxXSxbIm1vdW50YWluIiwzLDJdLFsibW91bnRhaW4iLDMsNF0sWyJtb3VudGFpbiIsNSwzXSxbIm1vdW50YWluIiw1LDFdLFsibW91bnRhaW4iLDIsMl0sWyJtb3VudGFpbiIsNSw0XV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiwxLDMsMF0sWyJjYW1wX3NpbmdsZSIsIndpbGQtMSIsMiw0LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0yIiwyLDMsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTMiLDUsMCwwXV0sInIiOlswLDEsMiwwLDAsMSwwLDBdLCJjIjpbMSwwLDAsMiwxLDAsMCwwXX0",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 1,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 28,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "tower_single",
+        "foodTruck_single",
+        "camp_single",
+        "tower_single"
+      ],
+      "metrics": {
+        "score": 3.1100000000000003,
+        "density": 0.078125,
+        "facilityDensity": 0.078125,
+        "candidates": 4.4,
+        "dependencies": 0.2,
+        "forced": 0,
+        "nodes": 16,
+        "branches": 4,
+        "logic": {
+          "solved": true,
+          "rounds": 4,
+          "deductions": 10,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 4,
+          "relationships": 2,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 28,
+      "attempts": 22,
+      "proofs": 1,
+      "logicChecks": 5,
+      "failures": {
+        "layout quality": 17,
+        "logic stalled": 3,
+        "too immediate": 1
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.8,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 33,
+        "effectiveGrass": 32,
+        "fragmentation": 0,
+        "concentration": 0.5,
+        "maxSameKind": 2,
+        "maxLine": 2,
+        "quadrants": [
+          2,
+          1,
+          1,
+          1
+        ],
+        "linked": 1,
+        "dependencies": 1,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNCwwXSxbIndhdGVyIiw0LDFdLFsid2F0ZXIiLDUsMl0sWyJ3YXRlciIsNCwyXSxbIndhdGVyIiw1LDNdLFsid2F0ZXIiLDUsNF0sWyJ3YXRlciIsNSw1XSxbIndhdGVyIiw1LDZdLFsid2F0ZXIiLDUsN10sWyJmb3Jlc3QiLDYsNF0sWyJmb3Jlc3QiLDcsNF0sWyJmb3Jlc3QiLDYsM10sWyJmb3Jlc3QiLDcsNV0sWyJmb3Jlc3QiLDYsNV0sWyJmb3Jlc3QiLDcsNl0sWyJmb3Jlc3QiLDcsN10sWyJmb3Jlc3QiLDYsNl0sWyJtb3VudGFpbiIsNCw1XSxbIm1vdW50YWluIiwzLDVdLFsibW91bnRhaW4iLDIsNV0sWyJtb3VudGFpbiIsMSw1XSxbIm1vdW50YWluIiwyLDRdLFsibW91bnRhaW4iLDEsNl0sWyJtb3VudGFpbiIsMSw3XSxbIm1vdW50YWluIiwzLDZdLFsibW91bnRhaW4iLDQsNl1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNCwzLDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xIiw0LDQsMF0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC0yIiwyLDMsMF0sWyJjYW1wX3NpbmdsZSIsIndpbGQtMyIsMywwLDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC00IiwyLDYsMF1dLCJyIjpbMCwwLDIsMSwyLDAsMCwwXSwiYyI6WzEsMCwwLDIsMSwwLDEsMF19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 2,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 9,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "camp_long",
+        "foodTruck_single",
+        "tower_single",
+        "tower_single",
+        "foodTruck_single"
+      ],
+      "metrics": {
+        "score": 2.8200000000000003,
+        "density": 0.125,
+        "facilityDensity": 0.09375,
+        "candidates": 7.5,
+        "dependencies": 0.3333333333333333,
+        "forced": 0.16666666666666666,
+        "nodes": 10,
+        "branches": 2,
+        "logic": {
+          "solved": true,
+          "rounds": 3,
+          "deductions": 18,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 3,
+          "relationships": 4,
+          "initialForced": 1
+        }
+      },
+      "elapsed": 8,
+      "attempts": 3,
+      "proofs": 1,
+      "logicChecks": 3,
+      "failures": {
+        "logic stalled": 2
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.6666666666666666,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 30,
+        "effectiveGrass": 29,
+        "fragmentation": 0,
+        "concentration": 0.4230769230769231,
+        "maxSameKind": 2,
+        "maxLine": 4,
+        "quadrants": [
+          1,
+          1,
+          2,
+          4
+        ],
+        "linked": 2,
+        "dependencies": 2,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMiw3XSxbIndhdGVyIiwyLDZdLFsid2F0ZXIiLDIsNV0sWyJ3YXRlciIsMiw0XSxbIndhdGVyIiwyLDNdLFsid2F0ZXIiLDIsMl0sWyJ3YXRlciIsMiwxXSxbIndhdGVyIiwyLDBdLFsiZm9yZXN0IiwxLDJdLFsiZm9yZXN0IiwwLDJdLFsiZm9yZXN0IiwwLDNdLFsiZm9yZXN0IiwxLDNdLFsiZm9yZXN0IiwxLDRdLFsiZm9yZXN0IiwxLDFdLFsiZm9yZXN0IiwxLDVdLFsiZm9yZXN0IiwxLDBdLFsibW91bnRhaW4iLDMsNF0sWyJtb3VudGFpbiIsNCw0XSxbIm1vdW50YWluIiw1LDRdLFsibW91bnRhaW4iLDYsNF0sWyJtb3VudGFpbiIsMyw1XSxbIm1vdW50YWluIiw1LDNdLFsibW91bnRhaW4iLDUsMl0sWyJtb3VudGFpbiIsNiwyXSxbIndhdGVyIiwzLDNdLFsibW91bnRhaW4iLDQsM11dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsMywwLDBdLFsiY2FtcF9sb25nIiwid2lsZC0xIiwzLDYsMV0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC0yIiw3LDYsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTMiLDUsNSwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNCIsNiwzLDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtNSIsNSwwLDBdXSwiciI6WzAsMCwwLDIsMSwzLDEsMV0sImMiOlsyLDAsMCwxLDAsMSw0LDBdfQ",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 2,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 8,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "picnic_domino",
+        "camp_single",
+        "foodTruck_single",
+        "tower_single",
+        "tower_single"
+      ],
+      "metrics": {
+        "score": 2.58,
+        "density": 0.109375,
+        "facilityDensity": 0.09375,
+        "candidates": 5.333333333333333,
+        "dependencies": 0.3333333333333333,
+        "forced": 0,
+        "nodes": 18,
+        "branches": 4,
+        "logic": {
+          "solved": true,
+          "rounds": 3,
+          "deductions": 18,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 3,
+          "relationships": 2,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 8,
+      "attempts": 4,
+      "proofs": 1,
+      "logicChecks": 4,
+      "failures": {
+        "logic stalled": 3
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.7,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 31,
+        "effectiveGrass": 29,
+        "fragmentation": 0,
+        "concentration": 0.46153846153846156,
+        "maxSameKind": 2,
+        "maxLine": 2,
+        "quadrants": [
+          1,
+          1,
+          3,
+          2
+        ],
+        "linked": 2,
+        "dependencies": 2,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNSwwXSxbIndhdGVyIiw1LDFdLFsid2F0ZXIiLDQsMV0sWyJ3YXRlciIsNSwyXSxbIndhdGVyIiw0LDJdLFsid2F0ZXIiLDUsM10sWyJ3YXRlciIsNSw0XSxbIndhdGVyIiw1LDVdLFsid2F0ZXIiLDUsNl0sWyJ3YXRlciIsNSw3XSxbImZvcmVzdCIsNiw1XSxbImZvcmVzdCIsNyw1XSxbImZvcmVzdCIsNiw2XSxbImZvcmVzdCIsNyw2XSxbImZvcmVzdCIsNyw0XSxbImZvcmVzdCIsNywzXSxbImZvcmVzdCIsNiw3XSxbIm1vdW50YWluIiw0LDRdLFsibW91bnRhaW4iLDMsNF0sWyJtb3VudGFpbiIsMiw0XSxbIm1vdW50YWluIiwxLDRdLFsibW91bnRhaW4iLDQsM10sWyJtb3VudGFpbiIsMSwzXSxbIm1vdW50YWluIiw0LDVdLFsibW91bnRhaW4iLDEsMl0sWyJtb3VudGFpbiIsMiwzXV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiw2LDMsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0xIiw2LDIsMV0sWyJjYW1wX3NpbmdsZSIsIndpbGQtMiIsNCw3LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMyIsMiw3LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC00Iiw0LDYsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTUiLDAsMywwXV0sInIiOlsxLDAsMSwwLDIsMCwyLDFdLCJjIjpbMCwwLDIsMiwwLDAsMSwyXX0",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 3,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 64,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "cabin_el",
+        "cabin_el",
+        "camp_single",
+        "fire_single",
+        "tower_single",
+        "tower_single",
+        "powerTower_single"
+      ],
+      "metrics": {
+        "score": 4.28,
+        "density": 0.1875,
+        "facilityDensity": 0.125,
+        "candidates": 10.5,
+        "dependencies": 0.125,
+        "forced": 0.25,
+        "nodes": 83,
+        "branches": 17,
+        "logic": {
+          "solved": true,
+          "rounds": 6,
+          "deductions": 59,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 5,
+          "relationships": 5,
+          "initialForced": 2
+        }
+      },
+      "elapsed": 64,
+      "attempts": 22,
+      "proofs": 1,
+      "logicChecks": 22,
+      "failures": {
+        "logic stalled": 21
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 1,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.6666666666666666,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 26,
+        "effectiveGrass": 25,
+        "fragmentation": 0,
+        "concentration": 0.38461538461538464,
+        "maxSameKind": 2,
+        "maxLine": 3,
+        "quadrants": [
+          6,
+          0,
+          2,
+          4
+        ],
+        "linked": 1,
+        "dependencies": 1,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNCw3XSxbIndhdGVyIiw0LDZdLFsid2F0ZXIiLDQsNV0sWyJ3YXRlciIsNCw0XSxbIndhdGVyIiw0LDNdLFsid2F0ZXIiLDQsMl0sWyJ3YXRlciIsNCwxXSxbIndhdGVyIiw0LDBdLFsiZm9yZXN0IiwzLDRdLFsiZm9yZXN0IiwyLDRdLFsiZm9yZXN0IiwxLDRdLFsiZm9yZXN0IiwwLDRdLFsiZm9yZXN0IiwzLDNdLFsiZm9yZXN0IiwxLDVdLFsiZm9yZXN0IiwwLDNdLFsiZm9yZXN0IiwwLDVdLFsiZm9yZXN0IiwzLDJdLFsibW91bnRhaW4iLDUsMl0sWyJtb3VudGFpbiIsNiwyXSxbIm1vdW50YWluIiw2LDNdLFsibW91bnRhaW4iLDUsM10sWyJtb3VudGFpbiIsNSwxXSxbIm1vdW50YWluIiw1LDRdLFsibW91bnRhaW4iLDUsNV0sWyJtb3VudGFpbiIsNSwwXSxbImZvcmVzdCIsMSw2XV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiw1LDYsMF0sWyJjYWJpbl9lbCIsIndpbGQtMSIsMCwyLDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTIiLDEsMSwwXSxbImNhbXBfc2luZ2xlIiwid2lsZC0zIiw1LDcsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtNCIsNiw2LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC01Iiw3LDMsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTYiLDYsNSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC03Iiw3LDAsMF1dLCJyIjpbMSwzLDIsMCwwLDIsMiwyXSwiYyI6WzEsMiwzLDIsMCwxLDIsMV19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 3,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 12,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "cabin_el",
+        "picnic_domino",
+        "tower_single",
+        "tower_single",
+        "tower_single",
+        "camp_single",
+        "camp_single"
+      ],
+      "metrics": {
+        "score": 2.95,
+        "density": 0.171875,
+        "facilityDensity": 0.125,
+        "candidates": 6.75,
+        "dependencies": 0.125,
+        "forced": 0.125,
+        "nodes": 25,
+        "branches": 6,
+        "logic": {
+          "solved": true,
+          "rounds": 3,
+          "deductions": 22,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 4,
+          "relationships": 3,
+          "initialForced": 1
+        }
+      },
+      "elapsed": 12,
+      "attempts": 5,
+      "proofs": 1,
+      "logicChecks": 5,
+      "failures": {
+        "logic stalled": 4
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.7777777777777778,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.5,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 27,
+        "effectiveGrass": 26,
+        "fragmentation": 0,
+        "concentration": 0.4230769230769231,
+        "maxSameKind": 3,
+        "maxLine": 3,
+        "quadrants": [
+          2,
+          2,
+          4,
+          3
+        ],
+        "linked": 1,
+        "dependencies": 1,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNywzXSxbIndhdGVyIiw2LDNdLFsid2F0ZXIiLDUsM10sWyJ3YXRlciIsNCwzXSxbIndhdGVyIiwzLDJdLFsid2F0ZXIiLDMsM10sWyJ3YXRlciIsMiwyXSxbIndhdGVyIiwxLDJdLFsid2F0ZXIiLDAsMl0sWyJmb3Jlc3QiLDQsMl0sWyJmb3Jlc3QiLDQsMV0sWyJmb3Jlc3QiLDQsMF0sWyJmb3Jlc3QiLDUsMV0sWyJmb3Jlc3QiLDUsMl0sWyJmb3Jlc3QiLDYsMV0sWyJmb3Jlc3QiLDYsMl0sWyJtb3VudGFpbiIsMyw0XSxbIm1vdW50YWluIiwzLDVdLFsibW91bnRhaW4iLDMsNl0sWyJtb3VudGFpbiIsNCw2XSxbIm1vdW50YWluIiw0LDRdLFsibW91bnRhaW4iLDUsNl0sWyJtb3VudGFpbiIsMiw0XSxbIm1vdW50YWluIiw0LDVdLFsibW91bnRhaW4iLDIsM10sWyJtb3VudGFpbiIsMSw0XV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiwwLDMsMF0sWyJjYWJpbl9lbCIsIndpbGQtMSIsNiwwLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMiIsMCw0LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0zIiw2LDYsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTQiLDQsNywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNSIsMSwzLDBdLFsiY2FtcF9zaW5nbGUiLCJ3aWxkLTYiLDcsMiwwXSxbImNhbXBfc2luZ2xlIiwid2lsZC03Iiw2LDQsMF1dLCJyIjpbMywxLDAsMCwxLDAsMywzXSwiYyI6WzIsMSwxLDIsMiwxLDEsMV19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 4,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 96,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "picnic_domino",
+        "cabin_el",
+        "tower_single",
+        "camp_single",
+        "foodTruck_single",
+        "pool_single",
+        "foodTruck_single",
+        "tower_single",
+        "camp_single"
+      ],
+      "metrics": {
+        "score": 5.6499999999999995,
+        "density": 0.203125,
+        "facilityDensity": 0.15625,
+        "candidates": 11,
+        "dependencies": 0.4,
+        "forced": 0.1,
+        "nodes": 52,
+        "branches": 21,
+        "logic": {
+          "solved": true,
+          "rounds": 7,
+          "deductions": 50,
+          "assumptions": 3,
+          "maxDepth": 1,
+          "techniques": 6,
+          "relationships": 7,
+          "initialForced": 1
+        }
+      },
+      "elapsed": 97,
+      "attempts": 23,
+      "proofs": 1,
+      "logicChecks": 23,
+      "failures": {
+        "logic stalled": 22
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.9,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.7777777777777778,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 25,
+        "effectiveGrass": 23,
+        "fragmentation": 0,
+        "concentration": 0.38461538461538464,
+        "maxSameKind": 3,
+        "maxLine": 3,
+        "quadrants": [
+          1,
+          2,
+          6,
+          4
+        ],
+        "linked": 4,
+        "dependencies": 4,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNSwwXSxbIndhdGVyIiw1LDFdLFsid2F0ZXIiLDUsMl0sWyJ3YXRlciIsNSwzXSxbIndhdGVyIiw1LDRdLFsid2F0ZXIiLDQsNF0sWyJ3YXRlciIsNCw1XSxbIndhdGVyIiw0LDZdLFsid2F0ZXIiLDQsN10sWyJmb3Jlc3QiLDYsNF0sWyJmb3Jlc3QiLDcsNF0sWyJmb3Jlc3QiLDcsNV0sWyJmb3Jlc3QiLDcsM10sWyJmb3Jlc3QiLDYsM10sWyJmb3Jlc3QiLDYsMl0sWyJmb3Jlc3QiLDcsMl0sWyJmb3Jlc3QiLDcsMV0sWyJmb3Jlc3QiLDYsNV0sWyJtb3VudGFpbiIsMyw1XSxbIm1vdW50YWluIiwyLDVdLFsibW91bnRhaW4iLDEsNV0sWyJtb3VudGFpbiIsMSw2XSxbIm1vdW50YWluIiwzLDZdLFsibW91bnRhaW4iLDEsNF0sWyJtb3VudGFpbiIsMyw0XSxbIndhdGVyIiw1LDZdXSwiZiI6W1siY2FtcF9zaW5nbGUiLCJ3aWxkLTAiLDYsMSwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEiLDYsMCwxXSxbImNhYmluX2VsIiwid2lsZC0yIiw2LDYsM10sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTMiLDEsNywwXSxbImNhbXBfc2luZ2xlIiwid2lsZC00Iiw0LDEsMF0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC01IiwyLDEsMF0sWyJwb29sX3NpbmdsZSIsIndpbGQtNiIsNCwwLDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtNyIsNCwzLDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC04IiwwLDUsMF0sWyJjYW1wX3NpbmdsZSIsIndpbGQtOSIsNSw1LDBdXSwiciI6WzEsMSwxLDAsMywxLDMsM10sImMiOlszLDMsMCwxLDAsMiwxLDNdfQ",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 4,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 61,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "camp_domino",
+        "cabin_el",
+        "tower_single",
+        "fire_single",
+        "foodTruck_single",
+        "tower_single",
+        "tower_single",
+        "foodTruck_single"
+      ],
+      "metrics": {
+        "score": 4.2,
+        "density": 0.1875,
+        "facilityDensity": 0.140625,
+        "candidates": 8,
+        "dependencies": 0.3333333333333333,
+        "forced": 0,
+        "nodes": 20,
+        "branches": 7,
+        "logic": {
+          "solved": true,
+          "rounds": 4,
+          "deductions": 37,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 5,
+          "relationships": 9,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 62,
+      "attempts": 15,
+      "proofs": 1,
+      "logicChecks": 15,
+      "failures": {
+        "logic stalled": 14
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.9,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 26,
+        "effectiveGrass": 24,
+        "fragmentation": 0,
+        "concentration": 0.34615384615384615,
+        "maxSameKind": 3,
+        "maxLine": 4,
+        "quadrants": [
+          8,
+          3,
+          1,
+          0
+        ],
+        "linked": 3,
+        "dependencies": 3,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNyw0XSxbIndhdGVyIiw2LDRdLFsid2F0ZXIiLDUsNF0sWyJ3YXRlciIsNSwzXSxbIndhdGVyIiw0LDNdLFsid2F0ZXIiLDMsM10sWyJ3YXRlciIsMiwzXSxbIndhdGVyIiwxLDNdLFsid2F0ZXIiLDAsM10sWyJmb3Jlc3QiLDMsNF0sWyJmb3Jlc3QiLDMsNV0sWyJmb3Jlc3QiLDMsNl0sWyJmb3Jlc3QiLDMsN10sWyJmb3Jlc3QiLDQsN10sWyJmb3Jlc3QiLDIsN10sWyJmb3Jlc3QiLDEsN10sWyJtb3VudGFpbiIsNCwyXSxbIm1vdW50YWluIiw0LDFdLFsibW91bnRhaW4iLDUsMl0sWyJtb3VudGFpbiIsNiwyXSxbIm1vdW50YWluIiwzLDJdLFsibW91bnRhaW4iLDYsMV0sWyJtb3VudGFpbiIsNywxXSxbIm1vdW50YWluIiw3LDJdLFsibW91bnRhaW4iLDMsMV0sWyJmb3Jlc3QiLDEsNl1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsMSwyLDBdLFsiY2FtcF9kb21pbm8iLCJ3aWxkLTEiLDAsMSwwXSxbImNhYmluX2VsIiwid2lsZC0yIiwxLDUsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTMiLDIsMiwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC00IiwwLDAsMF0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC01IiwxLDAsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTYiLDcsMCwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNyIsMywwLDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtOCIsMiwxLDBdXSwiciI6WzMsMyw0LDEsMCwwLDAsMV0sImMiOls0LDIsMywwLDAsMiwxLDBdfQ",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 5,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 31,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "cabin_el",
+        "camp_el",
+        "camp_long",
+        "powerTower_single",
+        "tower_single",
+        "foodTruck_single",
+        "fire_single",
+        "tower_single",
+        "foodTruck_single",
+        "tower_single"
+      ],
+      "metrics": {
+        "score": 4.470000000000001,
+        "density": 0.265625,
+        "facilityDensity": 0.171875,
+        "candidates": 17.818181818181817,
+        "dependencies": 0.2727272727272727,
+        "forced": 0.09090909090909091,
+        "nodes": 55,
+        "branches": 13,
+        "logic": {
+          "solved": true,
+          "rounds": 5,
+          "deductions": 132,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 4,
+          "relationships": 11,
+          "initialForced": 1
+        }
+      },
+      "elapsed": 31,
+      "attempts": 8,
+      "proofs": 1,
+      "logicChecks": 8,
+      "failures": {
+        "logic stalled": 7
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.4166666666666667,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.75,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.7777777777777778,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 21,
+        "effectiveGrass": 17,
+        "fragmentation": 0,
+        "concentration": 0.4230769230769231,
+        "maxSameKind": 3,
+        "maxLine": 6,
+        "quadrants": [
+          2,
+          6,
+          4,
+          5
+        ],
+        "linked": 3,
+        "dependencies": 3,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNSw3XSxbIndhdGVyIiw1LDZdLFsid2F0ZXIiLDUsNV0sWyJ3YXRlciIsNCw1XSxbIndhdGVyIiw0LDRdLFsid2F0ZXIiLDQsM10sWyJ3YXRlciIsNCwyXSxbIndhdGVyIiw0LDFdLFsid2F0ZXIiLDQsMF0sWyJmb3Jlc3QiLDUsM10sWyJmb3Jlc3QiLDYsM10sWyJmb3Jlc3QiLDcsM10sWyJmb3Jlc3QiLDUsNF0sWyJmb3Jlc3QiLDcsNF0sWyJmb3Jlc3QiLDUsMl0sWyJmb3Jlc3QiLDcsMl0sWyJmb3Jlc3QiLDYsMl0sWyJmb3Jlc3QiLDcsMV0sWyJtb3VudGFpbiIsMywzXSxbIm1vdW50YWluIiwyLDNdLFsibW91bnRhaW4iLDEsM10sWyJtb3VudGFpbiIsMywyXSxbIm1vdW50YWluIiwyLDRdLFsibW91bnRhaW4iLDEsNF0sWyJtb3VudGFpbiIsMSwyXSxbIndhdGVyIiwzLDVdXSwiZiI6W1siY2FtcF9zaW5nbGUiLCJ3aWxkLTAiLDUsMSwwXSxbImNhYmluX2VsIiwid2lsZC0xIiw2LDAsMV0sWyJjYW1wX2VsIiwid2lsZC0yIiwzLDYsMV0sWyJjYW1wX2xvbmciLCJ3aWxkLTMiLDYsNCwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC00IiwwLDYsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTUiLDAsMiwwXSxbImZvb2RUcnVja19zaW5nbGUiLCJ3aWxkLTYiLDEsNiwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC03Iiw3LDYsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTgiLDIsMiwwXSxbImZvb2RUcnVja19zaW5nbGUiLCJ3aWxkLTkiLDEsNywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTAiLDMsNCwwXV0sInIiOlsyLDIsMSwzLDEsMSw1LDJdLCJjIjpbMiwyLDIsMCwyLDEsNiwyXX0",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 5,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 189,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "cabin_el",
+        "cabin_el",
+        "picnic_domino",
+        "pool_single",
+        "tower_single",
+        "tower_single",
+        "tower_single",
+        "camp_single",
+        "camp_single",
+        "camp_single",
+        "fire_single"
+      ],
+      "metrics": {
+        "score": 5.109999999999999,
+        "density": 0.265625,
+        "facilityDensity": 0.1875,
+        "candidates": 10.083333333333334,
+        "dependencies": 0.25,
+        "forced": 0,
+        "nodes": 1061,
+        "branches": 322,
+        "logic": {
+          "solved": true,
+          "rounds": 7,
+          "deductions": 62,
+          "assumptions": 2,
+          "maxDepth": 1,
+          "techniques": 6,
+          "relationships": 5,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 189,
+      "attempts": 45,
+      "proofs": 1,
+      "logicChecks": 45,
+      "failures": {
+        "logic stalled": 44
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.4166666666666667,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5833333333333334,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.5,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 21,
+        "effectiveGrass": 19,
+        "fragmentation": 0,
+        "concentration": 0.34615384615384615,
+        "maxSameKind": 4,
+        "maxLine": 4,
+        "quadrants": [
+          2,
+          8,
+          5,
+          2
+        ],
+        "linked": 3,
+        "dependencies": 3,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNCw3XSxbIndhdGVyIiw0LDZdLFsid2F0ZXIiLDQsNV0sWyJ3YXRlciIsMyw0XSxbIndhdGVyIiw0LDRdLFsid2F0ZXIiLDMsM10sWyJ3YXRlciIsMiwyXSxbIndhdGVyIiwzLDJdLFsid2F0ZXIiLDIsMV0sWyJ3YXRlciIsMiwwXSxbImZvcmVzdCIsMiwzXSxbImZvcmVzdCIsMSwzXSxbImZvcmVzdCIsMCwzXSxbImZvcmVzdCIsMCw0XSxbImZvcmVzdCIsMiw0XSxbImZvcmVzdCIsMSwyXSxbImZvcmVzdCIsMCw1XSxbIm1vdW50YWluIiw1LDRdLFsibW91bnRhaW4iLDYsNF0sWyJtb3VudGFpbiIsNSwzXSxbIm1vdW50YWluIiw1LDJdLFsibW91bnRhaW4iLDUsNV0sWyJtb3VudGFpbiIsNSw2XSxbIm1vdW50YWluIiw2LDVdLFsibW91bnRhaW4iLDQsMl0sWyJtb3VudGFpbiIsNSwxXV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiwzLDAsMF0sWyJjYWJpbl9lbCIsIndpbGQtMSIsMSw0LDJdLFsiY2FiaW5fZWwiLCJ3aWxkLTIiLDAsNiwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTMiLDQsMCwxXSxbInBvb2xfc2luZ2xlIiwid2lsZC00IiwzLDEsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTUiLDYsMywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNiIsNiwxLDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC03Iiw0LDEsMF0sWyJjYW1wX3NpbmdsZSIsIndpbGQtOCIsMyw3LDBdLFsiY2FtcF9zaW5nbGUiLCJ3aWxkLTkiLDMsNSwwXSxbImNhbXBfc2luZ2xlIiwid2lsZC0xMCIsNSw3LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTExIiw2LDcsMF1dLCJyIjpbMSw0LDEsNCwyLDIsMywwXSwiYyI6WzMsMywwLDEsMSwzLDIsNF19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 6,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 705,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "cabin_el",
+        "picnic_domino",
+        "camp_long",
+        "picnic_domino",
+        "camp_single",
+        "foodTruck_single",
+        "camp_single",
+        "foodTruck_single",
+        "tower_single",
+        "tower_single",
+        "fire_single",
+        "tower_single",
+        "camp_single"
+      ],
+      "metrics": {
+        "score": 6.24,
+        "density": 0.3125,
+        "facilityDensity": 0.21875,
+        "candidates": 16.214285714285715,
+        "dependencies": 0.35714285714285715,
+        "forced": 0.07142857142857142,
+        "nodes": 231,
+        "branches": 76,
+        "logic": {
+          "solved": true,
+          "rounds": 8,
+          "deductions": 107,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 5,
+          "relationships": 17,
+          "initialForced": 1
+        }
+      },
+      "elapsed": 705,
+      "attempts": 174,
+      "proofs": 1,
+      "logicChecks": 165,
+      "failures": {
+        "logic stalled": 164,
+        "combination layout": 8,
+        "layout quality": 1
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.8,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.6666666666666666,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 18,
+        "effectiveGrass": 15,
+        "fragmentation": 0,
+        "concentration": 0.5384615384615384,
+        "maxSameKind": 5,
+        "maxLine": 7,
+        "quadrants": [
+          2,
+          10,
+          1,
+          7
+        ],
+        "linked": 5,
+        "dependencies": 5,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNSwwXSxbIndhdGVyIiw0LDBdLFsid2F0ZXIiLDUsMV0sWyJ3YXRlciIsNSwyXSxbIndhdGVyIiw1LDNdLFsid2F0ZXIiLDUsNF0sWyJ3YXRlciIsNCw0XSxbIndhdGVyIiw0LDVdLFsid2F0ZXIiLDQsNl0sWyJ3YXRlciIsNCw3XSxbImZvcmVzdCIsNiwyXSxbImZvcmVzdCIsNywyXSxbImZvcmVzdCIsNywzXSxbImZvcmVzdCIsNywxXSxbImZvcmVzdCIsNywwXSxbImZvcmVzdCIsNyw0XSxbImZvcmVzdCIsNiwxXSxbImZvcmVzdCIsNiwwXSxbIm1vdW50YWluIiw0LDJdLFsibW91bnRhaW4iLDMsMl0sWyJtb3VudGFpbiIsMiwyXSxbIm1vdW50YWluIiwxLDJdLFsibW91bnRhaW4iLDQsM10sWyJtb3VudGFpbiIsMSwzXSxbIm1vdW50YWluIiwyLDFdLFsibW91bnRhaW4iLDMsM11dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNSw2LDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTEiLDYsNSwxXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTIiLDUsNywxXSxbImNhbXBfbG9uZyIsIndpbGQtMyIsMSw1LDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtNCIsMiw2LDFdLFsiY2FtcF9zaW5nbGUiLCJ3aWxkLTUiLDYsMywwXSxbImZvb2RUcnVja19zaW5nbGUiLCJ3aWxkLTYiLDIsMywwXSxbImNhbXBfc2luZ2xlIiwid2lsZC03Iiw1LDUsMF0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC04IiwxLDcsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTkiLDMsNCwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTAiLDEsNCwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xMSIsMCw1LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xMiIsMCwyLDBdLFsiY2FtcF9zaW5nbGUiLCJ3aWxkLTEzIiwzLDcsMF1dLCJyIjpbMiwzLDMsNCwwLDMsNCwxXSwiYyI6WzAsMCwxLDIsMiw3LDQsNF19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 6,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 738,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "cabin_el",
+        "camp_long",
+        "picnic_domino",
+        "cabin_el",
+        "camp_single",
+        "camp_single",
+        "tower_single",
+        "camp_single",
+        "powerTower_single",
+        "foodTruck_single",
+        "foodTruck_single",
+        "foodTruck_single",
+        "tower_single"
+      ],
+      "metrics": {
+        "score": 4.43,
+        "density": 0.328125,
+        "facilityDensity": 0.21875,
+        "candidates": 13,
+        "dependencies": 0.2857142857142857,
+        "forced": 0.14285714285714285,
+        "nodes": 69,
+        "branches": 19,
+        "logic": {
+          "solved": true,
+          "rounds": 4,
+          "deductions": 87,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 4,
+          "relationships": 13,
+          "initialForced": 2
+        }
+      },
+      "elapsed": 738,
+      "attempts": 172,
+      "proofs": 1,
+      "logicChecks": 166,
+      "failures": {
+        "logic stalled": 165,
+        "combination layout": 6
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.8,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 17,
+        "effectiveGrass": 16,
+        "fragmentation": 0,
+        "concentration": 0.34615384615384615,
+        "maxSameKind": 5,
+        "maxLine": 6,
+        "quadrants": [
+          5,
+          1,
+          5,
+          10
+        ],
+        "linked": 4,
+        "dependencies": 4,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMywwXSxbIndhdGVyIiwzLDFdLFsid2F0ZXIiLDMsMl0sWyJ3YXRlciIsMywzXSxbIndhdGVyIiwzLDRdLFsid2F0ZXIiLDQsNV0sWyJ3YXRlciIsMyw1XSxbIndhdGVyIiw0LDZdLFsid2F0ZXIiLDQsN10sWyJmb3Jlc3QiLDQsMl0sWyJmb3Jlc3QiLDUsMl0sWyJmb3Jlc3QiLDYsMl0sWyJmb3Jlc3QiLDcsMl0sWyJmb3Jlc3QiLDQsMV0sWyJmb3Jlc3QiLDQsM10sWyJmb3Jlc3QiLDQsNF0sWyJmb3Jlc3QiLDYsMV0sWyJtb3VudGFpbiIsMiw0XSxbIm1vdW50YWluIiwxLDRdLFsibW91bnRhaW4iLDIsM10sWyJtb3VudGFpbiIsMiw1XSxbIm1vdW50YWluIiwxLDVdLFsibW91bnRhaW4iLDIsNl0sWyJtb3VudGFpbiIsMiw3XSxbIm1vdW50YWluIiwxLDZdLFsiZm9yZXN0Iiw3LDFdXSwiZiI6W1siY2FtcF9zaW5nbGUiLCJ3aWxkLTAiLDIsMCwwXSxbImNhYmluX2VsIiwid2lsZC0xIiw1LDQsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTIiLDUsNywxXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTMiLDUsNiwxXSxbImNhYmluX2VsIiwid2lsZC00Iiw1LDAsMV0sWyJjYW1wX3NpbmdsZSIsIndpbGQtNSIsNCwwLDBdLFsiY2FtcF9zaW5nbGUiLCJ3aWxkLTYiLDIsMSwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNyIsMiwyLDBdLFsiY2FtcF9zaW5nbGUiLCJ3aWxkLTgiLDUsNSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC05Iiw3LDAsMF0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC0xMCIsMCwwLDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMTEiLDAsMSwwXSxbImZvb2RUcnVja19zaW5nbGUiLCJ3aWxkLTEyIiw3LDUsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEzIiwwLDUsMF1dLCJyIjpbMywwLDMsMCwxLDYsNSwzXSwiYyI6WzYsMywxLDAsMiw0LDIsM119",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 7,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 438,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "tower_single",
+        "picnic_domino",
+        "camp_long",
+        "cabin_el",
+        "powerTower_single",
+        "fire_single",
+        "camp_long",
+        "picnic_domino",
+        "cabin_el",
+        "powerTower_single",
+        "picnic_domino",
+        "camp_long",
+        "fire_single",
+        "camp_long"
+      ],
+      "metrics": {
+        "score": 5.35,
+        "density": 0.453125,
+        "facilityDensity": 0.21875,
+        "candidates": 19.214285714285715,
+        "dependencies": 0.35714285714285715,
+        "forced": 0,
+        "nodes": 220,
+        "branches": 56,
+        "logic": {
+          "solved": true,
+          "rounds": 6,
+          "deductions": 97,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 4,
+          "relationships": 16,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 438,
+      "attempts": 329,
+      "proofs": 1,
+      "logicChecks": 33,
+      "failures": {
+        "combination layout": 296,
+        "logic stalled": 32
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.6666666666666666,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.75,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 9,
+        "effectiveGrass": 9,
+        "fragmentation": 0,
+        "concentration": 0.4230769230769231,
+        "maxSameKind": 4,
+        "maxLine": 7,
+        "quadrants": [
+          10,
+          5,
+          13,
+          1
+        ],
+        "linked": 5,
+        "dependencies": 5,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMCw0XSxbIndhdGVyIiwxLDRdLFsid2F0ZXIiLDIsNF0sWyJ3YXRlciIsMyw0XSxbIndhdGVyIiw0LDRdLFsid2F0ZXIiLDUsNF0sWyJ3YXRlciIsNiw0XSxbIndhdGVyIiw3LDNdLFsid2F0ZXIiLDcsNF0sWyJmb3Jlc3QiLDMsM10sWyJmb3Jlc3QiLDMsMl0sWyJmb3Jlc3QiLDMsMV0sWyJmb3Jlc3QiLDMsMF0sWyJmb3Jlc3QiLDQsM10sWyJmb3Jlc3QiLDIsMV0sWyJmb3Jlc3QiLDIsM10sWyJtb3VudGFpbiIsNSw1XSxbIm1vdW50YWluIiw1LDZdLFsibW91bnRhaW4iLDYsNl0sWyJtb3VudGFpbiIsNiw1XSxbIm1vdW50YWluIiw3LDVdLFsibW91bnRhaW4iLDQsNl0sWyJtb3VudGFpbiIsMyw2XSxbIm1vdW50YWluIiw0LDVdLFsibW91bnRhaW4iLDIsNl0sWyJmb3Jlc3QiLDQsMV1dLCJmIjpbWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTAiLDcsNiwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEiLDAsNSwwXSxbImNhbXBfbG9uZyIsIndpbGQtMiIsMSw1LDFdLFsiY2FiaW5fZWwiLCJ3aWxkLTMiLDEsMCwxXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC00IiwyLDIsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtNSIsMCwwLDBdLFsiY2FtcF9sb25nIiwid2lsZC02IiwwLDEsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC03IiwxLDIsMF0sWyJjYWJpbl9lbCIsIndpbGQtOCIsNCwwLDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTkiLDQsMiwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEwIiw1LDIsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTExIiw2LDEsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTIiLDYsMCwwXSxbImNhbXBfbG9uZyIsIndpbGQtMTMiLDcsMCwwXV0sInIiOls2LDUsMywxLDIsNCw0LDRdLCJjIjpbNyw1LDcsNCwwLDQsMiwwXX0",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 7,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 170,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "tower_single",
+        "picnic_domino",
+        "tower_single",
+        "tower_single",
+        "camp_long",
+        "camp_long",
+        "cabin_el",
+        "cabin_el",
+        "fire_single",
+        "fire_single",
+        "camp_long",
+        "camp_long",
+        "picnic_domino",
+        "picnic_domino"
+      ],
+      "metrics": {
+        "score": 4.3500000000000005,
+        "density": 0.453125,
+        "facilityDensity": 0.21875,
+        "candidates": 15.642857142857142,
+        "dependencies": 0.35714285714285715,
+        "forced": 0,
+        "nodes": 190,
+        "branches": 40,
+        "logic": {
+          "solved": true,
+          "rounds": 5,
+          "deductions": 68,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 4,
+          "relationships": 10,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 170,
+      "attempts": 150,
+      "proofs": 1,
+      "logicChecks": 15,
+      "failures": {
+        "combination layout": 135,
+        "logic stalled": 14
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.4166666666666667,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5833333333333334,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.75,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 9,
+        "effectiveGrass": 8,
+        "fragmentation": 0,
+        "concentration": 0.4230769230769231,
+        "maxSameKind": 4,
+        "maxLine": 6,
+        "quadrants": [
+          7,
+          12,
+          1,
+          9
+        ],
+        "linked": 5,
+        "dependencies": 5,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMCw1XSxbIndhdGVyIiwwLDRdLFsid2F0ZXIiLDEsNF0sWyJ3YXRlciIsMSwzXSxbIndhdGVyIiwyLDNdLFsid2F0ZXIiLDMsM10sWyJ3YXRlciIsNCwzXSxbIndhdGVyIiw1LDNdLFsid2F0ZXIiLDYsM10sWyJ3YXRlciIsNywzXSxbImZvcmVzdCIsNSw0XSxbImZvcmVzdCIsNSw1XSxbImZvcmVzdCIsNSw2XSxbImZvcmVzdCIsNSw3XSxbImZvcmVzdCIsNiw0XSxbImZvcmVzdCIsNCw1XSxbImZvcmVzdCIsNCw2XSxbIm1vdW50YWluIiw0LDJdLFsibW91bnRhaW4iLDQsMV0sWyJtb3VudGFpbiIsNSwxXSxbIm1vdW50YWluIiw2LDFdLFsibW91bnRhaW4iLDYsMl0sWyJtb3VudGFpbiIsNSwyXSxbIm1vdW50YWluIiw3LDJdLFsibW91bnRhaW4iLDMsMl0sWyJtb3VudGFpbiIsMiwyXV0sImYiOltbInRvd2VyX3NpbmdsZSIsIndpbGQtMCIsMywxLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMSIsMSwxLDFdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0yIiw3LDEsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTMiLDEsMiwwXSxbImNhbXBfbG9uZyIsIndpbGQtNCIsMCwxLDBdLFsiY2FtcF9sb25nIiwid2lsZC01IiwyLDQsMV0sWyJjYWJpbl9lbCIsIndpbGQtNiIsMyw2LDJdLFsiY2FiaW5fZWwiLCJ3aWxkLTciLDIsNSwxXSxbImZpcmVfc2luZ2xlIiwid2lsZC04IiwwLDYsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtOSIsMCw3LDBdLFsiY2FtcF9sb25nIiwid2lsZC0xMCIsMSw1LDBdLFsiY2FtcF9sb25nIiwid2lsZC0xMSIsNyw0LDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMTIiLDYsNSwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEzIiw2LDcsMV1dLCJyIjpbNSw1LDQsNSwyLDAsMyw1XSwiYyI6WzAsNSwyLDEsNCw1LDYsNl19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 8,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 849,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "tower_single",
+        "picnic_domino",
+        "tower_single",
+        "picnic_domino",
+        "picnic_domino",
+        "camp_long",
+        "fire_single",
+        "fire_single",
+        "fire_single",
+        "camp_long",
+        "picnic_domino",
+        "fire_single",
+        "camp_long",
+        "fire_single",
+        "picnic_domino",
+        "cabin_el",
+        "pool_single"
+      ],
+      "metrics": {
+        "score": 8.94,
+        "density": 0.46875,
+        "facilityDensity": 0.265625,
+        "candidates": 22.294117647058822,
+        "dependencies": 0.6470588235294118,
+        "forced": 0.058823529411764705,
+        "nodes": 603,
+        "branches": 139,
+        "logic": {
+          "solved": true,
+          "rounds": 15,
+          "deductions": 68,
+          "assumptions": 18,
+          "maxDepth": 2,
+          "techniques": 5,
+          "relationships": 12,
+          "initialForced": 1
+        }
+      },
+      "elapsed": 849,
+      "attempts": 693,
+      "proofs": 1,
+      "logicChecks": 61,
+      "failures": {
+        "combination layout": 632,
+        "logic stalled": 59,
+        "reasoning tier": 1
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.4166666666666667,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 1,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.5,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 8,
+        "effectiveGrass": 8,
+        "fragmentation": 0,
+        "concentration": 0.5769230769230769,
+        "maxSameKind": 5,
+        "maxLine": 7,
+        "quadrants": [
+          13,
+          7,
+          1,
+          9
+        ],
+        "linked": 11,
+        "dependencies": 11,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMCw0XSxbIndhdGVyIiwxLDRdLFsid2F0ZXIiLDIsM10sWyJ3YXRlciIsMiw0XSxbIndhdGVyIiwzLDJdLFsid2F0ZXIiLDMsM10sWyJ3YXRlciIsNCwyXSxbIndhdGVyIiw1LDJdLFsid2F0ZXIiLDYsMl0sWyJ3YXRlciIsNywyXSxbImZvcmVzdCIsNSwxXSxbImZvcmVzdCIsNSwwXSxbImZvcmVzdCIsNiwwXSxbImZvcmVzdCIsNCwwXSxbImZvcmVzdCIsNiwxXSxbImZvcmVzdCIsNCwxXSxbImZvcmVzdCIsNywxXSxbImZvcmVzdCIsNywwXSxbIm1vdW50YWluIiw0LDNdLFsibW91bnRhaW4iLDQsNF0sWyJtb3VudGFpbiIsNCw1XSxbIm1vdW50YWluIiw0LDZdLFsibW91bnRhaW4iLDMsNV0sWyJtb3VudGFpbiIsNSwzXSxbIm1vdW50YWluIiwzLDRdLFsibW91bnRhaW4iLDYsM11dLCJmIjpbWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTAiLDUsNiwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEiLDUsNSwxXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMiIsMyw2LDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMyIsNSw0LDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtNCIsNiw2LDFdLFsiY2FtcF9sb25nIiwid2lsZC01IiwwLDUsMV0sWyJmaXJlX3NpbmdsZSIsIndpbGQtNiIsMCw2LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTciLDEsNiwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC04IiwyLDYsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTkiLDcsMywwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEwIiwwLDAsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTEiLDAsMywwXSxbImNhbXBfbG9uZyIsIndpbGQtMTIiLDAsMiwxXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xMyIsMSwzLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMTQiLDEsMCwwXSxbImNhYmluX2VsIiwid2lsZC0xNSIsMiwwLDFdLFsicG9vbF9zaW5nbGUiLCJ3aWxkLTE2IiwzLDEsMF1dLCJyIjpbNiw2LDUsMywwLDMsMyw0XSwiYyI6WzQsNCwzLDMsMyw2LDcsMF19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 8,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 19,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "picnic_domino",
+        "pool_single",
+        "camp_long",
+        "picnic_domino",
+        "picnic_domino",
+        "cabin_el",
+        "camp_long",
+        "picnic_domino",
+        "pool_single",
+        "fire_single",
+        "tower_single",
+        "camp_long",
+        "tower_single",
+        "tower_single",
+        "camp_long",
+        "fire_single"
+      ],
+      "metrics": {
+        "score": 5.96,
+        "density": 0.46875,
+        "facilityDensity": 0.25,
+        "candidates": 16.625,
+        "dependencies": 0.5,
+        "forced": 0,
+        "nodes": 360,
+        "branches": 92,
+        "logic": {
+          "solved": true,
+          "rounds": 7,
+          "deductions": 74,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 5,
+          "relationships": 24,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 18,
+      "attempts": 16,
+      "proofs": 1,
+      "logicChecks": 1,
+      "failures": {
+        "combination layout": 15
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.5333333333333333,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 8,
+        "effectiveGrass": 7,
+        "fragmentation": 0,
+        "concentration": 0.38461538461538464,
+        "maxSameKind": 4,
+        "maxLine": 6,
+        "quadrants": [
+          6,
+          13,
+          5,
+          6
+        ],
+        "linked": 8,
+        "dependencies": 8,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMywwXSxbIndhdGVyIiwzLDFdLFsid2F0ZXIiLDMsMl0sWyJ3YXRlciIsNCwyXSxbIndhdGVyIiw0LDNdLFsid2F0ZXIiLDQsNF0sWyJ3YXRlciIsNCw1XSxbIndhdGVyIiw0LDZdLFsid2F0ZXIiLDQsN10sWyJmb3Jlc3QiLDMsM10sWyJmb3Jlc3QiLDIsM10sWyJmb3Jlc3QiLDEsM10sWyJmb3Jlc3QiLDAsM10sWyJmb3Jlc3QiLDAsNF0sWyJmb3Jlc3QiLDIsMl0sWyJmb3Jlc3QiLDAsMl0sWyJmb3Jlc3QiLDMsNF0sWyJmb3Jlc3QiLDAsMV0sWyJtb3VudGFpbiIsNSwyXSxbIm1vdW50YWluIiw2LDJdLFsibW91bnRhaW4iLDUsM10sWyJtb3VudGFpbiIsNiwxXSxbIm1vdW50YWluIiw2LDNdLFsibW91bnRhaW4iLDYsNF0sWyJtb3VudGFpbiIsNiw1XSxbIm1vdW50YWluIiw3LDVdXSwiZiI6W1sicGljbmljX2RvbWlubyIsIndpbGQtMCIsMSwxLDBdLFsicG9vbF9zaW5nbGUiLCJ3aWxkLTEiLDIsMSwwXSxbImNhbXBfbG9uZyIsIndpbGQtMiIsMCwwLDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtMyIsMCw1LDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNCIsMCw3LDFdLFsiY2FiaW5fZWwiLCJ3aWxkLTUiLDEsNCwwXSxbImNhbXBfbG9uZyIsIndpbGQtNiIsMSw2LDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtNyIsMiw3LDFdLFsicG9vbF9zaW5nbGUiLCJ3aWxkLTgiLDMsNSwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC05Iiw0LDEsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEwIiw1LDEsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTExIiw0LDAsMV0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEyIiw2LDYsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEzIiw1LDQsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTE0Iiw1LDUsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTUiLDYsNywwXV0sInIiOls0LDYsNiwzLDIsNiwzLDBdLCJjIjpbNiw0LDEsMCwzLDQsNiw2XX0",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 879,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "powerTower_single",
+        "tower_single",
+        "powerTower_single",
+        "picnic_domino",
+        "camp_long",
+        "fire_single",
+        "camp_long",
+        "picnic_domino",
+        "picnic_domino",
+        "powerTower_single",
+        "picnic_domino",
+        "camp_long",
+        "picnic_domino",
+        "fire_single",
+        "fire_single",
+        "tower_single",
+        "camp_long"
+      ],
+      "metrics": {
+        "score": 8.100000000000001,
+        "density": 0.46875,
+        "facilityDensity": 0.265625,
+        "candidates": 20.823529411764707,
+        "dependencies": 0.47058823529411764,
+        "forced": 0,
+        "nodes": 282,
+        "branches": 63,
+        "logic": {
+          "solved": true,
+          "rounds": 13,
+          "deductions": 73,
+          "assumptions": 18,
+          "maxDepth": 2,
+          "techniques": 5,
+          "relationships": 13,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 879,
+      "attempts": 751,
+      "proofs": 1,
+      "logicChecks": 85,
+      "failures": {
+        "combination layout": 666,
+        "logic stalled": 84
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.4375,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.9,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 8,
+        "effectiveGrass": 8,
+        "fragmentation": 0,
+        "concentration": 0.4230769230769231,
+        "maxSameKind": 5,
+        "maxLine": 7,
+        "quadrants": [
+          13,
+          10,
+          6,
+          1
+        ],
+        "linked": 8,
+        "dependencies": 8,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNCw3XSxbIndhdGVyIiw0LDZdLFsid2F0ZXIiLDQsNV0sWyJ3YXRlciIsNCw0XSxbIndhdGVyIiwzLDNdLFsid2F0ZXIiLDQsM10sWyJ3YXRlciIsMywyXSxbIndhdGVyIiw0LDJdLFsid2F0ZXIiLDQsMV0sWyJ3YXRlciIsNCwwXSxbImZvcmVzdCIsMyw0XSxbImZvcmVzdCIsMiw0XSxbImZvcmVzdCIsMSw0XSxbImZvcmVzdCIsMCw0XSxbImZvcmVzdCIsMSw1XSxbImZvcmVzdCIsMSwzXSxbImZvcmVzdCIsMSw2XSxbIm1vdW50YWluIiw1LDVdLFsibW91bnRhaW4iLDYsNV0sWyJtb3VudGFpbiIsNiw2XSxbIm1vdW50YWluIiw1LDRdLFsibW91bnRhaW4iLDUsM10sWyJtb3VudGFpbiIsNiw0XSxbIm1vdW50YWluIiw1LDZdLFsibW91bnRhaW4iLDYsM10sWyJtb3VudGFpbiIsNiw3XV0sImYiOltbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0wIiwwLDUsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEiLDUsNywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0yIiwwLDMsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0zIiwwLDYsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTQiLDIsMSwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC01IiwzLDEsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTYiLDEsMCwxXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTciLDAsMCwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTgiLDEsMSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC05IiwwLDIsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0xMCIsMiw1LDBdLFsiY2FtcF9sb25nIiwid2lsZC0xMSIsMSw3LDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtMTIiLDMsNSwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xMyIsNiwwLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTE0Iiw2LDEsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTE1Iiw2LDIsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTE2Iiw1LDAsMF1dLCJyIjpbNyw0LDcsNSwwLDQsMywwXSwiYyI6WzYsNiw1LDIsMCwzLDMsNV19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 185,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "tower_single",
+        "pool_single",
+        "pool_single",
+        "tower_single",
+        "camp_long",
+        "fire_single",
+        "fire_single",
+        "camp_long",
+        "fire_single",
+        "fire_single",
+        "fire_single",
+        "camp_long",
+        "cabin_el",
+        "camp_long",
+        "picnic_domino",
+        "powerTower_single",
+        "powerTower_single"
+      ],
+      "metrics": {
+        "score": 6.65,
+        "density": 0.4375,
+        "facilityDensity": 0.265625,
+        "candidates": 15.470588235294118,
+        "dependencies": 0.47058823529411764,
+        "forced": 0,
+        "nodes": 102,
+        "branches": 25,
+        "logic": {
+          "solved": true,
+          "rounds": 8,
+          "deductions": 101,
+          "assumptions": 3,
+          "maxDepth": 1,
+          "techniques": 6,
+          "relationships": 13,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 185,
+      "attempts": 148,
+      "proofs": 1,
+      "logicChecks": 18,
+      "failures": {
+        "combination layout": 130,
+        "logic stalled": 17
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5833333333333334,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.9,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 10,
+        "effectiveGrass": 8,
+        "fragmentation": 0,
+        "concentration": 0.4230769230769231,
+        "maxSameKind": 5,
+        "maxLine": 7,
+        "quadrants": [
+          6,
+          1,
+          12,
+          9
+        ],
+        "linked": 8,
+        "dependencies": 8,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMywwXSxbIndhdGVyIiw0LDFdLFsid2F0ZXIiLDMsMV0sWyJ3YXRlciIsNCwyXSxbIndhdGVyIiwzLDJdLFsid2F0ZXIiLDMsM10sWyJ3YXRlciIsMyw0XSxbIndhdGVyIiwzLDVdLFsid2F0ZXIiLDMsNl0sWyJ3YXRlciIsMyw3XSxbImZvcmVzdCIsNCw1XSxbImZvcmVzdCIsNSw1XSxbImZvcmVzdCIsNiw1XSxbImZvcmVzdCIsNyw1XSxbImZvcmVzdCIsNSw0XSxbImZvcmVzdCIsNSwzXSxbImZvcmVzdCIsNCw0XSxbIm1vdW50YWluIiwyLDVdLFsibW91bnRhaW4iLDEsNV0sWyJtb3VudGFpbiIsMiw2XSxbIm1vdW50YWluIiwxLDZdLFsibW91bnRhaW4iLDEsNF0sWyJtb3VudGFpbiIsMiw0XSxbIm1vdW50YWluIiwyLDddLFsibW91bnRhaW4iLDEsM10sWyJtb3VudGFpbiIsMiwzXV0sImYiOltbInRvd2VyX3NpbmdsZSIsIndpbGQtMCIsMSw3LDBdLFsicG9vbF9zaW5nbGUiLCJ3aWxkLTEiLDQsMywwXSxbInBvb2xfc2luZ2xlIiwid2lsZC0yIiw0LDYsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTMiLDEsMiwwXSxbImNhbXBfbG9uZyIsIndpbGQtNCIsMiwwLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTUiLDEsMCwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC02IiwxLDEsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTciLDQsMCwxXSxbImZpcmVfc2luZ2xlIiwid2lsZC04Iiw3LDAsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtOSIsNiwxLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTEwIiw3LDEsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTExIiw0LDcsMV0sWyJjYWJpbl9lbCIsIndpbGQtMTIiLDYsNiwwXSxbImNhbXBfbG9uZyIsIndpbGQtMTMiLDUsMiwxXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTE0Iiw2LDMsMV0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTUiLDYsNCwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNiIsNyw0LDBdXSwiciI6WzAsNCwzLDAsNCwzLDcsN10sImMiOls2LDQsNSwzLDIsMCwzLDVdfQ",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 1047,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "tower_single",
+        "pool_single",
+        "powerTower_single",
+        "powerTower_single",
+        "powerTower_single",
+        "picnic_domino",
+        "camp_long",
+        "camp_long",
+        "cabin_el",
+        "tower_single",
+        "camp_long",
+        "tower_single",
+        "fire_single",
+        "fire_single",
+        "camp_long",
+        "fire_single",
+        "fire_single",
+        "fire_single"
+      ],
+      "metrics": {
+        "score": 7.65,
+        "density": 0.453125,
+        "facilityDensity": 0.28125,
+        "candidates": 16.055555555555557,
+        "dependencies": 0.3888888888888889,
+        "forced": 0,
+        "nodes": 126,
+        "branches": 31,
+        "logic": {
+          "solved": true,
+          "rounds": 10,
+          "deductions": 94,
+          "assumptions": 15,
+          "maxDepth": 2,
+          "techniques": 6,
+          "relationships": 19,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 1047,
+      "attempts": 780,
+      "proofs": 1,
+      "logicChecks": 61,
+      "failures": {
+        "combination layout": 719,
+        "logic stalled": 60
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.4166666666666667,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.7,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 9,
+        "effectiveGrass": 8,
+        "fragmentation": 0,
+        "concentration": 0.38461538461538464,
+        "maxSameKind": 5,
+        "maxLine": 6,
+        "quadrants": [
+          10,
+          2,
+          7,
+          10
+        ],
+        "linked": 7,
+        "dependencies": 7,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNywyXSxbIndhdGVyIiw2LDJdLFsid2F0ZXIiLDUsMl0sWyJ3YXRlciIsNSwzXSxbIndhdGVyIiw0LDNdLFsid2F0ZXIiLDQsNF0sWyJ3YXRlciIsMyw0XSxbIndhdGVyIiwyLDRdLFsid2F0ZXIiLDEsNF0sWyJ3YXRlciIsMCw0XSxbImZvcmVzdCIsNCwyXSxbImZvcmVzdCIsNCwxXSxbImZvcmVzdCIsNCwwXSxbImZvcmVzdCIsMywyXSxbImZvcmVzdCIsMiwyXSxbImZvcmVzdCIsMiwxXSxbImZvcmVzdCIsMywzXSxbImZvcmVzdCIsNSwwXSxbImZvcmVzdCIsMiwzXSxbIm1vdW50YWluIiwyLDVdLFsibW91bnRhaW4iLDIsNl0sWyJtb3VudGFpbiIsMSw1XSxbIm1vdW50YWluIiwzLDZdLFsibW91bnRhaW4iLDEsNl0sWyJtb3VudGFpbiIsNCw2XSxbIm1vdW50YWluIiwwLDVdXSwiZiI6W1sidG93ZXJfc2luZ2xlIiwid2lsZC0wIiwwLDYsMF0sWyJwb29sX3NpbmdsZSIsIndpbGQtMSIsMSwzLDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTIiLDMsMCwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0zIiwzLDEsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtNCIsMiwwLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNSIsNiwwLDFdLFsiY2FtcF9sb25nIiwid2lsZC02Iiw1LDEsMV0sWyJjYW1wX2xvbmciLCJ3aWxkLTciLDAsMSwwXSxbImNhYmluX2VsIiwid2lsZC04IiwwLDAsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTkiLDMsNSwwXSxbImNhbXBfbG9uZyIsIndpbGQtMTAiLDQsNSwxXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTEiLDUsNiwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xMiIsNiw2LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTEzIiw3LDYsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTE0Iiw3LDMsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTUiLDUsNCwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xNiIsNiwzLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTE3Iiw2LDQsMF1dLCJyIjpbNSwzLDEsMywxLDQsNiw2XSwiYyI6WzYsNiwxLDQsMyw1LDQsMF19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261020,
+      "disabled": [],
+      "recent": 0,
+      "status": "success",
+      "ms": 4264,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "powerTower_single",
+        "powerTower_single",
+        "tower_single",
+        "picnic_domino",
+        "tower_single",
+        "pool_single",
+        "picnic_domino",
+        "tower_single",
+        "camp_long",
+        "tower_single",
+        "tower_single",
+        "camp_long",
+        "fire_single",
+        "camp_long",
+        "camp_long",
+        "camp_long",
+        "fire_single",
+        "fire_single",
+        "fire_single"
+      ],
+      "metrics": {
+        "score": 7.88,
+        "density": 0.484375,
+        "facilityDensity": 0.296875,
+        "candidates": 16.894736842105264,
+        "dependencies": 0.3684210526315789,
+        "forced": 0,
+        "nodes": 728,
+        "branches": 177,
+        "logic": {
+          "solved": true,
+          "rounds": 12,
+          "deductions": 95,
+          "assumptions": 9,
+          "maxDepth": 2,
+          "techniques": 5,
+          "relationships": 16,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 4264,
+      "attempts": 3656,
+      "proofs": 1,
+      "logicChecks": 215,
+      "failures": {
+        "combination layout": 3441,
+        "logic stalled": 214
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.6428571428571429,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.4375,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 25,
+        "grass": 8,
+        "effectiveGrass": 8,
+        "fragmentation": 0,
+        "concentration": 0.4,
+        "maxSameKind": 5,
+        "maxLine": 7,
+        "quadrants": [
+          7,
+          11,
+          6,
+          7
+        ],
+        "linked": 7,
+        "dependencies": 7,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNSwwXSxbIndhdGVyIiw1LDFdLFsid2F0ZXIiLDUsMl0sWyJ3YXRlciIsNSwzXSxbIndhdGVyIiw1LDRdLFsid2F0ZXIiLDUsNV0sWyJ3YXRlciIsNCw1XSxbIndhdGVyIiw0LDZdLFsid2F0ZXIiLDQsN10sWyJmb3Jlc3QiLDYsMl0sWyJmb3Jlc3QiLDcsMl0sWyJmb3Jlc3QiLDcsM10sWyJmb3Jlc3QiLDYsMV0sWyJmb3Jlc3QiLDcsNF0sWyJmb3Jlc3QiLDcsNV0sWyJmb3Jlc3QiLDcsNl0sWyJmb3Jlc3QiLDYsMF0sWyJmb3Jlc3QiLDYsNl0sWyJtb3VudGFpbiIsNCwyXSxbIm1vdW50YWluIiwzLDJdLFsibW91bnRhaW4iLDIsMl0sWyJtb3VudGFpbiIsMSwyXSxbIm1vdW50YWluIiwzLDFdLFsibW91bnRhaW4iLDIsM10sWyJtb3VudGFpbiIsMiw0XV0sImYiOltbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0wIiw3LDAsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMSIsNywxLDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0yIiwxLDMsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0zIiwxLDQsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTQiLDQsMSwwXSxbInBvb2xfc2luZ2xlIiwid2lsZC01Iiw1LDYsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC02IiwxLDAsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTciLDIsMSwwXSxbImNhbXBfbG9uZyIsIndpbGQtOCIsMiwwLDFdLFsidG93ZXJfc2luZ2xlIiwid2lsZC05IiwyLDUsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEwIiw0LDMsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTExIiwzLDMsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTIiLDQsNCwwXSxbImNhbXBfbG9uZyIsIndpbGQtMTMiLDUsNywxXSxbImNhbXBfbG9uZyIsIndpbGQtMTQiLDYsMywwXSxbImNhbXBfbG9uZyIsIndpbGQtMTUiLDEsNiwxXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xNiIsMSw3LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTE3IiwyLDcsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTgiLDMsNywwXV0sInIiOlswLDcsNSw2LDQsMiw0LDNdLCJjIjpbNSw0LDAsNCw0LDQsNCw2XX0",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 3,
+      "seed": 20261019,
+      "disabled": [
+        "foodTruck_single",
+        "pool_single",
+        "camp_el"
+      ],
+      "recent": 0,
+      "status": "success",
+      "ms": 17,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_long",
+        "cabin_el",
+        "tower_single",
+        "fire_single",
+        "tower_single",
+        "camp_single",
+        "fire_single",
+        "tower_single"
+      ],
+      "metrics": {
+        "score": 3.06,
+        "density": 0.1875,
+        "facilityDensity": 0.125,
+        "candidates": 8.375,
+        "dependencies": 0.25,
+        "forced": 0,
+        "nodes": 16,
+        "branches": 3,
+        "logic": {
+          "solved": true,
+          "rounds": 3,
+          "deductions": 31,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 3,
+          "relationships": 6,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 17,
+      "attempts": 12,
+      "proofs": 1,
+      "logicChecks": 10,
+      "failures": {
+        "logic stalled": 9,
+        "combination layout": 2
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.875,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 26,
+        "effectiveGrass": 26,
+        "fragmentation": 0,
+        "concentration": 0.3076923076923077,
+        "maxSameKind": 3,
+        "maxLine": 6,
+        "quadrants": [
+          2,
+          3,
+          3,
+          4
+        ],
+        "linked": 2,
+        "dependencies": 2,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNywzXSxbIndhdGVyIiw2LDNdLFsid2F0ZXIiLDUsM10sWyJ3YXRlciIsNCwzXSxbIndhdGVyIiwzLDNdLFsid2F0ZXIiLDIsM10sWyJ3YXRlciIsMSw0XSxbIndhdGVyIiwxLDNdLFsid2F0ZXIiLDAsNF0sWyJ3YXRlciIsMCwzXSxbImZvcmVzdCIsMyw0XSxbImZvcmVzdCIsMyw1XSxbImZvcmVzdCIsMyw2XSxbImZvcmVzdCIsMyw3XSxbImZvcmVzdCIsMiw0XSxbImZvcmVzdCIsMiw3XSxbImZvcmVzdCIsNCw1XSxbImZvcmVzdCIsNSw1XSxbImZvcmVzdCIsNSw2XSxbIm1vdW50YWluIiwzLDJdLFsibW91bnRhaW4iLDMsMV0sWyJtb3VudGFpbiIsMiwxXSxbIm1vdW50YWluIiwyLDJdLFsibW91bnRhaW4iLDQsMV0sWyJtb3VudGFpbiIsNCwyXSxbIm1vdW50YWluIiw1LDJdXSwiZiI6W1siY2FtcF9sb25nIiwid2lsZC0wIiw3LDQsMF0sWyJjYWJpbl9lbCIsIndpbGQtMSIsMCw2LDJdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0yIiwxLDIsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMyIsNyw3LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC00IiwzLDAsMF0sWyJjYW1wX3NpbmdsZSIsIndpbGQtNSIsNywyLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTYiLDcsMSwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNyIsNiwyLDBdXSwiciI6WzIsMiwwLDEsMCwwLDEsNl0sImMiOlsxLDEsMywwLDEsMSwyLDNdfQ",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 3,
+      "seed": 20261019,
+      "disabled": [
+        "camp_single"
+      ],
+      "recent": 0,
+      "status": "success",
+      "ms": 86,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_domino",
+        "picnic_domino",
+        "fire_single",
+        "foodTruck_single",
+        "tower_single",
+        "tower_single",
+        "powerTower_single",
+        "tower_single"
+      ],
+      "metrics": {
+        "score": 5.52,
+        "density": 0.15625,
+        "facilityDensity": 0.125,
+        "candidates": 10.125,
+        "dependencies": 0.375,
+        "forced": 0,
+        "nodes": 31,
+        "branches": 14,
+        "logic": {
+          "solved": true,
+          "rounds": 7,
+          "deductions": 65,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 5,
+          "relationships": 13,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 86,
+      "attempts": 38,
+      "proofs": 1,
+      "logicChecks": 24,
+      "failures": {
+        "logic stalled": 23,
+        "combination layout": 9,
+        "layout quality": 5
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.4666666666666667,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.75,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 28,
+        "effectiveGrass": 25,
+        "fragmentation": 0,
+        "concentration": 0.38461538461538464,
+        "maxSameKind": 3,
+        "maxLine": 4,
+        "quadrants": [
+          2,
+          1,
+          1,
+          6
+        ],
+        "linked": 3,
+        "dependencies": 3,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNCw3XSxbIndhdGVyIiwzLDddLFsid2F0ZXIiLDMsNl0sWyJ3YXRlciIsMyw1XSxbIndhdGVyIiw0LDRdLFsid2F0ZXIiLDMsNF0sWyJ3YXRlciIsNCwzXSxbIndhdGVyIiw0LDJdLFsid2F0ZXIiLDQsMV0sWyJ3YXRlciIsNCwwXSxbImZvcmVzdCIsNSwyXSxbImZvcmVzdCIsNiwyXSxbImZvcmVzdCIsNywyXSxbImZvcmVzdCIsNywzXSxbImZvcmVzdCIsNyw0XSxbImZvcmVzdCIsNiwxXSxbImZvcmVzdCIsNiwwXSxbIm1vdW50YWluIiwyLDRdLFsibW91bnRhaW4iLDEsNF0sWyJtb3VudGFpbiIsMSw1XSxbIm1vdW50YWluIiwyLDVdLFsibW91bnRhaW4iLDEsNl0sWyJtb3VudGFpbiIsMiw2XSxbIm1vdW50YWluIiwxLDNdLFsibW91bnRhaW4iLDIsM10sWyJtb3VudGFpbiIsMywzXV0sImYiOltbImNhbXBfZG9taW5vIiwid2lsZC0wIiw0LDYsMV0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0xIiw1LDUsMV0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMiIsNSw3LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMyIsNyw2LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC00IiwwLDMsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTUiLDAsNSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC02Iiw1LDMsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTciLDMsMiwwXV0sInIiOlsyLDAsMCwxLDEsNCwxLDFdLCJjIjpbMCwwLDEsMiwwLDMsMywxXX0",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 6,
+      "seed": 20261019,
+      "disabled": [
+        "cabin_el"
+      ],
+      "recent": 0,
+      "status": "success",
+      "ms": 1211,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_long",
+        "camp_long",
+        "camp_domino",
+        "picnic_domino",
+        "tower_single",
+        "foodTruck_single",
+        "pool_single",
+        "tower_single",
+        "fire_single",
+        "tower_single",
+        "fire_single",
+        "camp_single",
+        "tower_single"
+      ],
+      "metrics": {
+        "score": 7.65,
+        "density": 0.296875,
+        "facilityDensity": 0.203125,
+        "candidates": 15.76923076923077,
+        "dependencies": 0.38461538461538464,
+        "forced": 0,
+        "nodes": 191,
+        "branches": 88,
+        "logic": {
+          "solved": true,
+          "rounds": 10,
+          "deductions": 127,
+          "assumptions": 8,
+          "maxDepth": 1,
+          "techniques": 6,
+          "relationships": 29,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 1211,
+      "attempts": 290,
+      "proofs": 1,
+      "logicChecks": 276,
+      "failures": {
+        "logic stalled": 274,
+        "combination layout": 14,
+        "reasoning tier": 1
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.6666666666666666,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 19,
+        "effectiveGrass": 17,
+        "fragmentation": 0,
+        "concentration": 0.38461538461538464,
+        "maxSameKind": 4,
+        "maxLine": 6,
+        "quadrants": [
+          2,
+          6,
+          6,
+          5
+        ],
+        "linked": 5,
+        "dependencies": 5,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMywwXSxbIndhdGVyIiwzLDFdLFsid2F0ZXIiLDIsMl0sWyJ3YXRlciIsMywyXSxbIndhdGVyIiwyLDNdLFsid2F0ZXIiLDIsNF0sWyJ3YXRlciIsMiw1XSxbIndhdGVyIiwyLDZdLFsid2F0ZXIiLDIsN10sWyJmb3Jlc3QiLDEsM10sWyJmb3Jlc3QiLDAsM10sWyJmb3Jlc3QiLDEsMl0sWyJmb3Jlc3QiLDAsNF0sWyJmb3Jlc3QiLDEsMV0sWyJmb3Jlc3QiLDEsNF0sWyJmb3Jlc3QiLDEsMF0sWyJmb3Jlc3QiLDEsNV0sWyJtb3VudGFpbiIsMyw1XSxbIm1vdW50YWluIiw0LDVdLFsibW91bnRhaW4iLDUsNV0sWyJtb3VudGFpbiIsNiw1XSxbIm1vdW50YWluIiw0LDZdLFsibW91bnRhaW4iLDQsNF0sWyJtb3VudGFpbiIsMyw0XSxbIm1vdW50YWluIiw0LDNdLFsibW91bnRhaW4iLDUsNl1dLCJmIjpbWyJjYW1wX2xvbmciLCJ3aWxkLTAiLDQsMCwwXSxbImNhbXBfbG9uZyIsIndpbGQtMSIsMyw3LDFdLFsiY2FtcF9kb21pbm8iLCJ3aWxkLTIiLDAsNiwxXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTMiLDUsMCwxXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNCIsMyw2LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtNSIsNyw3LDBdLFsicG9vbF9zaW5nbGUiLCJ3aWxkLTYiLDEsNywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNyIsMywzLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTgiLDAsNywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtOSIsNSw0LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTEwIiw1LDIsMF0sWyJjYW1wX3NpbmdsZSIsIndpbGQtMTEiLDIsMCwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTIiLDcsNSwwXV0sInIiOlsyLDIsMSwzLDQsNCwxLDJdLCJjIjpbNCwxLDIsMSwxLDEsMyw2XX0",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [
+        "camp_el",
+        "foodTruck_single"
+      ],
+      "recent": 0,
+      "status": "success",
+      "ms": 787,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "tower_single",
+        "picnic_domino",
+        "tower_single",
+        "tower_single",
+        "tower_single",
+        "pool_single",
+        "camp_long",
+        "camp_long",
+        "fire_single",
+        "fire_single",
+        "camp_long",
+        "picnic_domino",
+        "pool_single",
+        "camp_long",
+        "picnic_domino",
+        "fire_single",
+        "fire_single",
+        "fire_single"
+      ],
+      "metrics": {
+        "score": 6.1000000000000005,
+        "density": 0.453125,
+        "facilityDensity": 0.28125,
+        "candidates": 16.88888888888889,
+        "dependencies": 0.5555555555555556,
+        "forced": 0,
+        "nodes": 1581,
+        "branches": 418,
+        "logic": {
+          "solved": true,
+          "rounds": 8,
+          "deductions": 65,
+          "assumptions": 5,
+          "maxDepth": 2,
+          "techniques": 5,
+          "relationships": 13,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 787,
+      "attempts": 885,
+      "proofs": 1,
+      "logicChecks": 40,
+      "failures": {
+        "combination layout": 845,
+        "logic stalled": 39
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.7777777777777778,
+            "count": 7,
+            "components": 1,
+            "largest": 7,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.6,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 9,
+        "effectiveGrass": 8,
+        "fragmentation": 0,
+        "concentration": 0.38461538461538464,
+        "maxSameKind": 5,
+        "maxLine": 7,
+        "quadrants": [
+          6,
+          8,
+          6,
+          9
+        ],
+        "linked": 10,
+        "dependencies": 10,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNSwwXSxbIndhdGVyIiw0LDBdLFsid2F0ZXIiLDUsMV0sWyJ3YXRlciIsNCwxXSxbIndhdGVyIiw0LDJdLFsid2F0ZXIiLDQsM10sWyJ3YXRlciIsNCw0XSxbIndhdGVyIiw0LDVdLFsid2F0ZXIiLDQsNl0sWyJ3YXRlciIsNCw3XSxbImZvcmVzdCIsNSwzXSxbImZvcmVzdCIsNiwzXSxbImZvcmVzdCIsNywzXSxbImZvcmVzdCIsNyw0XSxbImZvcmVzdCIsNSw0XSxbImZvcmVzdCIsNywyXSxbImZvcmVzdCIsNiw0XSxbIm1vdW50YWluIiwzLDJdLFsibW91bnRhaW4iLDIsMl0sWyJtb3VudGFpbiIsMSwyXSxbIm1vdW50YWluIiwyLDNdLFsibW91bnRhaW4iLDMsM10sWyJtb3VudGFpbiIsMyw0XSxbIm1vdW50YWluIiwyLDRdLFsibW91bnRhaW4iLDIsMV0sWyJtb3VudGFpbiIsMiw1XV0sImYiOltbInRvd2VyX3NpbmdsZSIsIndpbGQtMCIsMSwzLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMSIsMSw0LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0yIiwxLDEsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTMiLDMsMSwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNCIsMyw1LDBdLFsicG9vbF9zaW5nbGUiLCJ3aWxkLTUiLDUsMiwwXSxbImNhbXBfbG9uZyIsIndpbGQtNiIsMSwwLDFdLFsiY2FtcF9sb25nIiwid2lsZC03IiwxLDYsMV0sWyJmaXJlX3NpbmdsZSIsIndpbGQtOCIsMSw3LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTkiLDIsNywwXSxbImNhbXBfbG9uZyIsIndpbGQtMTAiLDYsMCwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTExIiw3LDAsMF0sWyJwb29sX3NpbmdsZSIsIndpbGQtMTIiLDUsNSwwXSxbImNhbXBfbG9uZyIsIndpbGQtMTMiLDUsNiwxXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTE0Iiw2LDUsMV0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTUiLDUsNywwXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xNiIsNiw3LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTE3Iiw3LDcsMF1dLCJyIjpbMCw3LDMsNCwwLDQsNiw1XSwiYyI6WzUsNCwyLDEsMSw1LDYsNV19",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [
+        "cabin_el"
+      ],
+      "recent": 0,
+      "status": "success",
+      "ms": 2630,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "powerTower_single",
+        "tower_single",
+        "tower_single",
+        "tower_single",
+        "picnic_domino",
+        "picnic_domino",
+        "powerTower_single",
+        "camp_long",
+        "picnic_domino",
+        "pool_single",
+        "picnic_domino",
+        "camp_long",
+        "fire_single",
+        "fire_single",
+        "tower_single",
+        "camp_long",
+        "fire_single",
+        "fire_single"
+      ],
+      "metrics": {
+        "score": 6.2700000000000005,
+        "density": 0.4375,
+        "facilityDensity": 0.28125,
+        "candidates": 17.666666666666668,
+        "dependencies": 0.5,
+        "forced": 0,
+        "nodes": 405,
+        "branches": 95,
+        "logic": {
+          "solved": true,
+          "rounds": 9,
+          "deductions": 85,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 4,
+          "relationships": 18,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 2630,
+      "attempts": 2775,
+      "proofs": 1,
+      "logicChecks": 141,
+      "failures": {
+        "combination layout": 2634,
+        "logic stalled": 139,
+        "reasoning tier": 1
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 0.4166666666666667,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.6666666666666666,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.8,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 10,
+        "effectiveGrass": 8,
+        "fragmentation": 0,
+        "concentration": 0.34615384615384615,
+        "maxSameKind": 4,
+        "maxLine": 7,
+        "quadrants": [
+          10,
+          9,
+          3,
+          6
+        ],
+        "linked": 9,
+        "dependencies": 9,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNCw3XSxbIndhdGVyIiw0LDZdLFsid2F0ZXIiLDQsNV0sWyJ3YXRlciIsNCw0XSxbIndhdGVyIiw0LDNdLFsid2F0ZXIiLDQsMl0sWyJ3YXRlciIsMywxXSxbIndhdGVyIiw0LDFdLFsid2F0ZXIiLDIsMF0sWyJ3YXRlciIsMywwXSxbImZvcmVzdCIsMyw0XSxbImZvcmVzdCIsMiw0XSxbImZvcmVzdCIsMSw0XSxbImZvcmVzdCIsMCw0XSxbImZvcmVzdCIsMyw1XSxbImZvcmVzdCIsMywzXSxbImZvcmVzdCIsMiw1XSxbImZvcmVzdCIsMSwzXSxbIm1vdW50YWluIiw1LDNdLFsibW91bnRhaW4iLDYsM10sWyJtb3VudGFpbiIsNSw0XSxbIm1vdW50YWluIiw1LDJdLFsibW91bnRhaW4iLDUsMV0sWyJtb3VudGFpbiIsNiwxXSxbIm1vdW50YWluIiw1LDBdLFsibW91bnRhaW4iLDYsNF1dLCJmIjpbWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMCIsMCw1LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xIiw0LDAsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTIiLDYsMCwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMyIsNiwyLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNCIsMCwyLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNSIsMCw2LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTYiLDEsNSwwXSxbImNhbXBfbG9uZyIsIndpbGQtNyIsMSw3LDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtOCIsMiw2LDFdLFsicG9vbF9zaW5nbGUiLCJ3aWxkLTkiLDMsMiwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEwIiwxLDIsMV0sWyJjYW1wX2xvbmciLCJ3aWxkLTExIiwwLDEsMV0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTIiLDAsMCwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xMyIsMSwwLDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xNCIsNiw1LDBdLFsiY2FtcF9sb25nIiwid2lsZC0xNSIsNSw1LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTE2Iiw2LDYsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTciLDYsNywwXV0sInIiOls3LDUsNCwzLDEsMyw1LDBdLCJjIjpbNCwzLDUsMSwwLDQsNSw2XX0",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [
+        "camp_long"
+      ],
+      "recent": 0,
+      "status": "failed",
+      "ms": 7599,
+      "unique": "unproven",
+      "error": "Error: 预算内未找到满足地形质量、逻辑路径和唯一解的地图（1462 次构造；设施组合不可行 801, 缺少可解释路径 661）。当前禁用组合可能限制了可用依赖关系，请调整设施或重试。",
+      "elapsed": 7600,
+      "attempts": 1462,
+      "proofs": 0,
+      "logicChecks": 661,
+      "failures": {
+        "logic stalled": 661,
+        "combination layout": 801
+      }
+    },
+    {
+      "difficulty": 1,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 1,
+      "status": "success",
+      "ms": 15,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "fire_single",
+        "camp_single",
+        "tower_single",
+        "tower_single"
+      ],
+      "metrics": {
+        "score": 2.09,
+        "density": 0.078125,
+        "facilityDensity": 0.078125,
+        "candidates": 4,
+        "dependencies": 0.2,
+        "forced": 0,
+        "nodes": 13,
+        "branches": 3,
+        "logic": {
+          "solved": true,
+          "rounds": 3,
+          "deductions": 9,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 2,
+          "relationships": 0,
+          "initialForced": 0
+        }
+      },
+      "elapsed": 15,
+      "attempts": 19,
+      "proofs": 1,
+      "logicChecks": 5,
+      "failures": {
+        "logic stalled": 3,
+        "layout quality": 14,
+        "recent similarity": 1
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 1,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.8,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.625,
+            "count": 10,
+            "components": 1,
+            "largest": 10,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 33,
+        "effectiveGrass": 33,
+        "fragmentation": 0,
+        "concentration": 0.38461538461538464,
+        "maxSameKind": 2,
+        "maxLine": 2,
+        "quadrants": [
+          3,
+          1,
+          0,
+          1
+        ],
+        "linked": 1,
+        "dependencies": 1,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNywyXSxbIndhdGVyIiw2LDJdLFsid2F0ZXIiLDUsMl0sWyJ3YXRlciIsNCwyXSxbIndhdGVyIiwzLDJdLFsid2F0ZXIiLDIsMl0sWyJ3YXRlciIsMSwyXSxbIndhdGVyIiwwLDJdLFsiZm9yZXN0Iiw0LDFdLFsiZm9yZXN0Iiw0LDBdLFsiZm9yZXN0Iiw1LDBdLFsiZm9yZXN0Iiw2LDBdLFsiZm9yZXN0Iiw1LDFdLFsiZm9yZXN0Iiw3LDBdLFsiZm9yZXN0IiwzLDBdLFsiZm9yZXN0IiwzLDFdLFsibW91bnRhaW4iLDMsM10sWyJtb3VudGFpbiIsMyw0XSxbIm1vdW50YWluIiwzLDVdLFsibW91bnRhaW4iLDMsNl0sWyJtb3VudGFpbiIsNCw2XSxbIm1vdW50YWluIiwyLDZdLFsibW91bnRhaW4iLDIsNF0sWyJtb3VudGFpbiIsMiwzXSxbIm1vdW50YWluIiwyLDVdLFsibW91bnRhaW4iLDEsNV1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsMCwxLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTEiLDAsMCwwXSxbImNhbXBfc2luZ2xlIiwid2lsZC0yIiwyLDEsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTMiLDQsNSwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNCIsMSw2LDBdXSwiciI6WzIsMSwxLDAsMSwwLDAsMF0sImMiOlsxLDIsMCwwLDAsMSwxLDBdfQ",
+      "solutionCount": 1
+    },
+    {
+      "difficulty": 1,
+      "seed": 20261019,
+      "disabled": [],
+      "recent": 2,
+      "status": "success",
+      "ms": 15,
+      "unique": true,
+      "proofAborted": false,
+      "facilities": [
+        "camp_single",
+        "fire_single",
+        "tower_single",
+        "powerTower_single"
+      ],
+      "metrics": {
+        "score": 2.94,
+        "density": 0.0625,
+        "facilityDensity": 0.0625,
+        "candidates": 3.25,
+        "dependencies": 0.25,
+        "forced": 0.25,
+        "nodes": 5,
+        "branches": 0,
+        "logic": {
+          "solved": true,
+          "rounds": 3,
+          "deductions": 9,
+          "assumptions": 0,
+          "maxDepth": 0,
+          "techniques": 3,
+          "relationships": 5,
+          "initialForced": 1
+        }
+      },
+      "elapsed": 15,
+      "attempts": 20,
+      "proofs": 1,
+      "logicChecks": 6,
+      "failures": {
+        "logic stalled": 3,
+        "layout quality": 14,
+        "recent similarity": 2
+      },
+      "quality": {
+        "regions": [
+          {
+            "kind": "water",
+            "compactness": 1,
+            "count": 8,
+            "components": 1,
+            "largest": 8,
+            "singletons": 0
+          },
+          {
+            "kind": "forest",
+            "compactness": 0.5625,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          },
+          {
+            "kind": "mountain",
+            "compactness": 0.6428571428571429,
+            "count": 9,
+            "components": 1,
+            "largest": 9,
+            "singletons": 0
+          }
+        ],
+        "terrainCount": 26,
+        "grass": 34,
+        "effectiveGrass": 34,
+        "fragmentation": 0,
+        "concentration": 0.34615384615384615,
+        "maxSameKind": 1,
+        "maxLine": 2,
+        "quadrants": [
+          2,
+          0,
+          1,
+          1
+        ],
+        "linked": 1,
+        "dependencies": 1,
+        "accepted": true
+      },
+      "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNywzXSxbIndhdGVyIiw2LDNdLFsid2F0ZXIiLDUsM10sWyJ3YXRlciIsNCwzXSxbIndhdGVyIiwzLDNdLFsid2F0ZXIiLDIsM10sWyJ3YXRlciIsMSwzXSxbIndhdGVyIiwwLDNdLFsiZm9yZXN0IiwyLDRdLFsiZm9yZXN0IiwyLDVdLFsiZm9yZXN0IiwyLDZdLFsiZm9yZXN0IiwyLDddLFsiZm9yZXN0IiwxLDRdLFsiZm9yZXN0IiwxLDddLFsiZm9yZXN0IiwzLDRdLFsiZm9yZXN0IiwzLDVdLFsibW91bnRhaW4iLDMsMl0sWyJtb3VudGFpbiIsMywxXSxbIm1vdW50YWluIiw0LDJdLFsibW91bnRhaW4iLDUsMl0sWyJtb3VudGFpbiIsMiwyXSxbIm1vdW50YWluIiw2LDJdLFsibW91bnRhaW4iLDEsMl0sWyJtb3VudGFpbiIsNywyXSxbIm1vdW50YWluIiw3LDFdLFsiZm9yZXN0IiwwLDddXSwiZiI6W1siY2FtcF9zaW5nbGUiLCJ3aWxkLTAiLDAsMiwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xIiwwLDEsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTIiLDUsMSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0zIiw3LDcsMF1dLCJyIjpbMiwwLDAsMCwwLDEsMCwxXSwiYyI6WzAsMiwxLDAsMCwwLDAsMV19",
+      "solutionCount": 1
+    }
+  ]
+}

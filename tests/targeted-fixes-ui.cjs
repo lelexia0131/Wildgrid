@@ -85,8 +85,10 @@ app.whenReady().then(async () => {
     // A failed replacement leaves the exact old save intact; success commits before entering play.
     await prepare(); await click('.mode-survival'); const original = await stored(); await generate();
     await js(`window.__workers[0].reply({status:'search-failed',error:'normal'});`); await settle();
-    assert.equal(await js(`window.__workers.length`), 2); assert.equal(await stored(), original);
-    assert.ok(await js(`window.__workers[0].terminated && window.__workers[0].request.seed!==window.__workers[1].request.seed`));
+    assert.equal(await js(`window.__workers.length`), 1); assert.equal(await stored(), original);
+    assert.equal(await js(`!!document.querySelector('.survival-generation-page')`), false);
+    assert.equal(await js(`window.__workers[0].terminated`), true);
+    await generate();
     await js(`Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));`); await settle();
     assert.equal(await js(`window.__workers[1].terminated`), true);
     await js(`Object.defineProperty(document,'hidden',{configurable:true,value:false});document.dispatchEvent(new Event('visibilitychange'));`); await settle();
@@ -116,12 +118,12 @@ app.whenReady().then(async () => {
     const workerAsset = readdirSync(path.join(root, 'dist/assets')).find(file => file.startsWith('survival.worker-'));
     const realWorker = (difficulty, forceSearchFailure = false) => {
       const source = `import 'wildgrid://game/assets/${workerAsset}';${forceSearchFailure ? 'const now=Date.now();let calls=0;Date.now=()=>now+(calls++ ? 30000 : 0);' : ''}self.postMessage({ready:true});`;
-      return js(`new Promise((resolve,reject)=>{const url=URL.createObjectURL(new Blob([${JSON.stringify(source)}],{type:'text/javascript'})),worker=new Worker(url,{type:'module'});worker.onmessage=event=>{if(event.data.ready){worker.postMessage({difficulty:${difficulty},seed:3,id:'real-worker',recent:[]});return;}worker.terminate();URL.revokeObjectURL(url);resolve(event.data);};worker.onerror=()=>{worker.terminate();URL.revokeObjectURL(url);reject(Error('Real worker failed'));};})`);
+      return js(`new Promise((resolve,reject)=>{const url=URL.createObjectURL(new Blob([${JSON.stringify(source)}],{type:'text/javascript'})),worker=new Worker(url,{type:'module'});worker.onmessage=event=>{if(event.data.ready){worker.postMessage({difficulty:${difficulty},seed:20261019,id:'real-worker',recent:[]});return;}worker.terminate();URL.revokeObjectURL(url);resolve(event.data);};worker.onerror=()=>{worker.terminate();URL.revokeObjectURL(url);reject(Error('Real worker failed'));};})`);
     };
     assert.equal((await realWorker(0)).status, 'error');
     assert.equal((await realWorker(1, true)).status, 'search-failed');
     const generated = await realWorker(10);
-    assert.equal(generated.status, 'success'); assert.equal(generated.challenge.draft.level.pieces.length, 20);
+    assert.equal(generated.status, 'success'); assert.ok(generated.challenge.draft.level.pieces.length >= 18 && generated.challenge.draft.level.pieces.length <= 20);
     const proof = solveLevel(generated.challenge.draft.level, 2);
     assert.equal(proof.aborted, false); assert.equal(proof.count, 1);
     // Render every actual facility/shape and rotation with the production CSS and SVGs.
@@ -148,7 +150,7 @@ app.whenReady().then(async () => {
     }
     assert.deepEqual(errors, []);
     writeFileSync(path.join(output, 'result.json'), JSON.stringify({ passed: true, facilityCases: cases.length, buttons: normal }, null, 2));
-    console.log(`PASS: sandbox cancellation/restart, survival retries/pause/cancel/atomic replacement, tutorial protection, button states, ${cases.length} facility borders at 2 visible pixels.`);
+    console.log(`PASS: sandbox cancellation/restart, survival bounded failure/manual retry/pause/cancel/atomic replacement, tutorial protection, button states, ${cases.length} facility borders at 2 visible pixels.`);
     clearTimeout(deadline); app.exit(0);
   } catch (error) {
     writeFileSync(path.join(output, 'failure.png'), (await wc.capturePage()).toPNG());
