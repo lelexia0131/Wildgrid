@@ -42,7 +42,8 @@ app.whenReady().then(async () => {
       await click('.menu-journal');
       assert.equal(await js(`document.querySelectorAll('.chapter-card').length`), 3);
       assert.equal(await js(`document.querySelector('.chapter-card[data-chapter="2"]').disabled`), false);
-      assert.equal(await js(`document.querySelectorAll('.chapter-2 [data-chapter-facility]').length`), 2);
+      assert.equal(await js(`document.querySelectorAll('.chapter-2 .chapter-art > img').length`), 3);
+      assert.equal(await js(`[...document.querySelectorAll('.chapter-2 .chapter-art > img')].every(img => img.complete && img.naturalWidth > 0)`), true);
       assert.equal(await js(`document.querySelectorAll('.level-card').length`), 0);
       assert.equal(await js(`document.documentElement.scrollWidth > innerWidth`), false);
       if (viewport.height > 800) assert.equal(await js(`document.querySelector('.chapter-grid').scrollHeight > document.querySelector('.chapter-grid').clientHeight + 1`), false);

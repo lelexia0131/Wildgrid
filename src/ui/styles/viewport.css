@@ -231,7 +231,7 @@ input[type=range] { height: 22px; }
 .camp-tools h2 { margin: 0 0 8px; }
 .camp-tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 48px)); justify-content: center; gap: 6px 9px; }
 .camp-tools .camp-tool { position: relative; display: flex; align-items: center; justify-content: center; min-width: 0; height: 38px; min-height: 36px; padding: 2px; border: 1px solid #c9d4b9; border-radius: 8px; background: linear-gradient(#faf5e3, #e8ead3); box-shadow: 0 3px 0 #acba9859, inset 0 1px 0 #fffdf3; transition: transform .15s, background .15s; }
-.camp-tools .camp-tool > svg { width: 32px; height: 32px; }
+.camp-tools .camp-tool > .camp-tool-art { width: 32px; height: 32px; }
 .camp-tools .camp-tool.tool-blueprint { background: linear-gradient(#edf5ee, #d3e5dc); border-color: #b6cdc0; }
 .camp-tools .camp-tool.tool-journal, .camp-tools .camp-tool.tool-export { background: linear-gradient(#fff1d5, #efe0b9); border-color: #d4c29b; }
 .camp-tools .camp-tool.tool-abandon { background: linear-gradient(#f9ece0, #ecd6c6); border-color: #d5b6a2; }
@@ -415,8 +415,6 @@ input[type=range] { height: 22px; }
   background: linear-gradient(115deg, transparent 30%, #fff2b8a0 48%, transparent 66%);
   opacity: 0; animation: reward-shine 500ms 120ms ease-out;
 }
-.survival-upgrade .survival-badge { animation: reward-bounce 500ms ease-out; }
-.survival-win .survival-reward { animation: screen-arrive 250ms 100ms both; }
 .single-facility-art { display: block; width: 100%; height: 100%; pointer-events: none; }
 .departing-facility { position: relative; min-width: 0; min-height: 0; pointer-events: none; }
 .departing-facility > .art { width: 100%; height: 100%; }
@@ -457,10 +455,6 @@ input[type=range] { height: 22px; }
 @media (max-height: 650px) {
   .app .win-modal { padding: 24px 18px 18px; }
   .app .win-modal .win-emblem { width: 76px; height: 76px; margin-bottom: 12px; }
-  .app .survival-win > .survival-badge { width: 84px; height: 90px; margin-bottom: 8px; }
-  .app .survival-win h3 { font-size: 20px; margin: 8px 0; }
-  .app .survival-win p { font-size: 14px; margin: 6px 0 10px; line-height: 1.4; }
-  .app .survival-reward { margin-bottom: 12px; padding: 6px 12px; }
   .app .win-modal .text-button { margin-top: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -478,27 +472,26 @@ input[type=range] { height: 22px; }
 .chapter-levels .page-heading { min-height: 52px; margin: 2px 0 10px; }
 .chapter-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; gap: 24px; padding: 12px 5px 24px; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; scrollbar-width: none; }
 .camp-diary :is(.chapter-grid, .journal-level-stage, .level-grid)::-webkit-scrollbar { display: none; }
-.chapter-card { position: relative; isolation: isolate; display: flex; flex-direction: column; min-width: 0; padding: 18px 12px 22px; aspect-ratio: .79; max-height: 430px; border: 3px solid #acba91; border-radius: 26px; background: radial-gradient(ellipse at 50% 15%, #fff9e7, transparent 65%), linear-gradient(#f4eed6, #d7e2bc); box-shadow: inset 0 3px 0 #fffdf0, inset 0 0 0 5px #dbe6c9, 0 7px 0 #91a17b, 0 13px 20px #49614616; transition: transform .18s, box-shadow .18s; }
-.chapter-card.chapter-1 { background: radial-gradient(ellipse at 50% 15%, #f6f4da, transparent 65%), linear-gradient(#dce8d2, #adc4a2); border-color: #8aa385; }
-.chapter-card.chapter-2 { background: radial-gradient(ellipse at 50% 15%, #faf1d6, transparent 65%), linear-gradient(#e5ede4, #b8cebf); border-color: #a6ae94; }
-.chapter-card::before { content: ''; position: absolute; z-index: -1; inset: 8px; border: 1px solid #fffbea99; border-radius: 17px; pointer-events: none; box-shadow: inset 0 0 0 1px #83946a20; }
+.chapter-card { position: relative; isolation: isolate; display: flex; flex-direction: column; min-width: 0; padding: 18px 12px 22px; aspect-ratio: .79; max-height: 430px; border: 3px solid #acba91; border-radius: 26px; background: #edf0d8; box-shadow: 0 7px 0 #91a17b, 0 13px 20px #49614616; transition: transform .18s, box-shadow .18s; }
+.chapter-card.chapter-1 { background: #d9e4ca; border-color: #8aa385; }
+.chapter-card.chapter-2 { background: #e2e8da; border-color: #a6ae94; }
 .chapter-art { flex: 1; min-height: 0; width: 100%; filter: drop-shadow(0 3px 1px #65764c12); }
 .chapter-art .art { width: 100%; height: 100%; }
 .chapter-state { position: absolute; top: 15px; right: 15px; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; color: #607d55; background: #faf8e1ba; box-shadow: inset 0 1px 0 #fffdf3; }
 .chapter-caption { display: flex; flex-direction: column; align-items: center; gap: 9px; position: relative; padding-top: 14px; }
-.chapter-caption::before { content: ''; position: absolute; top: 0; width: 65%; height: 1px; background: linear-gradient(90deg, transparent, #9dab7b80, transparent); }
+.chapter-caption::before { content: ''; position: absolute; top: 0; width: 65%; height: 1px; background: var(--art-caption-rule) center / 100% 100%; }
 .chapter-caption strong { font-family: var(--heading-font); font-weight: 400; font-size: clamp(21px, 2.8vw, 29px); color: #4e684c; }
 .chapter-caption > span { font-family: var(--number-font); font-size: 21px; color: #71825d; }
 .chapter-card.recommended { border-color: #b9a25f; box-shadow: inset 0 3px 0 #fff8d4, inset 0 0 0 5px #eadba178, 0 7px 0 #9b976d, 0 13px 20px #49614616; }
 .chapter-card:enabled:hover { transform: translateY(-3px); }
 .chapter-card:focus-visible { outline: 3px solid #526e54; outline-offset: 5px; }
 .chapter-card:enabled:active { transform: translateY(5px) scale(.99); box-shadow: inset 0 2px 0 #fffdf0, 0 2px 0 #91a17b; }
-.chapter-card.locked { background: linear-gradient(#e4e6dc, #cfd3c4); border-color: #b7bdab; box-shadow: inset 0 2px 0 #f7f6ea, 0 5px 0 #b0b6a3; }
+.chapter-card.locked { background: #e0e3d7; border-color: #b7bdab; box-shadow: inset 0 2px 0 #f7f6ea, 0 5px 0 #b0b6a3; }
 .chapter-card.locked .chapter-art { opacity: .48; filter: grayscale(.65); }
 .chapter-card.locked .chapter-caption strong, .chapter-card.locked .chapter-caption > span, .chapter-card.locked .chapter-state { color: #8a9280; }
-.app:has(.diary-creek) { background: radial-gradient(ellipse at 8% 90%, #bfdfd080, transparent 55%), linear-gradient(145deg, #f0f7ee, #dfeef3); }
-.app:has(.diary-woodland) { background: radial-gradient(ellipse at 95% 15%, #dbd5ad80, transparent 55%), linear-gradient(145deg, #faf1dc, #e9e5ce); }
-.app:has(.diary-highland) { background: radial-gradient(ellipse at 12% 90%, #e4d4b580, transparent 55%), linear-gradient(145deg, #edf3f5, #d9e3e8); }
+.app:has(.diary-creek) { background: #e5f0eb var(--art-creek-wash) center / cover; }
+.app:has(.diary-woodland) { background: #f2ead5 var(--art-woodland-wash) center / cover; }
+.app:has(.diary-highland) { background: #e5edf0 var(--art-highland-wash) center / cover; }
 .diary-creek { --diary-ink: #466e69; }
 .diary-woodland { --diary-ink: #777451; }
 .diary-highland { --diary-ink: #597580; }

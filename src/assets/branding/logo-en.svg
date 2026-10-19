@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="190" viewBox="0 0 880 190" fill="none">
+  <title>WILDGRID · carved geometric wordmark</title>
+  <defs>
+    <g id="letters" fill-rule="evenodd">
+      <path d="m21 28 28-3 12 86 19-62h23l17 62 12-85 28 3-23 129-28 4-18-64-20 64-29-4Z"/>
+      <path d="m177 29 57-2v24l-15 2v82l16 1v25l-59-1v-24l15-1V53l-14 1Z"/>
+      <path d="m255 29 28-3v107l52-2-4 29-76 1Z"/>
+      <path d="m353 29 48-2 32 17 14 30v42l-16 29-29 15h-49ZM382 55v78h17l18-13 6-18V83l-7-17-17-11Z"/>
+      <path d="m496 27 49 1 17 14-14 21-13-9h-25l-17 14-6 24 6 27 16 16h25v-24h-22V87h50v59l-27 16h-36l-29-19-13-36V79l14-33Z"/>
+      <path d="m583 28 52-1 28 15 10 25-8 26-18 13 31 51-31 5-30-50h-6v48h-28ZM611 54v32h20l13-9V63l-13-9Z"/>
+      <path d="m694 29 57-2v24l-15 2v82l16 1v25l-59-1v-24l15-1V53l-14 1Z"/>
+      <path d="m771 29 47-2 31 17 14 30v42l-15 29-29 15h-48ZM799 55v78h17l18-13 6-18V83l-7-17-17-11Z"/>
+    </g>
+  </defs>
+  <use href="#letters" transform="translate(0 7)" fill="#604431" stroke="#604431" stroke-width="13" stroke-linejoin="round"/>
+  <use href="#letters" fill="#edcf8a" stroke="#493b2d" stroke-width="10" stroke-linejoin="round"/>
+  <use href="#letters" fill="#f5dfa4" stroke="#fff0c5" stroke-width="2" stroke-linejoin="bevel"/>
+  <g stroke="#b78c52" stroke-width="2" stroke-linecap="round" opacity=".7"><path d="m34 40 8 49m144-49 35-1m-154 94 6-19m198-73v73m98-74h22m90 18 14-12m62 60v26m51-91 21-1m72 1 34-1m44 0h21"/></g>
+  <g fill="#d2ae68"><path d="m139 34 12 1-18 115-10 3ZM321 135l8 1-2 16-40 1ZM427 64l12 14v31l-9 18 2-27ZM653 136l16 19-18 1-17-27ZM848 68l8 12v28l-8 18 2-28Z"/></g>
+  <path d="M520 91h13v13h-13Z" fill="#6f8960"/>
+</svg>

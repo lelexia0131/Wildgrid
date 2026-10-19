@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const assert = require('node:assert/strict');
-const { mkdirSync, writeFileSync } = require('node:fs');
+const { mkdirSync, readdirSync, writeFileSync } = require('node:fs');
 const path = require('node:path');
 
 // Run after npm run build: npx electron tests/home-visual-smoke.cjs
@@ -16,20 +16,22 @@ app.whenReady().then(async () => {
   const js = code => contents.executeJavaScript(code);
   const settle = () => new Promise(resolve => setTimeout(resolve, 100));
   const click = async selector => { await js(`document.querySelector(${JSON.stringify(selector)}).click()`); await settle(); };
-  const shot = async name => writeFileSync(path.join(output, `${name}.png`), (await contents.capturePage()).toPNG());
+  const shot = async name => { await new Promise(resolve => setTimeout(resolve, 220)); writeFileSync(path.join(output, `${name}.png`), (await contents.capturePage()).toPNG()); };
   const layout = async () => {
     assert.equal(await js('document.documentElement.scrollWidth > innerWidth'), false);
     // Board cells intentionally contain floating terrain tooltips beyond their width.
-    assert.deepEqual(await js(`Array.from(document.querySelectorAll('button:not(.tile), h1, h2, .sandbox-choice-copy, .status-pill')).filter(el => el.getClientRects().length && el.clientWidth && el.scrollWidth > el.clientWidth + 2).map(el => el.textContent)`), []);
+    assert.deepEqual(await js(`Array.from(document.querySelectorAll('button:not(.tile), h1, h2, .sandbox-choice-copy, .status-pill')).filter(el => el.getClientRects().length && el.clientWidth && el.scrollWidth > el.clientWidth + 2).map(el => ({ text: el.textContent, class: el.className, width: el.clientWidth, scroll: el.scrollWidth }))`), []);
   };
   try {
     await win.loadFile(path.join(root, 'dist', 'index.html'));
+    const images = readdirSync(path.join(root, 'dist/assets')).filter(name => /\.(svg|webp|png)$/.test(name));
+    assert.deepEqual(await js(`Promise.all(${JSON.stringify(images)}.map(async name => { const img = new Image(); img.src = new URL('./assets/' + name, document.baseURI).href; try { await img.decode(); return null; } catch { return name; } })).then(result => result.filter(Boolean))`), []);
     contents.debugger.attach('1.3');
     await js(`localStorage.setItem('wildgrid-tutorial-v1', '{"version":1,"enabled":false,"language":"zh"}')`);
     await win.loadFile(path.join(root, 'dist', 'index.html'));
     for (const [width, height] of [[1280, 900], [390, 844], [844, 390], [320, 568]]) {
       win.setContentSize(width, height);
-      await contents.debugger.sendCommand('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 900 });
+      await contents.debugger.sendCommand('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: width === 1280 ? 2 : 1, mobile: width < 900 });
       for (const language of ['zh', 'en']) {
         // Exercise the real language selector, without reloading the home screen.
         await click('[data-tutorial="settings"]');
@@ -41,12 +43,17 @@ app.whenReady().then(async () => {
         await js('document.fonts.ready');
         await layout();
         assert.equal(await js(`document.querySelector('.camp-title').getAttribute('aria-label')`), language === 'zh' ? '野格' : 'WILDGRID');
-        assert.equal(await js(`document.querySelectorAll('.camp-title svg text').length`), 0);
-        assert.equal(await js(`document.querySelectorAll('.camp-title svg defs > g > path').length`), language === 'zh' ? 0 : 8);
+        assert.equal(await js(`[...document.querySelectorAll('.camp-title img')].every(img => img.complete && img.naturalWidth > 0)`), true);
+        assert.equal(await js(`document.querySelector('.title-lettering').src.includes('logo-${language}')`), true);
         assert.equal(await js(`(() => { const title = document.querySelector('.camp-title').getBoundingClientRect(); const buttons = document.querySelector('.menu-buttons').getBoundingClientRect(); return title.top >= 0 && buttons.bottom <= innerHeight && buttons.left >= 0 && buttons.right <= innerWidth; })()`), true);
         await shot(`home-${language}-${width}`);
         await click('.menu-buttons button:last-child'); await layout(); await shot(`manual-${language}-${width}`); await click('.modal-close');
-        await click('.menu-buttons button:nth-child(2)'); await layout(); await click('.levels-page .back-link');
+        await click('.menu-buttons button:nth-child(2)'); await layout(); await shot(`diary-${language}-${width}`);
+        await click('.chapter-card:first-child'); await layout();
+        assert.equal(await js(`document.querySelectorAll('.journal-level-stage img.level-cover-art').length`), 15);
+        assert.equal(await js(`[...document.querySelectorAll('.journal-level-stage img.level-cover-art')].every(img => img.complete && img.naturalWidth > 0)`), true);
+        await shot(`chapter-${language}-${width}`);
+        await click('.levels-page .back-link'); await click('.levels-page .back-link');
         await click('.menu-buttons .primary'); await layout(); await shot(`modes-${language}-${width}`);
         await click('.survival-entry'); await layout(); await shot(`survival-${language}-${width}`); await click('.survival-heading .back-link');
         await click('.sandbox-choice:nth-child(3)'); await layout(); await click('.sandbox-back');
@@ -80,6 +87,7 @@ app.whenReady().then(async () => {
       await click('.facility-card');
       const answer = require("../src/game-data/solutions.json")['1'][0];
       await click(`[data-cell="${answer.r},${answer.c}"]`);
+      await new Promise(resolve => setTimeout(resolve, 800));
       assert.equal(await js(`!!document.querySelector('dialog[open] .win-content')`), true);
       await layout(); await shot(`win-${language}-320`);
     }

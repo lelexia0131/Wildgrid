@@ -6,7 +6,6 @@ export const JOURNAL_CHAPTERS = [
   { name: '山野远行', theme: 'highland', sky: '#e5eddc', mist: '#aec8c2', grass: '#c5cba0', edge: '#7e9990' },
 ] as const;
 
-export const getJournalChapterArt = (chapter: number) => JOURNAL_CHAPTERS[chapter];
 
 // Soft chapter-compatible palettes for the shared scene drawing system.
 export const JOURNAL_PALETTES = {

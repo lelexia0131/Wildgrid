@@ -52,6 +52,7 @@ export const UI_ENGLISH = {
   '© 2026 lelexia。野格的原创插画、关卡及合成音乐与音效归作者所有。第三方开源组件的权利归各自作者所有。': '© 2026 lelexia. Original Wildgrid artwork, levels, synthesized music and sound effects belong to their creator. Third-party open-source components belong to their respective authors.',
   '感谢 React、Vite、Electron、Capacitor 等开源项目，以及每一位游玩、反馈和支持野格的朋友。': 'Thanks to React, Vite, Electron, Capacitor and other open-source projects, and to everyone who plays, shares feedback and supports Wildgrid.',
   '返回设置': 'Back to Settings', '玩家 ID': 'Player ID', '获取中…': 'Loading…', '暂未获取': 'Unavailable', '背景音乐': 'Music', '交互音效': 'Sound effects', '静音模式': 'Mute all sounds', '设施提示': 'Facility tips', '连续放置': 'Continuous placement',
+  '挑战难度': 'Difficulty', '通关次数': 'Clears', '+{0}': '+{0}', '{0} / {1}': '{0} / {1}', '{0} · 最高身份': '{0} · Max rank', '累计经验 {0} · {1}': 'Total XP {0} · {1}',
   '身份升级！': 'Rank up!', '挑战完成': 'Challenge complete', '本次获得 +{0} 经验': '+{0} XP earned', '这张地图已通关，本次不重复奖励': 'Already completed. No additional rewards.', '累计经验': 'Total XP', '难已通关': ' · clears:', '次': 'times', '返回难度选择': 'Back to difficulties', '下一关': 'Next level', '回看旅程': 'View your journey',
   '· 图纸': '· Blueprint', '{0} 的完整营地答案，全部 {1} 个设施已放置': 'Complete solution for {0}, with all {1} facilities placed',
   '沙盒模式': 'Sandbox', '选择地图尺寸': 'Choose map size', '导入地图': 'Import Map', '模式选择': 'Choose a mode', '本地地图': 'Local Maps',

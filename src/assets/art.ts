@@ -1,0 +1,24 @@
+// Local assets only. Vite emits files rather than Base64 strings.
+const files = import.meta.glob<string>(['./**/*.svg', './backgrounds/*.webp'], { eager: true, query: '?url', import: 'default' });
+const asset = (path: string) => files[`./${path}`];
+const svg = (path: string) => asset(`${path}.svg`);
+
+export const art = {
+  branding: { zh: svg('branding/logo-zh'), en: svg('branding/logo-en'), sign: svg('branding/title-sign') },
+  backgrounds: {
+    home: asset('backgrounds/home-woodland.webp'), portrait: asset('backgrounds/home-woodland-portrait.webp'),
+    diary: asset('backgrounds/camp-diary.webp'), survival: asset('backgrounds/wilderness-survival.webp'),
+    chapters: [0, 1, 2].map(i => svg(`backgrounds/chapter-${i}`)),
+  },
+  chapters: [0, 1, 2].map(i => ({ base: svg(`illustrations/chapter-${i}`), cloud: svg(`illustrations/chapter-${i}-cloud`), ripples: svg(`illustrations/chapter-${i}-ripples`) })),
+  journal: Array.from({ length: 45 }, (_, i) => svg(`illustrations/journal-${String(i + 1).padStart(2, '0')}`)),
+  illustration: (kind: 'adventure' | 'sandbox') => svg(`illustrations/${kind}`),
+  object: (kind: string) => svg(`objects/${kind}`),
+  menuIcon: (kind: string) => svg(`icons/menu-${kind}`),
+  toolIcon: (kind: string) => svg(`icons/tool-${kind}`),
+  badges: ['newcomer', 'apprentice', 'explorer', 'veteran', 'legend'].map(name => svg(`survival-badges/${name}`)),
+  hero: svg('illustrations/hero-island'),
+  decoration: (name: string) => svg(`decorations/${name}`),
+  completion: svg('achievements/completion-landscape'),
+  reward: { difficulty: svg('achievements/challenge-difficulty'), count: svg('achievements/challenge-count'), leaf: svg('progress/xp-leaf') },
+};

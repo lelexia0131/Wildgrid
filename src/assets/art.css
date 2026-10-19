@@ -1,0 +1,50 @@
+/* Central texture and nine-slice skin references. Keep each file's viewBox/slice margins. */
+:root {
+  --art-ambient-one: url('./decorations/ambient-rings-one.svg');
+  --art-ambient-two: url('./decorations/ambient-rings-two.svg');
+  --art-paper: url('./panels/ruled-paper.svg');
+  --art-ring: url('./decorations/notebook-ring.svg');
+  --art-ribbon: url('./decorations/ribbon.svg');
+  --art-sprig: url('./decorations/sprig.svg');
+  --art-grass: url('./decorations/grass.svg');
+  --art-check: url('./achievements/check-medallion.svg');
+  --art-caption-rule: url('./decorations/caption-rule.svg');
+  --art-xp-base: url('./progress/xp-base.svg');
+  --art-xp-gain: url('./progress/xp-gain.svg');
+  --art-xp-frame: url('./progress/xp-frame.svg');
+  --art-generation-stripe: url('./progress/generation-stripe.svg');
+  --art-generation-vignette: url('./backgrounds/generation-vignette.svg');
+  --art-home-vignette: url('./backgrounds/home-vignette.svg');
+  --art-app-wash: url('./backgrounds/app-wash.svg');
+  --art-creek-wash: url('./backgrounds/creek-wash.svg');
+  --art-woodland-wash: url('./backgrounds/woodland-wash.svg');
+  --art-highland-wash: url('./backgrounds/highland-wash.svg');
+  --art-panel-completion: url('./panels/completion.svg');
+  --art-panel-reward: url('./panels/reward.svg');
+  --art-panel-identity: url('./panels/identity.svg');
+  --art-panel-chapter-0: url('./panels/chapter-0.svg');
+  --art-panel-chapter-1: url('./panels/chapter-1.svg');
+  --art-panel-chapter-2: url('./panels/chapter-2.svg');
+  --art-panel-notebook-cover: url('./panels/notebook-cover.svg');
+  --art-panel-paper-edge: url('./panels/paper-edge.svg');
+}
+.app .modal.win-modal { border-image: var(--art-panel-completion) 16 fill / 16px / 0 stretch; }
+.app .survival-identity { border-image: var(--art-panel-identity) 16 fill / 16px / 0 stretch; }
+.reward-xp, .reward-mark { border-image: var(--art-panel-reward) 16 fill / 12px / 0 stretch; box-shadow: none; }
+.reward-xp-track, .survival-xp-track, .generation-progress { border-image: var(--art-xp-frame) 12 fill / 6px / 2px stretch; }
+.app .manual-modal { border-image: var(--art-panel-notebook-cover) 16 fill / 16px / 0 stretch; }
+.manual-notebook, .modal.survival-records.record-sheet { border-image: var(--art-panel-paper-edge) 16 / 16px / 6px stretch; }
+.chapter-card { border-image: var(--art-panel-chapter-0) 16 fill / 16px / 0 stretch; }
+.chapter-card.chapter-1 { border-image-source: var(--art-panel-chapter-1); }
+.chapter-card.chapter-2 { border-image-source: var(--art-panel-chapter-2); }
+.chapter-card.locked { border-image: none; }
+.chapter-art { position: relative; aspect-ratio: 320 / 275; }
+.chapter-art > img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+.journal-chapter-background { object-fit: cover; }
+.level-cover-art, .sandbox-illustration, img.art { object-fit: contain; }
+.completion-overlay { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.completion-effects { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.completion-landscape { display: block; }
+.win-modal[open] .leaf-left { transform-origin: 12.5% 35%; }
+.win-modal[open] .leaf-right { transform-origin: 85.5% 43%; }
+.reward-mark > img { object-fit: contain; }

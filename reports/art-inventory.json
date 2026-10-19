@@ -1,0 +1,1621 @@
+{
+  "assets": [
+    {
+      "file": "src/assets/achievements/challenge-count.svg",
+      "status": "external-art",
+      "bytes": 756,
+      "width": 80,
+      "height": 70,
+      "sha256": "22ff5ccb6b0903f1252b3db912bd63671b35595f090f158a69411a7d999a2d07"
+    },
+    {
+      "file": "src/assets/achievements/challenge-difficulty.svg",
+      "status": "external-art",
+      "bytes": 724,
+      "width": 80,
+      "height": 70,
+      "sha256": "65cadc20f14a107f69beca940649d8f477052f617d632aaa16ce3c6a1e8be487"
+    },
+    {
+      "file": "src/assets/achievements/check-medallion.svg",
+      "status": "external-art",
+      "bytes": 335,
+      "width": 52,
+      "height": 52,
+      "sha256": "ebd0582c937ffc33220889b1568566450bc2a0a064047a94b9b23d3eaded86ac"
+    },
+    {
+      "file": "src/assets/achievements/completion-landscape.svg",
+      "status": "external-art",
+      "bytes": 1358,
+      "width": 280,
+      "height": 210,
+      "sha256": "408839f7ba1b6b04f84ee3a7b47216974b353fdfb6a70e99def707d3c47e71a3"
+    },
+    {
+      "file": "src/assets/backgrounds/app-wash.svg",
+      "status": "external-art",
+      "bytes": 485,
+      "width": 800,
+      "height": 800,
+      "sha256": "cfd6468211d845513f4ab78086cf1c0fa16695b0e84edb96c5f64956fd707df7"
+    },
+    {
+      "file": "src/assets/backgrounds/camp-diary.webp",
+      "status": "reused",
+      "bytes": 273090,
+      "width": 1676,
+      "height": 939,
+      "sha256": "dc231e8bf35a05deb1264b99f577642793b9b55ad13a435eacbd7a5118b3b4d4"
+    },
+    {
+      "file": "src/assets/backgrounds/chapter-0.svg",
+      "status": "external-art",
+      "bytes": 24666,
+      "width": 1200,
+      "height": 800,
+      "sha256": "b8c40aa726e1573ab9edeb1fd59a3ae72c735056da49b61a5c8585d8b4c63f4b"
+    },
+    {
+      "file": "src/assets/backgrounds/chapter-1.svg",
+      "status": "external-art",
+      "bytes": 27867,
+      "width": 1200,
+      "height": 800,
+      "sha256": "7a0eda10809a9defa4c8ed1c9fab909278bce32388c007befe27394fdaaa46a4"
+    },
+    {
+      "file": "src/assets/backgrounds/chapter-2.svg",
+      "status": "external-art",
+      "bytes": 23922,
+      "width": 1200,
+      "height": 800,
+      "sha256": "d9d1dd13a3f4d67210670a2d53b596c1cf819bbc9f61f43bf377be4cce84e18a"
+    },
+    {
+      "file": "src/assets/backgrounds/creek-wash.svg",
+      "status": "external-art",
+      "bytes": 485,
+      "width": 800,
+      "height": 800,
+      "sha256": "f2c473d329d5af22ed14c1caaa5d4a48f75ff1691d28774a24b146125bf170d6"
+    },
+    {
+      "file": "src/assets/backgrounds/generation-vignette.svg",
+      "status": "external-art",
+      "bytes": 421,
+      "width": 800,
+      "height": 800,
+      "sha256": "3d0203cc4e3dc5ff4c4c8a387d20395cf54a3c029f8022ff44d62823c1168cdf"
+    },
+    {
+      "file": "src/assets/backgrounds/highland-wash.svg",
+      "status": "external-art",
+      "bytes": 485,
+      "width": 800,
+      "height": 800,
+      "sha256": "9b351e412b5dbea931051a1a7148c34e90c192b9fd017df40467fb840b5551bd"
+    },
+    {
+      "file": "src/assets/backgrounds/home-vignette.svg",
+      "status": "external-art",
+      "bytes": 383,
+      "width": 800,
+      "height": 800,
+      "sha256": "d39544de21a65bf89cc03d4f60b6569b149c6334d98198d4452a965be8a2803e"
+    },
+    {
+      "file": "src/assets/backgrounds/home-woodland-portrait.webp",
+      "status": "reused",
+      "bytes": 199310,
+      "width": 1024,
+      "height": 1536,
+      "sha256": "2cc86a723249d5c2996a746968cc00fe224be889653d9fa7e72c727ef4b43a80"
+    },
+    {
+      "file": "src/assets/backgrounds/home-woodland.webp",
+      "status": "reused",
+      "bytes": 183330,
+      "width": 1536,
+      "height": 1024,
+      "sha256": "97dfb934954a14729d13bf07943a43cabeda3d709ec523b93f81c0ff9f839974"
+    },
+    {
+      "file": "src/assets/backgrounds/wilderness-survival.webp",
+      "status": "reused",
+      "bytes": 264164,
+      "width": 1676,
+      "height": 939,
+      "sha256": "1fff0a9705be71a991e6cc91f71a35ccc831a6925b1fc6f6fdc8ce509d10ff29"
+    },
+    {
+      "file": "src/assets/backgrounds/woodland-wash.svg",
+      "status": "external-art",
+      "bytes": 485,
+      "width": 800,
+      "height": 800,
+      "sha256": "fab064321af7de7f8b5fa45a423d26127660cb51a4b851329955354b4973d877"
+    },
+    {
+      "file": "src/assets/branding/logo-en.svg",
+      "status": "redesigned",
+      "bytes": 1707,
+      "width": 880,
+      "height": 190,
+      "sha256": "34a5cf251aed690278f095bb6e56144c9a4a126fe6e6f1ce5ad79f8ca9a273ec"
+    },
+    {
+      "file": "src/assets/branding/logo-zh.svg",
+      "status": "redesigned",
+      "bytes": 2258,
+      "width": 600,
+      "height": 260,
+      "sha256": "21a0c1a0c19b67a0b88f99889ae610efb57ffd5609b773394894923fd1538aac"
+    },
+    {
+      "file": "src/assets/branding/title-sign.svg",
+      "status": "redesigned",
+      "bytes": 2964,
+      "width": 720,
+      "height": 330,
+      "sha256": "843b7773e7f689ba716d76670de6416bb81a29bf07f24dc63baa5363e35707bb"
+    },
+    {
+      "file": "src/assets/branding/wildgrid-en.webp",
+      "status": "legacy-not-shipped",
+      "bytes": 901852,
+      "width": 2172,
+      "height": 724,
+      "sha256": "903e0e922d4d0747a422edff692b7591a33394a0f890eec7d889bcd48c1fc68a"
+    },
+    {
+      "file": "src/assets/branding/wildgrid-zh.webp",
+      "status": "legacy-not-shipped",
+      "bytes": 1028752,
+      "width": 1774,
+      "height": 887,
+      "sha256": "cff7261ff42f9e5a4d23800e42196e78d26395aab33906d54465798b1a677e11"
+    },
+    {
+      "file": "src/assets/decorations/ambient-rings-one.svg",
+      "status": "external-art",
+      "bytes": 320,
+      "width": 830,
+      "height": 830,
+      "sha256": "02a9eb6132f203eb5ddecc238f23cf880cc73d23b07a11459f2b16bc019e7cbb"
+    },
+    {
+      "file": "src/assets/decorations/ambient-rings-two.svg",
+      "status": "external-art",
+      "bytes": 250,
+      "width": 720,
+      "height": 720,
+      "sha256": "effa62c4a73f0362ee0ad98fee671f9070f4b64871a8a946524dba5ae722214e"
+    },
+    {
+      "file": "src/assets/decorations/bird.svg",
+      "status": "external-art",
+      "bytes": 219,
+      "width": 24,
+      "height": 16,
+      "sha256": "27a007b1eea487f49803361b9f85bd3af9724dfa2624d56b84043e28e48fa54f"
+    },
+    {
+      "file": "src/assets/decorations/caption-rule.svg",
+      "status": "external-art",
+      "bytes": 159,
+      "width": 200,
+      "height": 2,
+      "sha256": "87f9aefde26bf5459d4763afcc06af75b280600adef3ed70ee236aa2ea4baf59"
+    },
+    {
+      "file": "src/assets/decorations/cloud-far.svg",
+      "status": "external-art",
+      "bytes": 179,
+      "width": 84,
+      "height": 16,
+      "sha256": "4cffb1947d2998fe2836e2190cf04ccb7416dd41581aadaa34a149ba020a9103"
+    },
+    {
+      "file": "src/assets/decorations/cloud.svg",
+      "status": "external-art",
+      "bytes": 190,
+      "width": 135,
+      "height": 28,
+      "sha256": "e3a440df729dda5a5c3735e8621765b7e1e7eda6e04f196a652fb200bcda3a5e"
+    },
+    {
+      "file": "src/assets/decorations/completion-0.svg",
+      "status": "external-art",
+      "bytes": 280,
+      "width": 280,
+      "height": 210,
+      "sha256": "70073c3e0af6660dc64599f56c72cfbd0107656e3b278f604f8f5faa58dbf6c2"
+    },
+    {
+      "file": "src/assets/decorations/completion-1.svg",
+      "status": "external-art",
+      "bytes": 177,
+      "width": 280,
+      "height": 210,
+      "sha256": "3be793de9efb233b67fa489c62a18c0970a7d857e9c6ede335348780ac223f3a"
+    },
+    {
+      "file": "src/assets/decorations/completion-2.svg",
+      "status": "external-art",
+      "bytes": 180,
+      "width": 280,
+      "height": 210,
+      "sha256": "f8435f22933f88f40e1b09744de34fe07089477378f5bcdadf0f1bada99ec3f9"
+    },
+    {
+      "file": "src/assets/decorations/fire-bloom.svg",
+      "status": "external-art",
+      "bytes": 379,
+      "width": 800,
+      "height": 620,
+      "sha256": "9962778fda58b62653a3a1e40ad6c7cd783b6a3a68f4036bc45d9166709bcf22"
+    },
+    {
+      "file": "src/assets/decorations/grass.svg",
+      "status": "external-art",
+      "bytes": 188,
+      "width": 16,
+      "height": 12,
+      "sha256": "dd073f2b1ad3e9a9c6de2f36c47b7f0985264740e52588f72f3be70147d2f9a4"
+    },
+    {
+      "file": "src/assets/decorations/hero-glow.svg",
+      "status": "external-art",
+      "bytes": 830,
+      "width": 800,
+      "height": 620,
+      "sha256": "52f88e48e4254e7f9d125de54722b311135f0b88046130afcdd3bde207e8ffa7"
+    },
+    {
+      "file": "src/assets/decorations/notebook-ring.svg",
+      "status": "external-art",
+      "bytes": 359,
+      "width": 40,
+      "height": 21,
+      "sha256": "4bb478cb4477d69cb54730c038dc2495bce8f16bc2f4c8c487175ebd1aa9565e"
+    },
+    {
+      "file": "src/assets/decorations/ribbon.svg",
+      "status": "external-art",
+      "bytes": 232,
+      "width": 18,
+      "height": 45,
+      "sha256": "7511a98610e05ce901835812a64b07f4f560f28620b97e8971fdf1aa2047256c"
+    },
+    {
+      "file": "src/assets/decorations/sprig.svg",
+      "status": "external-art",
+      "bytes": 302,
+      "width": 44,
+      "height": 72,
+      "sha256": "2af91a6d43637d1d63432afa1626a46260b9e6441d0071490e02a1a3bdc3c31a"
+    },
+    {
+      "file": "src/assets/icons/menu-acorn.svg",
+      "status": "external-art",
+      "bytes": 688,
+      "width": 100,
+      "height": 100,
+      "sha256": "491291d64d78425ef7d52f88b7e7fb40598e3928a83c6cb0a0fb36710b200c29"
+    },
+    {
+      "file": "src/assets/icons/menu-adventure.svg",
+      "status": "external-art",
+      "bytes": 836,
+      "width": 100,
+      "height": 100,
+      "sha256": "537ddf36fa23a46e7c872dfd241d7516a10a6fd7c7f75ac384c4ad0dded6a22e"
+    },
+    {
+      "file": "src/assets/icons/menu-archive.svg",
+      "status": "external-art",
+      "bytes": 708,
+      "width": 100,
+      "height": 100,
+      "sha256": "9e4455392a1641d148c279d57b8671260f5879a97e8620f4525c8f5a6ebe0506"
+    },
+    {
+      "file": "src/assets/icons/menu-badge.svg",
+      "status": "external-art",
+      "bytes": 627,
+      "width": 100,
+      "height": 100,
+      "sha256": "3aae89312abf4d97020cc893142fa3e409dc5e08d32108d5658c9e6742aa5aaa"
+    },
+    {
+      "file": "src/assets/icons/menu-binoculars.svg",
+      "status": "external-art",
+      "bytes": 868,
+      "width": 100,
+      "height": 100,
+      "sha256": "d9f85a0e573c3989a9e52d24ed59dfb99a10d1f36b423e1caebdcb0bcebe6366"
+    },
+    {
+      "file": "src/assets/icons/menu-boots.svg",
+      "status": "external-art",
+      "bytes": 667,
+      "width": 100,
+      "height": 100,
+      "sha256": "e990728fb67213b27e430beb9f9bc146687eaa8d223cbbd77d4022f10fd02840"
+    },
+    {
+      "file": "src/assets/icons/menu-camera.svg",
+      "status": "external-art",
+      "bytes": 732,
+      "width": 100,
+      "height": 100,
+      "sha256": "a919f822ac87741f25c03b2326de30b297c66d24408eabdabcf2eb584927794b"
+    },
+    {
+      "file": "src/assets/icons/menu-check.svg",
+      "status": "external-art",
+      "bytes": 694,
+      "width": 100,
+      "height": 100,
+      "sha256": "193373556ce6141270aa1ea7dc05d6d87d2a8af6712f6f3c6c2dc924899fe01f"
+    },
+    {
+      "file": "src/assets/icons/menu-clues.svg",
+      "status": "external-art",
+      "bytes": 511,
+      "width": 100,
+      "height": 100,
+      "sha256": "6eb9c28276f904dd8b9562728dd1fa270fe9f46adccabdb79de72241ee45f76d"
+    },
+    {
+      "file": "src/assets/icons/menu-difficulty.svg",
+      "status": "external-art",
+      "bytes": 509,
+      "width": 100,
+      "height": 100,
+      "sha256": "f498b885df5eff2d839edeb0e297bf25cd86f0f9e522cd4aaa2ec9f067329b31"
+    },
+    {
+      "file": "src/assets/icons/menu-edit.svg",
+      "status": "external-art",
+      "bytes": 979,
+      "width": 100,
+      "height": 100,
+      "sha256": "8519fa6a2115df9d46e04f6008cc56c1936cbaea4ffaba7d9e0e4ae89bc47240"
+    },
+    {
+      "file": "src/assets/icons/menu-flower.svg",
+      "status": "external-art",
+      "bytes": 724,
+      "width": 100,
+      "height": 100,
+      "sha256": "9505b30c01661e949944878cbf07750048783fd4e06481b7ec36bf4f0610e2b3"
+    },
+    {
+      "file": "src/assets/icons/menu-lantern.svg",
+      "status": "external-art",
+      "bytes": 678,
+      "width": 100,
+      "height": 100,
+      "sha256": "6d70f6b0885010562539f0f60f4ed76c9fd209482f785304ea626ad7187a0cde"
+    },
+    {
+      "file": "src/assets/icons/menu-maps.svg",
+      "status": "external-art",
+      "bytes": 738,
+      "width": 100,
+      "height": 100,
+      "sha256": "da41876cf7296572d473c6e2c8793cd053531f40add746a5d2692c74f8b54ac3"
+    },
+    {
+      "file": "src/assets/icons/menu-moon.svg",
+      "status": "external-art",
+      "bytes": 565,
+      "width": 100,
+      "height": 100,
+      "sha256": "fbda4c4baf12a37182184e8a572c6266768cb0bc161445e0f8d5759575a9790a"
+    },
+    {
+      "file": "src/assets/icons/menu-mug.svg",
+      "status": "external-art",
+      "bytes": 724,
+      "width": 100,
+      "height": 100,
+      "sha256": "baad0b06136740cfbbdfa16e85dc22e8419fae5b4aa8ceb732b917a9a79d9e4e"
+    },
+    {
+      "file": "src/assets/icons/menu-overview.svg",
+      "status": "external-art",
+      "bytes": 514,
+      "width": 100,
+      "height": 100,
+      "sha256": "4233636587db04e5a14dbe20341244e28eb37d4ee85add05242a4de817cabda6"
+    },
+    {
+      "file": "src/assets/icons/menu-resume.svg",
+      "status": "external-art",
+      "bytes": 546,
+      "width": 100,
+      "height": 100,
+      "sha256": "1d3c0a1e6150cbb084952f63834ca24509cb0767a4cc5077bb85ddcd2bc8947a"
+    },
+    {
+      "file": "src/assets/icons/menu-rotate.svg",
+      "status": "external-art",
+      "bytes": 487,
+      "width": 100,
+      "height": 100,
+      "sha256": "b8dc75654a721322aad754d149571f62423c2c42142f8e885ce202c1329b18db"
+    },
+    {
+      "file": "src/assets/icons/menu-sandbox.svg",
+      "status": "external-art",
+      "bytes": 999,
+      "width": 100,
+      "height": 100,
+      "sha256": "5d391682332e317a197d46675780c4b9a380b9a3357995e06bfa116e126cf56f"
+    },
+    {
+      "file": "src/assets/icons/menu-settings.svg",
+      "status": "external-art",
+      "bytes": 631,
+      "width": 100,
+      "height": 100,
+      "sha256": "93e9d0083e7902dbb7c0dfcd458bb6fe879e1ec98b64b9903b3dc98fd97b55ad"
+    },
+    {
+      "file": "src/assets/icons/menu-share.svg",
+      "status": "external-art",
+      "bytes": 544,
+      "width": 100,
+      "height": 100,
+      "sha256": "75007aa9a0f378ed869a549ebab3b5a6b6cf15ca3fa1c7e4faab77c67a57f219"
+    },
+    {
+      "file": "src/assets/icons/menu-survival.svg",
+      "status": "external-art",
+      "bytes": 773,
+      "width": 100,
+      "height": 100,
+      "sha256": "f491a35d60ae579694ee6cbbe8f25ff466a6fb61bcf91942e161c97ae1c880d0"
+    },
+    {
+      "file": "src/assets/icons/menu-tools.svg",
+      "status": "external-art",
+      "bytes": 547,
+      "width": 100,
+      "height": 100,
+      "sha256": "5d5755c78b4c0df41f5e08ddf447d017f97373b30fd89b7266052b120862d0b3"
+    },
+    {
+      "file": "src/assets/icons/tool-abandon.svg",
+      "status": "external-art",
+      "bytes": 532,
+      "width": 64,
+      "height": 64,
+      "sha256": "afc62a0cb3c9fac3f2385cab8093564efb11337ee726df6a13350fa3105f20c0"
+    },
+    {
+      "file": "src/assets/icons/tool-blueprint.svg",
+      "status": "external-art",
+      "bytes": 644,
+      "width": 64,
+      "height": 64,
+      "sha256": "77959a2bad42e1c682d3e1747ddb3d83e0ba8c7a31ee076c208e974b3fc5d8f7"
+    },
+    {
+      "file": "src/assets/icons/tool-export.svg",
+      "status": "external-art",
+      "bytes": 496,
+      "width": 64,
+      "height": 64,
+      "sha256": "1951c5c6f0bc4b48c3af319e1abe9c03a685288c503a09709eb84bd147bf2c48"
+    },
+    {
+      "file": "src/assets/icons/tool-journal.svg",
+      "status": "external-art",
+      "bytes": 636,
+      "width": 64,
+      "height": 64,
+      "sha256": "95299bf47a4a01a45d303b47d056e0fc57a3aa853776ac394aa87bba39950a2c"
+    },
+    {
+      "file": "src/assets/icons/tool-restart.svg",
+      "status": "external-art",
+      "bytes": 587,
+      "width": 64,
+      "height": 64,
+      "sha256": "2ffb72103bf472b98453d9a77cc0387cf09c0f65c5a137b4bb30f6ca3bc8e4b6"
+    },
+    {
+      "file": "src/assets/icons/tool-save.svg",
+      "status": "external-art",
+      "bytes": 626,
+      "width": 64,
+      "height": 64,
+      "sha256": "ce71bfba1c415ba9c2e4d17dbf753bbbb2c40d1d1df42c0172b88e40236b522a"
+    },
+    {
+      "file": "src/assets/icons/tool-undo.svg",
+      "status": "external-art",
+      "bytes": 497,
+      "width": 64,
+      "height": 64,
+      "sha256": "0c17259bb946f13bd313002f2416c02767d1dc608843e24d8a4642d13a2864fd"
+    },
+    {
+      "file": "src/assets/illustrations/adventure.svg",
+      "status": "external-art",
+      "bytes": 3218,
+      "width": 560,
+      "height": 460,
+      "sha256": "d4e7ff1fc7428e348ddde5c28dc8e2a311737063739a4f7f05ca76d64be9cca3"
+    },
+    {
+      "file": "src/assets/illustrations/chapter-0-cloud.svg",
+      "status": "external-art",
+      "bytes": 765,
+      "width": 320,
+      "height": 275,
+      "sha256": "b9106bcfa722f7e46cc6a37435daa78207925145273d168cb9d52ccae9473577"
+    },
+    {
+      "file": "src/assets/illustrations/chapter-0-ripples.svg",
+      "status": "external-art",
+      "bytes": 778,
+      "width": 320,
+      "height": 275,
+      "sha256": "bfb40fd180ce4457da3a71c68a9c25ae50e02d8fa60e3f2d4a079434a79c72bc"
+    },
+    {
+      "file": "src/assets/illustrations/chapter-0.svg",
+      "status": "external-art",
+      "bytes": 10210,
+      "width": 320,
+      "height": 275,
+      "sha256": "2c41996cb31b72039960fcff27c2ea9113c4b4fbe9ae7224112a010ec7914e19"
+    },
+    {
+      "file": "src/assets/illustrations/chapter-1-cloud.svg",
+      "status": "external-art",
+      "bytes": 768,
+      "width": 320,
+      "height": 275,
+      "sha256": "7388646217ef8b74ba0d3ffbf0270d794f9b3ad099ea925a3d644b09472a64ea"
+    },
+    {
+      "file": "src/assets/illustrations/chapter-1-ripples.svg",
+      "status": "external-art",
+      "bytes": 721,
+      "width": 320,
+      "height": 275,
+      "sha256": "63fc2770ec6fcda66f7b6c37653f2fed46e2bdaa2473b09515b9c5a30272da84"
+    },
+    {
+      "file": "src/assets/illustrations/chapter-1.svg",
+      "status": "external-art",
+      "bytes": 13225,
+      "width": 320,
+      "height": 275,
+      "sha256": "2d05112432a8dd271b27191fdd30426d2f610057664dad297409e4953583f370"
+    },
+    {
+      "file": "src/assets/illustrations/chapter-2-cloud.svg",
+      "status": "external-art",
+      "bytes": 768,
+      "width": 320,
+      "height": 275,
+      "sha256": "5986257a00a9d3cad7a298cc5958698c14055c94085077651fc33379546a4842"
+    },
+    {
+      "file": "src/assets/illustrations/chapter-2-ripples.svg",
+      "status": "external-art",
+      "bytes": 597,
+      "width": 320,
+      "height": 275,
+      "sha256": "e5393291f520fdfbe29f8e4a5555a7638cc073ef6cfc912795e7d54296d89b24"
+    },
+    {
+      "file": "src/assets/illustrations/chapter-2.svg",
+      "status": "external-art",
+      "bytes": 12024,
+      "width": 320,
+      "height": 275,
+      "sha256": "dce6f9ba4885df55430e65594aa20eafaa8320c0cf409a2cc3d9825214505a9a"
+    },
+    {
+      "file": "src/assets/illustrations/hero-island.svg",
+      "status": "external-art",
+      "bytes": 5482,
+      "width": 800,
+      "height": 620,
+      "sha256": "6f1dce8566370047f2f36483feca2b19d44df4c986da3394c4b4cb5e22149bff"
+    },
+    {
+      "file": "src/assets/illustrations/journal-01.svg",
+      "status": "external-art",
+      "bytes": 8426,
+      "width": 320,
+      "height": 220,
+      "sha256": "d11da150a15eefd1247797071598f22c5091659c944e4ee37b810215b70fd0bd"
+    },
+    {
+      "file": "src/assets/illustrations/journal-02.svg",
+      "status": "external-art",
+      "bytes": 9080,
+      "width": 320,
+      "height": 220,
+      "sha256": "09db220de9012288f16a9fa4556b3bb0ee760c89b1441bd9af1582820a2961e0"
+    },
+    {
+      "file": "src/assets/illustrations/journal-03.svg",
+      "status": "external-art",
+      "bytes": 9534,
+      "width": 320,
+      "height": 220,
+      "sha256": "921e9125d94160b52265fa642ebec6a5ebc6429903e6556780f981725bdbb9c4"
+    },
+    {
+      "file": "src/assets/illustrations/journal-04.svg",
+      "status": "external-art",
+      "bytes": 9955,
+      "width": 320,
+      "height": 220,
+      "sha256": "8791e1450575bb9ce9f06871ccd150d174e113db9268bf20fd2b5cf69b111ddf"
+    },
+    {
+      "file": "src/assets/illustrations/journal-05.svg",
+      "status": "external-art",
+      "bytes": 9474,
+      "width": 320,
+      "height": 220,
+      "sha256": "63e8fde9a246f143418c387aaecddfb545b61899df6f77c8f09028b79d794729"
+    },
+    {
+      "file": "src/assets/illustrations/journal-06.svg",
+      "status": "external-art",
+      "bytes": 9108,
+      "width": 320,
+      "height": 220,
+      "sha256": "5242dc23c0dcb4255f45a0dc6ea2d737003feaa082a135f0b1ce7abd7b71372f"
+    },
+    {
+      "file": "src/assets/illustrations/journal-07.svg",
+      "status": "external-art",
+      "bytes": 7648,
+      "width": 320,
+      "height": 220,
+      "sha256": "7b2655ee5157524a420015225e59d511de82c315488636f426f64f9dd288d443"
+    },
+    {
+      "file": "src/assets/illustrations/journal-08.svg",
+      "status": "external-art",
+      "bytes": 9702,
+      "width": 320,
+      "height": 220,
+      "sha256": "a54a5eb2cbc881175bf500a4ea8d9fa3c30fefe953f8219e5af4414a8cdc7959"
+    },
+    {
+      "file": "src/assets/illustrations/journal-09.svg",
+      "status": "external-art",
+      "bytes": 10091,
+      "width": 320,
+      "height": 220,
+      "sha256": "e9a3b377fa4dbf06fba757849fb2d90c1a94a8b07a011babd4852c3c0c8d58a7"
+    },
+    {
+      "file": "src/assets/illustrations/journal-10.svg",
+      "status": "external-art",
+      "bytes": 7690,
+      "width": 320,
+      "height": 220,
+      "sha256": "c173e280d3f73c40947294091a5953cba7d1c734537208a60cee45531594e964"
+    },
+    {
+      "file": "src/assets/illustrations/journal-11.svg",
+      "status": "external-art",
+      "bytes": 10652,
+      "width": 320,
+      "height": 220,
+      "sha256": "8c06d7fdcdb26941055f1512bdf04826047b9625a4fa9376a989920be13d26ee"
+    },
+    {
+      "file": "src/assets/illustrations/journal-12.svg",
+      "status": "external-art",
+      "bytes": 8733,
+      "width": 320,
+      "height": 220,
+      "sha256": "a6651f73c03f720865646d13f7b2747ce2060ff2ba7103ad30bd8fd9d9a7e361"
+    },
+    {
+      "file": "src/assets/illustrations/journal-13.svg",
+      "status": "external-art",
+      "bytes": 8992,
+      "width": 320,
+      "height": 220,
+      "sha256": "8e952442e30af2f9c1b1b93832a7b2f4793f31f98c7abf4070b95f0cdf4d9deb"
+    },
+    {
+      "file": "src/assets/illustrations/journal-14.svg",
+      "status": "external-art",
+      "bytes": 9827,
+      "width": 320,
+      "height": 220,
+      "sha256": "12a8f708c2765ec61623f270ecdfb759882e203bce94674cc3ed1aa3fa2dfeff"
+    },
+    {
+      "file": "src/assets/illustrations/journal-15.svg",
+      "status": "external-art",
+      "bytes": 12919,
+      "width": 320,
+      "height": 220,
+      "sha256": "2e12e216ac3752b9ea93f2dbafa40ead1572634d213b89cc3eb2b7a6738d40fd"
+    },
+    {
+      "file": "src/assets/illustrations/journal-16.svg",
+      "status": "external-art",
+      "bytes": 10140,
+      "width": 320,
+      "height": 220,
+      "sha256": "d905025b24ee18b3b45682a71da8939e45d5d46501d47415d4ca9d23777c7286"
+    },
+    {
+      "file": "src/assets/illustrations/journal-17.svg",
+      "status": "external-art",
+      "bytes": 10452,
+      "width": 320,
+      "height": 220,
+      "sha256": "2bc256742eee2cb76970f798e4ca5acc67741b6511c8591b36d8bc0d75b79049"
+    },
+    {
+      "file": "src/assets/illustrations/journal-18.svg",
+      "status": "external-art",
+      "bytes": 11327,
+      "width": 320,
+      "height": 220,
+      "sha256": "8b8220fbf8e5ac7069203fe006994a588ca54a249d45209128787999126be96e"
+    },
+    {
+      "file": "src/assets/illustrations/journal-19.svg",
+      "status": "external-art",
+      "bytes": 9721,
+      "width": 320,
+      "height": 220,
+      "sha256": "e752c855d8837d60e6d21c67af32eb25eff48340bc0189e330e9f71767782433"
+    },
+    {
+      "file": "src/assets/illustrations/journal-20.svg",
+      "status": "external-art",
+      "bytes": 11353,
+      "width": 320,
+      "height": 220,
+      "sha256": "4a0a4abfeff44ce65bb75b841f194753933b131603de004143b24fadccfaed35"
+    },
+    {
+      "file": "src/assets/illustrations/journal-21.svg",
+      "status": "external-art",
+      "bytes": 11042,
+      "width": 320,
+      "height": 220,
+      "sha256": "973d82dd500b478a4d5ad77ad7e94bf4150a980353dfce4ab6abb0b7890c1eae"
+    },
+    {
+      "file": "src/assets/illustrations/journal-22.svg",
+      "status": "external-art",
+      "bytes": 8855,
+      "width": 320,
+      "height": 220,
+      "sha256": "34422125957607e2c80ea5f9fa4d335649d7b36fbb617878cc7cf1e2015ebaa1"
+    },
+    {
+      "file": "src/assets/illustrations/journal-23.svg",
+      "status": "external-art",
+      "bytes": 11535,
+      "width": 320,
+      "height": 220,
+      "sha256": "ae9be6416341201f3675270a8d654846dc3ce3c1ca643155390532835021061b"
+    },
+    {
+      "file": "src/assets/illustrations/journal-24.svg",
+      "status": "external-art",
+      "bytes": 10075,
+      "width": 320,
+      "height": 220,
+      "sha256": "e684c13c102782ccd121bd02300352bf875eba5f48e22f56a1b335971962b53b"
+    },
+    {
+      "file": "src/assets/illustrations/journal-25.svg",
+      "status": "external-art",
+      "bytes": 11059,
+      "width": 320,
+      "height": 220,
+      "sha256": "d8508fd49e94944b67bbcd0c5fc14ef614ff87035c5eb68c48bde6f219535ee0"
+    },
+    {
+      "file": "src/assets/illustrations/journal-26.svg",
+      "status": "external-art",
+      "bytes": 10196,
+      "width": 320,
+      "height": 220,
+      "sha256": "10655228bd6cf6ad20d37faa4d2175aca3e62ddb96ed23c2b7904ca43c808223"
+    },
+    {
+      "file": "src/assets/illustrations/journal-27.svg",
+      "status": "external-art",
+      "bytes": 11385,
+      "width": 320,
+      "height": 220,
+      "sha256": "a50fad5dd1b576e08e27c75b595e203f55099a026460d90ec9438845ee9b9fa3"
+    },
+    {
+      "file": "src/assets/illustrations/journal-28.svg",
+      "status": "external-art",
+      "bytes": 10875,
+      "width": 320,
+      "height": 220,
+      "sha256": "140e59a10fe34b5873d422fc1654169d28c672a556ead8a2e87b78dc8b0ea69f"
+    },
+    {
+      "file": "src/assets/illustrations/journal-29.svg",
+      "status": "external-art",
+      "bytes": 11311,
+      "width": 320,
+      "height": 220,
+      "sha256": "c76be95ff597b7c6367ed872b993aa5c36d1cb74cd3556d623164934e2708a48"
+    },
+    {
+      "file": "src/assets/illustrations/journal-30.svg",
+      "status": "external-art",
+      "bytes": 11902,
+      "width": 320,
+      "height": 220,
+      "sha256": "e2b888fc9c447dc052c40e369653213f29b4663dad7b3d5f878ba7e613e6e68e"
+    },
+    {
+      "file": "src/assets/illustrations/journal-31.svg",
+      "status": "external-art",
+      "bytes": 8660,
+      "width": 320,
+      "height": 220,
+      "sha256": "ebcf8c77ffb1ffc5cef3bbed12d3d9a1160c080f80bf47dd7e7492f7a36d32b4"
+    },
+    {
+      "file": "src/assets/illustrations/journal-32.svg",
+      "status": "external-art",
+      "bytes": 10766,
+      "width": 320,
+      "height": 220,
+      "sha256": "2b0bf99de7cb56c0312a345b2272ab21ddb624410aff1c7d1818bf8d2dfb0c33"
+    },
+    {
+      "file": "src/assets/illustrations/journal-33.svg",
+      "status": "external-art",
+      "bytes": 12915,
+      "width": 320,
+      "height": 220,
+      "sha256": "3de77e0ee49b6ffa45b505b1c76cf7ed5a455a54ba5fdacdc3d81faa3151c115"
+    },
+    {
+      "file": "src/assets/illustrations/journal-34.svg",
+      "status": "external-art",
+      "bytes": 10161,
+      "width": 320,
+      "height": 220,
+      "sha256": "e21e78ed8173f6f94a2088715b6cf9cb6cd93183dfadaa44183d42381b1083c1"
+    },
+    {
+      "file": "src/assets/illustrations/journal-35.svg",
+      "status": "external-art",
+      "bytes": 10861,
+      "width": 320,
+      "height": 220,
+      "sha256": "1ff1c9425e85564ce1df1a8817c740e31fc877dc4f555e2d594f7d1df43cdffc"
+    },
+    {
+      "file": "src/assets/illustrations/journal-36.svg",
+      "status": "external-art",
+      "bytes": 12646,
+      "width": 320,
+      "height": 220,
+      "sha256": "82692fbc5eb7f6990d20a0643bfbbdbe324bb2381a0180fcfff454c64da753fe"
+    },
+    {
+      "file": "src/assets/illustrations/journal-37.svg",
+      "status": "external-art",
+      "bytes": 11610,
+      "width": 320,
+      "height": 220,
+      "sha256": "f63eb0a7e00e2242867f969442112283686feaa288433736dca0c6b9f6621254"
+    },
+    {
+      "file": "src/assets/illustrations/journal-38.svg",
+      "status": "external-art",
+      "bytes": 8636,
+      "width": 320,
+      "height": 220,
+      "sha256": "ef8bfdda1c3cf4d8493f6b0ca47bb4b491b7356b47df60f625884c41661ad013"
+    },
+    {
+      "file": "src/assets/illustrations/journal-39.svg",
+      "status": "external-art",
+      "bytes": 8799,
+      "width": 320,
+      "height": 220,
+      "sha256": "c6a72865082c855a41a1a85b2abba0fb9796e42bf79b0c61ac82ec19abf42a19"
+    },
+    {
+      "file": "src/assets/illustrations/journal-40.svg",
+      "status": "external-art",
+      "bytes": 12301,
+      "width": 320,
+      "height": 220,
+      "sha256": "86282316f2f8841c7385013ae2457428073e036eb37777209d1ce2a7b770e475"
+    },
+    {
+      "file": "src/assets/illustrations/journal-41.svg",
+      "status": "external-art",
+      "bytes": 11186,
+      "width": 320,
+      "height": 220,
+      "sha256": "935df06407a871ee60bd3d5c4aaff1a5e56814e04d9770aabf4876870bb3fc57"
+    },
+    {
+      "file": "src/assets/illustrations/journal-42.svg",
+      "status": "external-art",
+      "bytes": 13524,
+      "width": 320,
+      "height": 220,
+      "sha256": "b1dae74598b0fe10784f7c6d493b2a1ace47189471acd19b92e09ff4e160bc23"
+    },
+    {
+      "file": "src/assets/illustrations/journal-43.svg",
+      "status": "external-art",
+      "bytes": 10158,
+      "width": 320,
+      "height": 220,
+      "sha256": "d9ab97d7c4ea8371b0002d1bd88c8876e3c4ea0d8b052a755327d7a6c8af940b"
+    },
+    {
+      "file": "src/assets/illustrations/journal-44.svg",
+      "status": "external-art",
+      "bytes": 10543,
+      "width": 320,
+      "height": 220,
+      "sha256": "bb45bfa53b6440a38305a365e7cce2c65b25bee94880c57cba652edd7561a00b"
+    },
+    {
+      "file": "src/assets/illustrations/journal-45.svg",
+      "status": "external-art",
+      "bytes": 13224,
+      "width": 320,
+      "height": 220,
+      "sha256": "414cd90cd28e87ba7eab838197e9043182bb6ef86f8e1cde5f861648026cdeae"
+    },
+    {
+      "file": "src/assets/illustrations/sandbox.svg",
+      "status": "external-art",
+      "bytes": 4028,
+      "width": 560,
+      "height": 460,
+      "sha256": "2676a3063830f508dc98f7e11eed6c0ffd442b076941062f327ea7ec3e9a2776"
+    },
+    {
+      "file": "src/assets/objects/cabin.svg",
+      "status": "external-art",
+      "bytes": 830,
+      "width": 100,
+      "height": 100,
+      "sha256": "d114801ac998a9d6abefd431e723def2bcb24c1c7a0e5947eedcf2f0baac4855"
+    },
+    {
+      "file": "src/assets/objects/camp.svg",
+      "status": "external-art",
+      "bytes": 754,
+      "width": 100,
+      "height": 100,
+      "sha256": "7148219b45e61f85d73a10d90f61d3bfc0d403e9e99b68a6eb085b9b0c8b6809"
+    },
+    {
+      "file": "src/assets/objects/fire-flame-0.svg",
+      "status": "external-art",
+      "bytes": 215,
+      "width": 100,
+      "height": 100,
+      "sha256": "16662850ce7b8bc730fda91862b2d98e2ee0fbcee6db7bbfc4d5f6fc855e152d"
+    },
+    {
+      "file": "src/assets/objects/fire-flame-1.svg",
+      "status": "external-art",
+      "bytes": 197,
+      "width": 100,
+      "height": 100,
+      "sha256": "626f88b14258fd8606964d4ecceb03867bc95876b0b6f93a43c0fb942ba9d3b1"
+    },
+    {
+      "file": "src/assets/objects/fire-flame-2.svg",
+      "status": "external-art",
+      "bytes": 161,
+      "width": 100,
+      "height": 100,
+      "sha256": "9b56c3064162a8dddf7c78f776c57567cc10e052c40616fdb18ef4543efcaac4"
+    },
+    {
+      "file": "src/assets/objects/fire-flame-3.svg",
+      "status": "external-art",
+      "bytes": 177,
+      "width": 100,
+      "height": 100,
+      "sha256": "ea1890a5cee1c229df7b37995594226bc343a74db4ab037e3370e8507e89b686"
+    },
+    {
+      "file": "src/assets/objects/fire-ground.svg",
+      "status": "external-art",
+      "bytes": 246,
+      "width": 100,
+      "height": 100,
+      "sha256": "4f146de6f45914291349397cb9f829c0a42ffd0f40faed2905086b9ea93a40e1"
+    },
+    {
+      "file": "src/assets/objects/fire.svg",
+      "status": "external-art",
+      "bytes": 704,
+      "width": 100,
+      "height": 100,
+      "sha256": "fd5bef2cb953943382e546fd4895e155f18b183e767853f368eb41f93171810c"
+    },
+    {
+      "file": "src/assets/objects/foodTruck.svg",
+      "status": "external-art",
+      "bytes": 1255,
+      "width": 100,
+      "height": 100,
+      "sha256": "8e5cf525becfb94bba79493556de798e31d8976ef6ce384e0c1ad4d34ebe7da8"
+    },
+    {
+      "file": "src/assets/objects/forest-crowns.svg",
+      "status": "external-art",
+      "bytes": 456,
+      "width": 100,
+      "height": 100,
+      "sha256": "b2e624aad32b41019921e5c81c84019f7a3034668b6acd675d9440dbd856bbcd"
+    },
+    {
+      "file": "src/assets/objects/forest-ground.svg",
+      "status": "external-art",
+      "bytes": 250,
+      "width": 100,
+      "height": 100,
+      "sha256": "8374acc29f5e360226abfcd475c6d91d06e7afaafa45b8bd6eed8577a27f613f"
+    },
+    {
+      "file": "src/assets/objects/forest.svg",
+      "status": "external-art",
+      "bytes": 657,
+      "width": 100,
+      "height": 100,
+      "sha256": "a57ccb497e1cdb4d3e96c8a3e411f21d02a73b35640be057e92abe0ac07ba862"
+    },
+    {
+      "file": "src/assets/objects/mountain.svg",
+      "status": "external-art",
+      "bytes": 639,
+      "width": 100,
+      "height": 100,
+      "sha256": "eee9f796791dcf018f49d8dc6193b1a0875520328b55618a531097bc0952885a"
+    },
+    {
+      "file": "src/assets/objects/picnic.svg",
+      "status": "external-art",
+      "bytes": 647,
+      "width": 100,
+      "height": 100,
+      "sha256": "392c46c5250c66ce49dced8f38d95a58851461a730a4e2d3d6050e2de432aceb"
+    },
+    {
+      "file": "src/assets/objects/pool.svg",
+      "status": "external-art",
+      "bytes": 868,
+      "width": 100,
+      "height": 100,
+      "sha256": "e23b8d96498cece7231b21a8398efbeca81ebf1784c2541044faaf86349cec80"
+    },
+    {
+      "file": "src/assets/objects/powerTower.svg",
+      "status": "external-art",
+      "bytes": 884,
+      "width": 100,
+      "height": 100,
+      "sha256": "0e800d28e39661eae6a941ad149b8399b6245210e98ccdfa0288e48e0b35672d"
+    },
+    {
+      "file": "src/assets/objects/tower.svg",
+      "status": "external-art",
+      "bytes": 832,
+      "width": 100,
+      "height": 100,
+      "sha256": "30d502f9d7a61a4ec18e9cf7ce1cae46700ca7245ba1025181fb054774b14466"
+    },
+    {
+      "file": "src/assets/objects/water.svg",
+      "status": "external-art",
+      "bytes": 654,
+      "width": 100,
+      "height": 100,
+      "sha256": "60e2b88e1a7d5f963b939ad126c6f34ad142be7c7431030abe715e2fe4a225be"
+    },
+    {
+      "file": "src/assets/panels/chapter-0.svg",
+      "status": "external-art",
+      "bytes": 470,
+      "width": 96,
+      "height": 96,
+      "sha256": "550db25a684a72cb66af3891976cef419de774b9ac2797f0c1fb48c00910f1c4"
+    },
+    {
+      "file": "src/assets/panels/chapter-1.svg",
+      "status": "external-art",
+      "bytes": 470,
+      "width": 96,
+      "height": 96,
+      "sha256": "eb0205705fdbb6cce067ffc159135ded49f6cd9798c86c532552d04290f25dd8"
+    },
+    {
+      "file": "src/assets/panels/chapter-2.svg",
+      "status": "external-art",
+      "bytes": 470,
+      "width": 96,
+      "height": 96,
+      "sha256": "290b725e947437127c2cbe3f6b55cf84ebba27e4ef65950b822472fdc6bd6f7f"
+    },
+    {
+      "file": "src/assets/panels/completion.svg",
+      "status": "external-art",
+      "bytes": 470,
+      "width": 96,
+      "height": 96,
+      "sha256": "414d1dc1c0a8f33dcd1cdeeaa09c90405c84b826685a08f5a682795890679a52"
+    },
+    {
+      "file": "src/assets/panels/identity.svg",
+      "status": "external-art",
+      "bytes": 470,
+      "width": 96,
+      "height": 96,
+      "sha256": "56a178b4be385306b3f5b52d033fde282c3a27f886b2670455d692d26776a393"
+    },
+    {
+      "file": "src/assets/panels/notebook-cover.svg",
+      "status": "external-art",
+      "bytes": 396,
+      "width": 96,
+      "height": 96,
+      "sha256": "bd44149d59ca3b92e28899ab096bf314bd863da473fe1844c6f75ba707d80a3d"
+    },
+    {
+      "file": "src/assets/panels/paper-edge.svg",
+      "status": "external-art",
+      "bytes": 288,
+      "width": 96,
+      "height": 96,
+      "sha256": "0c1dbfbdc559a8780d0dd901d68ed661d321f6721121b128e220a91c8e8e2bcc"
+    },
+    {
+      "file": "src/assets/panels/reward.svg",
+      "status": "external-art",
+      "bytes": 470,
+      "width": 96,
+      "height": 96,
+      "sha256": "dd4b36670a69988e83d8b2f406524b835d2fdd36ab247d99d3b3e024c32d08e1"
+    },
+    {
+      "file": "src/assets/panels/ruled-paper.svg",
+      "status": "external-art",
+      "bytes": 293,
+      "width": 64,
+      "height": 64,
+      "sha256": "f8b6c3f44d8ae2a7db85779b34d5eb6ebceac7f6e314fe2ae223f688aeb47f04"
+    },
+    {
+      "file": "src/assets/progress/generation-stripe.svg",
+      "status": "external-art",
+      "bytes": 183,
+      "width": 15,
+      "height": 16,
+      "sha256": "4be990348fff3ba63061bd58cdc0796763e94f150ff8bed58737cdf378d0ca6d"
+    },
+    {
+      "file": "src/assets/progress/xp-base.svg",
+      "status": "external-art",
+      "bytes": 221,
+      "width": 16,
+      "height": 16,
+      "sha256": "be89f6d481913f40df40dee5d8b1a092ef51052b1c3a321be23623b5e3523001"
+    },
+    {
+      "file": "src/assets/progress/xp-frame.svg",
+      "status": "external-art",
+      "bytes": 354,
+      "width": 96,
+      "height": 32,
+      "sha256": "1baa94c2c251b09f11b8f829897d1aebf6848da31ecfa1ceb8ced9284417d79a"
+    },
+    {
+      "file": "src/assets/progress/xp-gain.svg",
+      "status": "external-art",
+      "bytes": 221,
+      "width": 16,
+      "height": 16,
+      "sha256": "0a58fad01ef3f317a2b9d2431f7a7f6146cd836d1e9a88fa5bd7ed79df78c94d"
+    },
+    {
+      "file": "src/assets/progress/xp-leaf.svg",
+      "status": "external-art",
+      "bytes": 286,
+      "width": 28,
+      "height": 28,
+      "sha256": "1aa8afb46d02cd307385edb2380699628d48cbfe4358d5ec182b80a9228f3729"
+    },
+    {
+      "file": "src/assets/survival-badges/apprentice.svg",
+      "status": "reused",
+      "bytes": 1801,
+      "width": 220,
+      "height": 220,
+      "sha256": "488224b2ca871121c7845ab560f8172b7e68a96c88e15ead1bccf169da4293de"
+    },
+    {
+      "file": "src/assets/survival-badges/explorer.svg",
+      "status": "reused",
+      "bytes": 1984,
+      "width": 220,
+      "height": 220,
+      "sha256": "02e22baeadd4cae6e86ba5d8c2c30716ecb4b126c0cf65ca703832178fd22bd0"
+    },
+    {
+      "file": "src/assets/survival-badges/legend.svg",
+      "status": "reused",
+      "bytes": 2309,
+      "width": 220,
+      "height": 220,
+      "sha256": "9db382b0921dd18f4a0cc25716a883f63894c085cdf06a7f537e0e7ed1ee4e5f"
+    },
+    {
+      "file": "src/assets/survival-badges/newcomer.svg",
+      "status": "reused",
+      "bytes": 2045,
+      "width": 220,
+      "height": 220,
+      "sha256": "287b9aad4b39afd967443539e0ec565f84282f3b7672baeee94a6977fd6462cc"
+    },
+    {
+      "file": "src/assets/survival-badges/veteran.svg",
+      "status": "reused",
+      "bytes": 1859,
+      "width": 220,
+      "height": 220,
+      "sha256": "cbd2d2828a5f87c4d594e8923a7a7ca38e081e4bc90019d7e7c9e4f607b086de"
+    }
+  ],
+  "packagingAssets": [
+    {
+      "file": "public/icon-192.png",
+      "status": "preserved-platform-icon",
+      "bytes": 12782,
+      "sha256": "9e57a0c5611153840ebdd7ba5b692ea5edb607f5099ee0b3f21e12e2c60c50fd"
+    },
+    {
+      "file": "public/icon-512.png",
+      "status": "preserved-platform-icon",
+      "bytes": 36830,
+      "sha256": "29128653bbb2dbd638c5230315ded16985f5d76d75cd2e08039d38c97203dce2"
+    },
+    {
+      "file": "public/icon.svg",
+      "status": "preserved-platform-icon",
+      "bytes": 2348,
+      "sha256": "03c914500021959b4ad9fba6b60e5e7e2e823eb064f188af150213d64e3601ae"
+    },
+    {
+      "file": "build/icon.ico",
+      "status": "preserved-platform-icon",
+      "bytes": 36907,
+      "sha256": "5ce9ad3c3e1e67c1c72347f9e1cc00edb3862a81ef3f211b7fbf2a736da1361d"
+    },
+    {
+      "file": "build/icon.png",
+      "status": "preserved-platform-icon",
+      "bytes": 36830,
+      "sha256": "29128653bbb2dbd638c5230315ded16985f5d76d75cd2e08039d38c97203dce2"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "status": "preserved-platform-icon",
+      "bytes": 4686,
+      "sha256": "c4d4ad1ded1d4a9bfe3d32d9ede51fd850b192bad7514a980a0d4de2faff59bf"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "status": "preserved-platform-icon",
+      "bytes": 7731,
+      "sha256": "4798d098a21090e196a4439a66f37606c1a1f1c5310ef59ec7b417490d848739"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "status": "preserved-platform-icon",
+      "bytes": 4686,
+      "sha256": "c4d4ad1ded1d4a9bfe3d32d9ede51fd850b192bad7514a980a0d4de2faff59bf"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "status": "preserved-platform-icon",
+      "bytes": 2911,
+      "sha256": "d774374c6a800896b2eaa06fe641a0078770ba241f288ed31d4a91d9a8bb0dd9"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "status": "preserved-platform-icon",
+      "bytes": 5022,
+      "sha256": "fad41434d81bfc44120c2e2c25e44167bcfc7f378a8e133248b135de29185431"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "status": "preserved-platform-icon",
+      "bytes": 2911,
+      "sha256": "d774374c6a800896b2eaa06fe641a0078770ba241f288ed31d4a91d9a8bb0dd9"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "status": "preserved-platform-icon",
+      "bytes": 6243,
+      "sha256": "4fc052563688039e4b1d8821b72bceee06479e54210986855ede52015cf009af"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "status": "preserved-platform-icon",
+      "bytes": 10811,
+      "sha256": "b4c931188f82103156fedfac331140ec113df5dee762682c97da5bd4cc18bc40"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "status": "preserved-platform-icon",
+      "bytes": 6243,
+      "sha256": "4fc052563688039e4b1d8821b72bceee06479e54210986855ede52015cf009af"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "status": "preserved-platform-icon",
+      "bytes": 9516,
+      "sha256": "ea2982d89a06d4b68613bfdfa07978affb3e48cd6828c3f0bfe445e24a5ce8ac"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "status": "preserved-platform-icon",
+      "bytes": 17167,
+      "sha256": "3d915934c7a6d235bbc056bba11b43a8c989107a1500a534d7a7884d6e8b3dba"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "status": "preserved-platform-icon",
+      "bytes": 9516,
+      "sha256": "ea2982d89a06d4b68613bfdfa07978affb3e48cd6828c3f0bfe445e24a5ce8ac"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "status": "preserved-platform-icon",
+      "bytes": 12782,
+      "sha256": "9e57a0c5611153840ebdd7ba5b692ea5edb607f5099ee0b3f21e12e2c60c50fd"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "status": "preserved-platform-icon",
+      "bytes": 24021,
+      "sha256": "2de3a76180911ba3413cf85b009883a01f36cace804b79427565ffbb12a1b2e4"
+    },
+    {
+      "file": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "status": "preserved-platform-icon",
+      "bytes": 12782,
+      "sha256": "9e57a0c5611153840ebdd7ba5b692ea5edb607f5099ee0b3f21e12e2c60c50fd"
+    }
+  ],
+  "sources": [
+    {
+      "file": "src/assets/art.css",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/localization/LanguageContext.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/main.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/App.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/Art.tsx",
+      "inlineSvg": 2,
+      "retainedReason": "State-dependent facility footprints and roof construction",
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/Blueprint.tsx",
+      "inlineSvg": 0,
+      "retainedReason": "Current level, clues and placements",
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/CampToolIcon.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/ChapterArtwork.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/CompletionEmblem.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/GameBoard.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/GameTitle.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/HeroArt.tsx",
+      "inlineSvg": 4,
+      "retainedReason": "External image coordinate stage and animated water dash",
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/JournalChapterBackground.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/JournalLevelSceneArt.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/Manual.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/MenuIcon.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/MenuLandscapeBackground.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/SandboxArt.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/SurvivalBadge.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/SurvivalRewardPanel.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/TutorialOverlay.tsx",
+      "inlineSvg": 2,
+      "retainedReason": "Dynamic spotlight and correct/incorrect placement demonstration; artwork uses external images",
+      "gradients": []
+    },
+    {
+      "file": "src/ui/components/TutorialSettings.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/screens/CampDiary.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/screens/SandboxMenu.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/screens/SurvivalMenu.tsx",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/styles/completion.css",
+      "inlineSvg": 0,
+      "gradients": [
+        ".app .win-modal .modal-close",
+        ".app .win-modal .win-content > .primary",
+        ".app .win-modal .win-content > .primary:enabled:hover"
+      ]
+    },
+    {
+      "file": "src/ui/styles/fonts.css",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/styles/hero.css",
+      "inlineSvg": 0,
+      "gradients": [
+        ".menu-buttons button::before",
+        ".menu-buttons button, .menu-buttons button:hover, .menu-buttons button:active",
+        ".home-entering::before",
+        ".home-entering::after"
+      ]
+    },
+    {
+      "file": "src/ui/styles/menu-landscape.css",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/styles/notebook.css",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/styles/sandbox.css",
+      "inlineSvg": 0,
+      "gradients": [
+        ".local-map-actions .local-map-edit",
+        ".local-map-actions .local-map-icon-edit"
+      ]
+    },
+    {
+      "file": "src/ui/styles/styles.css",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/styles/survival.css",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/styles/tutorial.css",
+      "inlineSvg": 0,
+      "gradients": []
+    },
+    {
+      "file": "src/ui/styles/viewport.css",
+      "inlineSvg": 0,
+      "gradients": [
+        ".camp-tools .camp-tool",
+        ".camp-tools .camp-tool.tool-blueprint",
+        ".camp-tools .camp-tool.tool-journal, .camp-tools .camp-tool.tool-export",
+        ".camp-tools .camp-tool.tool-abandon",
+        ".win-modal :is(.win-emblem, .survival-badge)::after"
+      ]
+    }
+  ]
+}

@@ -41,7 +41,7 @@ Wildgrid/
 │   ├── ui/
 │   │   ├── App.tsx                    页面/弹窗/交互协调、教学和完成反馈
 │   │   ├── screens/                   CampDiary、SandboxMenu、SurvivalMenu页面
-│   │   ├── components/                GameBoard、图纸、手册、教学、SVG插画
+│   │   ├── components/                GameBoard、图纸、手册、教学、图片与动态绘图
 │   │   ├── hooks/                     Session适配、输入、导航、模式IO和动画协调
 │   │   ├── tutorial/tutorialLessons.ts 教学事件、目标、课程选择与完成决策
 │   │   └── styles/                    原全局、视口、模式、字体、动画和教学CSS
@@ -56,7 +56,7 @@ Wildgrid/
 │   │   └── survival.worker.ts         调用求生入口，最终复用Engine生成算法
 │   ├── game-data/{levels,solutions}.json 原45关和参考答案（内容保留）
 │   ├── localization/                 中英文、反馈/手册文本、日期与LanguageContext
-│   └── assets/{fonts,survival-badges}/ 字体和SVG徽章
+│   └── assets/                       art.ts/art.css统一引用，字体、品牌、背景、插画、面板与徽章
 ├── public/                            PWA图标、manifest与字体许可证
 ├── electron/{main,preload}.cjs         Windows窗口、协议、IPC与原生身份
 ├── android/                           Capacitor/Gradle、原生插件与资源

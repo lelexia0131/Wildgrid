@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="260" viewBox="0 0 600 260" fill="none">
+  <title>野格 · 木刻拼图字标</title>
+  <defs>
+    <!-- Original, hand-drawn lettering. No font or device-dependent text. -->
+    <g id="lettering" fill-rule="evenodd">
+      <!-- 野: four open counters, a solid grounded 里, and a hooked 予. -->
+      <path d="M38 30 49 22 158 25 165 34 162 133 152 141H48L38 132ZM67 48V69H86V47ZM113 48V70H135V49ZM66 96V116H86V96ZM113 96V117H134V96ZM87 134H112V154L157 151 160 176 112 180V201L163 193 165 217 44 237 35 212 86 205V182L41 185 39 159 87 156Z"/>
+      <path d="M181 25 254 23 268 36 235 73 258 87 243 107 200 78 214 60 223 66 239 48 181 51ZM174 99 270 98 279 113 263 157 241 149 249 125 231 125 230 215 217 233 179 233 173 206 202 208 204 126 174 127Z"/>
+      <!-- 格: asymmetric 木 strokes balance the square, gridded 口. -->
+      <path d="M326 24 349 20 353 66 385 64 386 89 356 92 356 100 390 134 374 155 355 132 358 229 332 234 329 141 309 182 288 167 326 94 295 97 293 72 328 69Z"/>
+      <path d="M421 20 445 28 436 46 526 43 537 59 497 109 557 132 546 157 474 125 405 161 391 139 450 108 429 86 413 106 394 90ZM446 69 474 94 498 68Z"/>
+      <path d="M417 157 531 156 540 166 537 222 528 233 418 233 409 223 409 169ZM438 181V208H509V180Z"/>
+    </g>
+  </defs>
+  <use href="#lettering" transform="translate(0 8)" fill="#604431" stroke="#604431" stroke-width="13" stroke-linejoin="round"/>
+  <use href="#lettering" fill="#edcf8a" stroke="#493b2d" stroke-width="11" stroke-linejoin="round"/>
+  <use href="#lettering" fill="#f5dfa4" stroke="#fff0c5" stroke-width="2" stroke-linejoin="bevel"/>
+  <!-- Quiet chisel facets and grain follow the strokes, never obscure a counter. -->
+  <g stroke="#b78c52" stroke-width="2.5" stroke-linecap="round" opacity=".65">
+    <path d="m49 39 5 84m-4 90 29-5m109-170 33-1m-5 100-1 53m124-155 2 22m80 110 36-1m31 0 18-1"/>
+  </g>
+  <g fill="#d2ae68"><path d="m139 28 19 2-2 30-6-18ZM260 105l11 9-11 26-2-19ZM336 210l15-8 1 23-15 3ZM521 164l10 6-2 44-8 9Z"/></g>
+  <!-- A single fitted forest-green tile signs the grid motif. -->
+  <path d="m474 182 14-1v12h-14Z" fill="#6f8960"/>
+  <path d="m439 182 28-1m7 18h25" stroke="#d3b475" stroke-width="2"/>
+</svg>

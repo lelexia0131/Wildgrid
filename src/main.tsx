@@ -10,6 +10,7 @@ import './ui/styles/fonts.css';
 import './ui/styles/hero.css';
 import './ui/styles/notebook.css';
 import './ui/styles/completion.css';
+import './assets/art.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><App /></React.StrictMode>);
 registerOfflineCache();

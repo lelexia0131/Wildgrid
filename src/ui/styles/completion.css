@@ -4,20 +4,17 @@
   --completion-emblem-height: clamp(40px, calc(var(--completion-height) - 270px), 192px);
   width: min(410px, calc(100% - var(--safe-left) - var(--safe-right) - 24px));
   max-height: var(--completion-height); inset: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
-  padding: clamp(12px, 2.8dvh, 22px) 26px clamp(12px, 2.2dvh, 18px); border: 3px solid #b6be91; border-radius: 30px;
-  background: radial-gradient(ellipse at 50% 13%, #fff6d4, transparent 60%), linear-gradient(#fffbed, #f4f1dc);
-  box-shadow: inset 0 2px 0 #fffef5, inset 0 0 0 5px #e9e4c880, 0 7px 0 #758966, 0 24px 65px #1a352d66;
+  padding: clamp(12px, 2.8dvh, 22px) 26px clamp(12px, 2.2dvh, 18px); border: 3px solid #b6be91; border-radius: 30px; background: #fbf5df; box-shadow: 0 24px 65px #1a352d66;
   overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
 }
 .win-content { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(4px, .9dvh, 8px); }
 .win-content > * { min-width: 0; }
-.app .win-modal:has(.survival-win) { --completion-emblem-height: clamp(40px, calc(var(--completion-height) - 350px), 170px); }
+.app .win-modal:has(.survival-win) { --completion-emblem-height: clamp(40px, calc(var(--completion-height) - 410px), 170px); overflow: hidden; }
 .survival-win { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .survival-win > :not(.secondary, .text-button) { grid-column: 1 / -1; }
 .win-modal::backdrop { background: #20382f80; backdrop-filter: blur(3px); }
 .win-modal::before, .win-modal::after {
-  content: ''; position: absolute; width: 44px; height: 72px; bottom: 12px; pointer-events: none; opacity: .45;
-  background: radial-gradient(ellipse at 25% 25%, #b9c697 0 19%, transparent 20%), radial-gradient(ellipse at 75% 45%, #a8bc85 0 20%, transparent 21%), radial-gradient(ellipse at 30% 75%, #c4cf9a 0 22%, transparent 23%);
+  content: ''; position: absolute; width: 44px; height: 72px; bottom: 12px; pointer-events: none; opacity: .45; background: var(--art-sprig) center / contain no-repeat;
 }
 .win-modal::before { left: 18px; transform: rotate(-28deg); }
 .win-modal::after { right: 18px; transform: rotate(28deg) scaleX(-1); }
@@ -46,9 +43,7 @@
 .completion-tree.tree-right { right: 10%; transform: scale(.85); }
 .completion-check {
   position: absolute; bottom: 4%; left: calc(50% - 23px); width: 46px; height: 46px;
-  display: flex; align-items: center; justify-content: center; color: #fff8d6;
-  border: 3px solid #fff9df; border-radius: 50%; background: linear-gradient(#8da968, #567f52);
-  box-shadow: 0 0 0 2px #d4b974, inset 0 2px 0 #c3d59b, 0 4px 6px #5a784b33;
+  display: flex; align-items: center; justify-content: center; color: #fff8d6; border: 3px solid transparent; border-radius: 50%; background: var(--art-check) center / contain no-repeat; box-shadow: none;
 }
 .app .win-modal .win-content > h2 {
   margin: 0; padding: 0; color: #496b43; font-size: clamp(28px, 4.5dvh, 36px); line-height: 1.2; letter-spacing: 1px;
@@ -70,7 +65,31 @@
 .completion-art > .survival-badge { width: auto; height: 100%; max-width: 100%; max-height: 132px; aspect-ratio: 118 / 132; margin: 0; }
 .app .win-modal .survival-win h3 { margin: 0; font-size: clamp(18px, 2.8dvh, 22px); line-height: 1.25; color: #7b8b5b; }
 .app .win-modal .survival-win p { font-size: 14px; line-height: 1.4; margin: 0; overflow-wrap: anywhere; }
-.app .win-modal .survival-reward { display: grid; gap: 4px; margin: 0; padding: 8px 12px; border: 1px solid #d7d9b3; background: #e9edcf; box-shadow: inset 0 1px 0 #fbf9e3; }
+.survival-reward { display: grid; gap: 8px; }
+.reward-xp { position: relative; padding: 12px 14px 8px; border: 1px solid #d5d9b6; border-radius: 18px 12px 18px 12px; background: #f3f1db; box-shadow: inset 0 2px 0 #fffbed; }
+.reward-xp-track { height: 16px; margin: 3px 0 8px; padding: 3px; border: 1px solid #a7b893; border-radius: 12px; background: #dce3c7; box-shadow: none; }
+.reward-xp-rail { position: relative; height: 100%; border-radius: 8px; }
+.reward-xp-rail > i { position: absolute; inset: 0; display: block; border-radius: inherit; transform-origin: left; }
+.reward-xp-base { background: #73966b var(--art-xp-base) 0 0 / 100% 100%; box-shadow: inset 0 1px 0 #bcd29d; }
+.reward-xp-gain { background: #b7c975 var(--art-xp-gain) 0 0 / 100% 100%; box-shadow: inset 0 1px 0 #fff4c3, 0 0 5px #e8d28690; }
+.reward-xp-cursor { position: absolute; top: 0; width: 0; height: 100%; pointer-events: none; }
+.reward-xp-cursor img { position: absolute; width: 23px; height: 23px; left: -12px; top: -9px; filter: drop-shadow(0 1px 1px #5b734738); }
+.reward-xp-caption { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; color: #718060; font-size: 12px; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.reward-earned { font-size: 13px; font-weight: 500; color: #6b844d; }
+.reward-xp-caption > :last-child { white-space: nowrap; }
+.reward-xp-cursor::after { content: ''; position: absolute; width: 28px; height: 28px; left: -14px; top: -11px; border: 2px solid #d8be70; border-radius: 50%; opacity: 0; }
+.reward-xp.is-complete .reward-xp-cursor::after { animation: reward-xp-glow 650ms ease-out; }
+.reward-xp.is-growing .reward-xp-cursor::after { animation: reward-xp-glow 600ms 360ms 2 ease-out; }
+.reward-marks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.reward-mark { display: flex; align-items: center; justify-content: center; gap: 3px; min-width: 0; padding: 3px 6px; border: 1px solid #d5d8b8; border-radius: 14px; background: #f5f2dc; box-shadow: inset 0 2px 0 #fffbee; }
+.reward-mark > img { width: 62px; height: 54px; flex: 0 1 62px; min-width: 0; }
+.reward-mark > div { display: grid; gap: 2px; min-width: 0; text-align: left; }
+.reward-mark strong { color: #4f704d; font-size: 27px; line-height: 1; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.reward-mark span { color: #78865c; font-size: 12px; line-height: 1.2; }
+.app .win-modal .reward-repeat { color: #78865c; font-size: 12px; }
+.win-modal[open] .survival-win > :is(h2, h3) { animation: screen-arrive 300ms 160ms both; }
+.win-modal[open] .reward-earned { animation: screen-arrive 250ms 280ms both; }
+@keyframes reward-xp-glow { 0% { transform: scale(.55); opacity: 0; } 30% { opacity: .7; } 100% { transform: scale(1.6); opacity: 0; } }
 .app .win-modal .survival-win > .secondary { min-height: 42px; height: auto; margin: 0; padding: 8px; gap: 6px; font-size: 16px; line-height: 1.2; background: #faf7e6; border-color: #cdd4af; color: #71845c; box-shadow: none; }
 .app .win-modal .survival-win > .survival-error { padding: 6px 8px; }
 [lang='en'] .win-modal .win-content > h2 { font-size: clamp(27px, 4.3dvh, 33px); letter-spacing: .3px; }
@@ -87,6 +106,8 @@
   .app .modal.win-modal { padding-inline: 20px; }
   .app .win-modal .win-content > h2 { font-size: 31px; }
   [lang='en'] .win-modal .win-content > h2 { font-size: 29px; }
+  .reward-mark > img { width: 40px; height: 44px; flex-basis: 40px; }
+  .reward-mark span { font-size: 11px; white-space: nowrap; }
 }
 @media (max-height: 650px) {
   .app .modal.win-modal { border-radius: 24px; }
@@ -100,7 +121,9 @@
   .app .win-modal .win-content > .primary { min-height: 44px; padding: 8px 10px; font-size: 17px; }
   .app .win-modal .survival-win > :is(.secondary, .text-button) { min-height: 40px; padding: 6px; font-size: 16px; }
   .app .win-modal .survival-win p { font-size: 14px; line-height: 1.4; }
-  .app .win-modal .survival-reward { gap: 3px; padding: 6px 10px; }
+  .survival-reward { gap: 5px; }
+  .reward-xp { padding: 6px 10px; }
+  .reward-mark > img { width: 48px; height: 42px; flex-basis: 48px; }
 }
 @media (max-height: 560px) and (min-width: 560px) {
   .app .modal.win-modal { --completion-emblem-height: clamp(80px, 42dvh, 190px); width: min(680px, calc(100% - var(--safe-left) - var(--safe-right) - 24px)); }

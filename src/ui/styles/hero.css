@@ -1,9 +1,17 @@
 /* The lettering and island share one headpiece; the illustration keeps its space. */
 .menu-page { gap: 12px; }
-.menu-art { width: min(680px, 100%, calc((100dvh - var(--safe-top) - var(--safe-bottom) - 320px) * 1.29)); display: flex; flex-direction: column; align-items: center; flex: none; pointer-events: none; }
-.camp-title { width: 88%; height: clamp(82px, 16dvh, 140px); margin: 0; position: relative; z-index: 1; }
-.camp-title svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.menu-page .hero-art { margin-top: -36px; flex: none; }
+.menu-art { width: min(680px, 100%, calc((100dvh - var(--safe-top) - var(--safe-bottom) - 355px) * 1.29)); display: flex; flex-direction: column; align-items: center; flex: none; pointer-events: none; }
+.camp-title { --title-height: clamp(108px, 21dvh, 184px); width: 100%; height: var(--title-height); min-width: 0; margin: 0; position: relative; z-index: 1; }
+.camp-title-en { --title-height: clamp(100px, 19dvh, 170px); }
+.camp-title { display: grid; place-items: center; }
+.title-sign { position: relative; display: block; width: min(100%, calc(var(--title-height) * 720 / 330)); aspect-ratio: 720 / 330; min-width: 0; }
+.title-sign img { position: absolute; display: block; object-fit: contain; }
+.title-board { inset: 0; width: 100%; height: 100%; }
+.title-lettering { z-index: 1; left: 16%; top: 20%; width: 68%; height: 64%; }
+.camp-title-en .title-lettering { left: 14%; top: 30%; width: 72%; height: 43%; }
+.title-fallback { position: absolute; inset: 25% 10%; z-index: 1; color: #fff0c5; font-size: 48px; text-align: center; }
+.menu-page .hero-art { margin-top: -26px; flex: none; animation: camp-island-float 7s ease-in-out infinite; }
+@keyframes camp-island-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 .menu-copy { width: min(440px, 100%); }
 .menu-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 14px; }
 .menu-buttons button {
@@ -48,17 +56,13 @@
 .hero-forest-back { --sway-duration: 6.6s; --sway-delay: -1.3s; }
 .hero-forest-right { --sway-duration: 5.1s; --sway-delay: -2.6s; }
 /* Keep trunks and ground shadows still; all layers of each crown move together. */
-.hero-forest > path:nth-of-type(n + 2) { transform-box: view-box; transform-origin: 49px 72px; animation: camp-tree var(--sway-duration) ease-in-out var(--sway-delay) infinite; }
-.hero-forest > path:nth-of-type(2) { transform-origin: 29px 70px; }
-.hero-forest > path:nth-of-type(3) { transform-origin: 72px 65px; }
+.hero-forest-crown { transform-box: view-box; transform-origin: 49px 72px; animation: camp-tree var(--sway-duration) ease-in-out var(--sway-delay) infinite; }
 .hero-current { animation: camp-current 3.8s linear infinite; }
 /* Only the three flame paths move; the logs and shadow remain on the ground. */
-.hero-fire > path:nth-of-type(2),
-.hero-fire > path:nth-of-type(3),
-.hero-fire > path:nth-of-type(4) { transform-box: view-box; transform-origin: 50px 80px; animation: camp-fire 1.7s ease-in-out -.4s infinite; }
-.hero-fire > path:nth-of-type(3) { animation-duration: 1.3s; animation-delay: -.8s; }
-.hero-fire > path:nth-of-type(4) { animation-duration: 2.1s; animation-delay: -1.2s; }
-.hero-fire-glow { transform-box: fill-box; transform-origin: center; animation: camp-fire-glow 2.8s ease-in-out -.9s infinite; }
+.hero-flame { transform-box: view-box; transform-origin: 50px 80px; animation: camp-fire 1.7s ease-in-out -.4s infinite; }
+.hero-fire .flame-1 { animation-duration: 1.3s; animation-delay: -.8s; }
+.hero-fire .flame-2 { animation-duration: 2.1s; animation-delay: -1.2s; }
+.hero-fire-glow { transform-box: view-box; transform-origin: 377px 400px; animation: camp-fire-glow 2.8s ease-in-out -.9s infinite; }
 .hero-art[data-motion='paused'] *, .hero-art[data-motion='paused'] { animation-play-state: paused; }
 @keyframes camp-cloud {
   0% { transform: translate(-110px, 0); opacity: 0; }
@@ -77,10 +81,10 @@
 @keyframes camp-current { to { stroke-dashoffset: -47; } }
 @keyframes camp-fire { 0%, 100% { transform: scale(.96, .9) rotate(-2deg); } 50% { transform: scale(1.05, 1.09) rotate(2deg); } }
 @keyframes camp-fire-glow { 0%, 100% { transform: scale(.9); opacity: .65; } 50% { transform: scale(1.12); opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .hero-art * { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .menu-page .hero-art, .hero-art * { animation: none !important; } }
 
 /* Entrance layers are temporary; the existing scene loops keep their own clock. */
-.home-title-shine, .home-fire-bloom { opacity: 0; pointer-events: none; }
+.home-fire-bloom { opacity: 0; pointer-events: none; }
 @media (prefers-reduced-motion: no-preference) {
   .home-entering::before, .home-entering::after { content: ''; position: absolute; pointer-events: none; z-index: 3; }
   .home-entering::before {
@@ -93,8 +97,7 @@
     animation: home-sunlight .7s cubic-bezier(.25, .1, .35, 1) .5s both;
   }
   .home-entering .camp-title { transform-origin: 50% 60%; animation: home-title .7s ease-out 1s both; }
-  .home-entering .home-title-shine { animation: home-title-shine .45s ease-in-out 1.15s both; }
-  .home-entering .home-fire-bloom { transform-box: fill-box; transform-origin: center; animation: home-fire-bloom .65s ease-in-out 1s both; }
+  .home-entering .home-fire-bloom { transform-box: view-box; transform-origin: 377px 400px; animation: home-fire-bloom .65s ease-in-out 1s both; }
   .home-entering .menu-buttons button, .home-entering .header-actions button {
     animation: home-button .46s ease-out var(--home-delay) both;
   }
@@ -117,7 +120,6 @@
   78% { transform: scale(.992); }
   100% { transform: scale(1); opacity: 1; }
 }
-@keyframes home-title-shine { 0% { transform: translateX(0); opacity: 0; } 15%, 75% { opacity: 1; } 100% { transform: translateX(650px); opacity: 0; } }
 @keyframes home-fire-bloom { 0%, 100% { transform: scale(.85); opacity: 0; } 45% { transform: scale(1.15); opacity: 1; } }
 @keyframes home-button {
   0% { transform: translateY(12px); opacity: 0; }
@@ -139,7 +141,7 @@
 @media (max-height: 500px) and (min-width: 601px) {
   .menu-page { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(230px, 1fr); gap: 16px; padding-bottom: 12px; max-width: 900px; }
   .menu-art { width: min(420px, 100%, calc((100dvh - var(--safe-top) - var(--safe-bottom) - 150px) * 1.29)); justify-self: center; }
-  .camp-title { height: 76px; }
+  .camp-title { --title-height: 100px; }
   .menu-page .hero-art { margin-top: -38px; }
   .menu-copy { justify-self: center; }
   .menu-buttons button { padding: 0 12px; font-size: 17px; }

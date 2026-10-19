@@ -4,7 +4,7 @@ import { DICTIONARIES } from '../../localization/index';
 import type { Language } from '../../localization/index';
 import type { TutorialLesson, TutorialStep, TutorialTarget } from '../tutorial/tutorialLessons';
 import '../styles/tutorial.css';
-import { Art } from './Art';
+import { art } from '../../assets/art';
 import { audio } from '../../platform/audio/WildernessAudio';
 
 type Rect = { x: number; y: number; width: number; height: number };
@@ -148,7 +148,7 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
     <div ref={cardRef} className="tutorial-narration" role="region" aria-label={copy.title} lang={language === 'zh' ? 'zh-CN' : 'en'} style={{ left: card?.x ?? 12, top: card?.y ?? 12, visibility: layout ? 'visible' : 'hidden' }}>
       <span className="tutorial-progress">{dictionary.controls.progress} {index + 1}/{lesson.steps.length}</span>
       <p aria-live="polite">{copy.text}</p>
-      {step.example && <svg className="tutorial-example" viewBox="0 0 156 90" role="img" aria-label={copy.title}><g fill="#d5dfb4" stroke="#a6b78a" strokeWidth="2">{[0,1,2,3].map(i => <rect key={i} x={8+i%2*40} y={5+Math.floor(i/2)*40} width="36" height="36" rx="5"/>)}</g><svg x="8" y="5" width="36" height="36"><Art kind="water"/></svg><svg x="48" y={step.example === 'wrong' ? 45 : 5} width="36" height="36"><Art kind="camp"/></svg><path d={step.example === 'wrong' ? 'M107 30l23 23m0-23-23 23' : 'm101 44 12 12 26-30'} fill="none" stroke={step.example === 'wrong' ? '#bb735b' : '#678c60'} strokeWidth="6" strokeLinecap="round"/></svg>}
+      {step.example && <svg className="tutorial-example" viewBox="0 0 156 90" role="img" aria-label={copy.title}><g fill="#d5dfb4" stroke="#a6b78a" strokeWidth="2">{[0,1,2,3].map(i => <rect key={i} x={8+i%2*40} y={5+Math.floor(i/2)*40} width="36" height="36" rx="5"/>)}</g><image x="8" y="5" width="36" height="36" href={art.object('water')}/><image x="48" y={step.example === 'wrong' ? 45 : 5} width="36" height="36" href={art.object('camp')}/><path d={step.example === 'wrong' ? 'M107 30l23 23m0-23-23 23' : 'm101 44 12 12 26-30'} fill="none" stroke={step.example === 'wrong' ? '#bb735b' : '#678c60'} strokeWidth="6" strokeLinecap="round"/></svg>}
       <small>{step.advance === 'action' ? dictionary.controls.action : dictionary.controls.continue}</small>
       <div className="tutorial-controls">{step.allowSkip && <button className="tutorial-skip" data-sound="close" onClick={onSkip}>{dictionary.controls.skip}</button>}<button data-sound="close" disabled={index === 0 || step.advance === 'action' || lesson.steps[index - 1]?.advance === 'action'} onClick={onBack}>{dictionary.controls.back}</button><button className="tutorial-next" data-sound="confirm" disabled={step.advance === 'action'} onClick={onNext}>{index + 1 === lesson.steps.length ? lesson.facility ? dictionary.controls.understood : dictionary.controls.finish : dictionary.controls.next}</button></div>
     </div>

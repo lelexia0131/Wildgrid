@@ -1,14 +1,7 @@
+import { art } from '../../assets/art';
+
 export type CampToolKind = 'undo' | 'blueprint' | 'restart' | 'journal' | 'save' | 'export' | 'abandon';
 
 export function CampToolIcon({ kind }: { kind: CampToolKind }) {
-  return <svg viewBox="0 0 64 64" fill="none" aria-hidden="true" strokeLinecap="round" strokeLinejoin="round">
-    <ellipse cx="32" cy="55" rx="22" ry="3" fill="#50644618"/>
-    {kind === 'undo' && <><path d="M23 17 10 29l13 12" stroke="#c2ad79" strokeWidth="10"/><path d="M12 29h25q17 0 17 14v6" stroke="#537c66" strokeWidth="8"/><path d="m23 18-12 11 12 11" stroke="#f2dca2" strokeWidth="7"/><path d="M30 27h9q10 0 13 7" stroke="#a5bda0" strokeWidth="2"/></>}
-    {kind === 'blueprint' && <><path d="M15 10h36v39H17q-7 0-7-6V16q0-6 5-6Z" fill="#c6b18b"/><path d="M15 9h35v35H15Z" fill="#b8d5cf"/><path d="M23 14v25m9-25v25m9-25v25M19 21h26m-26 9h26" stroke="#7ca8a0" strokeWidth="1"/><path d="m23 34 7-11 9 11Z" fill="#f8e8b7"/><path d="M15 9q-7 0-7 6t7 6m0 23q-7 0-7 6t7 6h35V44" fill="#e5d4ac" stroke="#bda476" strokeWidth="2"/><path d="M16 51h30" stroke="#f7edd1" strokeWidth="2"/></>}
-    {kind === 'restart' && <><path d="M49 22a20 20 0 1 0 2 22" stroke="#c5ae7c" strokeWidth="8"/><path d="M49 22a20 20 0 1 0 2 22" stroke="#f0d79c" strokeWidth="5"/><path d="m48 9 3 17-17-2" fill="#89ab8e" stroke="#567b62" strokeWidth="3"/><path d="m26 35 7-11 8 11Z" fill="#739778"/><path d="M27 35v9h12v-9" fill="#aabf91"/><path d="M32 38h4v6h-4" fill="#f5e4b8"/></>}
-    {kind === 'journal' && <><rect x="12" y="9" width="39" height="46" rx="5" fill="#9c7955"/><path d="M18 9h30v42H18Z" fill="#d9b77f"/><path d="M21 16h23v24H21Z" fill="#f5e6bf"/><path d="m25 32 5-10 9 10Z" fill="#719378"/><path d="M28 30v8m-5 0h16" stroke="#b89664" strokeWidth="2"/><path d="M17 15h-6m6 10h-6m6 10h-6m6 10h-6" stroke="#e6d0a5" strokeWidth="3"/><path d="M40 43v14l4-3 4 3V43" fill="#bc7056"/></>}
-    {kind === 'save' && <><path d="M12 10h33l8 8v35H12Z" fill="#537b65"/><path d="M17 12h25v19H17Z" fill="#b8ceae"/><path d="M21 12h16v13H21Z" fill="#f2dfad"/><path d="M31 14v8" stroke="#b69a65" strokeWidth="3"/><rect x="19" y="36" width="27" height="17" rx="3" fill="#eee3bf"/><path d="M24 42h17m-17 5h12" stroke="#a9b897" strokeWidth="2"/><path d="M48 21v26" stroke="#8eab8b" strokeWidth="2"/></>}
-    {kind === 'export' && <><path d="m9 28 21 10 25-26-14 42-14-11-13 5Z" fill="#e4c58c"/><path d="m9 23 21 10 25-25-14 41-14-11-13 5Z" fill="#f6e7b7"/><path d="m14 43 16-10L55 8 27 38Z" fill="#b8c9a0"/><path d="M9 53q-4-13 5-10" stroke="#7a9b79" strokeWidth="2" strokeDasharray="3 4"/></>}
-    {kind === 'abandon' && <><path d="M22 11v44" stroke="#a58a63" strokeWidth="5"/><path d="M24 12q12-7 26 0v23q-14-7-26 0Z" fill="#d09373"/><path d="M26 14q10-5 21 0v16q-11-5-21 0Z" fill="#e9b093"/><path d="m32 17 9 9m0-9-9 9" stroke="#965e4d" strokeWidth="3"/><path d="M14 55h19" stroke="#c3b38c" strokeWidth="4"/></>}
-  </svg>;
+  return <img className="camp-tool-art" src={art.toolIcon(kind)} alt="" draggable={false} aria-hidden="true"/>;
 }

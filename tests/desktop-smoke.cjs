@@ -27,9 +27,10 @@ app.on('web-contents-created', (_event, contents) => {
       const state = await contents.executeJavaScript(`new Promise(resolve => requestAnimationFrame(() => {
         const art = document.querySelector('.menu-art')?.getBoundingClientRect();
         const buttons = document.querySelector('.menu-buttons')?.getBoundingClientRect();
-        resolve({ menu: Boolean(buttons), heading: Boolean(document.querySelector('.menu-page h1')), buttonsBelowArt: Boolean(art && buttons && buttons.top >= art.bottom), protocol: location.protocol });
+        const branding = [...document.querySelectorAll('.camp-title img')];
+        resolve({ menu: Boolean(buttons), heading: Boolean(document.querySelector('.menu-page h1')), brandingLoaded: branding.length === 2 && branding.every(img => img.complete && img.naturalWidth > 0), buttonsBelowArt: Boolean(art && buttons && buttons.top >= art.bottom), protocol: location.protocol });
       }))`);
-      if (!state.menu || state.heading || !state.buttonsBelowArt || state.protocol !== 'wildgrid:' || failures.length) throw new Error(JSON.stringify({ state, failures }));
+      if (!state.menu || !state.heading || !state.brandingLoaded || !state.buttonsBelowArt || state.protocol !== 'wildgrid:' || failures.length) throw new Error(JSON.stringify({ state, failures }));
       const click = selector => contents.executeJavaScript(`new Promise(resolve => {
         document.querySelector(${JSON.stringify(selector)}).click();
         requestAnimationFrame(() => resolve());

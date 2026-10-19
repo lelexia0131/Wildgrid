@@ -4,6 +4,7 @@ import { readdirSync, writeFileSync } from 'node:fs';
 
 export default defineConfig({
   base: './',
+  build: { assetsInlineLimit: 0 },
   server: { watch: { ignored: ['**/release/**', '**/build/**', '**/.desktop-smoke/**'] } },
   plugins: [react(), {
     name: 'wildgrid-offline',
