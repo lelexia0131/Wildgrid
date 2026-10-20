@@ -1,0 +1,5980 @@
+{
+  "seeds": [
+    20261019,
+    20261020,
+    20261021
+  ],
+  "limits": {
+    "total": 15,
+    "water": 4,
+    "forest": 5,
+    "mountain": 5,
+    "component": 3,
+    "window3": 4,
+    "window4": 8
+  },
+  "before": {
+    "summary": {
+      "success": 14,
+      "total": 15,
+      "totalMs": 18865,
+      "ms": {
+        "min": 5,
+        "max": 3632,
+        "mean": 1257.6666666666667,
+        "p50": 319,
+        "p95": 3632
+      },
+      "terrain": {
+        "min": 20,
+        "max": 28,
+        "mean": 25.428571428571427,
+        "p50": 27,
+        "p95": 28
+      },
+      "counts": {
+        "water": {
+          "min": 5,
+          "max": 10,
+          "mean": 7.071428571428571,
+          "p50": 7,
+          "p95": 10
+        },
+        "forest": {
+          "min": 6,
+          "max": 12,
+          "mean": 8.214285714285714,
+          "p50": 8,
+          "p95": 12
+        },
+        "mountain": {
+          "min": 7,
+          "max": 14,
+          "mean": 10.142857142857142,
+          "p50": 10,
+          "p95": 14
+        }
+      },
+      "components": {
+        "water": {
+          "min": 5,
+          "max": 10,
+          "mean": 7.071428571428571,
+          "p50": 7,
+          "p95": 10
+        },
+        "forest": {
+          "min": 3,
+          "max": 7,
+          "mean": 5.071428571428571,
+          "p50": 5,
+          "p95": 7
+        },
+        "mountain": {
+          "min": 3,
+          "max": 7,
+          "mean": 4.571428571428571,
+          "p50": 4,
+          "p95": 7
+        }
+      },
+      "max3": 9,
+      "max4": 13,
+      "allIsolated": 0,
+      "byDifficulty": [
+        {
+          "difficulty": 1,
+          "total": 3,
+          "success": 3,
+          "ms": [
+            42,
+            12,
+            5
+          ],
+          "meanMs": 19.666666666666668,
+          "terrain": [
+            27,
+            23,
+            24
+          ],
+          "counts": [
+            [
+              7,
+              9,
+              11
+            ],
+            [
+              7,
+              7,
+              9
+            ],
+            [
+              6,
+              8,
+              10
+            ]
+          ]
+        },
+        {
+          "difficulty": 5,
+          "total": 3,
+          "success": 3,
+          "ms": [
+            51,
+            54,
+            76
+          ],
+          "meanMs": 60.333333333333336,
+          "terrain": [
+            27,
+            27,
+            28
+          ],
+          "counts": [
+            [
+              9,
+              9,
+              9
+            ],
+            [
+              9,
+              10,
+              8
+            ],
+            [
+              5,
+              12,
+              11
+            ]
+          ]
+        },
+        {
+          "difficulty": 9,
+          "total": 3,
+          "success": 3,
+          "ms": [
+            3277,
+            3119,
+            394
+          ],
+          "meanMs": 2263.3333333333335,
+          "terrain": [
+            27,
+            28,
+            26
+          ],
+          "counts": [
+            [
+              6,
+              9,
+              12
+            ],
+            [
+              7,
+              7,
+              14
+            ],
+            [
+              6,
+              7,
+              13
+            ]
+          ]
+        },
+        {
+          "difficulty": 10,
+          "total": 3,
+          "success": 2,
+          "ms": [
+            3443,
+            1258,
+            3632
+          ],
+          "meanMs": 2777.6666666666665,
+          "terrain": [
+            23,
+            23
+          ],
+          "counts": [
+            [
+              10,
+              6,
+              7
+            ],
+            [
+              6,
+              7,
+              10
+            ]
+          ]
+        }
+      ]
+    },
+    "records": [
+      {
+        "difficulty": 1,
+        "seed": 20261019,
+        "disabled": [],
+        "status": "success",
+        "ms": 42,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "tower_single": 1,
+          "picnic_domino": 1,
+          "camp_el": 1
+        },
+        "metrics": {
+          "score": 2.05,
+          "density": 0.109375,
+          "facilityDensity": 0.0625,
+          "candidates": 3,
+          "dependencies": 0.25,
+          "forced": 0.25,
+          "nodes": 5,
+          "branches": 0,
+          "logic": {
+            "solved": true,
+            "rounds": 2,
+            "deductions": 8,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 2,
+            "relationships": 2,
+            "initialForced": 1
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            8,
+            9,
+            9,
+            1
+          ],
+          "halves": [
+            17,
+            10,
+            17,
+            10
+          ],
+          "max3": 8,
+          "max4": 10,
+          "imbalance": 0.2962962962962963,
+          "halfImbalance": 0.25925925925925924,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 41,
+        "attempts": 7,
+        "proofs": 1,
+        "logicChecks": 2,
+        "failures": {
+          "role ambiguity": 4,
+          "logic stalled": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.4666666666666667,
+              "patchCompactness": 0.4666666666666667,
+              "branches": 1,
+              "bends": 2,
+              "count": 7,
+              "components": 1,
+              "largest": 7,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.5,
+              "patchCompactness": 0.75,
+              "branches": 1,
+              "bends": 4,
+              "count": 9,
+              "components": 2,
+              "largest": 5,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.22448979591836735,
+              "patchCompactness": 0.7083333333333334,
+              "branches": 1,
+              "bends": 2,
+              "count": 11,
+              "components": 3,
+              "largest": 5,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 27,
+          "grass": 30,
+          "effectiveGrass": 29,
+          "fragmentation": 3,
+          "concentration": 0.3333333333333333,
+          "maxSameKind": 2,
+          "kinds": 3,
+          "shapes": 4,
+          "campShapes": 2,
+          "terrainLinks": 3,
+          "clueVariety": 5,
+          "maxLine": 4,
+          "quadrants": [
+            2,
+            2,
+            1,
+            2
+          ],
+          "grassQuadrants": [
+            6,
+            5,
+            6,
+            13
+          ],
+          "linked": 1,
+          "dependencies": 1,
+          "score": 6.5714473435606955,
+          "naturalness": 0.26249999999999996,
+          "clueEntropy": 1.7947367178034825,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNSwwXSxbIndhdGVyIiw1LDFdLFsid2F0ZXIiLDUsMl0sWyJ3YXRlciIsNSwzXSxbIndhdGVyIiw2LDNdLFsid2F0ZXIiLDYsNF0sWyJmb3Jlc3QiLDEsN10sWyJmb3Jlc3QiLDIsN10sWyJmb3Jlc3QiLDAsN10sWyJmb3Jlc3QiLDEsNl0sWyJmb3Jlc3QiLDAsNl0sWyJmb3Jlc3QiLDAsMl0sWyJmb3Jlc3QiLDEsMl0sWyJmb3Jlc3QiLDAsM10sWyJmb3Jlc3QiLDAsNF0sWyJtb3VudGFpbiIsMiwyXSxbIm1vdW50YWluIiwyLDNdLFsibW91bnRhaW4iLDMsMl0sWyJtb3VudGFpbiIsNywyXSxbIm1vdW50YWluIiw2LDJdLFsibW91bnRhaW4iLDcsM10sWyJtb3VudGFpbiIsMSw1XSxbIm1vdW50YWluIiwyLDVdLFsibW91bnRhaW4iLDIsNl0sWyJ3YXRlciIsNCwxXSxbIm1vdW50YWluIiwyLDFdLFsibW91bnRhaW4iLDIsMF1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNSw0LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xIiwyLDQsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0yIiwzLDQsMV0sWyJjYW1wX2VsIiwid2lsZC0zIiwzLDAsMV1dLCJyIjpbMCwwLDEsMywyLDEsMCwwXSwiYyI6WzIsMSwwLDAsNCwwLDAsMF19"
+      },
+      {
+        "difficulty": 1,
+        "seed": 20261020,
+        "disabled": [],
+        "status": "success",
+        "ms": 12,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "camp_long": 1,
+          "tower_single": 1,
+          "picnic_domino": 1,
+          "cabin_el": 1
+        },
+        "metrics": {
+          "score": 2.95,
+          "density": 0.15625,
+          "facilityDensity": 0.078125,
+          "candidates": 4.6,
+          "dependencies": 0.2,
+          "forced": 0.2,
+          "nodes": 6,
+          "branches": 0,
+          "logic": {
+            "solved": true,
+            "rounds": 3,
+            "deductions": 18,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 4,
+            "relationships": 3,
+            "initialForced": 1
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            9,
+            0,
+            10,
+            4
+          ],
+          "halves": [
+            9,
+            14,
+            19,
+            4
+          ],
+          "max3": 8,
+          "max4": 10,
+          "imbalance": 0.43478260869565216,
+          "halfImbalance": 0.43478260869565216,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 12,
+        "attempts": 10,
+        "proofs": 1,
+        "logicChecks": 1,
+        "failures": {
+          "role ambiguity": 7
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.4666666666666667,
+              "patchCompactness": 0.4666666666666667,
+              "branches": 0,
+              "bends": 1,
+              "count": 7,
+              "components": 1,
+              "largest": 7,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.7777777777777778,
+              "patchCompactness": 0.7777777777777778,
+              "branches": 2,
+              "bends": 4,
+              "count": 7,
+              "components": 1,
+              "largest": 7,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.3,
+              "patchCompactness": 0.75,
+              "branches": 0,
+              "bends": 3,
+              "count": 9,
+              "components": 3,
+              "largest": 3,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 23,
+          "grass": 31,
+          "effectiveGrass": 29,
+          "fragmentation": 2,
+          "concentration": 0.43478260869565216,
+          "maxSameKind": 2,
+          "kinds": 4,
+          "shapes": 5,
+          "campShapes": 2,
+          "terrainLinks": 4,
+          "clueVariety": 5,
+          "maxLine": 6,
+          "quadrants": [
+            3,
+            1,
+            3,
+            3
+          ],
+          "grassQuadrants": [
+            4,
+            15,
+            3,
+            9
+          ],
+          "linked": 1,
+          "dependencies": 1,
+          "score": 7.878608431229727,
+          "naturalness": 0.4083333333333334,
+          "clueEntropy": 2.0217822215997976,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNyw0XSxbIndhdGVyIiw3LDNdLFsid2F0ZXIiLDcsMl0sWyJ3YXRlciIsNywxXSxbIndhdGVyIiw3LDBdLFsid2F0ZXIiLDYsMF0sWyJ3YXRlciIsNSwwXSxbImZvcmVzdCIsMSwwXSxbImZvcmVzdCIsMSwxXSxbImZvcmVzdCIsMiwwXSxbImZvcmVzdCIsMiwxXSxbImZvcmVzdCIsMCwwXSxbImZvcmVzdCIsMSwyXSxbImZvcmVzdCIsMCwxXSxbIm1vdW50YWluIiw2LDVdLFsibW91bnRhaW4iLDYsNl0sWyJtb3VudGFpbiIsNyw1XSxbIm1vdW50YWluIiwzLDJdLFsibW91bnRhaW4iLDQsMl0sWyJtb3VudGFpbiIsMywxXSxbIm1vdW50YWluIiw2LDFdLFsibW91bnRhaW4iLDUsMV0sWyJtb3VudGFpbiIsNiwyXV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiw2LDQsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTEiLDQsMywxXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMiIsMywzLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMyIsNSw0LDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTQiLDAsMywxXV0sInIiOlsyLDEsMCwxLDEsMywyLDBdLCJjIjpbMCwwLDAsNiwzLDEsMCwwXX0"
+      },
+      {
+        "difficulty": 1,
+        "seed": 20261021,
+        "disabled": [],
+        "status": "success",
+        "ms": 5,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "fire_single": 1,
+          "foodTruck_single": 1,
+          "camp_el": 1
+        },
+        "metrics": {
+          "score": 2.3,
+          "density": 0.09375,
+          "facilityDensity": 0.0625,
+          "candidates": 4,
+          "dependencies": 0.5,
+          "forced": 0.25,
+          "nodes": 5,
+          "branches": 1,
+          "logic": {
+            "solved": true,
+            "rounds": 2,
+            "deductions": 12,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 3,
+            "relationships": 2,
+            "initialForced": 1
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            9,
+            7,
+            3,
+            5
+          ],
+          "halves": [
+            16,
+            8,
+            12,
+            12
+          ],
+          "max3": 7,
+          "max4": 10,
+          "imbalance": 0.25,
+          "halfImbalance": 0.16666666666666666,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 5,
+        "attempts": 3,
+        "proofs": 1,
+        "logicChecks": 2,
+        "failures": {
+          "logic stalled": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.6,
+              "patchCompactness": 0.6,
+              "branches": 0,
+              "bends": 1,
+              "count": 6,
+              "components": 1,
+              "largest": 6,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.2,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 8,
+              "count": 8,
+              "components": 2,
+              "largest": 4,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.23809523809523808,
+              "patchCompactness": 0.8055555555555555,
+              "branches": 0,
+              "bends": 2,
+              "count": 10,
+              "components": 3,
+              "largest": 4,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 24,
+          "grass": 34,
+          "effectiveGrass": 34,
+          "fragmentation": 3,
+          "concentration": 0.375,
+          "maxSameKind": 2,
+          "kinds": 3,
+          "shapes": 4,
+          "campShapes": 2,
+          "terrainLinks": 2,
+          "clueVariety": 3,
+          "maxLine": 2,
+          "quadrants": [
+            3,
+            2,
+            1,
+            0
+          ],
+          "grassQuadrants": [
+            4,
+            7,
+            12,
+            11
+          ],
+          "linked": 2,
+          "dependencies": 2,
+          "score": 6.008333333333331,
+          "naturalness": 0.45833333333333337,
+          "clueEntropy": 1.5,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMyw3XSxbIndhdGVyIiwzLDZdLFsid2F0ZXIiLDMsNV0sWyJ3YXRlciIsMyw0XSxbIndhdGVyIiwzLDNdLFsid2F0ZXIiLDIsM10sWyJmb3Jlc3QiLDQsNl0sWyJmb3Jlc3QiLDQsN10sWyJmb3Jlc3QiLDUsNl0sWyJmb3Jlc3QiLDUsN10sWyJmb3Jlc3QiLDEsMF0sWyJmb3Jlc3QiLDIsMF0sWyJmb3Jlc3QiLDEsMV0sWyJtb3VudGFpbiIsMSw3XSxbIm1vdW50YWluIiwwLDddLFsibW91bnRhaW4iLDAsNl0sWyJtb3VudGFpbiIsNCwzXSxbIm1vdW50YWluIiw1LDNdLFsibW91bnRhaW4iLDYsM10sWyJtb3VudGFpbiIsMCwyXSxbIm1vdW50YWluIiwxLDJdLFsibW91bnRhaW4iLDIsMl0sWyJtb3VudGFpbiIsNCw0XSxbImZvcmVzdCIsMiwxXV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiwzLDIsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMSIsNCwyLDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMiIsMywwLDBdLFsiY2FtcF9lbCIsIndpbGQtMyIsMSwzLDJdXSwiciI6WzAsMiwxLDIsMSwwLDAsMF0sImMiOlsxLDAsMiwxLDIsMCwwLDBdfQ"
+      },
+      {
+        "difficulty": 5,
+        "seed": 20261019,
+        "disabled": [],
+        "status": "success",
+        "ms": 51,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "camp_domino": 2,
+          "picnic_domino": 1,
+          "pool_single": 1,
+          "foodTruck_single": 1,
+          "fire_single": 1,
+          "camp_long": 1,
+          "tower_single": 1,
+          "cabin_el": 2
+        },
+        "metrics": {
+          "score": 6.800000000000001,
+          "density": 0.3125,
+          "facilityDensity": 0.171875,
+          "candidates": 12.090909090909092,
+          "dependencies": 0.36363636363636365,
+          "forced": 0,
+          "nodes": 326,
+          "branches": 119,
+          "logic": {
+            "solved": true,
+            "rounds": 10,
+            "deductions": 109,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 5,
+            "relationships": 19,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            11,
+            3,
+            3,
+            10
+          ],
+          "halves": [
+            14,
+            13,
+            14,
+            13
+          ],
+          "max3": 8,
+          "max4": 12,
+          "imbalance": 0.2962962962962963,
+          "halfImbalance": 0.037037037037037035,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 51,
+        "attempts": 12,
+        "proofs": 1,
+        "logicChecks": 5,
+        "failures": {
+          "role ambiguity": 6,
+          "reasoning tier": 1,
+          "logic stalled": 3
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.45,
+              "patchCompactness": 0.45,
+              "branches": 0,
+              "bends": 4,
+              "count": 9,
+              "components": 1,
+              "largest": 9,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.2571428571428571,
+              "patchCompactness": 0.75,
+              "branches": 2,
+              "bends": 3,
+              "count": 9,
+              "components": 2,
+              "largest": 5,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.375,
+              "patchCompactness": 0.75,
+              "branches": 2,
+              "bends": 3,
+              "count": 9,
+              "components": 2,
+              "largest": 5,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 27,
+          "grass": 17,
+          "effectiveGrass": 16,
+          "fragmentation": 2,
+          "concentration": 0.4074074074074074,
+          "maxSameKind": 4,
+          "kinds": 7,
+          "shapes": 9,
+          "campShapes": 3,
+          "terrainLinks": 8,
+          "clueVariety": 6,
+          "maxLine": 5,
+          "quadrants": [
+            3,
+            7,
+            5,
+            5
+          ],
+          "grassQuadrants": [
+            2,
+            6,
+            8,
+            1
+          ],
+          "linked": 4,
+          "dependencies": 4,
+          "score": 12.293853104582967,
+          "naturalness": 0.5,
+          "clueEntropy": 2.4056390622295667,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMyw0XSxbIndhdGVyIiwzLDVdLFsid2F0ZXIiLDMsNl0sWyJ3YXRlciIsNCw2XSxbIndhdGVyIiw1LDZdLFsid2F0ZXIiLDUsN10sWyJ3YXRlciIsNiw3XSxbIndhdGVyIiw3LDddLFsid2F0ZXIiLDcsNl0sWyJmb3Jlc3QiLDAsMl0sWyJmb3Jlc3QiLDEsMl0sWyJmb3Jlc3QiLDEsM10sWyJmb3Jlc3QiLDIsMl0sWyJmb3Jlc3QiLDIsM10sWyJmb3Jlc3QiLDYsNl0sWyJmb3Jlc3QiLDYsNV0sWyJmb3Jlc3QiLDYsNF0sWyJmb3Jlc3QiLDUsNV0sWyJtb3VudGFpbiIsNSwzXSxbIm1vdW50YWluIiw0LDNdLFsibW91bnRhaW4iLDQsMl0sWyJtb3VudGFpbiIsMywzXSxbIm1vdW50YWluIiwxLDFdLFsibW91bnRhaW4iLDAsMV0sWyJtb3VudGFpbiIsMCwwXSxbIm1vdW50YWluIiwyLDFdLFsibW91bnRhaW4iLDEsMF1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNCw1LDBdLFsiY2FtcF9kb21pbm8iLCJ3aWxkLTEiLDcsNCwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTIiLDQsNCwxXSxbImNhbXBfZG9taW5vIiwid2lsZC0zIiwxLDQsMV0sWyJwb29sX3NpbmdsZSIsIndpbGQtNCIsMiw1LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtNSIsNywyLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTYiLDEsNSwwXSxbImNhbXBfbG9uZyIsIndpbGQtNyIsMCw2LDFdLFsidG93ZXJfc2luZ2xlIiwid2lsZC04IiwyLDAsMF0sWyJjYWJpbl9lbCIsIndpbGQtOSIsNSwyLDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTEwIiwzLDEsMV1dLCJyIjpbMSwzLDQsMiwzLDIsMiwzXSwiYyI6WzEsMiw0LDEsNSw0LDMsMF19"
+      },
+      {
+        "difficulty": 5,
+        "seed": 20261020,
+        "disabled": [],
+        "status": "success",
+        "ms": 54,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "picnic_domino": 2,
+          "cabin_el": 2,
+          "camp_long": 2,
+          "pool_single": 3,
+          "fire_single": 1
+        },
+        "metrics": {
+          "score": 4.84,
+          "density": 0.328125,
+          "facilityDensity": 0.171875,
+          "candidates": 12.181818181818182,
+          "dependencies": 0.5454545454545454,
+          "forced": 0,
+          "nodes": 159,
+          "branches": 38,
+          "logic": {
+            "solved": true,
+            "rounds": 5,
+            "deductions": 61,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 5,
+            "relationships": 12,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            5,
+            8,
+            8,
+            6
+          ],
+          "halves": [
+            13,
+            14,
+            13,
+            14
+          ],
+          "max3": 6,
+          "max4": 9,
+          "imbalance": 0.1111111111111111,
+          "halfImbalance": 0.037037037037037035,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 54,
+        "attempts": 13,
+        "proofs": 1,
+        "logicChecks": 6,
+        "failures": {
+          "role ambiguity": 7,
+          "logic stalled": 5
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.45,
+              "patchCompactness": 0.45,
+              "branches": 1,
+              "bends": 1,
+              "count": 9,
+              "components": 1,
+              "largest": 9,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.20408163265306123,
+              "patchCompactness": 0.8055555555555555,
+              "branches": 1,
+              "bends": 1,
+              "count": 10,
+              "components": 3,
+              "largest": 4,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.2857142857142857,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 8,
+              "components": 3,
+              "largest": 3,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 27,
+          "grass": 16,
+          "effectiveGrass": 15,
+          "fragmentation": 4,
+          "concentration": 0.2962962962962963,
+          "maxSameKind": 3,
+          "kinds": 5,
+          "shapes": 6,
+          "campShapes": 2,
+          "terrainLinks": 8,
+          "clueVariety": 7,
+          "maxLine": 6,
+          "quadrants": [
+            7,
+            8,
+            1,
+            5
+          ],
+          "grassQuadrants": [
+            4,
+            0,
+            7,
+            5
+          ],
+          "linked": 6,
+          "dependencies": 6,
+          "score": 8.545664983164983,
+          "naturalness": 0.09166666666666665,
+          "clueEntropy": 2.5,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNyw3XSxbIndhdGVyIiw2LDddLFsid2F0ZXIiLDUsN10sWyJ3YXRlciIsNCw3XSxbIndhdGVyIiwzLDddLFsid2F0ZXIiLDMsNl0sWyJ3YXRlciIsMyw1XSxbIndhdGVyIiwzLDRdLFsiZm9yZXN0Iiw2LDNdLFsiZm9yZXN0Iiw1LDNdLFsiZm9yZXN0Iiw1LDRdLFsiZm9yZXN0IiwxLDNdLFsiZm9yZXN0IiwxLDJdLFsiZm9yZXN0IiwxLDFdLFsiZm9yZXN0IiwwLDddLFsiZm9yZXN0IiwwLDZdLFsibW91bnRhaW4iLDQsMF0sWyJtb3VudGFpbiIsNCwxXSxbIm1vdW50YWluIiw3LDJdLFsibW91bnRhaW4iLDcsMV0sWyJtb3VudGFpbiIsNywzXSxbIm1vdW50YWluIiwxLDBdLFsibW91bnRhaW4iLDIsMF0sWyJmb3Jlc3QiLDAsNV0sWyJ3YXRlciIsNSw2XSxbImZvcmVzdCIsMSw2XSxbIm1vdW50YWluIiw0LDJdXSwiZiI6W1siY2FtcF9zaW5nbGUiLCJ3aWxkLTAiLDIsNiwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEiLDEsNywxXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTIiLDEsNSwxXSxbImNhYmluX2VsIiwid2lsZC0zIiwyLDAsM10sWyJjYW1wX2xvbmciLCJ3aWxkLTQiLDIsMywxXSxbInBvb2xfc2luZ2xlIiwid2lsZC01IiwyLDQsMF0sWyJjYWJpbl9lbCIsIndpbGQtNiIsMCwzLDJdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTciLDMsMiwwXSxbImNhbXBfbG9uZyIsIndpbGQtOCIsNCw1LDFdLFsicG9vbF9zaW5nbGUiLCJ3aWxkLTkiLDQsNiwwXSxbInBvb2xfc2luZ2xlIiwid2lsZC0xMCIsNCw0LDBdXSwiciI6WzIsMyw2LDQsNCwxLDEsMF0sImMiOlsxLDIsMSw0LDQsNSwyLDJdfQ"
+      },
+      {
+        "difficulty": 5,
+        "seed": 20261021,
+        "disabled": [],
+        "status": "success",
+        "ms": 76,
+        "single": true,
+        "facilities": {
+          "camp_single": 2,
+          "camp_long": 1,
+          "picnic_domino": 2,
+          "cabin_el": 3,
+          "foodTruck_single": 1,
+          "tower_single": 4
+        },
+        "metrics": {
+          "score": 5.47,
+          "density": 0.359375,
+          "facilityDensity": 0.203125,
+          "candidates": 16.923076923076923,
+          "dependencies": 0.23076923076923078,
+          "forced": 0,
+          "nodes": 400,
+          "branches": 93,
+          "logic": {
+            "solved": true,
+            "rounds": 7,
+            "deductions": 92,
+            "assumptions": 3,
+            "maxDepth": 1,
+            "techniques": 6,
+            "relationships": 8,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            12,
+            8,
+            3,
+            5
+          ],
+          "halves": [
+            20,
+            8,
+            15,
+            13
+          ],
+          "max3": 8,
+          "max4": 12,
+          "imbalance": 0.32142857142857145,
+          "halfImbalance": 0.25,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 75,
+        "attempts": 16,
+        "proofs": 1,
+        "logicChecks": 9,
+        "failures": {
+          "role ambiguity": 7,
+          "logic stalled": 7,
+          "reasoning tier": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.625,
+              "patchCompactness": 0.625,
+              "branches": 0,
+              "bends": 1,
+              "count": 5,
+              "components": 1,
+              "largest": 5,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.34285714285714286,
+              "patchCompactness": 0.55,
+              "branches": 1,
+              "bends": 2,
+              "count": 12,
+              "components": 2,
+              "largest": 6,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.22916666666666666,
+              "patchCompactness": 0.6944444444444443,
+              "branches": 2,
+              "bends": 1,
+              "count": 11,
+              "components": 3,
+              "largest": 4,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 28,
+          "grass": 13,
+          "effectiveGrass": 12,
+          "fragmentation": 3,
+          "concentration": 0.42857142857142855,
+          "maxSameKind": 4,
+          "kinds": 5,
+          "shapes": 6,
+          "campShapes": 2,
+          "terrainLinks": 10,
+          "clueVariety": 6,
+          "maxLine": 5,
+          "quadrants": [
+            4,
+            7,
+            9,
+            3
+          ],
+          "grassQuadrants": [
+            0,
+            1,
+            4,
+            8
+          ],
+          "linked": 3,
+          "dependencies": 3,
+          "score": 9.039197979047074,
+          "naturalness": 0.3566666666666667,
+          "clueEntropy": 2.3522170014624826,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMCwxXSxbIndhdGVyIiwwLDBdLFsid2F0ZXIiLDEsMF0sWyJ3YXRlciIsMiwwXSxbIndhdGVyIiwzLDBdLFsiZm9yZXN0IiwxLDJdLFsiZm9yZXN0IiwyLDJdLFsiZm9yZXN0IiwwLDJdLFsiZm9yZXN0IiwyLDFdLFsiZm9yZXN0IiwwLDNdLFsiZm9yZXN0IiwzLDddLFsiZm9yZXN0IiwyLDddLFsiZm9yZXN0IiwxLDddLFsiZm9yZXN0Iiw0LDddLFsiZm9yZXN0IiwwLDddLFsibW91bnRhaW4iLDUsNl0sWyJtb3VudGFpbiIsNSw3XSxbIm1vdW50YWluIiw2LDZdLFsibW91bnRhaW4iLDQsNl0sWyJtb3VudGFpbiIsMyw0XSxbIm1vdW50YWluIiwyLDRdLFsibW91bnRhaW4iLDIsNV0sWyJtb3VudGFpbiIsMiwzXSxbIm1vdW50YWluIiw3LDBdLFsibW91bnRhaW4iLDYsMF0sWyJtb3VudGFpbiIsNywxXSxbImZvcmVzdCIsMywyXSxbImZvcmVzdCIsMCw2XV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiwzLDEsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTEiLDQsMCwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTIiLDUsMSwxXSxbImNhYmluX2VsIiwid2lsZC0zIiwzLDUsMV0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC00Iiw0LDQsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTUiLDMsMywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNiIsNSwwLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNyIsNSwyLDFdLFsidG93ZXJfc2luZ2xlIiwid2lsZC04Iiw1LDUsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTkiLDcsMiwwXSxbImNhYmluX2VsIiwid2lsZC0xMCIsMCwzLDNdLFsiY2FtcF9zaW5nbGUiLCJ3aWxkLTExIiwxLDEsMF0sWyJjYWJpbl9lbCIsIndpbGQtMTIiLDAsNSwwXV0sInIiOlsyLDUsMCw0LDUsNCwyLDFdLCJjIjpbMiw1LDQsMiwzLDUsMiwwXX0"
+      },
+      {
+        "difficulty": 9,
+        "seed": 20261019,
+        "disabled": [],
+        "status": "success",
+        "ms": 3277,
+        "single": true,
+        "facilities": {
+          "camp_single": 3,
+          "camp_long": 1,
+          "picnic_domino": 2,
+          "camp_domino": 2,
+          "cabin_el": 3,
+          "foodTruck_single": 1,
+          "fire_single": 1,
+          "tower_single": 3,
+          "powerTower_single": 1
+        },
+        "metrics": {
+          "score": 6.48,
+          "density": 0.453125,
+          "facilityDensity": 0.265625,
+          "candidates": 15.588235294117647,
+          "dependencies": 0.23529411764705882,
+          "forced": 0,
+          "nodes": 1993,
+          "branches": 583,
+          "logic": {
+            "solved": true,
+            "rounds": 10,
+            "deductions": 146,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 5,
+            "relationships": 14,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            7,
+            7,
+            5,
+            8
+          ],
+          "halves": [
+            14,
+            13,
+            12,
+            15
+          ],
+          "max3": 6,
+          "max4": 9,
+          "imbalance": 0.1111111111111111,
+          "halfImbalance": 0.07407407407407407,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 3277,
+        "attempts": 1045,
+        "proofs": 1,
+        "logicChecks": 391,
+        "failures": {
+          "role ambiguity": 650,
+          "logic stalled": 389,
+          "combination layout": 2,
+          "reasoning tier": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.6666666666666666,
+              "patchCompactness": 0.6666666666666666,
+              "branches": 0,
+              "bends": 2,
+              "count": 6,
+              "components": 1,
+              "largest": 6,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.6,
+              "patchCompactness": 0.9166666666666667,
+              "branches": 0,
+              "bends": 6,
+              "count": 9,
+              "components": 2,
+              "largest": 5,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.21428571428571427,
+              "patchCompactness": 0.6666666666666666,
+              "branches": 2,
+              "bends": 2,
+              "count": 12,
+              "components": 3,
+              "largest": 4,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 27,
+          "grass": 8,
+          "effectiveGrass": 5,
+          "fragmentation": 3,
+          "concentration": 0.2962962962962963,
+          "maxSameKind": 6,
+          "kinds": 7,
+          "shapes": 9,
+          "campShapes": 3,
+          "terrainLinks": 12,
+          "clueVariety": 7,
+          "maxLine": 6,
+          "quadrants": [
+            8,
+            9,
+            5,
+            7
+          ],
+          "grassQuadrants": [
+            1,
+            0,
+            6,
+            1
+          ],
+          "linked": 4,
+          "dependencies": 4,
+          "score": 12.220030137159773,
+          "naturalness": 0.5750000000000001,
+          "clueEntropy": 2.5778195311147836,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMCw2XSxbIndhdGVyIiwwLDddLFsid2F0ZXIiLDEsN10sWyJ3YXRlciIsMiw3XSxbIndhdGVyIiwyLDZdLFsid2F0ZXIiLDIsNV0sWyJmb3Jlc3QiLDUsMV0sWyJmb3Jlc3QiLDQsMV0sWyJmb3Jlc3QiLDQsMl0sWyJmb3Jlc3QiLDYsMV0sWyJmb3Jlc3QiLDYsNV0sWyJmb3Jlc3QiLDYsNF0sWyJmb3Jlc3QiLDUsNF0sWyJmb3Jlc3QiLDUsNV0sWyJtb3VudGFpbiIsMywyXSxbIm1vdW50YWluIiwzLDNdLFsibW91bnRhaW4iLDIsM10sWyJtb3VudGFpbiIsMiw0XSxbIm1vdW50YWluIiwyLDBdLFsibW91bnRhaW4iLDEsMF0sWyJtb3VudGFpbiIsMSwxXSxbIm1vdW50YWluIiwwLDBdLFsibW91bnRhaW4iLDUsN10sWyJtb3VudGFpbiIsNSw2XSxbIm1vdW50YWluIiw2LDddLFsibW91bnRhaW4iLDQsN10sWyJmb3Jlc3QiLDYsMl1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsMyw1LDBdLFsiY2FtcF9sb25nIiwid2lsZC0xIiwwLDMsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0yIiwwLDEsMF0sWyJjYW1wX2RvbWlubyIsIndpbGQtMyIsMSw0LDBdLFsiY2FtcF9kb21pbm8iLCJ3aWxkLTQiLDMsNiwxXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTUiLDEsMiwwXSxbImNhYmluX2VsIiwid2lsZC02Iiw2LDUsM10sWyJjYW1wX3NpbmdsZSIsIndpbGQtNyIsMSw2LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtOCIsNCw0LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTkiLDMsNCwwXSxbImNhbXBfc2luZ2xlIiwid2lsZC0xMCIsMyw3LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xMSIsNyw3LDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTEyIiw2LDAsMF0sWyJjYWJpbl9lbCIsIndpbGQtMTMiLDMsMCwxXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTQiLDQsMywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTUiLDIsMSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNiIsNyw0LDBdXSwiciI6WzUsNSwxLDYsNCwwLDIsNl0sImMiOls0LDQsMiwzLDUsNCw1LDJdfQ"
+      },
+      {
+        "difficulty": 9,
+        "seed": 20261020,
+        "disabled": [],
+        "status": "success",
+        "ms": 3119,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "cabin_el": 1,
+          "camp_long": 2,
+          "picnic_domino": 2,
+          "camp_domino": 1,
+          "tower_single": 5,
+          "powerTower_single": 7
+        },
+        "metrics": {
+          "score": 6.26,
+          "density": 0.4375,
+          "facilityDensity": 0.296875,
+          "candidates": 23.68421052631579,
+          "dependencies": 0.10526315789473684,
+          "forced": 0.05263157894736842,
+          "nodes": 6533,
+          "branches": 1740,
+          "logic": {
+            "solved": true,
+            "rounds": 7,
+            "deductions": 92,
+            "assumptions": 1,
+            "maxDepth": 1,
+            "techniques": 5,
+            "relationships": 21,
+            "initialForced": 1
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            7,
+            2,
+            12,
+            7
+          ],
+          "halves": [
+            9,
+            19,
+            19,
+            9
+          ],
+          "max3": 8,
+          "max4": 12,
+          "imbalance": 0.35714285714285715,
+          "halfImbalance": 0.35714285714285715,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 3119,
+        "attempts": 1115,
+        "proofs": 1,
+        "logicChecks": 441,
+        "failures": {
+          "role ambiguity": 670,
+          "logic stalled": 438,
+          "combination layout": 4,
+          "reasoning tier": 2
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.4375,
+              "patchCompactness": 0.4375,
+              "branches": 0,
+              "bends": 1,
+              "count": 7,
+              "components": 1,
+              "largest": 7,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.7,
+              "patchCompactness": 0.7,
+              "branches": 2,
+              "bends": 2,
+              "count": 7,
+              "components": 1,
+              "largest": 7,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.25,
+              "patchCompactness": 0.875,
+              "branches": 1,
+              "bends": 2,
+              "count": 14,
+              "components": 4,
+              "largest": 6,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 28,
+          "grass": 8,
+          "effectiveGrass": 8,
+          "fragmentation": 3,
+          "concentration": 0.42857142857142855,
+          "maxSameKind": 7,
+          "kinds": 5,
+          "shapes": 7,
+          "campShapes": 3,
+          "terrainLinks": 10,
+          "clueVariety": 6,
+          "maxLine": 7,
+          "quadrants": [
+            9,
+            6,
+            4,
+            9
+          ],
+          "grassQuadrants": [
+            0,
+            8,
+            0,
+            0
+          ],
+          "linked": 2,
+          "dependencies": 2,
+          "score": 8.647417080951545,
+          "naturalness": 0.3475,
+          "clueEntropy": 2.430036532577266,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNCwwXSxbIndhdGVyIiw1LDBdLFsid2F0ZXIiLDYsMF0sWyJ3YXRlciIsNywwXSxbIndhdGVyIiw3LDFdLFsid2F0ZXIiLDcsMl0sWyJ3YXRlciIsNywzXSxbImZvcmVzdCIsNCwxXSxbImZvcmVzdCIsNSwxXSxbImZvcmVzdCIsMywxXSxbImZvcmVzdCIsNSwyXSxbImZvcmVzdCIsMiwxXSxbImZvcmVzdCIsNiwxXSxbImZvcmVzdCIsNCwyXSxbIm1vdW50YWluIiwzLDRdLFsibW91bnRhaW4iLDQsNF0sWyJtb3VudGFpbiIsNSw0XSxbIm1vdW50YWluIiw2LDddLFsibW91bnRhaW4iLDYsNl0sWyJtb3VudGFpbiIsMCwwXSxbIm1vdW50YWluIiwxLDBdLFsibW91bnRhaW4iLDAsMV0sWyJtb3VudGFpbiIsMiwyXSxbIm1vdW50YWluIiwzLDJdLFsibW91bnRhaW4iLDUsNl0sWyJtb3VudGFpbiIsNCw2XSxbIm1vdW50YWluIiwzLDZdLFsibW91bnRhaW4iLDQsN11dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNiwyLDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTEiLDAsMSwzXSxbImNhbXBfbG9uZyIsIndpbGQtMiIsNCwzLDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtMyIsMiwzLDFdLFsiY2FtcF9sb25nIiwid2lsZC00Iiw3LDQsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC01Iiw1LDUsMV0sWyJjYW1wX2RvbWlubyIsIndpbGQtNiIsMiwwLDFdLFsidG93ZXJfc2luZ2xlIiwid2lsZC03Iiw2LDQsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTgiLDcsNywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtOSIsNCw1LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTEwIiwyLDUsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTExIiw1LDcsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEyIiwyLDQsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTMiLDMsNSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNCIsMCw1LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTE1IiwwLDMsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTYiLDEsMywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNyIsMSw0LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTE4IiwwLDQsMF1dLCJyIjpbNCw0LDQsMywyLDMsNCw0XSwiYyI6WzIsMSwzLDcsNSw3LDEsMl19"
+      },
+      {
+        "difficulty": 9,
+        "seed": 20261021,
+        "disabled": [],
+        "status": "success",
+        "ms": 394,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "camp_long": 2,
+          "camp_el": 1,
+          "cabin_el": 2,
+          "fire_single": 2,
+          "foodTruck_single": 1,
+          "picnic_domino": 1,
+          "powerTower_single": 4,
+          "tower_single": 3
+        },
+        "metrics": {
+          "score": 5.43,
+          "density": 0.4375,
+          "facilityDensity": 0.265625,
+          "candidates": 20.705882352941178,
+          "dependencies": 0.23529411764705882,
+          "forced": 0,
+          "nodes": 1562,
+          "branches": 469,
+          "logic": {
+            "solved": true,
+            "rounds": 6,
+            "deductions": 157,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 4,
+            "relationships": 29,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            11,
+            4,
+            4,
+            7
+          ],
+          "halves": [
+            15,
+            11,
+            15,
+            11
+          ],
+          "max3": 9,
+          "max4": 12,
+          "imbalance": 0.2692307692307692,
+          "halfImbalance": 0.15384615384615385,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 394,
+        "attempts": 135,
+        "proofs": 1,
+        "logicChecks": 49,
+        "failures": {
+          "role ambiguity": 84,
+          "logic stalled": 48
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.5,
+              "patchCompactness": 0.5,
+              "branches": 0,
+              "bends": 2,
+              "count": 6,
+              "components": 1,
+              "largest": 6,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.4375,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 4,
+              "count": 7,
+              "components": 2,
+              "largest": 4,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.30952380952380953,
+              "patchCompactness": 0.9375,
+              "branches": 1,
+              "bends": 1,
+              "count": 13,
+              "components": 4,
+              "largest": 6,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 26,
+          "grass": 10,
+          "effectiveGrass": 7,
+          "fragmentation": 4,
+          "concentration": 0.4230769230769231,
+          "maxSameKind": 4,
+          "kinds": 7,
+          "shapes": 9,
+          "campShapes": 3,
+          "terrainLinks": 9,
+          "clueVariety": 7,
+          "maxLine": 6,
+          "quadrants": [
+            5,
+            9,
+            8,
+            6
+          ],
+          "grassQuadrants": [
+            0,
+            3,
+            4,
+            3
+          ],
+          "linked": 4,
+          "dependencies": 4,
+          "score": 11.761689471833815,
+          "naturalness": 0.51875,
+          "clueEntropy": 2.5778195311147836,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMywyXSxbIndhdGVyIiwyLDJdLFsid2F0ZXIiLDIsMV0sWyJ3YXRlciIsMiwwXSxbIndhdGVyIiwxLDBdLFsid2F0ZXIiLDAsMF0sWyJmb3Jlc3QiLDMsMV0sWyJmb3Jlc3QiLDMsMF0sWyJmb3Jlc3QiLDQsMV0sWyJmb3Jlc3QiLDQsMF0sWyJmb3Jlc3QiLDEsMl0sWyJmb3Jlc3QiLDEsM10sWyJmb3Jlc3QiLDEsMV0sWyJtb3VudGFpbiIsMyw3XSxbIm1vdW50YWluIiwyLDddLFsibW91bnRhaW4iLDQsN10sWyJtb3VudGFpbiIsNSwyXSxbIm1vdW50YWluIiw1LDFdLFsibW91bnRhaW4iLDYsNl0sWyJtb3VudGFpbiIsNiw3XSxbIm1vdW50YWluIiw2LDVdLFsibW91bnRhaW4iLDMsNF0sWyJtb3VudGFpbiIsMyw1XSxbIm1vdW50YWluIiw2LDRdLFsibW91bnRhaW4iLDcsNl0sWyJtb3VudGFpbiIsNyw0XV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiwzLDMsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTEiLDIsMywwXSxbImNhbXBfZWwiLCJ3aWxkLTIiLDQsMiwyXSxbImNhYmluX2VsIiwid2lsZC0zIiw1LDAsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTQiLDAsMSwwXSxbImNhYmluX2VsIiwid2lsZC01IiwwLDQsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtNiIsNiwzLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTciLDUsNCwwXSxbImZvb2RUcnVja19zaW5nbGUiLCJ3aWxkLTgiLDQsNSwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTkiLDIsNiwxXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xMCIsMCw2LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTExIiwwLDUsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEyIiw1LDUsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTMiLDUsNiwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTQiLDYsMiwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNSIsNCw2LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xNiIsNyw1LDBdXSwiciI6WzYsMiw0LDIsNCw1LDQsMV0sImMiOlsyLDIsMyw2LDQsNiw1LDBdfQ"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261019,
+        "disabled": [],
+        "status": "success",
+        "ms": 3443,
+        "single": true,
+        "facilities": {
+          "camp_single": 3,
+          "camp_long": 2,
+          "camp_domino": 1,
+          "cabin_el": 3,
+          "powerTower_single": 4,
+          "tower_single": 4,
+          "fire_single": 1,
+          "foodTruck_single": 1
+        },
+        "metrics": {
+          "score": 5.15,
+          "density": 0.46875,
+          "facilityDensity": 0.296875,
+          "candidates": 15.421052631578947,
+          "dependencies": 0.10526315789473684,
+          "forced": 0,
+          "nodes": 1471,
+          "branches": 332,
+          "logic": {
+            "solved": true,
+            "rounds": 5,
+            "deductions": 115,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 4,
+            "relationships": 24,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            5,
+            13,
+            1,
+            4
+          ],
+          "halves": [
+            18,
+            5,
+            6,
+            17
+          ],
+          "max3": 9,
+          "max4": 13,
+          "imbalance": 0.5217391304347826,
+          "halfImbalance": 0.5217391304347826,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 3443,
+        "attempts": 1166,
+        "proofs": 2,
+        "logicChecks": 425,
+        "failures": {
+          "role ambiguity": 734,
+          "logic stalled": 421,
+          "combination layout": 6,
+          "reasoning tier": 2,
+          "proof budget": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.625,
+              "patchCompactness": 0.625,
+              "branches": 0,
+              "bends": 3,
+              "count": 10,
+              "components": 1,
+              "largest": 10,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 2,
+              "bends": 4,
+              "count": 6,
+              "components": 1,
+              "largest": 6,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.23333333333333334,
+              "patchCompactness": 0.7083333333333333,
+              "branches": 0,
+              "bends": 2,
+              "count": 7,
+              "components": 2,
+              "largest": 4,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 23,
+          "grass": 11,
+          "effectiveGrass": 11,
+          "fragmentation": 1,
+          "concentration": 0.5652173913043478,
+          "maxSameKind": 6,
+          "kinds": 6,
+          "shapes": 8,
+          "campShapes": 3,
+          "terrainLinks": 13,
+          "clueVariety": 7,
+          "maxLine": 7,
+          "quadrants": [
+            11,
+            3,
+            10,
+            6
+          ],
+          "grassQuadrants": [
+            0,
+            0,
+            5,
+            6
+          ],
+          "linked": 2,
+          "dependencies": 2,
+          "score": 10.673786816724002,
+          "naturalness": 0.5875,
+          "clueEntropy": 2.6493974703476995,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMSwwXSxbIndhdGVyIiwxLDFdLFsid2F0ZXIiLDAsMV0sWyJ3YXRlciIsMCwyXSxbIndhdGVyIiwwLDNdLFsid2F0ZXIiLDAsNF0sWyJ3YXRlciIsMCw1XSxbIndhdGVyIiwwLDZdLFsid2F0ZXIiLDAsN10sWyJ3YXRlciIsMSw3XSxbImZvcmVzdCIsMiw2XSxbImZvcmVzdCIsMSw2XSxbImZvcmVzdCIsMSw1XSxbImZvcmVzdCIsMiw1XSxbImZvcmVzdCIsMyw1XSxbImZvcmVzdCIsMyw2XSxbIm1vdW50YWluIiwyLDddLFsibW91bnRhaW4iLDMsN10sWyJtb3VudGFpbiIsNCw3XSxbIm1vdW50YWluIiw0LDZdLFsibW91bnRhaW4iLDYsNF0sWyJtb3VudGFpbiIsNiwzXSxbIm1vdW50YWluIiw3LDRdXSwiZiI6W1siY2FtcF9zaW5nbGUiLCJ3aWxkLTAiLDEsNCwwXSxbImNhbXBfbG9uZyIsIndpbGQtMSIsMiwwLDFdLFsiY2FtcF9kb21pbm8iLCJ3aWxkLTIiLDIsMSwxXSxbImNhYmluX2VsIiwid2lsZC0zIiwyLDMsMV0sWyJjYW1wX2xvbmciLCJ3aWxkLTQiLDEsMiwxXSxbImNhYmluX2VsIiwid2lsZC01IiwzLDMsM10sWyJjYWJpbl9lbCIsIndpbGQtNiIsNCw0LDNdLFsiY2FtcF9zaW5nbGUiLCJ3aWxkLTciLDEsMywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC04Iiw1LDIsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTkiLDUsMywwXSxbImZpcmVfc2luZ2xlIiwid2lsZC0xMCIsNSwwLDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMTEiLDUsMSwwXSxbImNhbXBfc2luZ2xlIiwid2lsZC0xMiIsMCwwLDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTEzIiw3LDAsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTE0Iiw1LDcsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTE1Iiw3LDMsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTE2Iiw3LDUsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTciLDcsMiwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xOCIsNywxLDBdXSwiciI6WzEsMyw1LDUsNCw3LDAsNV0sImMiOls2LDQsNSw2LDUsMywwLDFdfQ"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261020,
+        "disabled": [],
+        "status": "success",
+        "ms": 1258,
+        "single": true,
+        "facilities": {
+          "camp_single": 2,
+          "camp_domino": 1,
+          "camp_long": 1,
+          "picnic_domino": 2,
+          "camp_el": 1,
+          "cabin_el": 4,
+          "tower_single": 2,
+          "foodTruck_single": 3,
+          "powerTower_single": 2
+        },
+        "metrics": {
+          "score": 6.6,
+          "density": 0.515625,
+          "facilityDensity": 0.28125,
+          "candidates": 23.22222222222222,
+          "dependencies": 0.2777777777777778,
+          "forced": 0,
+          "nodes": 2348,
+          "branches": 758,
+          "logic": {
+            "solved": true,
+            "rounds": 10,
+            "deductions": 167,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 5,
+            "relationships": 15,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            4,
+            7,
+            12,
+            0
+          ],
+          "halves": [
+            11,
+            12,
+            16,
+            7
+          ],
+          "max3": 9,
+          "max4": 12,
+          "imbalance": 0.5217391304347826,
+          "halfImbalance": 0.21739130434782608,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 1257,
+        "attempts": 432,
+        "proofs": 1,
+        "logicChecks": 161,
+        "failures": {
+          "role ambiguity": 269,
+          "logic stalled": 160,
+          "combination layout": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.5,
+              "patchCompactness": 0.5,
+              "branches": 0,
+              "bends": 3,
+              "count": 6,
+              "components": 1,
+              "largest": 6,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.19444444444444445,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 7,
+              "components": 3,
+              "largest": 3,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.4166666666666667,
+              "patchCompactness": 0.7291666666666667,
+              "branches": 1,
+              "bends": 4,
+              "count": 10,
+              "components": 2,
+              "largest": 5,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 23,
+          "grass": 8,
+          "effectiveGrass": 4,
+          "fragmentation": 3,
+          "concentration": 0.5217391304347826,
+          "maxSameKind": 5,
+          "kinds": 6,
+          "shapes": 9,
+          "campShapes": 4,
+          "terrainLinks": 11,
+          "clueVariety": 8,
+          "maxLine": 7,
+          "quadrants": [
+            8,
+            8,
+            4,
+            13
+          ],
+          "grassQuadrants": [
+            4,
+            1,
+            0,
+            3
+          ],
+          "linked": 5,
+          "dependencies": 5,
+          "score": 11.971677329354124,
+          "naturalness": 0.5812499999999999,
+          "clueEntropy": 2.7806390622295667,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNywzXSxbIndhdGVyIiw2LDNdLFsid2F0ZXIiLDYsMl0sWyJ3YXRlciIsNiwxXSxbIndhdGVyIiw1LDFdLFsid2F0ZXIiLDUsMF0sWyJmb3Jlc3QiLDIsNV0sWyJmb3Jlc3QiLDIsNF0sWyJmb3Jlc3QiLDcsMl0sWyJmb3Jlc3QiLDcsMV0sWyJmb3Jlc3QiLDcsMF0sWyJmb3Jlc3QiLDMsMl0sWyJmb3Jlc3QiLDIsMl0sWyJtb3VudGFpbiIsMiw2XSxbIm1vdW50YWluIiwyLDddLFsibW91bnRhaW4iLDMsNl0sWyJtb3VudGFpbiIsMyw1XSxbIm1vdW50YWluIiwzLDddLFsibW91bnRhaW4iLDIsM10sWyJtb3VudGFpbiIsMywzXSxbIm1vdW50YWluIiw0LDNdLFsibW91bnRhaW4iLDUsM10sWyJtb3VudGFpbiIsNSwyXV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiw0LDAsMF0sWyJjYW1wX2RvbWlubyIsIndpbGQtMSIsNCwxLDBdLFsiY2FtcF9sb25nIiwid2lsZC0yIiw0LDQsMV0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0zIiw0LDUsMF0sWyJjYW1wX2VsIiwid2lsZC00Iiw2LDQsM10sWyJjYWJpbl9lbCIsIndpbGQtNSIsMCw0LDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtNiIsNyw2LDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTciLDAsNSwzXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtOCIsMyw0LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtOSIsNSw2LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMTAiLDYsNywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTEiLDQsNywwXSxbImNhYmluX2VsIiwid2lsZC0xMiIsMCwxLDJdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMTMiLDIsMCwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNCIsMCw3LDBdLFsiY2FtcF9zaW5nbGUiLCJ3aWxkLTE1Iiw2LDAsMF0sWyJjYWJpbl9lbCIsIndpbGQtMTYiLDEsMCwyXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNyIsMCwwLDBdXSwiciI6WzcsNiwyLDEsNywyLDQsNF0sImMiOls1LDQsMywwLDcsNSw1LDRdfQ"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261021,
+        "disabled": [],
+        "status": "failed",
+        "ms": 3632,
+        "error": "预算内未找到满足地形质量、逻辑路径和唯一解的地图（1200 次构造；设施角色存在等价交换 769, 缺少可解释路径 425, 设施组合不可行 5）。请重试。",
+        "elapsed": 3632,
+        "attempts": 1200,
+        "proofs": 0,
+        "logicChecks": 426,
+        "failures": {
+          "role ambiguity": 769,
+          "logic stalled": 425,
+          "combination layout": 5,
+          "reasoning tier": 1
+        }
+      },
+      {
+        "difficulty": 1,
+        "seed": 20261019,
+        "disabled": [
+          "camp_single"
+        ],
+        "status": "success",
+        "ms": 6,
+        "single": false,
+        "facilities": {
+          "camp_el": 1,
+          "camp_domino": 1,
+          "cabin_el": 1,
+          "pool_single": 2
+        },
+        "metrics": {
+          "score": 2.7,
+          "density": 0.15625,
+          "facilityDensity": 0.078125,
+          "candidates": 4.4,
+          "dependencies": 0.4,
+          "forced": 0,
+          "nodes": 11,
+          "branches": 2,
+          "logic": {
+            "solved": true,
+            "rounds": 3,
+            "deductions": 12,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 3,
+            "relationships": 3,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            9,
+            5,
+            7,
+            7
+          ],
+          "halves": [
+            14,
+            14,
+            16,
+            12
+          ],
+          "max3": 8,
+          "max4": 12,
+          "imbalance": 0.14285714285714285,
+          "halfImbalance": 0.07142857142857142,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 6,
+        "attempts": 6,
+        "proofs": 1,
+        "logicChecks": 4,
+        "failures": {
+          "logic stalled": 3
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.4666666666666667,
+              "patchCompactness": 0.4666666666666667,
+              "branches": 0,
+              "bends": 3,
+              "count": 7,
+              "components": 1,
+              "largest": 7,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.38095238095238093,
+              "patchCompactness": 0.8333333333333333,
+              "branches": 0,
+              "bends": 6,
+              "count": 8,
+              "components": 2,
+              "largest": 4,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.30952380952380953,
+              "patchCompactness": 0.625,
+              "branches": 3,
+              "bends": 3,
+              "count": 13,
+              "components": 2,
+              "largest": 7,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 28,
+          "grass": 26,
+          "effectiveGrass": 26,
+          "fragmentation": 2,
+          "concentration": 0.32142857142857145,
+          "maxSameKind": 2,
+          "kinds": 3,
+          "shapes": 4,
+          "campShapes": 2,
+          "terrainLinks": 5,
+          "clueVariety": 5,
+          "maxLine": 4,
+          "quadrants": [
+            0,
+            4,
+            3,
+            3
+          ],
+          "grassQuadrants": [
+            7,
+            7,
+            6,
+            6
+          ],
+          "linked": 2,
+          "dependencies": 2,
+          "score": 7.930650163658309,
+          "naturalness": 0.5625,
+          "clueEntropy": 2.0550365325772657,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMyw3XSxbIndhdGVyIiwzLDZdLFsid2F0ZXIiLDIsNl0sWyJ3YXRlciIsMiw1XSxbIndhdGVyIiwyLDRdLFsiZm9yZXN0Iiw3LDBdLFsiZm9yZXN0Iiw3LDFdLFsiZm9yZXN0Iiw2LDFdLFsiZm9yZXN0Iiw2LDJdLFsiZm9yZXN0IiwyLDFdLFsiZm9yZXN0IiwyLDJdLFsiZm9yZXN0IiwxLDJdLFsiZm9yZXN0IiwxLDFdLFsibW91bnRhaW4iLDYsNV0sWyJtb3VudGFpbiIsNSw1XSxbIm1vdW50YWluIiw2LDRdLFsibW91bnRhaW4iLDQsNV0sWyJtb3VudGFpbiIsNCw2XSxbIm1vdW50YWluIiw3LDVdLFsibW91bnRhaW4iLDYsNl0sWyJtb3VudGFpbiIsMywwXSxbIm1vdW50YWluIiwyLDBdLFsibW91bnRhaW4iLDQsMF0sWyJtb3VudGFpbiIsMywxXSxbIm1vdW50YWluIiw0LDFdLFsibW91bnRhaW4iLDQsMl0sWyJ3YXRlciIsMiwzXSxbIndhdGVyIiwxLDNdXSwiZiI6W1siY2FtcF9lbCIsIndpbGQtMCIsNCw2LDNdLFsiY2FtcF9kb21pbm8iLCJ3aWxkLTEiLDAsNiwxXSxbImNhYmluX2VsIiwid2lsZC0yIiw1LDIsMl0sWyJwb29sX3NpbmdsZSIsIndpbGQtMyIsMiw3LDBdLFsicG9vbF9zaW5nbGUiLCJ3aWxkLTQiLDEsNSwwXV0sInIiOlsxLDIsMSwwLDEsNCwxLDBdLCJjIjpbMCwwLDEsMiwwLDEsMywzXX0"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261019,
+        "disabled": [
+          "camp_single"
+        ],
+        "status": "success",
+        "ms": 3177,
+        "single": false,
+        "facilities": {
+          "camp_long": 2,
+          "camp_domino": 1,
+          "cabin_el": 2,
+          "picnic_domino": 1,
+          "fire_single": 1,
+          "foodTruck_single": 1,
+          "tower_single": 5,
+          "powerTower_single": 6
+        },
+        "metrics": {
+          "score": 5.15,
+          "density": 0.453125,
+          "facilityDensity": 0.296875,
+          "candidates": 22.210526315789473,
+          "dependencies": 0.15789473684210525,
+          "forced": 0.10526315789473684,
+          "nodes": 1425,
+          "branches": 317,
+          "logic": {
+            "solved": true,
+            "rounds": 5,
+            "deductions": 160,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 4,
+            "relationships": 18,
+            "initialForced": 2
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            12,
+            0,
+            6
+          ],
+          "halves": [
+            14,
+            6,
+            2,
+            18
+          ],
+          "max3": 8,
+          "max4": 12,
+          "imbalance": 0.6,
+          "halfImbalance": 0.6,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density",
+            "terrain distribution"
+          ]
+        },
+        "elapsed": 3176,
+        "attempts": 776,
+        "proofs": 1,
+        "logicChecks": 481,
+        "failures": {
+          "role ambiguity": 292,
+          "logic stalled": 478,
+          "reasoning tier": 2,
+          "combination layout": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.5833333333333334,
+              "patchCompactness": 0.5833333333333334,
+              "branches": 0,
+              "bends": 3,
+              "count": 7,
+              "components": 1,
+              "largest": 7,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 2,
+              "bends": 4,
+              "count": 6,
+              "components": 1,
+              "largest": 6,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.4666666666666667,
+              "patchCompactness": 0.7083333333333333,
+              "branches": 1,
+              "bends": 1,
+              "count": 7,
+              "components": 2,
+              "largest": 4,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 20,
+          "grass": 15,
+          "effectiveGrass": 14,
+          "fragmentation": 1,
+          "concentration": 0.6,
+          "maxSameKind": 6,
+          "kinds": 7,
+          "shapes": 8,
+          "campShapes": 2,
+          "terrainLinks": 10,
+          "clueVariety": 8,
+          "maxLine": 7,
+          "quadrants": [
+            9,
+            4,
+            9,
+            7
+          ],
+          "grassQuadrants": [
+            5,
+            0,
+            7,
+            3
+          ],
+          "linked": 3,
+          "dependencies": 3,
+          "score": 11.571472420423257,
+          "naturalness": 0.5875,
+          "clueEntropy": 2.8584585933443503,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMSw0XSxbIndhdGVyIiwxLDVdLFsid2F0ZXIiLDAsNV0sWyJ3YXRlciIsMCw2XSxbIndhdGVyIiwwLDddLFsid2F0ZXIiLDEsN10sWyJ3YXRlciIsMiw3XSxbImZvcmVzdCIsMyw1XSxbImZvcmVzdCIsMiw1XSxbImZvcmVzdCIsMiw0XSxbImZvcmVzdCIsMyw0XSxbImZvcmVzdCIsMywzXSxbIm1vdW50YWluIiw0LDddLFsibW91bnRhaW4iLDQsNl0sWyJtb3VudGFpbiIsMyw2XSxbIm1vdW50YWluIiw0LDVdLFsibW91bnRhaW4iLDcsNl0sWyJtb3VudGFpbiIsNiw2XSxbIm1vdW50YWluIiw2LDddLFsiZm9yZXN0IiwyLDNdXSwiZiI6W1siY2FtcF9sb25nIiwid2lsZC0wIiwxLDEsMF0sWyJjYW1wX2RvbWlubyIsIndpbGQtMSIsMSw2LDFdLFsiY2FtcF9sb25nIiwid2lsZC0yIiwwLDIsMF0sWyJjYWJpbl9lbCIsIndpbGQtMyIsNCwyLDFdLFsiY2FiaW5fZWwiLCJ3aWxkLTQiLDQsMywzXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTUiLDAsMCwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC02IiwyLDEsMF0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC03IiwzLDIsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTgiLDMsNywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtOSIsNSw3LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTEwIiw1LDYsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTExIiw1LDUsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEyIiw3LDcsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTMiLDUsMSwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTQiLDcsNSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNSIsNCwxLDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTE2Iiw3LDIsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTciLDcsMywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xOCIsNywxLDBdXSwiciI6WzUsNCwyLDIsNCw3LDAsNV0sImMiOlsxLDYsNiw1LDMsMiwzLDNdfQ"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261019,
+        "disabled": [
+          "camp_el",
+          "foodTruck_single"
+        ],
+        "status": "success",
+        "ms": 319,
+        "single": true,
+        "facilities": {
+          "camp_single": 2,
+          "picnic_domino": 1,
+          "cabin_el": 4,
+          "camp_domino": 3,
+          "tower_single": 6,
+          "powerTower_single": 3
+        },
+        "metrics": {
+          "score": 5.92,
+          "density": 0.484375,
+          "facilityDensity": 0.296875,
+          "candidates": 18.57894736842105,
+          "dependencies": 0.05263157894736842,
+          "forced": 0,
+          "nodes": 3280,
+          "branches": 707,
+          "logic": {
+            "solved": true,
+            "rounds": 11,
+            "deductions": 111,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 5,
+            "relationships": 7,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            7,
+            4,
+            8,
+            6
+          ],
+          "halves": [
+            11,
+            14,
+            15,
+            10
+          ],
+          "max3": 8,
+          "max4": 10,
+          "imbalance": 0.16,
+          "halfImbalance": 0.16,
+          "violations": [
+            "terrain total",
+            "terrain component or kind count",
+            "terrain local density"
+          ]
+        },
+        "elapsed": 319,
+        "attempts": 110,
+        "proofs": 1,
+        "logicChecks": 38,
+        "failures": {
+          "role ambiguity": 71,
+          "logic stalled": 37
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.5833333333333334,
+              "patchCompactness": 0.5833333333333334,
+              "branches": 0,
+              "bends": 2,
+              "count": 7,
+              "components": 1,
+              "largest": 7,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.3333333333333333,
+              "patchCompactness": 0.8333333333333334,
+              "branches": 1,
+              "bends": 5,
+              "count": 10,
+              "components": 2,
+              "largest": 5,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.22857142857142856,
+              "patchCompactness": 0.8333333333333333,
+              "branches": 1,
+              "bends": 0,
+              "count": 8,
+              "components": 2,
+              "largest": 4,
+              "singletons": 0
+            }
+          ],
+          "terrainCount": 25,
+          "grass": 8,
+          "effectiveGrass": 6,
+          "fragmentation": 2,
+          "concentration": 0.32,
+          "maxSameKind": 6,
+          "kinds": 5,
+          "shapes": 6,
+          "campShapes": 2,
+          "terrainLinks": 15,
+          "clueVariety": 7,
+          "maxLine": 7,
+          "quadrants": [
+            4,
+            9,
+            8,
+            10
+          ],
+          "grassQuadrants": [
+            5,
+            3,
+            0,
+            0
+          ],
+          "linked": 1,
+          "dependencies": 1,
+          "score": 9.583233075603806,
+          "naturalness": 0.5,
+          "clueEntropy": 2.6556390622295667,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNiwxXSxbIndhdGVyIiw2LDJdLFsid2F0ZXIiLDcsMl0sWyJ3YXRlciIsNywzXSxbIndhdGVyIiw3LDRdLFsid2F0ZXIiLDcsNV0sWyJ3YXRlciIsNyw2XSxbImZvcmVzdCIsMywyXSxbImZvcmVzdCIsMiwyXSxbImZvcmVzdCIsMiwxXSxbImZvcmVzdCIsMywxXSxbImZvcmVzdCIsNiw1XSxbImZvcmVzdCIsNiw0XSxbImZvcmVzdCIsNSw1XSxbImZvcmVzdCIsNiwzXSxbIm1vdW50YWluIiw1LDBdLFsibW91bnRhaW4iLDQsMF0sWyJtb3VudGFpbiIsMywwXSxbIm1vdW50YWluIiwyLDBdLFsibW91bnRhaW4iLDEsNl0sWyJtb3VudGFpbiIsMSw1XSxbIm1vdW50YWluIiwxLDRdLFsiZm9yZXN0IiwxLDJdLFsiZm9yZXN0Iiw1LDNdLFsibW91bnRhaW4iLDIsNV1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNyw3LDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMSIsNSw3LDFdLFsiY2FiaW5fZWwiLCJ3aWxkLTIiLDQsNiwxXSxbImNhbXBfZG9taW5vIiwid2lsZC0zIiw0LDEsMV0sWyJjYWJpbl9lbCIsIndpbGQtNCIsNCwzLDJdLFsiY2FtcF9kb21pbm8iLCJ3aWxkLTUiLDcsMCwwXSxbImNhbXBfZG9taW5vIiwid2lsZC02Iiw0LDIsMV0sWyJjYW1wX3NpbmdsZSIsIndpbGQtNyIsNiw2LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC04Iiw2LDAsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTkiLDIsNiwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTAiLDAsNiwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTEiLDIsNCwwXSxbImNhYmluX2VsIiwid2lsZC0xMiIsMyw1LDFdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xMyIsMCw0LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xNCIsMSwwLDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTE1IiwwLDAsMl0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTYiLDMsNywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNyIsMiw3LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTE4IiwwLDcsMF1dLCJyIjpbNSwyLDMsMyw3LDUsMywzXSwiYyI6WzQsNSwyLDEsNCwyLDYsN119"
+      }
+    ]
+  },
+  "after": {
+    "summary": {
+      "success": 15,
+      "total": 15,
+      "totalMs": 10732,
+      "ms": {
+        "min": 5,
+        "max": 2682,
+        "mean": 715.4666666666667,
+        "p50": 204,
+        "p95": 2682
+      },
+      "terrain": {
+        "min": 7,
+        "max": 12,
+        "mean": 8.533333333333333,
+        "p50": 8,
+        "p95": 12
+      },
+      "counts": {
+        "water": {
+          "min": 1,
+          "max": 4,
+          "mean": 2.4,
+          "p50": 2,
+          "p95": 4
+        },
+        "forest": {
+          "min": 1,
+          "max": 5,
+          "mean": 3.066666666666667,
+          "p50": 3,
+          "p95": 5
+        },
+        "mountain": {
+          "min": 2,
+          "max": 5,
+          "mean": 3.066666666666667,
+          "p50": 3,
+          "p95": 5
+        }
+      },
+      "components": {
+        "water": {
+          "min": 1,
+          "max": 3,
+          "mean": 1.8,
+          "p50": 2,
+          "p95": 3
+        },
+        "forest": {
+          "min": 1,
+          "max": 3,
+          "mean": 1.8,
+          "p50": 2,
+          "p95": 3
+        },
+        "mountain": {
+          "min": 1,
+          "max": 3,
+          "mean": 2,
+          "p50": 2,
+          "p95": 3
+        }
+      },
+      "max3": 4,
+      "max4": 6,
+      "allIsolated": 1,
+      "byDifficulty": [
+        {
+          "difficulty": 1,
+          "total": 3,
+          "success": 3,
+          "ms": [
+            38,
+            9,
+            8
+          ],
+          "meanMs": 18.333333333333332,
+          "terrain": [
+            9,
+            8,
+            8
+          ],
+          "counts": [
+            [
+              4,
+              3,
+              2
+            ],
+            [
+              2,
+              4,
+              2
+            ],
+            [
+              1,
+              2,
+              5
+            ]
+          ]
+        },
+        {
+          "difficulty": 5,
+          "total": 3,
+          "success": 3,
+          "ms": [
+            204,
+            112,
+            24
+          ],
+          "meanMs": 113.33333333333333,
+          "terrain": [
+            8,
+            12,
+            7
+          ],
+          "counts": [
+            [
+              4,
+              1,
+              3
+            ],
+            [
+              4,
+              5,
+              3
+            ],
+            [
+              3,
+              1,
+              3
+            ]
+          ]
+        },
+        {
+          "difficulty": 9,
+          "total": 3,
+          "success": 3,
+          "ms": [
+            234,
+            1079,
+            227
+          ],
+          "meanMs": 513.3333333333334,
+          "terrain": [
+            10,
+            8,
+            9
+          ],
+          "counts": [
+            [
+              2,
+              4,
+              4
+            ],
+            [
+              1,
+              5,
+              2
+            ],
+            [
+              2,
+              5,
+              2
+            ]
+          ]
+        },
+        {
+          "difficulty": 10,
+          "total": 3,
+          "success": 3,
+          "ms": [
+            1852,
+            118,
+            1744
+          ],
+          "meanMs": 1238,
+          "terrain": [
+            11,
+            7,
+            10
+          ],
+          "counts": [
+            [
+              1,
+              5,
+              5
+            ],
+            [
+              3,
+              2,
+              2
+            ],
+            [
+              4,
+              2,
+              4
+            ]
+          ]
+        }
+      ]
+    },
+    "records": [
+      {
+        "difficulty": 1,
+        "seed": 20261019,
+        "disabled": [],
+        "status": "success",
+        "ms": 38,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "foodTruck_single": 1,
+          "fire_single": 1,
+          "cabin_el": 1
+        },
+        "metrics": {
+          "score": 2.18,
+          "density": 0.09375,
+          "facilityDensity": 0.0625,
+          "candidates": 3.5,
+          "dependencies": 0.5,
+          "forced": 0.5,
+          "nodes": 5,
+          "branches": 0,
+          "logic": {
+            "solved": true,
+            "rounds": 2,
+            "deductions": 10,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 3,
+            "relationships": 1,
+            "initialForced": 2
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            2,
+            3,
+            2
+          ],
+          "halves": [
+            4,
+            5,
+            5,
+            4
+          ],
+          "max3": 2,
+          "max4": 4,
+          "imbalance": 0.1111111111111111,
+          "halfImbalance": 0.1111111111111111,
+          "violations": []
+        },
+        "elapsed": 38,
+        "attempts": 4,
+        "proofs": 1,
+        "logicChecks": 2,
+        "failures": {
+          "role ambiguity": 1,
+          "logic stalled": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.09523809523809523,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 4,
+              "components": 4,
+              "largest": 1,
+              "singletons": 4
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.125,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 3,
+              "components": 3,
+              "largest": 1,
+              "singletons": 3
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.16666666666666666,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 2,
+              "largest": 1,
+              "singletons": 2
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              2,
+              3,
+              2
+            ],
+            "halves": [
+              4,
+              5,
+              5,
+              4
+            ],
+            "max3": 2,
+            "max4": 4,
+            "imbalance": 0.1111111111111111,
+            "halfImbalance": 0.1111111111111111,
+            "violations": []
+          },
+          "terrainCount": 9,
+          "grass": 49,
+          "effectiveGrass": 48,
+          "fragmentation": 6,
+          "concentration": 0.3333333333333333,
+          "maxSameKind": 1,
+          "kinds": 4,
+          "shapes": 4,
+          "campShapes": 1,
+          "terrainLinks": 2,
+          "clueVariety": 4,
+          "maxLine": 4,
+          "quadrants": [
+            4,
+            2,
+            0,
+            0
+          ],
+          "grassQuadrants": [
+            10,
+            12,
+            13,
+            14
+          ],
+          "linked": 2,
+          "dependencies": 2,
+          "score": 6.841025842207843,
+          "naturalness": 0.3,
+          "clueEntropy": 1.501614471810182,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJtb3VudGFpbiIsNSw0XSxbIndhdGVyIiwxLDZdLFsibW91bnRhaW4iLDIsMl0sWyJmb3Jlc3QiLDUsM10sWyJmb3Jlc3QiLDYsMF0sWyJ3YXRlciIsMiw1XSxbImZvcmVzdCIsMSwyXSxbIndhdGVyIiw1LDZdLFsid2F0ZXIiLDcsMV1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsMSw1LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMSIsMSwzLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTIiLDAsNSwwXSxbImNhYmluX2VsIiwid2lsZC0zIiwwLDAsMF1dLCJyIjpbMiw0LDAsMCwwLDAsMCwwXSwiYyI6WzIsMSwwLDEsMCwyLDAsMF19"
+      },
+      {
+        "difficulty": 1,
+        "seed": 20261020,
+        "disabled": [],
+        "status": "success",
+        "ms": 9,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "camp_long": 1,
+          "camp_el": 1,
+          "tower_single": 1
+        },
+        "metrics": {
+          "score": 2.74,
+          "density": 0.125,
+          "facilityDensity": 0.0625,
+          "candidates": 3.75,
+          "dependencies": 0,
+          "forced": 0,
+          "nodes": 7,
+          "branches": 2,
+          "logic": {
+            "solved": true,
+            "rounds": 4,
+            "deductions": 11,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 3,
+            "relationships": 1,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "halves": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "max3": 2,
+          "max4": 3,
+          "imbalance": 0,
+          "halfImbalance": 0,
+          "violations": []
+        },
+        "elapsed": 9,
+        "attempts": 3,
+        "proofs": 1,
+        "logicChecks": 1,
+        "failures": {},
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 1,
+              "largest": 2,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.4,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 4,
+              "components": 2,
+              "largest": 2,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 1,
+              "largest": 2,
+              "singletons": 0
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "halves": [
+              4,
+              4,
+              4,
+              4
+            ],
+            "max3": 2,
+            "max4": 3,
+            "imbalance": 0,
+            "halfImbalance": 0,
+            "violations": []
+          },
+          "terrainCount": 8,
+          "grass": 48,
+          "effectiveGrass": 48,
+          "fragmentation": 1,
+          "concentration": 0.25,
+          "maxSameKind": 3,
+          "kinds": 2,
+          "shapes": 4,
+          "campShapes": 3,
+          "terrainLinks": 4,
+          "clueVariety": 4,
+          "maxLine": 3,
+          "quadrants": [
+            1,
+            6,
+            0,
+            1
+          ],
+          "grassQuadrants": [
+            13,
+            8,
+            14,
+            13
+          ],
+          "linked": 0,
+          "dependencies": 0,
+          "score": 6.456127812445914,
+          "naturalness": 0.3,
+          "clueEntropy": 1.7806390622295667,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJtb3VudGFpbiIsMiwxXSxbIm1vdW50YWluIiwxLDFdLFsiZm9yZXN0Iiw2LDVdLFsiZm9yZXN0Iiw2LDRdLFsid2F0ZXIiLDEsN10sWyJ3YXRlciIsMSw2XSxbImZvcmVzdCIsNSwxXSxbImZvcmVzdCIsNSwyXV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiwxLDUsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTEiLDIsNywxXSxbImNhbXBfZWwiLCJ3aWxkLTIiLDIsNSwzXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMyIsMiwyLDBdXSwiciI6WzAsMSwzLDMsMSwwLDAsMF0sImMiOlswLDAsMSwwLDAsMiwyLDNdfQ"
+      },
+      {
+        "difficulty": 1,
+        "seed": 20261021,
+        "disabled": [],
+        "status": "success",
+        "ms": 8,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "cabin_el": 2,
+          "camp_long": 1,
+          "fire_single": 1
+        },
+        "metrics": {
+          "score": 2.43,
+          "density": 0.171875,
+          "facilityDensity": 0.078125,
+          "candidates": 4.2,
+          "dependencies": 0.2,
+          "forced": 0.2,
+          "nodes": 9,
+          "branches": 1,
+          "logic": {
+            "solved": true,
+            "rounds": 2,
+            "deductions": 11,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 4,
+            "relationships": 1,
+            "initialForced": 1
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "halves": [
+            4,
+            4,
+            4,
+            4
+          ],
+          "max3": 4,
+          "max4": 4,
+          "imbalance": 0,
+          "halfImbalance": 0,
+          "violations": []
+        },
+        "elapsed": 8,
+        "attempts": 4,
+        "proofs": 1,
+        "logicChecks": 2,
+        "failures": {
+          "role ambiguity": 1,
+          "logic stalled": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 1,
+              "components": 1,
+              "largest": 1,
+              "singletons": 1
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 2,
+              "largest": 1,
+              "singletons": 2
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.16666666666666666,
+              "patchCompactness": 0.9166666666666666,
+              "branches": 0,
+              "bends": 1,
+              "count": 5,
+              "components": 3,
+              "largest": 3,
+              "singletons": 2
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "halves": [
+              4,
+              4,
+              4,
+              4
+            ],
+            "max3": 4,
+            "max4": 4,
+            "imbalance": 0,
+            "halfImbalance": 0,
+            "violations": []
+          },
+          "terrainCount": 8,
+          "grass": 45,
+          "effectiveGrass": 45,
+          "fragmentation": 3,
+          "concentration": 0.25,
+          "maxSameKind": 2,
+          "kinds": 3,
+          "shapes": 4,
+          "campShapes": 2,
+          "terrainLinks": 4,
+          "clueVariety": 6,
+          "maxLine": 6,
+          "quadrants": [
+            4,
+            2,
+            2,
+            3
+          ],
+          "grassQuadrants": [
+            10,
+            12,
+            12,
+            11
+          ],
+          "linked": 1,
+          "dependencies": 1,
+          "score": 7.660484256765871,
+          "naturalness": 0.325,
+          "clueEntropy": 2.1774212838293643,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNiw0XSxbIm1vdW50YWluIiwzLDFdLFsibW91bnRhaW4iLDQsMV0sWyJtb3VudGFpbiIsMSw1XSxbImZvcmVzdCIsMSw0XSxbImZvcmVzdCIsNCwwXSxbIm1vdW50YWluIiwzLDBdLFsibW91bnRhaW4iLDUsNV1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNSw0LDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTEiLDAsMywxXSxbImNhYmluX2VsIiwid2lsZC0yIiwyLDMsMV0sWyJjYW1wX2xvbmciLCJ3aWxkLTMiLDcsMywwXSxbImZpcmVfc2luZ2xlIiwid2lsZC00Iiw1LDMsMF1dLCJyIjpbMiwxLDIsMSwwLDIsMCwzXSwiYyI6WzAsMCwwLDYsNCwxLDAsMF19"
+      },
+      {
+        "difficulty": 5,
+        "seed": 20261019,
+        "disabled": [],
+        "status": "success",
+        "ms": 204,
+        "single": true,
+        "facilities": {
+          "camp_single": 2,
+          "camp_el": 1,
+          "cabin_el": 2,
+          "picnic_domino": 1,
+          "camp_long": 1,
+          "fire_single": 1,
+          "foodTruck_single": 1,
+          "powerTower_single": 1,
+          "tower_single": 1
+        },
+        "metrics": {
+          "score": 6.79,
+          "density": 0.3125,
+          "facilityDensity": 0.171875,
+          "candidates": 25.272727272727273,
+          "dependencies": 0.2727272727272727,
+          "forced": 0,
+          "nodes": 155,
+          "branches": 49,
+          "logic": {
+            "solved": true,
+            "rounds": 8,
+            "deductions": 245,
+            "assumptions": 1,
+            "maxDepth": 1,
+            "techniques": 6,
+            "relationships": 21,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            2,
+            1,
+            3
+          ],
+          "halves": [
+            4,
+            4,
+            3,
+            5
+          ],
+          "max3": 3,
+          "max4": 3,
+          "imbalance": 0.25,
+          "halfImbalance": 0.125,
+          "violations": []
+        },
+        "elapsed": 204,
+        "attempts": 43,
+        "proofs": 1,
+        "logicChecks": 22,
+        "failures": {
+          "role ambiguity": 19,
+          "logic stalled": 20,
+          "reasoning tier": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.16666666666666666,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 4,
+              "components": 3,
+              "largest": 2,
+              "singletons": 2
+            },
+            {
+              "kind": "forest",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 1,
+              "components": 1,
+              "largest": 1,
+              "singletons": 1
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.07142857142857142,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 3,
+              "components": 3,
+              "largest": 1,
+              "singletons": 3
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              2,
+              1,
+              3
+            ],
+            "halves": [
+              4,
+              4,
+              3,
+              5
+            ],
+            "max3": 3,
+            "max4": 3,
+            "imbalance": 0.25,
+            "halfImbalance": 0.125,
+            "violations": []
+          },
+          "terrainCount": 8,
+          "grass": 36,
+          "effectiveGrass": 33,
+          "fragmentation": 4,
+          "concentration": 0.375,
+          "maxSameKind": 4,
+          "kinds": 7,
+          "shapes": 9,
+          "campShapes": 3,
+          "terrainLinks": 7,
+          "clueVariety": 6,
+          "maxLine": 7,
+          "quadrants": [
+            3,
+            10,
+            4,
+            3
+          ],
+          "grassQuadrants": [
+            11,
+            4,
+            11,
+            10
+          ],
+          "linked": 3,
+          "dependencies": 3,
+          "score": 12.002685118344164,
+          "naturalness": 0.3,
+          "clueEntropy": 2.0778195311147836,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJmb3Jlc3QiLDUsMl0sWyJ3YXRlciIsMSw2XSxbIndhdGVyIiwxLDNdLFsibW91bnRhaW4iLDYsNl0sWyJ3YXRlciIsNiw0XSxbIm1vdW50YWluIiwxLDFdLFsibW91bnRhaW4iLDAsNF0sWyJ3YXRlciIsNSw0XV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiwwLDYsMF0sWyJjYW1wX2VsIiwid2lsZC0xIiwyLDUsM10sWyJjYWJpbl9lbCIsIndpbGQtMiIsMywxLDJdLFsicGljbmljX2RvbWlubyIsIndpbGQtMyIsMywzLDBdLFsiY2FtcF9sb25nIiwid2lsZC00IiwxLDcsMV0sWyJjYW1wX3NpbmdsZSIsIndpbGQtNSIsMSw1LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTYiLDAsNywwXSxbImZvb2RUcnVja19zaW5nbGUiLCJ3aWxkLTciLDUsNywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC04Iiw3LDcsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTkiLDUsNiwwXSxbImNhYmluX2VsIiwid2lsZC0xMCIsNCwwLDBdXSwiciI6WzIsMiwyLDcsMiw0LDAsMV0sImMiOlsyLDIsMiwxLDEsMiw0LDZdfQ"
+      },
+      {
+        "difficulty": 5,
+        "seed": 20261020,
+        "disabled": [],
+        "status": "success",
+        "ms": 112,
+        "single": true,
+        "facilities": {
+          "camp_single": 2,
+          "camp_domino": 1,
+          "picnic_domino": 1,
+          "cabin_el": 3,
+          "fire_single": 1,
+          "foodTruck_single": 1,
+          "tower_single": 1,
+          "camp_long": 1
+        },
+        "metrics": {
+          "score": 5.36,
+          "density": 0.328125,
+          "facilityDensity": 0.171875,
+          "candidates": 12,
+          "dependencies": 0.2727272727272727,
+          "forced": 0,
+          "nodes": 145,
+          "branches": 39,
+          "logic": {
+            "solved": true,
+            "rounds": 6,
+            "deductions": 99,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 5,
+            "relationships": 14,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            3,
+            4,
+            3
+          ],
+          "halves": [
+            5,
+            7,
+            6,
+            6
+          ],
+          "max3": 3,
+          "max4": 5,
+          "imbalance": 0.16666666666666666,
+          "halfImbalance": 0.08333333333333333,
+          "violations": []
+        },
+        "elapsed": 112,
+        "attempts": 35,
+        "proofs": 1,
+        "logicChecks": 13,
+        "failures": {
+          "role ambiguity": 20,
+          "logic stalled": 12
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.2,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 4,
+              "components": 2,
+              "largest": 3,
+              "singletons": 1
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.5,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 5,
+              "components": 2,
+              "largest": 3,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.75,
+              "patchCompactness": 0.75,
+              "branches": 0,
+              "bends": 1,
+              "count": 3,
+              "components": 1,
+              "largest": 3,
+              "singletons": 0
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              3,
+              4,
+              3
+            ],
+            "halves": [
+              5,
+              7,
+              6,
+              6
+            ],
+            "max3": 3,
+            "max4": 5,
+            "imbalance": 0.16666666666666666,
+            "halfImbalance": 0.08333333333333333,
+            "violations": []
+          },
+          "terrainCount": 12,
+          "grass": 31,
+          "effectiveGrass": 31,
+          "fragmentation": 2,
+          "concentration": 0.3333333333333333,
+          "maxSameKind": 4,
+          "kinds": 6,
+          "shapes": 8,
+          "campShapes": 3,
+          "terrainLinks": 8,
+          "clueVariety": 7,
+          "maxLine": 6,
+          "quadrants": [
+            6,
+            2,
+            7,
+            6
+          ],
+          "grassQuadrants": [
+            8,
+            11,
+            5,
+            7
+          ],
+          "linked": 3,
+          "dependencies": 3,
+          "score": 11.785260875919928,
+          "naturalness": 0.375,
+          "clueEntropy": 2.7028195311147836,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsNCw1XSxbImZvcmVzdCIsMywxXSxbImZvcmVzdCIsNCwxXSxbIm1vdW50YWluIiwxLDRdLFsid2F0ZXIiLDQsNl0sWyJtb3VudGFpbiIsMSw1XSxbIndhdGVyIiw0LDRdLFsiZm9yZXN0IiwyLDFdLFsiZm9yZXN0Iiw2LDFdLFsid2F0ZXIiLDcsMl0sWyJtb3VudGFpbiIsMCw1XSxbImZvcmVzdCIsNiwyXV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiw0LDcsMF0sWyJjYW1wX2RvbWlubyIsIndpbGQtMSIsNywwLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMiIsNSwwLDFdLFsiY2FiaW5fZWwiLCJ3aWxkLTMiLDEsMCwxXSxbImNhYmluX2VsIiwid2lsZC00IiwxLDIsMV0sWyJmaXJlX3NpbmdsZSIsIndpbGQtNSIsNSw3LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtNiIsMiw3LDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTciLDQsMSwzXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtOCIsMSw2LDBdLFsiY2FtcF9sb25nIiwid2lsZC05Iiw1LDYsMV0sWyJjYW1wX3NpbmdsZSIsIndpbGQtMTAiLDUsNCwwXV0sInIiOlswLDUsMywwLDIsNiwyLDNdLCJjIjpbNSwzLDQsMSwxLDAsNCwzXX0"
+      },
+      {
+        "difficulty": 5,
+        "seed": 20261021,
+        "disabled": [],
+        "status": "success",
+        "ms": 24,
+        "single": true,
+        "facilities": {
+          "camp_single": 2,
+          "camp_long": 1,
+          "picnic_domino": 2,
+          "fire_single": 2,
+          "tower_single": 3,
+          "powerTower_single": 1
+        },
+        "metrics": {
+          "score": 4.6000000000000005,
+          "density": 0.234375,
+          "facilityDensity": 0.171875,
+          "candidates": 14.636363636363637,
+          "dependencies": 0.36363636363636365,
+          "forced": 0,
+          "nodes": 69,
+          "branches": 19,
+          "logic": {
+            "solved": true,
+            "rounds": 5,
+            "deductions": 80,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 5,
+            "relationships": 10,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            2,
+            1,
+            2
+          ],
+          "halves": [
+            4,
+            3,
+            3,
+            4
+          ],
+          "max3": 2,
+          "max4": 4,
+          "imbalance": 0.14285714285714285,
+          "halfImbalance": 0.14285714285714285,
+          "violations": []
+        },
+        "elapsed": 24,
+        "attempts": 8,
+        "proofs": 1,
+        "logicChecks": 3,
+        "failures": {
+          "role ambiguity": 5,
+          "logic stalled": 2
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.2,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 3,
+              "components": 2,
+              "largest": 2,
+              "singletons": 1
+            },
+            {
+              "kind": "forest",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 1,
+              "components": 1,
+              "largest": 1,
+              "singletons": 1
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.3,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 3,
+              "components": 2,
+              "largest": 2,
+              "singletons": 1
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              2,
+              1,
+              2
+            ],
+            "halves": [
+              4,
+              3,
+              3,
+              4
+            ],
+            "max3": 2,
+            "max4": 4,
+            "imbalance": 0.14285714285714285,
+            "halfImbalance": 0.14285714285714285,
+            "violations": []
+          },
+          "terrainCount": 7,
+          "grass": 42,
+          "effectiveGrass": 42,
+          "fragmentation": 2,
+          "concentration": 0.2857142857142857,
+          "maxSameKind": 3,
+          "kinds": 5,
+          "shapes": 6,
+          "campShapes": 2,
+          "terrainLinks": 6,
+          "clueVariety": 5,
+          "maxLine": 5,
+          "quadrants": [
+            11,
+            4,
+            0,
+            0
+          ],
+          "grassQuadrants": [
+            3,
+            10,
+            15,
+            14
+          ],
+          "linked": 4,
+          "dependencies": 4,
+          "score": 9.406137176645323,
+          "naturalness": 0.3,
+          "clueEntropy": 2.180036532577266,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJtb3VudGFpbiIsMiw1XSxbImZvcmVzdCIsNiwyXSxbIm1vdW50YWluIiwxLDJdLFsid2F0ZXIiLDYsNV0sWyJ3YXRlciIsNSw1XSxbIndhdGVyIiwyLDNdLFsibW91bnRhaW4iLDIsNl1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsMywzLDBdLFsiY2FtcF9sb25nIiwid2lsZC0xIiwyLDAsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0yIiwwLDAsMV0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0zIiwwLDEsMV0sWyJmaXJlX3NpbmdsZSIsIndpbGQtNCIsMywwLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTUiLDMsMSwwXSxbImNhbXBfc2luZ2xlIiwid2lsZC02IiwyLDQsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTciLDIsNywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtOCIsMyw1LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTkiLDAsNywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTAiLDAsMiwwXV0sInIiOls0LDIsNSw0LDAsMCwwLDBdLCJjIjpbNCw0LDIsMSwxLDEsMCwyXX0"
+      },
+      {
+        "difficulty": 9,
+        "seed": 20261019,
+        "disabled": [],
+        "status": "success",
+        "ms": 234,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "camp_long": 1,
+          "picnic_domino": 3,
+          "cabin_el": 5,
+          "tower_single": 2,
+          "powerTower_single": 5
+        },
+        "metrics": {
+          "score": 6.87,
+          "density": 0.5,
+          "facilityDensity": 0.265625,
+          "candidates": 24.58823529411765,
+          "dependencies": 0.17647058823529413,
+          "forced": 0,
+          "nodes": 2639,
+          "branches": 602,
+          "logic": {
+            "solved": true,
+            "rounds": 9,
+            "deductions": 92,
+            "assumptions": 1,
+            "maxDepth": 1,
+            "techniques": 6,
+            "relationships": 15,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            3,
+            2,
+            3
+          ],
+          "halves": [
+            5,
+            5,
+            4,
+            6
+          ],
+          "max3": 3,
+          "max4": 5,
+          "imbalance": 0.1,
+          "halfImbalance": 0.1,
+          "violations": []
+        },
+        "elapsed": 234,
+        "attempts": 53,
+        "proofs": 1,
+        "logicChecks": 27,
+        "failures": {
+          "role ambiguity": 25,
+          "logic stalled": 26,
+          "combination layout": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 1,
+              "largest": 2,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.3333333333333333,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 4,
+              "components": 2,
+              "largest": 2,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.2857142857142857,
+              "patchCompactness": 0.875,
+              "branches": 0,
+              "bends": 1,
+              "count": 4,
+              "components": 2,
+              "largest": 3,
+              "singletons": 1
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              3,
+              2,
+              3
+            ],
+            "halves": [
+              5,
+              5,
+              4,
+              6
+            ],
+            "max3": 3,
+            "max4": 5,
+            "imbalance": 0.1,
+            "halfImbalance": 0.1,
+            "violations": []
+          },
+          "terrainCount": 10,
+          "grass": 22,
+          "effectiveGrass": 20,
+          "fragmentation": 2,
+          "concentration": 0.3,
+          "maxSameKind": 5,
+          "kinds": 5,
+          "shapes": 6,
+          "campShapes": 2,
+          "terrainLinks": 9,
+          "clueVariety": 6,
+          "maxLine": 7,
+          "quadrants": [
+            6,
+            7,
+            8,
+            11
+          ],
+          "grassQuadrants": [
+            8,
+            6,
+            6,
+            2
+          ],
+          "linked": 3,
+          "dependencies": 3,
+          "score": 9.599777545066233,
+          "naturalness": 0.33749999999999997,
+          "clueEntropy": 2.5306390622295667,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJmb3Jlc3QiLDUsM10sWyJtb3VudGFpbiIsMSw1XSxbIndhdGVyIiw0LDZdLFsiZm9yZXN0Iiw0LDNdLFsiZm9yZXN0IiwwLDJdLFsiZm9yZXN0IiwwLDNdLFsibW91bnRhaW4iLDEsNl0sWyJtb3VudGFpbiIsMiw1XSxbIm1vdW50YWluIiw3LDVdLFsid2F0ZXIiLDUsNl1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNCw3LDBdLFsiY2FtcF9sb25nIiwid2lsZC0xIiw0LDUsMV0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0yIiw1LDcsMV0sWyJjYWJpbl9lbCIsIndpbGQtMyIsMCw0LDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtNCIsNCw0LDFdLFsicGljbmljX2RvbWlubyIsIndpbGQtNSIsNiw0LDFdLFsidG93ZXJfc2luZ2xlIiwid2lsZC02IiwyLDQsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtNyIsMiw3LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC04IiwxLDcsMF0sWyJjYWJpbl9lbCIsIndpbGQtOSIsNSwxLDNdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTEwIiwwLDcsMF0sWyJjYWJpbl9lbCIsIndpbGQtMTEiLDQsMSwxXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xMiIsNyw3LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTEzIiw3LDIsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTQiLDUsMCwwXSxbImNhYmluX2VsIiwid2lsZC0xNSIsMSwxLDNdLFsiY2FiaW5fZWwiLCJ3aWxkLTE2IiwwLDAsMV1dLCJyIjpbNSw0LDQsMCw1LDYsNSwzXSwiYyI6WzMsNSw2LDAsNyw0LDAsN119"
+      },
+      {
+        "difficulty": 9,
+        "seed": 20261020,
+        "disabled": [],
+        "status": "success",
+        "ms": 1079,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "picnic_domino": 3,
+          "camp_el": 1,
+          "cabin_el": 4,
+          "powerTower_single": 4,
+          "tower_single": 4,
+          "fire_single": 1
+        },
+        "metrics": {
+          "score": 8.89,
+          "density": 0.484375,
+          "facilityDensity": 0.28125,
+          "candidates": 24.444444444444443,
+          "dependencies": 0.2222222222222222,
+          "forced": 0.2222222222222222,
+          "nodes": 2341,
+          "branches": 452,
+          "logic": {
+            "solved": true,
+            "rounds": 13,
+            "deductions": 114,
+            "assumptions": 13,
+            "maxDepth": 2,
+            "techniques": 6,
+            "relationships": 15,
+            "initialForced": 4
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            3,
+            2,
+            1
+          ],
+          "halves": [
+            5,
+            3,
+            4,
+            4
+          ],
+          "max3": 3,
+          "max4": 4,
+          "imbalance": 0.25,
+          "halfImbalance": 0.125,
+          "violations": []
+        },
+        "elapsed": 1080,
+        "attempts": 360,
+        "proofs": 1,
+        "logicChecks": 177,
+        "failures": {
+          "role ambiguity": 175,
+          "logic stalled": 174,
+          "combination layout": 8,
+          "reasoning tier": 2
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 1,
+              "components": 1,
+              "largest": 1,
+              "singletons": 1
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.16666666666666666,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 5,
+              "components": 4,
+              "largest": 2,
+              "singletons": 3
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.1111111111111111,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 2,
+              "largest": 1,
+              "singletons": 2
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              3,
+              2,
+              1
+            ],
+            "halves": [
+              5,
+              3,
+              4,
+              4
+            ],
+            "max3": 3,
+            "max4": 4,
+            "imbalance": 0.25,
+            "halfImbalance": 0.125,
+            "violations": []
+          },
+          "terrainCount": 8,
+          "grass": 25,
+          "effectiveGrass": 23,
+          "fragmentation": 4,
+          "concentration": 0.375,
+          "maxSameKind": 4,
+          "kinds": 6,
+          "shapes": 7,
+          "campShapes": 2,
+          "terrainLinks": 10,
+          "clueVariety": 5,
+          "maxLine": 7,
+          "quadrants": [
+            5,
+            4,
+            11,
+            11
+          ],
+          "grassQuadrants": [
+            9,
+            9,
+            3,
+            4
+          ],
+          "linked": 4,
+          "dependencies": 4,
+          "score": 10.185460101627298,
+          "naturalness": 0.3,
+          "clueEntropy": 2.0078560636920497,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJmb3Jlc3QiLDEsM10sWyJmb3Jlc3QiLDYsN10sWyJmb3Jlc3QiLDMsNl0sWyJmb3Jlc3QiLDYsM10sWyJtb3VudGFpbiIsMSwwXSxbIndhdGVyIiw1LDFdLFsibW91bnRhaW4iLDMsNV0sWyJmb3Jlc3QiLDIsNl1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNSwwLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMSIsNiwwLDFdLFsiY2FtcF9lbCIsIndpbGQtMiIsNCwyLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtMyIsNCwzLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNCIsNSw0LDFdLFsiY2FiaW5fZWwiLCJ3aWxkLTUiLDYsMiwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC02Iiw3LDQsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtNyIsMiwyLDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTgiLDQsNSwzXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtOSIsMiwwLDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTEwIiw0LDAsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTEiLDAsMiwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTIiLDQsNSwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTMiLDAsMCwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTQiLDIsNSwwXSxbImNhYmluX2VsIiwid2lsZC0xNSIsNiw1LDNdLFsiY2FiaW5fZWwiLCJ3aWxkLTE2IiwwLDMsMl0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTciLDIsNCwwXV0sInIiOls0LDEsNCwwLDYsNiw0LDZdLCJjIjpbNiwwLDYsNCw3LDQsNCwwXX0"
+      },
+      {
+        "difficulty": 9,
+        "seed": 20261021,
+        "disabled": [],
+        "status": "success",
+        "ms": 227,
+        "single": true,
+        "facilities": {
+          "camp_single": 2,
+          "picnic_domino": 2,
+          "camp_long": 2,
+          "cabin_el": 4,
+          "foodTruck_single": 4,
+          "fire_single": 2,
+          "powerTower_single": 3
+        },
+        "metrics": {
+          "score": 5.91,
+          "density": 0.515625,
+          "facilityDensity": 0.296875,
+          "candidates": 30.894736842105264,
+          "dependencies": 0.42105263157894735,
+          "forced": 0,
+          "nodes": 252,
+          "branches": 64,
+          "logic": {
+            "solved": true,
+            "rounds": 11,
+            "deductions": 189,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 4,
+            "relationships": 9,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            2,
+            3,
+            2
+          ],
+          "halves": [
+            4,
+            5,
+            5,
+            4
+          ],
+          "max3": 3,
+          "max4": 5,
+          "imbalance": 0.1111111111111111,
+          "halfImbalance": 0.1111111111111111,
+          "violations": []
+        },
+        "elapsed": 228,
+        "attempts": 76,
+        "proofs": 1,
+        "logicChecks": 38,
+        "failures": {
+          "role ambiguity": 33,
+          "combination layout": 4,
+          "logic stalled": 37
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 1,
+              "largest": 2,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.16666666666666666,
+              "patchCompactness": 0.875,
+              "branches": 0,
+              "bends": 1,
+              "count": 5,
+              "components": 2,
+              "largest": 3,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 1,
+              "largest": 2,
+              "singletons": 0
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              2,
+              3,
+              2
+            ],
+            "halves": [
+              4,
+              5,
+              5,
+              4
+            ],
+            "max3": 3,
+            "max4": 5,
+            "imbalance": 0.1111111111111111,
+            "halfImbalance": 0.1111111111111111,
+            "violations": []
+          },
+          "terrainCount": 9,
+          "grass": 22,
+          "effectiveGrass": 18,
+          "fragmentation": 1,
+          "concentration": 0.3333333333333333,
+          "maxSameKind": 4,
+          "kinds": 6,
+          "shapes": 7,
+          "campShapes": 2,
+          "terrainLinks": 8,
+          "clueVariety": 7,
+          "maxLine": 7,
+          "quadrants": [
+            8,
+            8,
+            9,
+            8
+          ],
+          "grassQuadrants": [
+            6,
+            6,
+            4,
+            6
+          ],
+          "linked": 8,
+          "dependencies": 8,
+          "score": 10.721830519726414,
+          "naturalness": 0.2625,
+          "clueEntropy": 2.702819531114783,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJmb3Jlc3QiLDUsMV0sWyJ3YXRlciIsNiw0XSxbImZvcmVzdCIsNSwwXSxbIndhdGVyIiw1LDRdLFsiZm9yZXN0IiwwLDRdLFsibW91bnRhaW4iLDIsMF0sWyJmb3Jlc3QiLDEsNF0sWyJtb3VudGFpbiIsMiwxXSxbImZvcmVzdCIsNCwwXV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiw2LDMsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0xIiw3LDIsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0yIiw1LDIsMV0sWyJjYW1wX2xvbmciLCJ3aWxkLTMiLDUsNSwwXSxbImNhbXBfbG9uZyIsIndpbGQtNCIsNiw1LDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTUiLDAsMiwxXSxbImZvb2RUcnVja19zaW5nbGUiLCJ3aWxkLTYiLDMsNywwXSxbImZvb2RUcnVja19zaW5nbGUiLCJ3aWxkLTciLDMsNiwwXSxbImZpcmVfc2luZ2xlIiwid2lsZC04Iiw3LDcsMF0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC05IiwzLDUsMF0sWyJjYW1wX3NpbmdsZSIsIndpbGQtMTAiLDUsMywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xMSIsMywyLDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMTIiLDMsMywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xMyIsMCw3LDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTE0IiwxLDIsM10sWyJjYWJpbl9lbCIsIndpbGQtMTUiLDAsNSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNiIsMSw3LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTE3Iiw3LDUsMF0sWyJjYWJpbl9lbCIsIndpbGQtMTgiLDYsMCwwXV0sInIiOls0LDUsMiw1LDAsNSw2LDZdLCJjIjpbMiwxLDcsNywwLDYsNCw2XX0"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261019,
+        "disabled": [],
+        "status": "success",
+        "ms": 1852,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "camp_el": 1,
+          "camp_long": 1,
+          "picnic_domino": 3,
+          "cabin_el": 1,
+          "tower_single": 5,
+          "powerTower_single": 6
+        },
+        "metrics": {
+          "score": 5.93,
+          "density": 0.421875,
+          "facilityDensity": 0.28125,
+          "candidates": 21.72222222222222,
+          "dependencies": 0.16666666666666666,
+          "forced": 0,
+          "nodes": 3869,
+          "branches": 940,
+          "logic": {
+            "solved": true,
+            "rounds": 8,
+            "deductions": 80,
+            "assumptions": 2,
+            "maxDepth": 1,
+            "techniques": 6,
+            "relationships": 7,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            3,
+            2,
+            3,
+            3
+          ],
+          "halves": [
+            5,
+            6,
+            6,
+            5
+          ],
+          "max3": 4,
+          "max4": 6,
+          "imbalance": 0.09090909090909091,
+          "halfImbalance": 0.09090909090909091,
+          "violations": []
+        },
+        "elapsed": 1852,
+        "attempts": 646,
+        "proofs": 1,
+        "logicChecks": 290,
+        "failures": {
+          "role ambiguity": 316,
+          "logic stalled": 286,
+          "combination layout": 39,
+          "reasoning tier": 3
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 1,
+              "components": 1,
+              "largest": 1,
+              "singletons": 1
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.2,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 5,
+              "components": 3,
+              "largest": 3,
+              "singletons": 2
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.14285714285714285,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 5,
+              "components": 4,
+              "largest": 2,
+              "singletons": 3
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              3,
+              2,
+              3,
+              3
+            ],
+            "halves": [
+              5,
+              6,
+              6,
+              5
+            ],
+            "max3": 4,
+            "max4": 6,
+            "imbalance": 0.09090909090909091,
+            "halfImbalance": 0.09090909090909091,
+            "violations": []
+          },
+          "terrainCount": 11,
+          "grass": 26,
+          "effectiveGrass": 25,
+          "fragmentation": 5,
+          "concentration": 0.2727272727272727,
+          "maxSameKind": 6,
+          "kinds": 5,
+          "shapes": 7,
+          "campShapes": 3,
+          "terrainLinks": 9,
+          "clueVariety": 7,
+          "maxLine": 6,
+          "quadrants": [
+            6,
+            6,
+            6,
+            9
+          ],
+          "grassQuadrants": [
+            7,
+            8,
+            7,
+            4
+          ],
+          "linked": 3,
+          "dependencies": 3,
+          "score": 10.515393546711648,
+          "naturalness": 0.3,
+          "clueEntropy": 2.655639062229567,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJmb3Jlc3QiLDIsMV0sWyJ3YXRlciIsNSw0XSxbIm1vdW50YWluIiwyLDVdLFsiZm9yZXN0Iiw2LDFdLFsibW91bnRhaW4iLDUsMV0sWyJtb3VudGFpbiIsMiwyXSxbIm1vdW50YWluIiwyLDZdLFsiZm9yZXN0IiwzLDFdLFsibW91bnRhaW4iLDYsN10sWyJmb3Jlc3QiLDQsMV0sWyJmb3Jlc3QiLDYsNV1dLCJmIjpbWyJjYW1wX3NpbmdsZSIsIndpbGQtMCIsNiw0LDBdLFsiY2FtcF9lbCIsIndpbGQtMSIsNSw1LDJdLFsiY2FtcF9sb25nIiwid2lsZC0yIiw0LDQsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0zIiwzLDQsMF0sWyJjYWJpbl9lbCIsIndpbGQtNCIsMCwwLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNSIsMyw2LDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNiIsNCw3LDFdLFsidG93ZXJfc2luZ2xlIiwid2lsZC03IiwxLDYsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtOCIsNCwyLDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTkiLDYsMiwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTAiLDUsMCwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTEiLDUsMiwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xMiIsNCwwLDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xMyIsMSwyLDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTE0Iiw2LDAsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTE1IiwzLDIsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTYiLDMsMCwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNyIsMCw2LDBdXSwiciI6WzIsNCwwLDYsNiw1LDQsMF0sImMiOls2LDEsNSwwLDMsMyw2LDNdfQ"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261020,
+        "disabled": [],
+        "status": "success",
+        "ms": 118,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "camp_el": 1,
+          "camp_domino": 1,
+          "picnic_domino": 4,
+          "foodTruck_single": 1,
+          "tower_single": 2,
+          "powerTower_single": 8
+        },
+        "metrics": {
+          "score": 7.65,
+          "density": 0.390625,
+          "facilityDensity": 0.28125,
+          "candidates": 26.38888888888889,
+          "dependencies": 0.2777777777777778,
+          "forced": 0,
+          "nodes": 9778,
+          "branches": 2156,
+          "logic": {
+            "solved": true,
+            "rounds": 10,
+            "deductions": 101,
+            "assumptions": 3,
+            "maxDepth": 1,
+            "techniques": 6,
+            "relationships": 24,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            1,
+            2,
+            2
+          ],
+          "halves": [
+            3,
+            4,
+            4,
+            3
+          ],
+          "max3": 2,
+          "max4": 6,
+          "imbalance": 0.14285714285714285,
+          "halfImbalance": 0.14285714285714285,
+          "violations": []
+        },
+        "elapsed": 119,
+        "attempts": 29,
+        "proofs": 1,
+        "logicChecks": 15,
+        "failures": {
+          "role ambiguity": 12,
+          "logic stalled": 14,
+          "combination layout": 2
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.375,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 3,
+              "components": 2,
+              "largest": 2,
+              "singletons": 1
+            },
+            {
+              "kind": "forest",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 1,
+              "largest": 2,
+              "singletons": 0
+            },
+            {
+              "kind": "mountain",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 1,
+              "largest": 2,
+              "singletons": 0
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              1,
+              2,
+              2
+            ],
+            "halves": [
+              3,
+              4,
+              4,
+              3
+            ],
+            "max3": 2,
+            "max4": 6,
+            "imbalance": 0.14285714285714285,
+            "halfImbalance": 0.14285714285714285,
+            "violations": []
+          },
+          "terrainCount": 7,
+          "grass": 32,
+          "effectiveGrass": 31,
+          "fragmentation": 1,
+          "concentration": 0.2857142857142857,
+          "maxSameKind": 8,
+          "kinds": 5,
+          "shapes": 7,
+          "campShapes": 3,
+          "terrainLinks": 5,
+          "clueVariety": 6,
+          "maxLine": 7,
+          "quadrants": [
+            8,
+            3,
+            6,
+            8
+          ],
+          "grassQuadrants": [
+            6,
+            12,
+            8,
+            6
+          ],
+          "linked": 5,
+          "dependencies": 5,
+          "score": 9.80274330597046,
+          "naturalness": 0.3,
+          "clueEntropy": 2.4834585933443503,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJtb3VudGFpbiIsMyw0XSxbImZvcmVzdCIsNiw0XSxbIndhdGVyIiwzLDFdLFsibW91bnRhaW4iLDMsM10sWyJ3YXRlciIsNiwxXSxbIndhdGVyIiw2LDJdLFsiZm9yZXN0Iiw2LDVdXSwiZiI6W1siY2FtcF9zaW5nbGUiLCJ3aWxkLTAiLDcsMiwwXSxbImNhbXBfZWwiLCJ3aWxkLTEiLDMsMiwwXSxbImNhbXBfZG9taW5vIiwid2lsZC0yIiwzLDAsMV0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC0zIiw0LDQsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC00Iiw3LDMsMF0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC01IiwxLDIsMV0sWyJwaWNuaWNfZG9taW5vIiwid2lsZC02IiwxLDAsMV0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC03Iiw3LDAsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTgiLDIsMywwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtOSIsMyw1LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTEwIiw3LDUsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTEiLDIsNSwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xMiIsMSw1LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTEzIiw0LDYsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTQiLDQsNywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNSIsMSwzLDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTE2Iiw3LDYsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTciLDcsNywwXV0sInIiOlswLDQsNCwzLDcsMCwwLDddLCJjIjpbNSwwLDUsNCwyLDUsMiwyXX0"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261021,
+        "disabled": [],
+        "status": "success",
+        "ms": 1744,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "picnic_domino": 2,
+          "cabin_el": 3,
+          "camp_domino": 2,
+          "camp_long": 1,
+          "tower_single": 4,
+          "powerTower_single": 6,
+          "fire_single": 1
+        },
+        "metrics": {
+          "score": 7.75,
+          "density": 0.5,
+          "facilityDensity": 0.3125,
+          "candidates": 21.2,
+          "dependencies": 0.15,
+          "forced": 0,
+          "nodes": 6151,
+          "branches": 1441,
+          "logic": {
+            "solved": true,
+            "rounds": 10,
+            "deductions": 118,
+            "assumptions": 6,
+            "maxDepth": 1,
+            "techniques": 6,
+            "relationships": 15,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            3,
+            3,
+            2
+          ],
+          "halves": [
+            5,
+            5,
+            5,
+            5
+          ],
+          "max3": 3,
+          "max4": 6,
+          "imbalance": 0.1,
+          "halfImbalance": 0,
+          "violations": []
+        },
+        "elapsed": 1744,
+        "attempts": 497,
+        "proofs": 1,
+        "logicChecks": 251,
+        "failures": {
+          "role ambiguity": 220,
+          "logic stalled": 250,
+          "combination layout": 25
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 0.25,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 4,
+              "components": 2,
+              "largest": 3,
+              "singletons": 1
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.06666666666666667,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 2,
+              "largest": 1,
+              "singletons": 2
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.16666666666666666,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 4,
+              "components": 3,
+              "largest": 2,
+              "singletons": 2
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              3,
+              3,
+              2
+            ],
+            "halves": [
+              5,
+              5,
+              5,
+              5
+            ],
+            "max3": 3,
+            "max4": 6,
+            "imbalance": 0.1,
+            "halfImbalance": 0,
+            "violations": []
+          },
+          "terrainCount": 10,
+          "grass": 22,
+          "effectiveGrass": 19,
+          "fragmentation": 4,
+          "concentration": 0.3,
+          "maxSameKind": 6,
+          "kinds": 6,
+          "shapes": 8,
+          "campShapes": 3,
+          "terrainLinks": 11,
+          "clueVariety": 7,
+          "maxLine": 7,
+          "quadrants": [
+            11,
+            12,
+            3,
+            6
+          ],
+          "grassQuadrants": [
+            3,
+            1,
+            10,
+            8
+          ],
+          "linked": 3,
+          "dependencies": 3,
+          "score": 11.77920026985932,
+          "naturalness": 0.3,
+          "clueEntropy": 2.577819531114783,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJtb3VudGFpbiIsMyw1XSxbIndhdGVyIiw0LDJdLFsiZm9yZXN0IiwxLDJdLFsid2F0ZXIiLDQsM10sWyJmb3Jlc3QiLDYsNl0sWyJ3YXRlciIsNCw0XSxbIm1vdW50YWluIiwwLDVdLFsibW91bnRhaW4iLDEsNV0sWyJ3YXRlciIsMSwxXSxbIm1vdW50YWluIiw3LDNdXSwiZiI6W1siY2FtcF9zaW5nbGUiLCJ3aWxkLTAiLDEsMCwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEiLDIsMCwxXSxbImNhYmluX2VsIiwid2lsZC0yIiwwLDIsMl0sWyJjYW1wX2RvbWlubyIsIndpbGQtMyIsMiwzLDFdLFsiY2FiaW5fZWwiLCJ3aWxkLTQiLDYsNiwzXSxbImNhbXBfbG9uZyIsIndpbGQtNSIsMSw0LDFdLFsiY2FtcF9kb21pbm8iLCJ3aWxkLTYiLDIsMiwxXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNyIsMyw2LDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtOCIsMiw1LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC05IiwxLDYsMF0sWyJjYWJpbl9lbCIsIndpbGQtMTAiLDYsNCwxXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xMSIsMyw3LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xMiIsMCw0LDBdLFsiZmlyZV9zaW5nbGUiLCJ3aWxkLTEzIiwwLDAsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTE0Iiw2LDMsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTUiLDYsMCwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNiIsNywwLDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTE3IiwyLDcsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTgiLDEsNywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xOSIsMCw3LDBdXSwiciI6WzUsNSw3LDYsMCwwLDUsNF0sImMiOls2LDAsMyw1LDYsMiw0LDZdfQ"
+      },
+      {
+        "difficulty": 1,
+        "seed": 20261019,
+        "disabled": [
+          "camp_single"
+        ],
+        "status": "success",
+        "ms": 5,
+        "single": false,
+        "facilities": {
+          "camp_domino": 2,
+          "pool_single": 1,
+          "tower_single": 1,
+          "foodTruck_single": 1
+        },
+        "metrics": {
+          "score": 3.1100000000000003,
+          "density": 0.109375,
+          "facilityDensity": 0.078125,
+          "candidates": 5.6,
+          "dependencies": 0.4,
+          "forced": 0,
+          "nodes": 10,
+          "branches": 1,
+          "logic": {
+            "solved": true,
+            "rounds": 4,
+            "deductions": 19,
+            "assumptions": 0,
+            "maxDepth": 0,
+            "techniques": 4,
+            "relationships": 2,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            3,
+            1,
+            1
+          ],
+          "halves": [
+            5,
+            2,
+            3,
+            4
+          ],
+          "max3": 3,
+          "max4": 3,
+          "imbalance": 0.2857142857142857,
+          "halfImbalance": 0.2857142857142857,
+          "violations": []
+        },
+        "elapsed": 5,
+        "attempts": 3,
+        "proofs": 1,
+        "logicChecks": 2,
+        "failures": {
+          "logic stalled": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 1,
+              "largest": 2,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.08571428571428572,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 3,
+              "components": 2,
+              "largest": 2,
+              "singletons": 1
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 2,
+              "largest": 1,
+              "singletons": 2
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              3,
+              1,
+              1
+            ],
+            "halves": [
+              5,
+              2,
+              3,
+              4
+            ],
+            "max3": 3,
+            "max4": 3,
+            "imbalance": 0.2857142857142857,
+            "halfImbalance": 0.2857142857142857,
+            "violations": []
+          },
+          "terrainCount": 7,
+          "grass": 50,
+          "effectiveGrass": 50,
+          "fragmentation": 2,
+          "concentration": 0.42857142857142855,
+          "maxSameKind": 2,
+          "kinds": 4,
+          "shapes": 4,
+          "campShapes": 1,
+          "terrainLinks": 4,
+          "clueVariety": 4,
+          "maxLine": 4,
+          "quadrants": [
+            1,
+            5,
+            1,
+            0
+          ],
+          "grassQuadrants": [
+            13,
+            8,
+            14,
+            15
+          ],
+          "linked": 2,
+          "dependencies": 2,
+          "score": 6.43014146006849,
+          "naturalness": 0.3,
+          "clueEntropy": 1.5435644431995963,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMSw2XSxbImZvcmVzdCIsNiw1XSxbImZvcmVzdCIsMSwxXSxbIm1vdW50YWluIiw2LDJdLFsibW91bnRhaW4iLDIsNV0sWyJmb3Jlc3QiLDAsMV0sWyJ3YXRlciIsMSw1XV0sImYiOltbImNhbXBfZG9taW5vIiwid2lsZC0wIiwwLDQsMF0sWyJwb29sX3NpbmdsZSIsIndpbGQtMSIsMCw2LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0yIiw2LDEsMF0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC0zIiwwLDIsMF0sWyJjYW1wX2RvbWlubyIsIndpbGQtNCIsMSw0LDFdXSwiciI6WzQsMSwxLDAsMCwwLDEsMF0sImMiOlswLDEsMSwwLDMsMSwxLDBdfQ"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261019,
+        "disabled": [
+          "camp_single"
+        ],
+        "status": "success",
+        "ms": 2682,
+        "single": false,
+        "facilities": {
+          "camp_long": 1,
+          "picnic_domino": 1,
+          "camp_el": 1,
+          "camp_domino": 1,
+          "cabin_el": 2,
+          "tower_single": 4,
+          "foodTruck_single": 4,
+          "powerTower_single": 4
+        },
+        "metrics": {
+          "score": 6.59,
+          "density": 0.4375,
+          "facilityDensity": 0.28125,
+          "candidates": 22.72222222222222,
+          "dependencies": 0.2777777777777778,
+          "forced": 0,
+          "nodes": 178,
+          "branches": 67,
+          "logic": {
+            "solved": true,
+            "rounds": 8,
+            "deductions": 135,
+            "assumptions": 2,
+            "maxDepth": 1,
+            "techniques": 6,
+            "relationships": 15,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            2,
+            1,
+            2
+          ],
+          "halves": [
+            4,
+            3,
+            3,
+            4
+          ],
+          "max3": 3,
+          "max4": 4,
+          "imbalance": 0.14285714285714285,
+          "halfImbalance": 0.14285714285714285,
+          "violations": []
+        },
+        "elapsed": 2682,
+        "attempts": 635,
+        "proofs": 2,
+        "logicChecks": 383,
+        "failures": {
+          "role ambiguity": 214,
+          "combination layout": 37,
+          "logic stalled": 380,
+          "proof budget": 1,
+          "reasoning tier": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 2,
+              "components": 1,
+              "largest": 2,
+              "singletons": 0
+            },
+            {
+              "kind": "forest",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 1,
+              "components": 1,
+              "largest": 1,
+              "singletons": 1
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.125,
+              "patchCompactness": 0.875,
+              "branches": 0,
+              "bends": 1,
+              "count": 4,
+              "components": 2,
+              "largest": 3,
+              "singletons": 1
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              2,
+              1,
+              2
+            ],
+            "halves": [
+              4,
+              3,
+              3,
+              4
+            ],
+            "max3": 3,
+            "max4": 4,
+            "imbalance": 0.14285714285714285,
+            "halfImbalance": 0.14285714285714285,
+            "violations": []
+          },
+          "terrainCount": 7,
+          "grass": 29,
+          "effectiveGrass": 29,
+          "fragmentation": 1,
+          "concentration": 0.2857142857142857,
+          "maxSameKind": 4,
+          "kinds": 6,
+          "shapes": 8,
+          "campShapes": 3,
+          "terrainLinks": 9,
+          "clueVariety": 6,
+          "maxLine": 6,
+          "quadrants": [
+            10,
+            5,
+            8,
+            5
+          ],
+          "grassQuadrants": [
+            4,
+            9,
+            7,
+            9
+          ],
+          "linked": 5,
+          "dependencies": 5,
+          "score": 11.760382194859346,
+          "naturalness": 0.33749999999999997,
+          "clueEntropy": 2.4834585933443503,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJ3YXRlciIsMiwzXSxbIm1vdW50YWluIiwzLDZdLFsid2F0ZXIiLDIsMl0sWyJmb3Jlc3QiLDYsNF0sWyJtb3VudGFpbiIsMyw3XSxbIm1vdW50YWluIiw2LDBdLFsibW91bnRhaW4iLDQsNl1dLCJmIjpbWyJjYW1wX2xvbmciLCJ3aWxkLTAiLDEsMCwwXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTEiLDAsMCwwXSxbImNhbXBfZWwiLCJ3aWxkLTIiLDAsMiwyXSxbImNhbXBfZG9taW5vIiwid2lsZC0zIiwyLDAsMF0sWyJjYWJpbl9lbCIsIndpbGQtNCIsNSwyLDBdLFsiY2FiaW5fZWwiLCJ3aWxkLTUiLDUsNSwxXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtNiIsNSwwLDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtNyIsMSw1LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC04IiwyLDYsMF0sWyJmb29kVHJ1Y2tfc2luZ2xlIiwid2lsZC05IiwwLDUsMF0sWyJ0b3dlcl9zaW5nbGUiLCJ3aWxkLTEwIiw0LDUsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTEiLDEsNiwwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xMiIsMiw1LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC0xMyIsNCw3LDBdLFsiZm9vZFRydWNrX3NpbmdsZSIsIndpbGQtMTQiLDQsMSwwXSxbImZvb2RUcnVja19zaW5nbGUiLCJ3aWxkLTE1Iiw0LDAsMF0sWyJwb3dlclRvd2VyX3NpbmdsZSIsIndpbGQtMTYiLDQsMywwXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNyIsNCwyLDBdXSwiciI6WzUsNiw0LDAsNiw0LDMsMF0sImMiOls1LDQsNSw0LDAsNiwzLDFdfQ"
+      },
+      {
+        "difficulty": 10,
+        "seed": 20261019,
+        "disabled": [
+          "camp_el",
+          "foodTruck_single"
+        ],
+        "status": "success",
+        "ms": 2396,
+        "single": true,
+        "facilities": {
+          "camp_single": 1,
+          "camp_long": 1,
+          "picnic_domino": 3,
+          "cabin_el": 4,
+          "tower_single": 4,
+          "fire_single": 2,
+          "powerTower_single": 3
+        },
+        "metrics": {
+          "score": 7.65,
+          "density": 0.484375,
+          "facilityDensity": 0.28125,
+          "candidates": 22.72222222222222,
+          "dependencies": 0.2777777777777778,
+          "forced": 0,
+          "nodes": 1224,
+          "branches": 342,
+          "logic": {
+            "solved": true,
+            "rounds": 12,
+            "deductions": 122,
+            "assumptions": 2,
+            "maxDepth": 1,
+            "techniques": 6,
+            "relationships": 12,
+            "initialForced": 0
+          }
+        },
+        "distribution": {
+          "quadrants": [
+            2,
+            2,
+            2,
+            1
+          ],
+          "halves": [
+            4,
+            3,
+            4,
+            3
+          ],
+          "max3": 2,
+          "max4": 3,
+          "imbalance": 0.14285714285714285,
+          "halfImbalance": 0.14285714285714285,
+          "violations": []
+        },
+        "elapsed": 2396,
+        "attempts": 833,
+        "proofs": 1,
+        "logicChecks": 388,
+        "failures": {
+          "role ambiguity": 408,
+          "logic stalled": 386,
+          "combination layout": 35,
+          "reasoning tier": 1
+        },
+        "unique": true,
+        "quality": {
+          "regions": [
+            {
+              "kind": "water",
+              "compactness": 1,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 1,
+              "components": 1,
+              "largest": 1,
+              "singletons": 1
+            },
+            {
+              "kind": "forest",
+              "compactness": 0.3,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 3,
+              "components": 2,
+              "largest": 2,
+              "singletons": 1
+            },
+            {
+              "kind": "mountain",
+              "compactness": 0.08333333333333333,
+              "patchCompactness": 1,
+              "branches": 0,
+              "bends": 0,
+              "count": 3,
+              "components": 2,
+              "largest": 2,
+              "singletons": 1
+            }
+          ],
+          "distribution": {
+            "quadrants": [
+              2,
+              2,
+              2,
+              1
+            ],
+            "halves": [
+              4,
+              3,
+              4,
+              3
+            ],
+            "max3": 2,
+            "max4": 3,
+            "imbalance": 0.14285714285714285,
+            "halfImbalance": 0.14285714285714285,
+            "violations": []
+          },
+          "terrainCount": 7,
+          "grass": 26,
+          "effectiveGrass": 24,
+          "fragmentation": 2,
+          "concentration": 0.2857142857142857,
+          "maxSameKind": 4,
+          "kinds": 6,
+          "shapes": 7,
+          "campShapes": 2,
+          "terrainLinks": 10,
+          "clueVariety": 7,
+          "maxLine": 7,
+          "quadrants": [
+            7,
+            6,
+            9,
+            9
+          ],
+          "grassQuadrants": [
+            7,
+            8,
+            5,
+            6
+          ],
+          "linked": 5,
+          "dependencies": 5,
+          "score": 10.950266355115453,
+          "naturalness": 0.3,
+          "clueEntropy": 2.477217001462483,
+          "violations": [],
+          "accepted": true
+        },
+        "code": "WG1:eyJ2IjoxLCJzIjo4LCJ0IjpbWyJmb3Jlc3QiLDMsMl0sWyJ3YXRlciIsNSw2XSxbIm1vdW50YWluIiw2LDJdLFsiZm9yZXN0IiwyLDZdLFsibW91bnRhaW4iLDYsMV0sWyJmb3Jlc3QiLDIsMl0sWyJtb3VudGFpbiIsMSw2XV0sImYiOltbImNhbXBfc2luZ2xlIiwid2lsZC0wIiw1LDcsMF0sWyJjYW1wX2xvbmciLCJ3aWxkLTEiLDMsNSwxXSxbInBpY25pY19kb21pbm8iLCJ3aWxkLTIiLDMsNywxXSxbImNhYmluX2VsIiwid2lsZC0zIiwzLDAsMV0sWyJjYWJpbl9lbCIsIndpbGQtNCIsMywzLDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNSIsNiw0LDBdLFsicGljbmljX2RvbWlubyIsIndpbGQtNiIsNSwzLDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC03Iiw2LDMsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtOCIsNiw3LDBdLFsidG93ZXJfc2luZ2xlIiwid2lsZC05Iiw2LDAsMF0sWyJmaXJlX3NpbmdsZSIsIndpbGQtMTAiLDMsNCwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTEiLDEsNSwwXSxbInRvd2VyX3NpbmdsZSIsIndpbGQtMTIiLDEsNywwXSxbImNhYmluX2VsIiwid2lsZC0xMyIsMCwyLDNdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTE0Iiw1LDAsMF0sWyJjYWJpbl9lbCIsIndpbGQtMTUiLDQsMSwzXSxbInBvd2VyVG93ZXJfc2luZ2xlIiwid2lsZC0xNiIsMSw0LDBdLFsicG93ZXJUb3dlcl9zaW5nbGUiLCJ3aWxkLTE3IiwxLDAsMF1dLCJyIjpbMSw2LDAsNiw2LDcsNSwwXSwiYyI6WzUsMiwzLDYsNSw1LDAsNV19"
+      }
+    ],
+    "diversity": [
+      {
+        "difficulty": 1,
+        "exact": false,
+        "equivalent": false,
+        "similarity": 0.30289915966386555
+      },
+      {
+        "difficulty": 5,
+        "exact": false,
+        "equivalent": false,
+        "similarity": 0.4438558758314856
+      },
+      {
+        "difficulty": 10,
+        "exact": false,
+        "equivalent": false,
+        "similarity": 0.41052613142777084
+      }
+    ]
+  },
+  "planning": {
+    "samples": 96,
+    "total": {
+      "min": 7,
+      "max": 14,
+      "mean": 9.520833333333334,
+      "p50": 9,
+      "p95": 13
+    },
+    "allIsolated": 20,
+    "maxIsolatedRun": 3,
+    "totalHistogram": {
+      "7": 19,
+      "8": 21,
+      "9": 12,
+      "10": 13,
+      "11": 8,
+      "12": 13,
+      "13": 9,
+      "14": 1
+    },
+    "plans": [
+      {
+        "seed": 20261019,
+        "total": 10,
+        "counts": [
+          3,
+          3,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261020,
+        "total": 9,
+        "counts": [
+          3,
+          3,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261021,
+        "total": 8,
+        "counts": [
+          4,
+          4,
+          0
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261022,
+        "total": 8,
+        "counts": [
+          2,
+          4,
+          2
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 3
+      },
+      {
+        "seed": 20261023,
+        "total": 7,
+        "counts": [
+          2,
+          3,
+          2
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261024,
+        "total": 10,
+        "counts": [
+          2,
+          5,
+          3
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261025,
+        "total": 13,
+        "counts": [
+          4,
+          5,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 6
+      },
+      {
+        "seed": 20261026,
+        "total": 7,
+        "counts": [
+          2,
+          1,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261027,
+        "total": 12,
+        "counts": [
+          3,
+          4,
+          5
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261028,
+        "total": 7,
+        "counts": [
+          3,
+          0,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261029,
+        "total": 10,
+        "counts": [
+          2,
+          4,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261030,
+        "total": 9,
+        "counts": [
+          3,
+          5,
+          1
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 6
+      },
+      {
+        "seed": 20261031,
+        "total": 13,
+        "counts": [
+          4,
+          5,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 4,
+        "max4": 5
+      },
+      {
+        "seed": 20261032,
+        "total": 7,
+        "counts": [
+          3,
+          0,
+          4
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261033,
+        "total": 8,
+        "counts": [
+          4,
+          4,
+          0
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261034,
+        "total": 11,
+        "counts": [
+          4,
+          3,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261035,
+        "total": 7,
+        "counts": [
+          3,
+          0,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261036,
+        "total": 9,
+        "counts": [
+          2,
+          4,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 4,
+        "max4": 5
+      },
+      {
+        "seed": 20261037,
+        "total": 13,
+        "counts": [
+          4,
+          5,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 4,
+        "max4": 5
+      },
+      {
+        "seed": 20261038,
+        "total": 10,
+        "counts": [
+          2,
+          3,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261039,
+        "total": 12,
+        "counts": [
+          4,
+          5,
+          3
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261040,
+        "total": 12,
+        "counts": [
+          4,
+          5,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 6
+      },
+      {
+        "seed": 20261041,
+        "total": 9,
+        "counts": [
+          4,
+          4,
+          1
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261042,
+        "total": 12,
+        "counts": [
+          4,
+          3,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 4,
+        "max4": 8
+      },
+      {
+        "seed": 20261043,
+        "total": 7,
+        "counts": [
+          3,
+          1,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261044,
+        "total": 7,
+        "counts": [
+          3,
+          1,
+          3
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261045,
+        "total": 11,
+        "counts": [
+          3,
+          5,
+          3
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261046,
+        "total": 9,
+        "counts": [
+          2,
+          5,
+          2
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261047,
+        "total": 10,
+        "counts": [
+          4,
+          5,
+          1
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 6
+      },
+      {
+        "seed": 20261048,
+        "total": 9,
+        "counts": [
+          4,
+          5,
+          0
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261049,
+        "total": 8,
+        "counts": [
+          2,
+          2,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 5
+      },
+      {
+        "seed": 20261050,
+        "total": 9,
+        "counts": [
+          4,
+          0,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261051,
+        "total": 12,
+        "counts": [
+          4,
+          5,
+          3
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261052,
+        "total": 14,
+        "counts": [
+          4,
+          5,
+          5
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261053,
+        "total": 12,
+        "counts": [
+          4,
+          4,
+          4
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261054,
+        "total": 8,
+        "counts": [
+          3,
+          0,
+          5
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261055,
+        "total": 10,
+        "counts": [
+          1,
+          5,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261056,
+        "total": 9,
+        "counts": [
+          3,
+          4,
+          2
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261057,
+        "total": 11,
+        "counts": [
+          2,
+          5,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261058,
+        "total": 13,
+        "counts": [
+          4,
+          4,
+          5
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 6
+      },
+      {
+        "seed": 20261059,
+        "total": 9,
+        "counts": [
+          4,
+          5,
+          0
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261060,
+        "total": 12,
+        "counts": [
+          4,
+          3,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 4,
+        "max4": 5
+      },
+      {
+        "seed": 20261061,
+        "total": 7,
+        "counts": [
+          2,
+          2,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261062,
+        "total": 9,
+        "counts": [
+          4,
+          2,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 5
+      },
+      {
+        "seed": 20261063,
+        "total": 12,
+        "counts": [
+          3,
+          4,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 6
+      },
+      {
+        "seed": 20261064,
+        "total": 13,
+        "counts": [
+          3,
+          5,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 4,
+        "max4": 5
+      },
+      {
+        "seed": 20261065,
+        "total": 7,
+        "counts": [
+          4,
+          3,
+          0
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 3
+      },
+      {
+        "seed": 20261066,
+        "total": 8,
+        "counts": [
+          3,
+          5,
+          0
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261067,
+        "total": 8,
+        "counts": [
+          4,
+          1,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261068,
+        "total": 7,
+        "counts": [
+          2,
+          0,
+          5
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261069,
+        "total": 11,
+        "counts": [
+          3,
+          3,
+          5
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261070,
+        "total": 12,
+        "counts": [
+          3,
+          5,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261071,
+        "total": 11,
+        "counts": [
+          3,
+          3,
+          5
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 5
+      },
+      {
+        "seed": 20261072,
+        "total": 10,
+        "counts": [
+          2,
+          5,
+          3
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261073,
+        "total": 9,
+        "counts": [
+          4,
+          0,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261074,
+        "total": 7,
+        "counts": [
+          2,
+          3,
+          2
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261075,
+        "total": 8,
+        "counts": [
+          3,
+          5,
+          0
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261076,
+        "total": 12,
+        "counts": [
+          4,
+          4,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 6
+      },
+      {
+        "seed": 20261077,
+        "total": 10,
+        "counts": [
+          4,
+          3,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261078,
+        "total": 10,
+        "counts": [
+          4,
+          4,
+          2
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261079,
+        "total": 7,
+        "counts": [
+          4,
+          0,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261080,
+        "total": 13,
+        "counts": [
+          3,
+          5,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 4,
+        "max4": 7
+      },
+      {
+        "seed": 20261081,
+        "total": 13,
+        "counts": [
+          4,
+          5,
+          4
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261082,
+        "total": 8,
+        "counts": [
+          3,
+          4,
+          1
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261083,
+        "total": 8,
+        "counts": [
+          4,
+          1,
+          3
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261084,
+        "total": 7,
+        "counts": [
+          2,
+          3,
+          2
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 2
+      },
+      {
+        "seed": 20261085,
+        "total": 8,
+        "counts": [
+          3,
+          3,
+          2
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261086,
+        "total": 7,
+        "counts": [
+          3,
+          4,
+          0
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261087,
+        "total": 12,
+        "counts": [
+          4,
+          3,
+          5
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261088,
+        "total": 10,
+        "counts": [
+          3,
+          4,
+          3
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261089,
+        "total": 8,
+        "counts": [
+          3,
+          0,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261090,
+        "total": 10,
+        "counts": [
+          4,
+          2,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261091,
+        "total": 8,
+        "counts": [
+          4,
+          2,
+          2
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261092,
+        "total": 11,
+        "counts": [
+          4,
+          3,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261093,
+        "total": 7,
+        "counts": [
+          4,
+          3,
+          0
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261094,
+        "total": 7,
+        "counts": [
+          1,
+          2,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261095,
+        "total": 7,
+        "counts": [
+          2,
+          1,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 3
+      },
+      {
+        "seed": 20261096,
+        "total": 13,
+        "counts": [
+          4,
+          4,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261097,
+        "total": 7,
+        "counts": [
+          4,
+          1,
+          2
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261098,
+        "total": 10,
+        "counts": [
+          2,
+          5,
+          3
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 5
+      },
+      {
+        "seed": 20261099,
+        "total": 13,
+        "counts": [
+          4,
+          4,
+          5
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 3,
+        "max4": 6
+      },
+      {
+        "seed": 20261100,
+        "total": 11,
+        "counts": [
+          2,
+          5,
+          4
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261101,
+        "total": 8,
+        "counts": [
+          2,
+          2,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261102,
+        "total": 8,
+        "counts": [
+          4,
+          0,
+          4
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261103,
+        "total": 9,
+        "counts": [
+          3,
+          3,
+          3
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261104,
+        "total": 8,
+        "counts": [
+          4,
+          4,
+          0
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 5
+      },
+      {
+        "seed": 20261105,
+        "total": 8,
+        "counts": [
+          4,
+          2,
+          2
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 4
+      },
+      {
+        "seed": 20261106,
+        "total": 8,
+        "counts": [
+          4,
+          0,
+          4
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261107,
+        "total": 12,
+        "counts": [
+          4,
+          3,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261108,
+        "total": 8,
+        "counts": [
+          2,
+          3,
+          3
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261109,
+        "total": 8,
+        "counts": [
+          2,
+          2,
+          4
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261110,
+        "total": 8,
+        "counts": [
+          4,
+          2,
+          2
+        ],
+        "largest": 2,
+        "isolated": false,
+        "max3": 2,
+        "max4": 5
+      },
+      {
+        "seed": 20261111,
+        "total": 10,
+        "counts": [
+          3,
+          4,
+          3
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 3
+      },
+      {
+        "seed": 20261112,
+        "total": 11,
+        "counts": [
+          3,
+          3,
+          5
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 3,
+        "max4": 5
+      },
+      {
+        "seed": 20261113,
+        "total": 12,
+        "counts": [
+          4,
+          3,
+          5
+        ],
+        "largest": 3,
+        "isolated": false,
+        "max3": 3,
+        "max4": 4
+      },
+      {
+        "seed": 20261114,
+        "total": 7,
+        "counts": [
+          4,
+          1,
+          2
+        ],
+        "largest": 1,
+        "isolated": true,
+        "max3": 2,
+        "max4": 3
+      }
+    ]
+  }
+}

@@ -8,7 +8,7 @@ import { encodeMap } from '../src/engine/mapBlueprint';
 import { mapFeatures } from '../src/engine/mapNovelty';
 import { SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
 
-const output = 'reports/generation-rework';
+const output = '.desktop-smoke/generation-benchmark';
 mkdirSync(output, { recursive: true });
 type Generated = ReturnType<typeof generateMap>;
 const samples: Generated[] = [];

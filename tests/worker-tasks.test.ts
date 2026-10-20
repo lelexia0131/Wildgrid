@@ -124,3 +124,19 @@ test('survival creation, posting, runtime and protocol errors stop without retry
   FakeWorker.failPost = true; start(); FakeWorker.failPost = false; assert.equal(task.isRunning(), false);
   t.mock.timers.tick(MAP_GENERATION_TIMEOUT * 2); assert.deepEqual(errors, Array(9).fill('error'));
 });
+
+test('survival rejects a worker inventory that omits the enabled single camp', t => {
+  const descriptor=Object.getOwnPropertyDescriptor(globalThis,'Worker');
+  Object.defineProperty(globalThis,'Worker',{configurable:true,value:FakeWorker});
+  t.after(()=>{ if(descriptor) Object.defineProperty(globalThis,'Worker',descriptor); else Reflect.deleteProperty(globalThis,'Worker'); });
+  const task=createSurvivalGenerationTask(), errors:string[]=[];
+  const request={difficulty:1,seed:2,id:'missing-camp',recent:[]};
+  task.start(request,{onResult:()=>assert.fail('unexpected result'),onError:reason=>errors.push(reason)});
+  const level={...getLevelById(6)!,size:8};
+  const placements=getSolution(6)!;
+  const base=withEditorPlacements({level,placements},placements);
+  const draft={...base,level:{...base.level,pieces:base.level.pieces.map(p=>p.kind==='camp'&&p.shape==='single'?{...p,kind:'fire' as const}:p)}};
+  FakeWorker.instances.at(-1)!.reply({status:'success',challenge:{...request,draft,fingerprint:'missing'}});
+  assert.deepEqual(errors,['error']);
+  assert.equal(task.isRunning(),false);
+});

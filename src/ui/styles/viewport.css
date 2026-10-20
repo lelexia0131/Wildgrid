@@ -463,8 +463,9 @@ input[type=range] { height: 22px; }
 
 /* The journal has one camp selection, then fifteen touchable level buttons. */
 .camp-diary { max-width: 960px; gap: 16px; }
-.camp-diary.chapter-levels { position: relative; isolation: isolate; max-width: 1120px; padding: 4px 12px 20px; gap: 14px; }
-.journal-chapter-background { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; border-radius: 28px; pointer-events: none; opacity: .85; }
+.camp-diary.chapter-levels { position: relative; z-index: 1; isolation: isolate; max-width: 1120px; padding: 4px 12px 20px; gap: 14px; }
+.journal-chapter-background { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; opacity: .85; }
+.app:has(> .journal-chapter-background) > .ambient { display: none; }
 .chapter-levels > .back-link, .chapter-levels > .page-heading { position: relative; z-index: 1; }
 .camp-diary .back-link { min-height: 44px; height: auto; font-size: 16px; }
 .camp-diary .page-heading { height: auto; min-height: 42px; justify-content: center; }
@@ -528,7 +529,6 @@ input[type=range] { height: 22px; }
   .camp-diary { gap: 10px; }
   .camp-diary.chapter-levels { width: calc(100% - 16px); padding: 2px 6px 12px; gap: 10px; }
   .chapter-levels .page-heading { min-height: 40px; margin: 0 0 4px; }
-  .journal-chapter-background { border-radius: 20px; }
   .camp-diary .page-heading h1 { font-size: 27px; }
   .chapter-grid { grid-template-columns: minmax(0, 1fr); align-content: center; gap: 15px; padding-top: 5px; }
   .chapter-card { aspect-ratio: auto; min-height: 155px; height: clamp(155px, 22dvh, 220px); padding: 10px 22px 10px 8px; flex-direction: row; align-items: center; border-radius: 23px; }

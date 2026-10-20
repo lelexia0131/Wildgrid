@@ -2,8 +2,8 @@ import { adjacent, occupied, offsets } from './boardGeometry';
 import { campConnections, facilityConflict, terrainConflict } from './placementRules';
 import type { Cell, FacilityKind, Level, Piece, Placement } from './types';
 
-export type Position = { at: Placement; cells: Cell[]; mask: bigint; rows: number[]; cols: number[]; forbidden: { kind: FacilityKind; mask: bigint }[] };
-export type Candidate = Position & { connections: { camp: bigint; gap: bigint }[] };
+export type Position = { at: Placement; cells: Cell[]; mask: bigint; rows: number[]; cols: number[]; forbidden: { kind: FacilityKind; mask: bigint }[]; connections: { camp: bigint; gap: bigint }[] };
+export type Candidate = Position;
 export const cellBit = (cell: Cell, size = 8) => 1n << BigInt(cell.r * size + cell.c);
 const cache = new Map<string, Position[]>();
 const kinds: FacilityKind[] = ['camp', 'fire', 'tower', 'picnic', 'cabin', 'foodTruck', 'powerTower', 'pool'];
@@ -28,7 +28,8 @@ export function placementGeometry(piece: Piece, size: number): Position[] {
         const mask = board.reduce((m, p) => facilityConflict(piece.kind, cells, kind, [p]) ? m | cellBit(p, size) : m, 0n);
         return mask ? [{ kind, mask }] : [];
       });
-      positions.push({ at, cells, rows, cols, forbidden, mask: cells.reduce((m, p) => m | cellBit(p, size), 0n) });
+      const connections = campConnections(piece.kind, cells, board, []).map(link => ({ camp: cellBit(link.camp, size), gap: link.gap ? cellBit(link.gap, size) : 0n }));
+      positions.push({ at, cells, rows, cols, forbidden, connections, mask: cells.reduce((m, p) => m | cellBit(p, size), 0n) });
     }
   }
   cache.set(key, positions);
@@ -46,14 +47,28 @@ export function staticPositions(piece: Piece, level: Level): Position[] {
 
 export type PlacementGroup = { piece: Piece; ids: string[]; domain: Candidate[] };
 export function placementDomains(level: Level): PlacementGroup[] {
-  const groups: PlacementGroup[] = [], board = boardCells(level.size);
+  const groups: PlacementGroup[] = [];
+  const terrainMask = level.terrain.reduce((m,p) => m | cellBit(p,level.size),0n);
   for (const piece of level.pieces) {
     const existing = groups.find(g => g.piece.kind === piece.kind && g.piece.shape === piece.shape);
     if (existing) { existing.ids.push(piece.id); continue; }
     groups.push({ piece, ids: [piece.id], domain: staticPositions(piece, level).map(p => ({ ...p,
       at: { ...p.at, id: piece.id },
-      connections: campConnections(piece.kind, p.cells, board, level.terrain).map(link => ({ camp: cellBit(link.camp, level.size), gap: link.gap ? cellBit(link.gap, level.size) : 0n })),
+      connections: p.connections.filter(link => !(link.gap & terrainMask)),
     })) });
+  }
+  return groups;
+}
+
+// Reuse terrain-specific geometry only for the same terrain and stricter clues.
+// Rebind IDs after construction/role assignment; never cache mutable domains.
+export function domainsWithClues(base: PlacementGroup[], level: Level): PlacementGroup[] {
+  const groups: PlacementGroup[] = [];
+  for (const piece of level.pieces) {
+    const existing = groups.find(g => g.piece.kind === piece.kind && g.piece.shape === piece.shape);
+    if (existing) { existing.ids.push(piece.id); continue; }
+    const source = base.find(g => g.piece.kind === piece.kind && g.piece.shape === piece.shape);
+    groups.push({ piece, ids: [piece.id], domain: (source?.domain ?? []).filter(p => !p.rows.some((v, i) => v > level.rows[i]) && !p.cols.some((v, i) => v > level.cols[i])).map(p => ({...p, at: {...p.at, id: piece.id}})) });
   }
   return groups;
 }

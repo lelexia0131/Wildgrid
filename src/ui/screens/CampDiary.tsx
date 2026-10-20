@@ -23,8 +23,7 @@ export function CampDiary({ completed, currentId, chapter, onChapter, onStart, o
     if (next === chapter) return;
     audio.feedback('page'); onChapter(next);
   }
-  return <>{chapter === null && <MenuLandscapeBackground scene="diary"/>}<main className={`levels-page camp-diary ${chapter === null ? 'chapter-selection' : `chapter-levels diary-${JOURNAL_CHAPTERS[chapter].theme}`}`}>
-    {chapter !== null && <JournalChapterBackground chapter={chapter}/>}
+  return <>{chapter === null ? <MenuLandscapeBackground scene="diary"/> : <JournalChapterBackground chapter={chapter}/>}<main className={`levels-page camp-diary ${chapter === null ? 'chapter-selection' : `chapter-levels diary-${JOURNAL_CHAPTERS[chapter].theme}`}`}>
     <button className="back-link" data-sound={chapter === null ? 'close' : 'handled'} onClick={() => chapter === null ? onBack() : turnChapter(null)}><ArrowLeft size={18}/>{chapter === null ? t('返回营地') : t('返回板块选择')}</button>
     <div className="page-heading"><h1>{chapter === null ? t('营地日记') : t(JOURNAL_CHAPTERS[chapter].name)}</h1></div>
     {chapter === null ? <div className="chapter-grid">{JOURNAL_CHAPTERS.map(({ name }, index) => {
