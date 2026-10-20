@@ -1,12 +1,12 @@
 import { adjacent, occupied, offsets } from './boardGeometry';
-import { campConnections, facilityConflict, terrainConflict } from './placementRules';
+import { campConnections, facilityConflict, terrainConflict, TERRAIN_REQUIREMENTS } from './placementRules';
+import { facilities } from './facilityRegistry';
 import type { Cell, FacilityKind, Level, Piece, Placement } from './types';
 
 export type Position = { at: Placement; cells: Cell[]; mask: bigint; rows: number[]; cols: number[]; forbidden: { kind: FacilityKind; mask: bigint }[]; connections: { camp: bigint; gap: bigint }[] };
 export type Candidate = Position;
 export const cellBit = (cell: Cell, size = 8) => 1n << BigInt(cell.r * size + cell.c);
 const cache = new Map<string, Position[]>();
-const kinds: FacilityKind[] = ['camp', 'fire', 'tower', 'picnic', 'cabin', 'foodTruck', 'powerTower', 'pool'];
 export const boardCells = (size: number) => Array.from({ length: size * size }, (_, i) => ({ r: Math.floor(i / size), c: i % size }));
 
 // Shared immutable geometry: no terrain, IDs or seed-specific state is cached.
@@ -24,7 +24,7 @@ export function placementGeometry(piece: Piece, size: number): Position[] {
       if (cells.some(p => p.r >= size || p.c >= size)) continue;
       const rows = Array<number>(size).fill(0), cols = Array<number>(size).fill(0);
       for (const cell of cells) { rows[cell.r]++; cols[cell.c]++; }
-      const forbidden = kinds.flatMap(kind => {
+      const forbidden = facilities.flatMap(({kind}) => {
         const mask = board.reduce((m, p) => facilityConflict(piece.kind, cells, kind, [p]) ? m | cellBit(p, size) : m, 0n);
         return mask ? [{ kind, mask }] : [];
       });
@@ -38,7 +38,7 @@ export function placementGeometry(piece: Piece, size: number): Position[] {
 
 export function staticPositions(piece: Piece, level: Level): Position[] {
   const terrainMask = level.terrain.reduce((m, p) => m | cellBit(p, level.size), 0n);
-  const need = piece.kind === 'camp' || piece.kind === 'pool' ? 'water' : piece.kind === 'cabin' ? 'forest' : piece.kind === 'tower' ? 'mountain' : undefined;
+  const need = TERRAIN_REQUIREMENTS[piece.kind];
   return placementGeometry(piece, level.size).filter(p => !(p.mask & terrainMask)
     && !p.rows.some((v, i) => v > level.rows[i]) && !p.cols.some((v, i) => v > level.cols[i])
     && (!need || level.terrain.some(t => t.kind === need && p.cells.some(c => adjacent(c, t))))

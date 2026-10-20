@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { generateMap, MapGenerationSearchError, planTerrain, seeded } from '../src/engine/mapGeneration';
-import { facilityLibrary } from '../src/engine/facilityRegistry';
+import { inventoryViolations } from '../src/engine/generationConfig';
 import { SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
 import { evaluate } from '../src/engine/placementRules';
 import { solveLevel } from '../src/engine/solver';
@@ -26,8 +26,7 @@ for (const { difficulty, seed, disabled } of cases.filter(c => !/^\d+$/.test(pro
     const proof = solveLevel(level, 2, { maxNodes: 100000, deadline: Date.now() + 1500 });
     assert.ok(evaluate(level, placements).won);
     assert.ok(!proof.aborted && proof.count === 1);
-    assert.ok(level.pieces.length >= spec.min && level.pieces.length <= spec.max);
-    assert.ok(level.pieces.filter(p => p.shape !== 'single').length >= spec.multi);
+    assert.deepEqual(inventoryViolations(level,difficulty,disabled),[]);
     assert.ok(level.pieces.every(p => !disabled.includes(`${p.kind}_${p.shape}`)));
     const single = level.pieces.some(p => p.kind === 'camp' && p.shape === 'single');
     if (phase !== 'baseline') assert.equal(single, !disabled.includes('camp_single'));
@@ -63,7 +62,7 @@ let planningStats;
 if(terrainRun && phase!=='terrain-before') {
   let run=0,maxIsolatedRun=0;
   const plans=Array.from({length:96},(_,i)=>{
-    const plan=planTerrain(seeded(20261019+i),18,6,facilityLibrary); assert.ok(plan);
+    const plan=planTerrain(seeded(20261019+i),10); assert.ok(plan);
     const regions=terrainRegions(plan.terrain), distribution=terrainDistribution(plan.terrain,regions);
     assert.deepEqual(distribution.violations,[]);
     const isolated=regions.every(r=>r.largest<=1);run=isolated?run+1:0;maxIsolatedRun=Math.max(maxIsolatedRun,run);

@@ -1,5 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import sharp from 'sharp';
+import { inventoryViolations } from '../src/engine/generationConfig';
 import { generateMap, MapGenerationSearchError } from '../src/engine/mapGeneration';
 import { solveLevel } from '../src/engine/solver';
 import { evaluate } from '../src/engine/placementRules';
@@ -25,7 +26,7 @@ function run(difficulty: number, seed: number, disabled: string[], recent: Gener
     const map = generateMap(difficulty, seed, `bench-${records.length}`, recent.map(m => m.fingerprint), spec, disabled, recent.map(m => mapFeatures(m.draft, difficulty)));
     const ms = Math.round(performance.now() - started);
     const proof = solveLevel(map.draft.level, 2, { deadline: Date.now() + 1000, maxNodes: 100000 });
-    if (proof.aborted || proof.count !== 1 || !evaluate(map.draft.level, map.draft.placements).won || map.draft.level.pieces.some(p => disabled.includes(`${p.kind}_${p.shape}`)) || map.draft.level.pieces.filter(p => p.shape !== 'single').length < spec.multi || !map.diagnostics.reasoning.solved) throw new Error('Benchmark verification failed');
+    if (proof.aborted || proof.count !== 1 || !evaluate(map.draft.level, map.draft.placements).won || map.draft.level.pieces.some(p => disabled.includes(`${p.kind}_${p.shape}`)) || inventoryViolations(map.draft.level,difficulty,disabled).length > 0 || !map.diagnostics.reasoning.solved) throw new Error('Benchmark verification failed');
     samples.push(map);
     const record = { difficulty, seed, disabled, recent: recent.length, status: 'success', ms, solutionCount: proof.count, unique: true, proofAborted: proof.aborted,
       facilities: map.draft.level.pieces.map(p => `${p.kind}_${p.shape}`), metrics: map.metrics, ...map.diagnostics, reasoning: undefined, code: encodeMap(map.draft) };

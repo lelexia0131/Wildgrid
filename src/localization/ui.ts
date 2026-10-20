@@ -12,6 +12,7 @@ export const UI_ENGLISH = {
   '本地地图不完整或版本不兼容，原数据已保留': 'Local maps are incomplete or incompatible. Existing data has been preserved.',
   '野格': 'WILDGRID',
   '溪畔初营': 'Riverside Beginnings', '林间漫游': 'Woodland Wanderings', '山野远行': 'Highland Adventures',
+  '上一篇章': 'Previous chapter', '下一篇章': 'Next chapter',
   '返回板块选择': 'Back to camps', '规则显示': 'Show rules', '未解锁': 'Locked',
   '第 {0} 关': 'Level {0}',
   '设施名称显示': 'Facility names', '暂无未完成挑战': 'No unfinished challenge', '已放弃': 'Abandoned',

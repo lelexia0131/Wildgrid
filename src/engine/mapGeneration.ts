@@ -1,19 +1,23 @@
-import { ACTIVITY_LIMITS, hasRoleSwap, tileFacilities } from './facilityConstruction';
+import { hasRoleSwap, refineFacilities, activityDomains } from './facilityConstruction';
 import { facilityLibrary } from './facilityRegistry';
-import { CAMP_REQUIREMENTS, evaluate, terrainConflict } from './placementRules';
-import { adjacent } from './boardGeometry';
+import { CAMP_REQUIREMENTS, evaluate } from './placementRules';
 import { withEditorPlacements, mapFingerprint } from './mapBlueprint';
 import type { SandboxDraft } from './mapBlueprint';
 import { solveLevel } from './solver';
 import type { SolverResult } from './solver';
-import { reasonLevel } from './logicalSolver';
-import { mapQuality, TERRAIN_LIMITS, terrainPlacementScores } from './mapQuality';
-import { cellBit, compatible, placementDomains, domainsWithClues } from './placementDomains';
+import { reasonLevel, reasonedDomains } from './logicalSolver';
+import { mapQuality } from './mapQuality';
+import { generationBudgets, inventoryViolations, templateId } from './generationConfig';
+import { terrainRegistry } from './terrainRegistry';
+import { layoutTerrain } from './terrainLayout';
+import { refineTerrain } from './generationRefinement';
+import { placementDomains } from './placementDomains';
 import type { PlacementGroup } from './placementDomains';
 import { compareMaps, mapFeatures } from './mapNovelty';
 import type { MapFeatures } from './mapNovelty';
-import type { Level, Piece, Terrain, TerrainKind } from './types';
+import type { Level } from './types';
 import { facilityRestrictionError } from '../game-modes/survival/survivalFacilities';
+import { occupied } from './boardGeometry';
 
 export const MAP_GENERATION_TIMEOUT = 8000;
 export const generationBudget = (difficulty: number) => difficulty <= 3 ? 2800 : difficulty <= 6 ? 5000 : 7600;
@@ -39,136 +43,75 @@ export function generationDifficulty(draft: SandboxDraft, solved: Pick<SolverRes
   };
 }
 
-// Choose a small inventory independently of the reasoning tier. Frontier scores
-// share the same component/window limits as final acceptance and refinement.
-export function planTerrain(random: () => number, target: number, multi: number, allowed: readonly Piece[]) {
-  const terrain: Terrain[] = [];
-  const kinds: TerrainKind[]=['water','forest','mountain'];
-  const caps:Record<TerrainKind,number>={...TERRAIN_LIMITS.counts};
-  if(!allowed.some(p=>p.kind==='cabin')) caps.forest=random()<.5?0:2;
-  else if(random()<TERRAIN_LIMITS.omitChance) caps.forest=0;
-  if(!allowed.some(p=>p.kind==='tower')) caps.mountain=random()<.5?0:2;
-  else if(random()<TERRAIN_LIMITS.omitChance) caps.mountain=0;
-  const desired=random()<TERRAIN_LIMITS.specialChance?TERRAIN_LIMITS.normalMax+1:TERRAIN_LIMITS.min+Math.floor(random()*(TERRAIN_LIMITS.normalMax-TERRAIN_LIMITS.min+1));
-  const budget=Math.min(desired,TERRAIN_LIMITS.max,caps.water+caps.forest+caps.mountain,64-target-multi*2-8);
-  const reserve=budget>TERRAIN_LIMITS.min && random()<TERRAIN_LIMITS.reserveChance?TERRAIN_LIMITS.refinements:0;
-  const counts:Record<TerrainKind,number>={water:1,forest:0,mountain:0};
-  for(let i=1;i<budget-reserve;i++) {
-    const available=kinds.filter(kind=>counts[kind]<caps[kind]);
-    let cursor=random()*available.reduce((n,kind)=>n+(kind==='water'?.8:1)/(1+counts[kind]*.1),0);
-    const kind=available.find(kind=>(cursor-=(kind==='water'?.8:1)/(1+counts[kind]*.1))<=0)??available[0];
-    counts[kind]++;
-  }
-  const clustering=random()*TERRAIN_LIMITS.clusterBias.range+TERRAIN_LIMITS.clusterBias.min, mountainForestAffinity=random()*TERRAIN_LIMITS.mixedAffinity, jitter=TERRAIN_LIMITS.jitter.min+random()*TERRAIN_LIMITS.jitter.range;
-  while(terrain.length<budget-reserve) {
-    const pending=kinds.filter(kind=>counts[kind]>0), kind=pending[Math.floor(random()*pending.length)];
-    const candidates=terrainPlacementScores(terrain,kind,budget).map(({cell,score})=>{
-      const same=terrain.filter(t=>t.kind===kind && adjacent(t,cell)).length;
-      const mixed=kind==='water'?0:terrain.filter(t=>t.kind!=='water' && t.kind!==kind && adjacent(t,cell)).length;
-      return {cell,score:score+(same?clustering:0)+mixed*mountainForestAffinity+random()*jitter};
-    }).sort((a,b)=>b.score-a.score);
-    if(!candidates.length) return;
-    terrain.push({...candidates[0].cell,kind}); counts[kind]--;
-  }
-  return {terrain,budget};
+export function planTerrain(random: () => number, difficulty: number) {
+  const allocation = generationBudgets(difficulty).terrain.sample(random);
+  const terrain = layoutTerrain(random, allocation.counts, terrainRegistry, allocation.area);
+  return terrain ? {terrain, budget:allocation.area, allocation} : undefined;
 }
 
-export function generateMap(difficulty: number, seed: number, id: string, recent: string[], spec: MapGenerationSpec, disabled: readonly string[] = [], history: readonly MapFeatures[] = [], budgetMs = generationBudget(difficulty)) {
+// Keep the adapter signature; legacy total-count specs no longer set inventory.
+export function generateMap(difficulty: number, seed: number, id: string, recent: string[], _spec: MapGenerationSpec, disabled: readonly string[] = [], history: readonly MapFeatures[] = [], budgetMs = generationBudget(difficulty)) {
   const restriction = facilityRestrictionError(difficulty, disabled);
   if (restriction) throw new MapGenerationConstraintError(restriction);
   const allowed = facilityLibrary.filter(p => !disabled.includes(`${p.kind}_${p.shape}`));
-  const requireSingle = allowed.some(p => p.kind === 'camp' && p.shape === 'single');
-  const minMultiSize = Math.min(...allowed.filter(p => p.shape !== 'single').map(p => p.shape === 'domino' ? 2 : 3));
-  if (spec.multi && (!Number.isFinite(minMultiSize) || spec.min + spec.multi * (minMultiSize - 1) + 8 + 2 > 64 || (requireSingle && spec.multi >= spec.max))) throw new MapGenerationConstraintError('此设施组合无法满足设施数量、多格下限和单格营地要求。');
+  let budgets: ReturnType<typeof generationBudgets>;
+  try { budgets = generationBudgets(difficulty, disabled); }
+  catch (error) { throw new MapGenerationConstraintError(String(error)); }
+  if (budgets.facilities.min + budgets.terrain.min + 8 > 64) throw new MapGenerationConstraintError('设施与地形最低预算超过可用棋盘空间。');
   const started = Date.now(), deadline = started + Math.min(generationBudget(difficulty), budgetMs), random = seeded(seed);
-  const shuffle = <T,>(items: readonly T[]) => { const result = [...items]; for (let i = result.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [result[i], result[j]] = [result[j], result[i]]; } return result; };
   const previous = history.filter(m => m.difficulty === difficulty).slice(-40);
   const failures: Record<string, number> = {};
   const reject = (reason: string) => { failures[reason] = (failures[reason] ?? 0) + 1; };
   let attempts = 0, proofs = 0, logicChecks = 0;
-  const candidates: { draft: SandboxDraft; quality: ReturnType<typeof mapQuality>; prepared: PlacementGroup[] }[] = [];
+  const candidates: { draft: SandboxDraft; quality: ReturnType<typeof mapQuality>; prepared: PlacementGroup[]; allocation: ReturnType<typeof budgets.facilities.sample>; terrainAllocation: ReturnType<typeof budgets.terrain.sample> }[] = [];
   for (; attempts < 1200 && Date.now() < deadline; attempts++) {
-    const target = spec.min + Math.floor(random() ** 2 * (spec.max - spec.min + 1));
-    const plan = planTerrain(random, target, spec.multi, allowed);
-    if(!plan) { reject('terrain planning'); continue; }
-    const {terrain,budget:terrainBudget}=plan;
+    const allocation={counts:{} as Record<string,number>,area:budgets.facilities.chooseArea(()=>random()**2),target:budgets.facilities.target,min:budgets.facilities.min,max:budgets.facilities.max},terrainAllocation=budgets.terrain.sample(random);
+    if (allocation.area + terrainAllocation.area + 8 > 64) { reject('board capacity'); continue; }
+    const terrain = layoutTerrain(random,terrainAllocation.counts,terrainRegistry,terrainAllocation.area);
+    if (!terrain) { reject('terrain planning'); continue; }
+    const piecesToPlace = allowed.filter(p=>(budgets.facilities.items.find(i=>i.id===p.id)?.max??0)>0);
     // Sparse terrain needs informative clue capacities, not more obstacles.
     // These seeded zero lines may be internal or peripheral; no grass is tiled.
-    const lineCount=()=>ACTIVITY_LIMITS.minLines+Math.floor(random()*(ACTIVITY_LIMITS.maxLines-ACTIVITY_LIMITS.minLines+1));
-    const activeRows=spec.multi>=ACTIVITY_LIMITS.minMulti?shuffle([0,1,2,3,4,5,6,7]).slice(0,lineCount()):[0,1,2,3,4,5,6,7];
-    const activeCols=spec.multi>=ACTIVITY_LIMITS.minMulti?shuffle([0,1,2,3,4,5,6,7]).slice(0,activeRows.length===ACTIVITY_LIMITS.minLines?ACTIVITY_LIMITS.maxLines:lineCount()):[0,1,2,3,4,5,6,7];
-    const level: Level = { id: 0, name: `荒野求生 · ${difficulty}难`, chapter: '荒野求生', tip: '结合行列占格数、地形与设施规则，完成这片营地。', size: 8, terrain, pieces: allowed, rows: Array.from({length:8},(_,i)=>activeRows.includes(i)?8:0), cols: Array.from({length:8},(_,i)=>activeCols.includes(i)?8:0) };
-    const groups = placementDomains(level);
-    const spare = 64 - terrain.length - target - spec.multi * (Number.isFinite(minMultiSize) ? minMultiSize - 1 : 0);
-    const grassReserve = Math.max(8, Math.min(12, spare - spec.multi - 4));
-    const entries = tileFacilities(level, groups, target, spec.multi, grassReserve, random);
-    if (!entries) { reject('combination layout'); continue; }
-    const rows = Array<number>(8).fill(0), cols = Array<number>(8).fill(0);
-    for (const e of entries) for (let i = 0; i < 8; i++) { rows[i] += e.p.rows[i]; cols[i] += e.p.cols[i]; }
-    const clueLevel = { ...level, rows, cols }, roleDomains = domainsWithClues(groups, clueLevel);
-    const used = entries.reduce((m, e) => m | e.p.mask, 0n);
-    for (const entry of shuffle(entries)) {
-      const choices = roleDomains.filter(g => g.piece.shape === entry.piece.shape && g.domain.some(p => p.mask === entry.p.mask)).sort((a, b) => {
-        const cost = (g: typeof a) => g.domain.length / (1 + entries.filter(e => e.piece.kind === g.piece.kind && e.piece.shape === g.piece.shape).length);
-        return cost(a) - cost(b);
-      });
-      for (const role of choices) {
-        if (role.piece.kind === entry.piece.kind) break;
-        if (requireSingle && entry.piece.kind === 'camp' && entry.piece.shape === 'single' && entries.filter(e => e.piece.kind === 'camp' && e.piece.shape === 'single').length === 1) continue;
-        if (entries.filter(e => e.piece.kind === role.piece.kind).length >= Math.max(2, Math.ceil(target * .3))) continue;
-        const position = role.domain.find(p => p.mask === entry.p.mask)!;
-        if (entries.some(e => e !== entry && !compatible(position, e.piece.kind, e.p))) continue;
-        const camps = entries.reduce((m, e) => (e === entry ? role.piece.kind : e.piece.kind) === 'camp' ? m | e.p.mask : m, 0n);
-        if (entries.some(e => {
-          const kind = e === entry ? role.piece.kind : e.piece.kind, p = e === entry ? position : e.p;
-          return CAMP_REQUIREMENTS[kind] && !p.connections.some(link => (link.camp & camps) && !(link.gap & used));
-        })) continue;
-        entry.piece = { ...role.piece, id: entry.piece.id }; entry.p = position; break;
-      }
-    }
+    const baseLevel: Level = { id: 0, name: `荒野求生 · ${difficulty}难`, chapter: '荒野求生', tip: '结合行列占格数、地形与设施规则，完成这片营地。', size: 8, terrain, pieces: piecesToPlace, rows: Array<number>(8).fill(8), cols: Array<number>(8).fill(8) };
+    const activity=activityDomains(baseLevel,placementDomains(baseLevel),budgets.facilities.items,allocation.area,random,deadline);
+    if (!activity) { reject('combination layout'); continue; }
+    const {level,groups,entries}=activity;
+    for(const item of budgets.facilities.items) allocation.counts[item.id]=entries.filter(e=>templateId(e.piece)===item.id).length;
+    refineFacilities(entries,groups,random,deadline);
     const pieces = entries.map(e => e.piece), placements = entries.map(e => ({ ...e.p.at, id: e.piece.id }));
-    let draft = withEditorPlacements({ level: { ...level, pieces }, placements }, placements);
-    let prepared = domainsWithClues(groups, draft.level);
-    // Refine a bounded frontier using geometry alone, before either solver runs.
-    // Preserve all answer footprints and camp links, including empty truck gaps.
-    const camps = entries.filter(e => e.piece.kind === 'camp').reduce((m, e) => m | e.p.mask, 0n);
-    const growth = Math.max(0, Math.min(TERRAIN_LIMITS.refinements, terrainBudget - terrain.length, 64 - terrain.length - entries.reduce((s,e) => s+e.p.cells.length,0) - grassReserve));
-    for (let step = 0; step < growth; step++) {
-      const domains = prepared;
-      const terrainMask = terrain.reduce((m,t) => m | cellBit(t),0n);
-      let best: Terrain | undefined, bestScore = .1;
-      for (const kind of ['water', 'forest', 'mountain'] as TerrainKind[]) {
-        for (const {cell,score:distributionScore} of terrainPlacementScores(terrain,kind,terrainBudget)) {
-          const bit=cellBit(cell);
-          if(bit & used) continue;
-          if(!terrain.some(t=>t.kind===kind && adjacent(t,cell))) continue;
-          const added = { ...cell, kind };
-          if (entries.some(e => terrainConflict(e.piece.kind, e.p.cells, added))) continue;
-          if (entries.some(e => e.piece.kind === 'foodTruck' && !e.p.connections.some(link => (link.camp & camps) && !(link.gap & (used | terrainMask | bit))))) continue;
-          let score = 0;
-          for (const g of domains) for (const p of g.domain) {
-            if (entries.some(e => e.piece.kind === g.piece.kind && e.piece.shape === g.piece.shape && e.p.mask === p.mask)) continue;
-            if ((p.mask & bit) || terrainConflict(g.piece.kind, p.cells, added)) score += g.ids.length / Math.max(1,g.domain.length);
-          }
-          score += distributionScore*.02+random()*.02;
-          if (score > bestScore) { bestScore = score; best = added; }
-        }
-      }
-      if (!best) break;
-      terrain.push(best); draft = { ...draft, level: { ...draft.level, terrain: [...terrain] } };
-      prepared = placementDomains(draft.level);
-    }
-    const quality = mapQuality(draft, { disabled, requireSingle, min: spec.min, max: spec.max, multi: spec.multi });
-    if (!quality.accepted || !evaluate(draft.level, placements).won) { reject('layout quality'); continue; }
+    const initial = withEditorPlacements({ level: { ...level, pieces }, placements }, placements);
+    const draft = {...initial,level:refineTerrain(initial.level,entries,random,deadline)};
+    const prepared = placementDomains(draft.level);
+    const quality = mapQuality(draft);
+    if (!quality.accepted || quality.distribution.violations.length || inventoryViolations(draft.level,difficulty,disabled).length || !evaluate(draft.level, placements).won) { reject('layout quality'); continue; }
     if (hasRoleSwap(entries, prepared)) { reject('role ambiguity'); continue; }
-    candidates.push({draft, quality, prepared});
+    candidates.push({draft, quality, prepared, allocation, terrainAllocation});
     // A fixed batch makes soft quality affect acceptance without time-based selection.
     if (candidates.length < 3) continue;
     const batch = candidates.splice(0).sort((a, b) => b.quality.score - a.quality.score);
     for (const candidate of batch) {
-      const {draft, quality, prepared} = candidate, count = draft.level.pieces.length;
+      let {draft, quality, prepared} = candidate;
+      const {allocation,terrainAllocation}=candidate, count = draft.level.pieces.length;
       logicChecks++;
-      const logic = reasonLevel(draft.level, { deadline, maxAssumptions: difficulty <= 3 ? 0 : difficulty <= 6 ? 8 : 24, maxDepth: difficulty >= 7 ? 2 : 1 }, prepared);
+      const logicBudget = { deadline, maxAssumptions: difficulty <= 3 ? 0 : difficulty <= 6 ? 8 : 64, maxDepth: difficulty >= 7 ? 2 : 1, maxUnresolved: difficulty>=7?96:32 };
+      let logic = reasonLevel(draft.level, logicBudget, prepared);
+      const excluded: (typeof draft.placements)[]=[];
+      for(let refinement=0;!logic.solved && !logic.aborted && refinement<8 && Date.now()<deadline;refinement++) {
+        const probe=solveLevel(draft.level,2,{deadline,maxNodes:2400},reasonedDomains(prepared,logic));
+        if(probe.aborted || !probe.count) break;
+        const signature=(placements:typeof draft.placements)=>placements.map(at=>{
+          const piece=draft.level.pieces.find(p=>p.id===at.id)!;
+          return templateId(piece)+':'+occupied(piece,at).map(p=>p.r*8+p.c).sort((a,b)=>a-b).join(',');
+        }).sort().join(';');
+        const answer=signature(draft.placements),witnesses=probe.solutions.filter(p=>signature(p)!==answer);
+        if(!witnesses.length) break;
+        excluded.push(...witnesses);
+        const entries=draft.placements.map(at=>{const piece=draft.level.pieces.find(p=>p.id===at.id)!;return {piece,p:prepared.find(g=>templateId(g.piece)===templateId(piece))!.domain.find(p=>p.mask===occupied(piece,at).reduce((m,c)=>m|(1n<<BigInt(c.r*8+c.c)),0n))!};});
+        const next=refineTerrain(draft.level,entries,random,deadline,excluded);
+        if(next===draft.level) break;
+        draft={...draft,level:next};prepared=placementDomains(next);quality=mapQuality(draft);
+        logicChecks++;logic=reasonLevel(next,logicBudget,prepared);
+      }
       // Time exhaustion stops the entire run, never changes which candidate wins.
       if (logic.aborted) { reject('logic budget'); break; }
       if (!logic.solved) { reject('logic stalled'); continue; }
@@ -183,11 +126,11 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
       const fingerprint = mapFingerprint(draft), features = mapFeatures(draft, difficulty);
       if (recent.includes(fingerprint) || previous.some(old => { const c = compareMaps(features, old); return c.equivalent || c.similarity > .88; })) { reject('recent similarity'); continue; }
       proofs++;
-      const solved = solveLevel(draft.level, 2, { deadline, maxNodes: 16000 }, prepared);
+      const solved = solveLevel(draft.level, 2, { deadline, maxNodes: 16000 }, reasonedDomains(prepared,logic));
       if (solved.aborted || solved.count !== 1) { reject(solved.aborted ? 'proof budget' : 'not unique'); continue; }
       if (Date.now() >= deadline) break;
       return { id, difficulty, seed, draft, fingerprint, metrics: generationDifficulty(draft, solved, logic),
-        diagnostics: { elapsed: Date.now() - started, attempts: attempts + 1, proofs, logicChecks, failures, unique: true, quality, reasoning: logic } };
+        diagnostics: { elapsed: Date.now() - started, attempts: attempts + 1, proofs, logicChecks, failures, unique: true, quality, inventory: {facilities:allocation, terrain:terrainAllocation}, reasoning: logic } };
     }
   }
   const labels: Record<string, string> = { 'terrain planning': '地形规划不可行', 'combination layout': '设施组合不可行', 'layout quality': '布局质量或硬约束', 'role ambiguity': '设施角色存在等价交换', 'logic budget': '逻辑推演预算', 'logic stalled': '缺少可解释路径', 'no logical opening': '缺少局部推理入口', 'too immediate': '初始位置过于直接', 'recent similarity': '近期地图相似', 'proof budget': '唯一解证明未完成', 'not unique': '未证明唯一解', 'reasoning tier': '推理难度不符' };

@@ -2,10 +2,11 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { generateSurvival } from '../src/game-modes/survival/survivalChallenge';
+import { inventoryViolations } from '../src/engine/generationConfig';
 import { MapGenerationSearchError } from '../src/engine/mapGeneration';
 import { completeSurvival, readSurvival, writeSurvival } from '../src/save-system/survivalStorage';
 import { emptySurvivalProgress, survivalTotals } from '../src/game-modes/survival/survivalChallenge';
-import { rankFor, SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
+import { rankFor } from '../src/game-modes/survival/survivalDifficulty';
 import type { SurvivalChallenge } from '../src/game-modes/survival/survivalChallenge';
 import { evaluate } from '../src/engine';
 import { solveLevel } from '../src/engine';
@@ -23,7 +24,7 @@ function storage(fail = false) {
 
 test('ten seeded tiers generate legal unique 8×8 puzzles within their facility ranges', () => {
   for (let difficulty = 1; difficulty <= 10; difficulty++) {
-    const started = Date.now(), spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
+    const started = Date.now();
     let map: SurvivalChallenge | undefined;
     for (let retry = 0; !map && Date.now() - started < 45000; retry++) {
       const seed = (20261019 + retry * 0x9e3779b9) >>> 0;
@@ -32,9 +33,8 @@ test('ten seeded tiers generate legal unique 8×8 puzzles within their facility 
     }
     assert.ok(map, `difficulty ${difficulty} failed within the 45s session budget`);
     assert.equal(map.draft.level.size, 8);
-    assert.ok(map.draft.level.pieces.length >= spec.min && map.draft.level.pieces.length <= spec.max);
+    assert.deepEqual(inventoryViolations(map.draft.level,difficulty),[]);
     assert.ok(map.draft.level.pieces.some(p => p.kind === 'camp'));
-    assert.ok(map.draft.level.pieces.filter(p => p.shape !== 'single').length >= spec.multi);
     assert.equal(evaluate(map.draft.level, map.draft.placements).won, true);
     const solved = solveLevel(map.draft.level, 2);
     assert.equal(solved.aborted, false); assert.equal(solved.count, 1);

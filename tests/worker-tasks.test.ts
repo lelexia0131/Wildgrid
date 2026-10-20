@@ -1,3 +1,5 @@
+import { generateMap } from '../src/engine/mapGeneration';
+import { SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createSandbox, getLevelById, getSolution, MAP_GENERATION_TIMEOUT, generationBudget, withEditorPlacements } from '../src/engine';
@@ -59,7 +61,7 @@ test('survival has one bounded worker run, no seed cycling, and accepts a result
   first.reply({status:'success',challenge:{}}); assert.deepEqual(results, []);
   start(); const final = FakeWorker.instances.at(-1)!, request = final.request as { id: string; seed: number; difficulty: number };
   assert.equal(request.seed, 2);
-  const level = { ...getLevelById(6)!, size: 8 }, placements = getSolution(6)!;
+  const {level,placements}=generateMap(1,2,'worker-fixture',[],SURVIVAL_DIFFICULTIES[0]).draft;
   const challenge = { ...request, draft: withEditorPlacements({ level, placements }, placements), fingerprint: 'test' };
   final.reply({ status: 'success', challenge }); final.reply({ status: 'success', challenge });
   assert.deepEqual(results, [challenge]); assert.equal(task.isRunning(), false);

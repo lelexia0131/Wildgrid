@@ -1,4 +1,5 @@
 import type { FacilityKind, Piece, Shape, TerrainKind } from './types';
+import { terrainRegistry } from './terrainRegistry';
 
 export type FacilityDefinition = Readonly<{
   kind: FacilityKind;
@@ -43,4 +44,4 @@ export const facilities: readonly FacilityDefinition[] = FACILITY_DESCRIPTIONS.m
 export const facilityNames = Object.fromEntries(facilities.map(facility => [facility.kind, facility.name])) as Readonly<Record<FacilityKind, string>>;
 export const facilityTips = Object.fromEntries(facilities.map(facility => [facility.kind, facility.tips])) as Readonly<Record<FacilityKind, readonly [string, string]>>;
 export const shapeNames: Readonly<Record<Shape, string>> = { single: '单格', domino: '双格', long: '三格', el: 'L 形' };
-export const terrainNames: Readonly<Record<TerrainKind, string>> = { water: '水源', forest: '森林', mountain: '山地' };
+export const terrainNames = Object.fromEntries(terrainRegistry.map(t => [t.id,t.name])) as Readonly<Record<TerrainKind, string>>;

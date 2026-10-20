@@ -7,6 +7,9 @@ export const CAMP_REQUIREMENTS: Partial<Record<FacilityKind, string>> = {
 };
 const PICNIC_CONFLICT_MESSAGE = '野餐桌不能邻近篝火，包括斜角';
 const TOWER_CONFLICT_MESSAGE = '瞭望塔之间不能相邻，包括斜角';
+// Shared rule metadata used by legal domains and generation feasibility.
+export const TERRAIN_REQUIREMENTS: Partial<Record<FacilityKind, Terrain['kind']>> = { camp: 'water', pool: 'water', cabin: 'forest', tower: 'mountain' };
+export const providesConnections = (kind: FacilityKind) => kind === 'camp';
 export function facilityConflict(kind: FacilityKind, cells: readonly Cell[], other: FacilityKind, otherCells: readonly Cell[]): string | null {
   const pair = [kind, other];
   if (pair.includes('powerTower') && pair.includes('fire') && cells.some(p => otherCells.some(q => adjacent(p, q, true)))) return '电塔不能邻近篝火，包括斜角';

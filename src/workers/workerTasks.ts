@@ -1,6 +1,6 @@
 import type { MapFeatures } from '../engine/mapNovelty';
 import { encodeMap, MAP_GENERATION_TIMEOUT, generationBudget } from '../engine';
-import { SURVIVAL_DIFFICULTIES } from '../game-modes/survival/survivalDifficulty';
+import { inventoryViolations } from '../engine/generationConfig';
 import type { SandboxCheck, SandboxDraft } from '../engine';
 import type { SurvivalChallenge } from '../game-modes/survival/survivalChallenge';
 
@@ -77,8 +77,8 @@ export function createSurvivalGenerationTask() {
           const result = data as SurvivalGenerationResult;
           if (result.status !== 'success') { fail('error', typeof result.error === 'string' ? result.error : undefined); return; }
           try {
-            const c = result.challenge, spec = SURVIVAL_DIFFICULTIES[request.difficulty - 1];
-            if (!c || c.id !== request.id || c.seed !== request.seed || c.difficulty !== request.difficulty || typeof c.fingerprint !== 'string' || !spec || c.draft.level.size !== 8 || c.draft.level.pieces.length < spec.min || c.draft.level.pieces.length > spec.max || c.draft.level.pieces.filter(p => p.shape !== 'single').length < spec.multi || c.draft.level.pieces.some(p => request.disabled?.includes(`${p.kind}_${p.shape}`))) throw new Error('Invalid worker reply');
+            const c = result.challenge;
+            if (!c || c.id !== request.id || c.seed !== request.seed || c.difficulty !== request.difficulty || typeof c.fingerprint !== 'string' || c.draft.level.size !== 8 || inventoryViolations(c.draft.level,request.difficulty,request.disabled).length > 0) throw new Error('Invalid worker reply');
             if (!request.disabled?.includes('camp_single') && !c.draft.level.pieces.some(p => p.kind === 'camp' && p.shape === 'single')) throw new Error('Missing required single camp');
             encodeMap(c.draft);
           } catch { fail('error'); return; }

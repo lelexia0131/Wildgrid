@@ -1,94 +1,182 @@
-import { CAMP_REQUIREMENTS } from './placementRules';
+import { CAMP_REQUIREMENTS, providesConnections } from './placementRules';
 import { boardCells, compatible } from './placementDomains';
 import type { Candidate, PlacementGroup } from './placementDomains';
-import type { FacilityKind, Level, Piece } from './types';
+import type { Level, Piece } from './types';
+import { templateId } from './generationConfig';
+import { offsets } from './boardGeometry';
+import type { BudgetItem } from './generationBudget';
 
 export type FacilityEntry = { piece: Piece; p: Candidate };
-export const ACTIVITY_LIMITS = { minMulti:4, minLines:6, maxLines:7, spareCells:2 } as const;
-// Two different roles exchanging equal-shaped footprints preserve every clue.
-// A legal exchange is a cheap ambiguity witness, not a substitute for proving
-// uniqueness of the candidates that survive this check.
-export function hasRoleSwap(entries: FacilityEntry[], groups: PlacementGroup[]): boolean {
-  const domains = new Map(groups.map(g => [`${g.piece.kind}_${g.piece.shape}`, new Map(g.domain.map(p => [p.mask,p]))]));
-  const current = entries.map(e => ({ ...e, p: domains.get(`${e.piece.kind}_${e.piece.shape}`)!.get(e.p.mask)! }));
-  const used = current.reduce((m,e) => m | e.p.mask,0n);
-  for (let i = 0; i < current.length; i++) for (let j = i+1; j < current.length; j++) {
-    const a = current[i], b = current[j];
-    if (a.piece.kind === b.piece.kind || a.piece.shape !== b.piece.shape) continue;
-    const pa = domains.get(`${a.piece.kind}_${a.piece.shape}`)!.get(b.p.mask), pb = domains.get(`${b.piece.kind}_${b.piece.shape}`)!.get(a.p.mask);
-    if (!pa || !pb || !compatible(pa,b.piece.kind,pb)) continue;
-    if (current.some((e,k) => k !== i && k !== j && (!compatible(pa,e.piece.kind,e.p) || !compatible(pb,e.piece.kind,e.p)))) continue;
-    const camps = current.reduce((m,e,k) => e.piece.kind === 'camp' ? m | (k === i ? pa : k === j ? pb : e.p).mask : m,0n);
-    if (current.some((e,k) => {
-      const p = k === i ? pa : k === j ? pb : e.p;
-      return CAMP_REQUIREMENTS[e.piece.kind] && !p.connections.some(link => (link.camp & camps) && !(link.gap & used));
-    })) continue;
-    return true;
+export const ACTIVITY_LIMITS = { spareCells: 2 } as const;
+
+export function activityDomains(level: Level, groups: PlacementGroup[], inventory: readonly BudgetItem[], area: number, random:()=>number, deadline:number) {
+  let current=groups;
+  let entries=tileFacilityBudget(level,groups,inventory,area,random,deadline);
+  if(!entries) return;
+  const rows=Array<number>(8).fill(8),cols=Array<number>(8).fill(8);
+  for(let step=0;step<2;step++) {
+    const options:{groups:PlacementGroup[];line:number;score:number}[]=[];
+    for(let line=0;line<16;line++) {
+      if((line<8?rows[line]:cols[line-8])===0) continue;
+      const next=current.map(g=>({...g,domain:g.domain.filter(p=>!(line<8?p.rows[line]:p.cols[line-8]))}));
+      if(next.some(g=>g.domain.length<(inventory.find(i=>i.id===templateId(g.piece))?.min??0))) continue;
+      const union=next.reduce((m,g)=>g.domain.reduce((u,p)=>u|p.mask,m),0n);
+      let cells=0,mask=union;while(mask){mask&=mask-1n;cells++;}
+      if(cells<area+ACTIVITY_LIMITS.spareCells) continue;
+      const score=next.reduce((s,g)=>s+Math.log(1+g.domain.length/Math.max(1,inventory.find(i=>i.id===templateId(g.piece))?.min??0)),0)+random()*.8;
+      options.push({groups:next,line,score});
+    }
+    if(!options.length) break;
+    options.sort((a,b)=>a.score-b.score);
+    let best:typeof options[number]|undefined, bestEntries:FacilityEntry[]|undefined;
+    for(const option of options.slice(0,3)) {
+      const found=tileFacilityBudget(level,option.groups,inventory,area,random,deadline);
+      if(found) {
+        best=option;bestEntries=found;break;
+      }
+    }
+    if(!best) break;
+    entries=bestEntries!;
+    current=best.groups;
+    if(best.line<8) rows[best.line]=0;else cols[best.line-8]=0;
   }
-  return false;
+  return {groups:current,level:{...level,rows,cols},entries};
 }
 
-// Compose an inventory from legal domains. Empty grass is never a covering target.
-export function tileFacilities(level: Level, groups: PlacementGroup[], target: number, minMulti: number, grassReserve: number, random: () => number): FacilityEntry[] | undefined {
-  const entries: FacilityEntry[] = [], rows = Array<number>(8).fill(0), cols = Array<number>(8).fill(0);
-  const counts = new Map<FacilityKind, number>(), shapes = new Map<string, number>();
-  const requireSingle = level.pieces.some(p => p.kind === 'camp' && p.shape === 'single');
-  const onlySingleCamps = groups.every(g => g.piece.kind !== 'camp' || g.piece.shape === 'single' || !g.domain.length);
+// A legal role exchange witnesses ambiguity without running either solver.
+export const hasRoleSwap = (entries: FacilityEntry[], groups: PlacementGroup[]) => roleSwapCount(entries,groups)>0;
+export function roleSwapCount(entries: FacilityEntry[], groups: PlacementGroup[]): number {
+  const domains = new Map(groups.map(g => [templateId(g.piece), new Map(g.domain.map(p => [p.mask,p]))]));
+  const current = entries.map(e => ({ ...e, p: domains.get(templateId(e.piece))!.get(e.p.mask)! }));
+  const used = current.reduce((m,e) => m | e.p.mask,0n);
+  let swaps=0;
+  for (let i = 0; i < current.length; i++) for (let j = i+1; j < current.length; j++) {
+    const a=current[i],b=current[j];
+    if(a.piece.kind===b.piece.kind || a.piece.shape!==b.piece.shape) continue;
+    const pa=domains.get(templateId(a.piece))!.get(b.p.mask),pb=domains.get(templateId(b.piece))!.get(a.p.mask);
+    if(!pa || !pb || !compatible(pa,b.piece.kind,pb)) continue;
+    if(current.some((e,k)=>k!==i && k!==j && (!compatible(pa,e.piece.kind,e.p) || !compatible(pb,e.piece.kind,e.p)))) continue;
+    const providers=current.reduce((m,e,k)=>providesConnections(e.piece.kind)?m|(k===i?pa:k===j?pb:e.p).mask:m,0n);
+    if(current.some((e,k)=>{
+      const p=k===i?pa:k===j?pb:e.p;
+      return CAMP_REQUIREMENTS[e.piece.kind] && !p.connections.some(link=>(link.camp&providers) && !(link.gap&used));
+    })) continue;
+    swaps++;
+  }
+  return swaps;
+}
+
+// Fixed inventories use the same search as range-driven generation.
+export function tileFacilities(level: Level, groups: PlacementGroup[], inventory: Readonly<Record<string, number>>, random: () => number, deadline = Infinity) {
+  const items=groups.map(g=>({id:templateId(g.piece),area:offsets(g.piece.shape,0).length,min:inventory[templateId(g.piece)]??0,max:inventory[templateId(g.piece)]??0}));
+  return tileFacilityBudget(level,groups,items,items.reduce((n,i)=>n+i.area*i.min,0),random,deadline);
+}
+
+// Choose counts and positions together under one exact area budget. Every step
+// reserves all outstanding minima and checks residual integer reachability.
+export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:readonly BudgetItem[],targetArea:number,random:()=>number,deadline=Infinity):FacilityEntry[]|undefined {
+  const entries:FacilityEntry[]=[],counts=groups.map(()=>0),rows=Array<number>(8).fill(0),cols=Array<number>(8).fill(0);
+  const limits=groups.map(g=>items.find(i=>i.id===templateId(g.piece))!);
   const capacity=boardCells(8).filter(p=>level.rows[p.r]>0 && level.cols[p.c]>0 && !level.terrain.some(t=>t.r===p.r && t.c===p.c)).length;
-  const maxArea = Math.min(64 - level.terrain.length - grassReserve,capacity-ACTIVITY_LIMITS.spareCells);
-  const maxSize = Math.max(0, ...groups.filter(g => g.domain.length).map(g => g.domain[0].cells.length));
-  const multiExtra=groups.some(g=>g.domain[0]?.cells.length===2)?1:2;
-  if (!groups.some(g => g.piece.kind === 'camp' && g.domain.length && (!requireSingle || g.piece.shape === 'single')) || target + minMulti*multiExtra > maxArea || (minMulti && maxSize < 2)) return;
-  let nodes = 0;
-  function search(used: bigint, camps: bigint, multi: number, area: number): boolean {
-    if (++nodes > 240) return false;
-    const slots = target - entries.length, needMulti = Math.max(0, minMulti - multi);
-    if (!slots) return !needMulti;
-    if (needMulti > slots || area + slots + needMulti*multiExtra > maxArea) return false;
-    const moves: { group: PlacementGroup; valid: Candidate[]; weight: number }[] = [];
-    for (const group of groups) {
-      const { piece, domain } = group, size = domain[0]?.cells.length ?? 0;
-      if (!size) continue;
-      if (!entries.length && (piece.kind !== 'camp' || (requireSingle && piece.shape !== 'single'))) continue;
-      if (entries.length && needMulti > 0 && size === 1 && !(piece.kind === 'camp' && onlySingleCamps)) continue;
-      if (needMulti === slots && size === 1) continue;
-      if (area + size + slots - 1 + Math.max(0, needMulti - (size > 1 ? 1 : 0))*multiExtra > maxArea) continue;
-      const valid = domain.filter(p => {
-        if (p.mask & used || p.rows.some((v, r) => rows[r] + v > 7) || p.cols.some((v, c) => cols[c] + v > 7) || entries.some(e => !compatible(p, e.piece.kind, e.p))) return false;
-        const next = used | p.mask;
-        if (CAMP_REQUIREMENTS[piece.kind] && !p.connections.some(link => (link.camp & camps) && !(link.gap & next))) return false;
-        return !entries.some(e => CAMP_REQUIREMENTS[e.piece.kind] && !e.p.connections.some(link => (link.camp & camps) && !(link.gap & next)));
-      });
-      const count = counts.get(piece.kind) ?? 0, sameShape = shapes.get(`${piece.kind}_${piece.shape}`) ?? 0;
-      // Favor new roles and camp shapes, but keep every feasible role available.
-      const balance = 1 / (1 + count * count / Math.max(1, target / 5));
-      const variety = piece.kind === 'camp' && !sameShape ? 2 : 1;
-      if (valid.length) moves.push({ group, valid, weight: balance * variety * (size > 1 && needMulti ? 2.5 : 1) / Math.sqrt(valid.length) });
+  if(targetArea>Math.min(64-level.terrain.length-8,capacity-ACTIVITY_LIMITS.spareCells) || limits.some((i,g)=>i.min>groups[g].domain.length)) return;
+  const reachability=new Map<string,boolean>();
+  const canFinish=(remaining:number)=>{
+    const key=counts.join(',');
+    const cached=reachability.get(key);if(cached!==undefined) return cached;
+    let reachable=new Set([0]);
+    for(let g=0;g<groups.length;g++) {
+      const next=new Set<number>(),item=limits[g];
+      for(let n=Math.max(0,item.min-counts[g]);n<=item.max-counts[g] && n*item.area<=remaining;n++) for(const sum of reachable)
+        if(sum+n*item.area<=remaining) next.add(sum+n*item.area);
+      reachable=next;
     }
-    const coverage = Array<number>(64).fill(0);
-    for (const move of moves) for (const p of move.valid) for (const cell of p.cells) coverage[cell.r * 8 + cell.c]++;
-    while (moves.length && nodes <= 240) {
-      let cursor = random() * moves.reduce((sum, m) => sum + m.weight, 0);
-      const move = moves.find(m => (cursor -= m.weight) <= 0) ?? moves[0];
-      moves.splice(moves.indexOf(move), 1);
-      const { piece } = move.group, key = `${piece.kind}_${piece.shape}`;
-      const previous = counts.get(piece.kind) ?? 0, sameShape = shapes.get(key) ?? 0;
-      // Prefer footprints that make existing row/column counts informative.
-      // Random jitter keeps alternatives within the planner's clue capacities;
-      // there is no requirement to fill a line or cover all activity grass.
-      const ranked = move.valid.map(p => ({ p, score: (p.rows.reduce((s,v,i) => s+v*rows[i],0) + p.cols.reduce((s,v,i) => s+v*cols[i],0) + p.cells.reduce((s,c) => s+8/coverage[c.r*8+c.c],0)) / p.cells.length + random() * 4 })).sort((a,b) => b.score-a.score);
-      for (let i = 0; i < Math.min(5, move.valid.length); i++) {
-        const p = ranked[i].p;
-        entries.push({ piece: { ...piece, id: `wild-${entries.length}` }, p });
-        counts.set(piece.kind, previous + 1); shapes.set(key, sameShape + 1);
-        for (let j = 0; j < 8; j++) { rows[j] += p.rows[j]; cols[j] += p.cols[j]; }
-        if (search(used | p.mask, piece.kind === 'camp' ? camps | p.mask : camps, multi + (p.cells.length > 1 ? 1 : 0), area + p.cells.length)) return true;
-        for (let j = 0; j < 8; j++) { rows[j] -= p.rows[j]; cols[j] -= p.cols[j]; }
-        entries.pop(); counts.set(piece.kind, previous); shapes.set(key, sameShape);
-        if (nodes > 240) return false;
+    const result=reachable.has(remaining);reachability.set(key,result);return result;
+  };
+  const masks=groups.map(g=>new Set(g.domain.map(p=>p.mask)));
+  let nodes=0;
+  function search(used:bigint,providers:bigint,remaining:number,domains:Candidate[][]):boolean {
+    if(++nodes>240 || (nodes%16===0 && Date.now()>=deadline)) return false;
+    if(!remaining) return limits.every((i,g)=>counts[g]>=i.min) && !entries.some(e=>CAMP_REQUIREMENTS[e.piece.kind] && !e.p.connections.some(link=>(link.camp&providers) && !(link.gap&used)));
+    if(!canFinish(remaining)) return false;
+    const potential=domains.reduce((m,domain,g)=>counts[g]<limits[g].max && providesConnections(groups[g].piece.kind)?domain.reduce((mask,p)=>mask|p.mask,m):m,providers);
+    if(entries.some(e=>CAMP_REQUIREMENTS[e.piece.kind] && !e.p.connections.some(link=>(link.camp&potential) && !(link.gap&used)))) return false;
+    if(domains.some((domain,g)=>domain.length<Math.max(0,limits[g].min-counts[g]))) return false;
+    const moves:{g:number;valid:Candidate[];weight:number}[]=[];
+    for(let g=0;g<groups.length;g++) {
+      const item=limits[g],piece=groups[g].piece;
+      if(counts[g]>=item.max || item.area>remaining) continue;
+      counts[g]++;const feasible=canFinish(remaining-item.area);counts[g]--;
+      if(!feasible) continue;
+      const valid=domains[g].filter(p=>!CAMP_REQUIREMENTS[piece.kind] || p.connections.some(link=>(link.camp&providers) && !(link.gap&(used|p.mask))));
+      if(!valid.length) continue;
+      const need=counts[g]<item.min;
+      moves.push({g,valid,weight:(need?3:1)*(1+Math.max(0,item.min-counts[g]))/(1+counts[g]*counts[g])/(Math.sqrt(valid.length))});
+    }
+    const coverage=Array<number>(64).fill(0);
+    for(const move of moves) for(const p of move.valid) for(const c of p.cells) coverage[c.r*8+c.c]++;
+    while(moves.length && nodes<=240 && Date.now()<deadline) {
+      let cursor=random()*moves.reduce((n,m)=>n+m.weight,0);
+      const move=moves.find(m=>(cursor-=m.weight)<=0)??moves[0];moves.splice(moves.indexOf(move),1);
+      const piece=groups[move.g].piece;
+      const ranked=move.valid.map(p=>({p,score:
+        (p.rows.reduce((n,v,i)=>n+v*rows[i],0)+p.cols.reduce((n,v,i)=>n+v*cols[i],0)+p.cells.reduce((n,c)=>n+8/coverage[c.r*8+c.c],0))/p.cells.length
+        -groups.reduce((n,g,i)=>n+Number(g.piece.kind!==piece.kind && g.piece.shape===piece.shape && masks[i].has(p.mask)),0)+random()*4
+      })).sort((a,b)=>b.score-a.score);
+      for(const {p} of ranked.slice(0,5)) {
+        const repartition=!CAMP_REQUIREMENTS[piece.kind] && entries.some(e=>{
+          if(e.piece.kind!==piece.kind || (p.cells.length===1 && e.p.cells.length===1)) return false;
+          const union=p.mask|e.p.mask,other=masks[groups.findIndex(g=>templateId(g.piece)===templateId(e.piece))];
+          return groups[move.g].domain.some(q=>q.mask!==p.mask && !(templateId(piece)===templateId(e.piece) && q.mask===e.p.mask) && (q.mask&union)===q.mask && other.has(union^q.mask));
+        });
+        if(repartition) continue;
+        entries.push({piece:{...piece,id:`wild-${entries.length}`},p});counts[move.g]++;
+        for(let j=0;j<8;j++){rows[j]+=p.rows[j];cols[j]+=p.cols[j];}
+        const next=domains.map((domain,g)=>counts[g]<limits[g].max?domain.filter(q=>compatible(q,piece.kind,p) && !q.rows.some((v,r)=>rows[r]+v>7) && !q.cols.some((v,c)=>cols[c]+v>7)):[]);
+        if(search(used|p.mask,providesConnections(piece.kind)?providers|p.mask:providers,remaining-limits[move.g].area,next)) return true;
+        for(let j=0;j<8;j++){rows[j]-=p.rows[j];cols[j]-=p.cols[j];}
+        counts[move.g]--;entries.pop();
+        if(nodes>240 || Date.now()>=deadline) return false;
       }
     }
     return false;
   }
-  return search(0n, 0n, 0, 0) ? entries : undefined;
+  return search(0n,0n,targetArea,groups.map(g=>g.domain))?entries:undefined;
+}
+
+// Coordinate descent changes positions, never the inventory or terrain budget.
+// Rank clue-domain entropy cheaply; only completed candidates reach the solvers.
+export function refineFacilities(entries: FacilityEntry[], groups: PlacementGroup[], random: () => number, deadline: number) {
+  const inventory = groups.map(g=>entries.filter(e=>templateId(e.piece)===templateId(g.piece)).length);
+  const lines = () => {
+    const rows=Array<number>(8).fill(0),cols=Array<number>(8).fill(0);
+    for(const e of entries) for(let i=0;i<8;i++) {rows[i]+=e.p.rows[i];cols[i]+=e.p.cols[i];}
+    return {rows,cols};
+  };
+  function cost() {
+    const {rows,cols}=lines();
+    return groups.reduce((score,g,i)=>{
+      const count=g.domain.filter(p=>!p.rows.some((v,r)=>v>rows[r]) && !p.cols.some((v,c)=>v>cols[c])).length;
+      let entropy=0;for(let n=0;n<inventory[i];n++) entropy+=Math.log((count-n)/(inventory[i]-n));
+      return score+entropy;
+    },0) + roleSwapCount(entries,groups)*30;
+  }
+  let current=cost();
+  for(let step=0;step<6 && Date.now()<deadline;step++) {
+    let best=current,move:{entry:FacilityEntry;p:Candidate}|undefined;
+    const candidates=entries.flatMap(entry=>{
+      const group=groups.find(g=>templateId(g.piece)===templateId(entry.piece))!;
+      return group.domain.filter(p=>p.mask!==entry.p.mask && !entries.some(e=>e!==entry && !compatible(p,e.piece.kind,e.p))).map(p=>({entry,p,order:random()}));
+    }).sort((a,b)=>a.order-b.order).slice(0,80);
+    for(const candidate of candidates) {
+      if(Date.now()>=deadline) break;
+      const old=candidate.entry.p;candidate.entry.p=candidate.p;
+      const used=entries.reduce((m,e)=>m|e.p.mask,0n),providers=entries.reduce((m,e)=>providesConnections(e.piece.kind)?m|e.p.mask:m,0n);
+      if(!entries.some(e=>CAMP_REQUIREMENTS[e.piece.kind] && !e.p.connections.some(link=>(link.camp&providers) && !(link.gap&used)))) {
+        const next=cost();if(next<best-.001) {best=next;move=candidate;}
+      }
+      candidate.entry.p=old;
+    }
+    if(!move) break;
+    move.entry.p=move.p;current=best;
+  }
 }

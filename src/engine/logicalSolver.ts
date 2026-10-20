@@ -7,9 +7,22 @@ export type LogicStep = { rule: 'line' | 'overlap' | 'relationship' | 'capacity'
 export type LogicResult = { solved: boolean; contradiction: boolean; aborted: boolean; steps: LogicStep[]; rounds: number; initialForced: number; deductions: number; assumptions: number; maxDepth: number; remaining: number; placements: Placement[]; initialPlacements: Placement[] };
 type State = { domains: Candidate[][]; required: bigint; forbidden: bigint; pinned: Candidate[][] };
 
+// Top-level eliminations are proved for this exact map. Nested assumption
+// traces are hypothetical and must never be reused as unconditional pruning.
+export function reasonedDomains(groups: PlacementGroup[], logic: LogicResult): PlacementGroup[] {
+  const eliminated=new Map<string,Set<string>>();
+  const key=(p:Placement)=>`${p.r}/${p.c}/${p.rotation}`;
+  for(const step of logic.steps) if(step.eliminated) {
+    const positions=eliminated.get(step.group)??new Set<string>();
+    for(const p of step.eliminated) positions.add(key(p));
+    eliminated.set(step.group,positions);
+  }
+  return groups.map(g=>({...g,domain:g.domain.filter(p=>!eliminated.get(`${g.piece.kind}_${g.piece.shape}`)?.has(key(p.at)))}));
+}
+
 // Group cardinality treats interchangeable IDs as one set of placements. All
 // eliminations are necessary conditions, never a preference for the blueprint.
-export function reasonLevel(level: Level, budget: { deadline?: number; maxAssumptions?: number; maxDepth?: number } = {}, prepared?: PlacementGroup[]): LogicResult {
+export function reasonLevel(level: Level, budget: { deadline?: number; maxAssumptions?: number; maxDepth?: number; maxUnresolved?: number } = {}, prepared?: PlacementGroup[]): LogicResult {
   const groups = prepared ?? placementDomains(level), n = level.size, board = boardCells(n);
   const full = (1n << BigInt(n * n)) - 1n;
   const lines = Array.from({ length: n * 2 }, (_, i) => board.reduce((mask, p) => (i < n ? p.r === i : p.c === i - n) ? mask | cellBit(p, n) : mask, 0n));
@@ -161,9 +174,9 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
   }
   const state: State = { domains: groups.map(g => [...g.domain]), required: 0n, forbidden: 0n, pinned: groups.map(() => []) };
   result.contradiction = !propagate(state, true);
-  while (state.domains.reduce((s, d, g) => s + d.length - counts[g], 0) <= 32 && !result.contradiction && !result.aborted && result.assumptions < (budget.maxAssumptions ?? 0)) {
+  while (state.domains.reduce((s, d, g) => s + d.length - counts[g], 0) <= (budget.maxUnresolved??32) && !result.contradiction && !result.aborted && result.assumptions < (budget.maxAssumptions ?? 0)) {
     let removed = false;
-    outer: for (let g = 0; g < groups.length; g++) {
+    outer: for (const g of groups.map((_,i)=>i).sort((a,b)=>(state.domains[a].length-counts[a])-(state.domains[b].length-counts[b]))) {
       if (state.domains[g].length <= counts[g] || state.domains[g].length > 24) continue;
       for (const p of state.domains[g]) {
         if (result.assumptions >= (budget.maxAssumptions ?? 0) || expired()) break outer;
