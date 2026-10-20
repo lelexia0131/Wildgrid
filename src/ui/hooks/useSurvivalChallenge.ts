@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { audio } from '../../platform/audio/WildernessAudio';
 import { readLocalMaps, saveLocalMap, unlockSurvivalMaps } from '../../save-system/localMapStorage';
 import { completeSurvival, readSurvival, readSurvivalForWrite, writeSurvival } from '../../save-system/survivalStorage';
-import { abandonSurvivalChallenge, replaceSurvivalChallenge, restartSurvivalChallenge, updateSurvivalProgress } from '../../game-modes/survival/survivalChallenge';
+import { abandonSurvivalChallenge, replaceSurvivalChallenge, restartSurvivalChallenge, survivalContinuation, updateSurvivalProgress } from '../../game-modes/survival/survivalChallenge';
 import { survivalCollectionTarget } from '../../game-modes/sandbox/localMapCollection';
 import { createSurvivalGenerationTask } from '../../workers/workerTasks';
 import type { GameSession, Piece, Shape } from '../../engine';
@@ -79,6 +79,15 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
   function continueSurvival() {
     const latest = readSurvival();
     if (latest.challenge) playSurvival(latest.challenge);
+  }
+  function continueAdventure(): boolean {
+    try {
+      const latest = readSurvivalForWrite(), target = survivalContinuation(latest);
+      if (!target) return false;
+      setSurvival(latest);
+      playSurvival(target);
+    } catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '挑战存档无法读取，原数据已保留'); sound('error'); }
+    return true;
   }
   function cancelGeneration() {
     generatorRef.current.cancel(); setGenerating(null);
@@ -159,7 +168,7 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
 
   return {
     survival, challenge, survivalReward, survivalError, generating, replaceChallenge, abandonOpen,
-    openSurvivalMenu, continueSurvival, cancelGeneration, requestSurvival, abandonSurvival, collectSurvival, settleSurvival, prepareRestart,
+    openSurvivalMenu, continueSurvival, continueAdventure, cancelGeneration, requestSurvival, abandonSurvival, collectSurvival, settleSurvival, prepareRestart,
     confirmReplacement, closeSurvivalDialogs, cancelReplacement: () => setReplaceChallenge(null),
     openAbandon: () => { sound(); setAbandonOpen(true); }, closeAbandon: () => setAbandonOpen(false), resetReward: () => setSurvivalReward(null),
   };

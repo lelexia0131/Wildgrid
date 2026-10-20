@@ -45,7 +45,7 @@ test('worker tasks cancel, ignore stale/duplicate replies, release errors and cl
   assert.equal(task.isRunning(), false); assert.equal(FakeWorker.instances.at(-1)!.terminated, true);
 });
 
-test('survival has one bounded worker run, no seed cycling, and accepts a result only once', t => {
+test('survival replaces timed-out rounds indefinitely and accepts a result only once', t => {
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'Worker');
   Object.defineProperty(globalThis, 'Worker', { configurable: true, value: FakeWorker });
@@ -55,12 +55,13 @@ test('survival has one bounded worker run, no seed cycling, and accepts a result
   const before = FakeWorker.instances.length;
   start(); const first = FakeWorker.instances.at(-1)!;
   t.mock.timers.tick(generationBudget(1) + 399); assert.equal(first.terminated, false);
-  t.mock.timers.tick(1); assert.equal(first.terminated, true); assert.equal(task.isRunning(), false);
-  t.mock.timers.tick(MAP_GENERATION_TIMEOUT * 3);
-  assert.equal(FakeWorker.instances.length, before + 1); assert.deepEqual(errors, ['timeout']);
+  t.mock.timers.tick(1); assert.equal(first.terminated, true); assert.equal(task.isRunning(), true);
+  for (let i = 0; i < 10; i++) t.mock.timers.tick(generationBudget(1) + 400);
+  assert.equal(FakeWorker.instances.length, before + 12); assert.deepEqual(errors, []);
   first.reply({status:'success',challenge:{}}); assert.deepEqual(results, []);
   start(); const final = FakeWorker.instances.at(-1)!, request = final.request as { id: string; seed: number; difficulty: number };
-  assert.equal(request.seed, 2);
+  assert.notEqual(request.seed, 2);
+  assert.equal(request.id, 'bounded');
   const {level,placements}=generateMap(1,2,'worker-fixture',[],SURVIVAL_DIFFICULTIES[0]).draft;
   const challenge = { ...request, draft: withEditorPlacements({ level, placements }, placements), fingerprint: 'test' };
   final.reply({ status: 'success', challenge }); final.reply({ status: 'success', challenge });
@@ -90,22 +91,42 @@ test('survival pause preserves the seed and remaining active budget; cancellatio
   assert.equal(task.isRunning(), false);
 });
 
-test('successive failed manual requests stop immediately without recreating workers or changing seeds', t => {
+test('exhausted searches keep constructing with fresh seeds until cancelled', t => {
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'Worker');
   Object.defineProperty(globalThis, 'Worker', { configurable: true, value: FakeWorker });
   t.after(() => { if (descriptor) Object.defineProperty(globalThis, 'Worker', descriptor); else Reflect.deleteProperty(globalThis, 'Worker'); });
   const task = createSurvivalGenerationTask(), errors: string[] = [], before = FakeWorker.instances.length;
-  for (let seed = 1; seed <= 3; seed++) {
-    task.start({ difficulty: 10, seed, id: 'manual', recent: [] }, { onResult: () => assert.fail('unexpected success'), onError: (_reason, message) => errors.push(message!) });
+  const request = { difficulty: 8, seed: 0xffffffff, id: 'retry', recent: ['previous'], disabled: ['pool_single'], history: [] };
+  task.start(request, { onResult: () => assert.fail('unexpected success'), onError: (_reason, message) => errors.push(message!) });
+  const seeds = new Set<number>();
+  for (let round = 0; round < 25; round++) {
     const worker = FakeWorker.instances.at(-1)!;
-    assert.equal((worker.request as {seed:number}).seed, seed);
+    const sent = worker.request as typeof request;
+    assert.equal(sent.id, request.id);
+    assert.equal(sent.difficulty, request.difficulty);
+    assert.deepEqual(sent.disabled, request.disabled);
+    assert.deepEqual(sent.recent, request.recent);
+    assert.deepEqual(sent.history, request.history);
+    assert.ok(sent.seed >= 0 && sent.seed <= 0xffffffff);
+    seeds.add(sent.seed);
     worker.reply({ status: 'search-failed', error: '缺少可解释路径' });
-    assert.equal(task.isRunning(), false); assert.equal(worker.terminated, true);
-    t.mock.timers.tick(MAP_GENERATION_TIMEOUT * 2);
-    assert.equal(FakeWorker.instances.length, before + seed);
+    assert.equal(task.isRunning(), true); assert.equal(worker.terminated, true);
+    assert.equal(FakeWorker.instances.length, before + round + 2);
+    worker.reply({ status: 'error', error: 'stale' });
   }
-  assert.deepEqual(errors, Array(3).fill('缺少可解释路径'));
+  assert.equal(seeds.size, 25);
+  task.setPaused(true);
+  t.mock.timers.tick(MAP_GENERATION_TIMEOUT * 2);
+  assert.equal(FakeWorker.instances.length, before + 26);
+  task.setPaused(false);
+  const last = FakeWorker.instances.at(-1)!;
+  task.cancel();
+  last.reply({ status: 'search-failed', error: 'late' });
+  t.mock.timers.tick(MAP_GENERATION_TIMEOUT * 2);
+  assert.equal(task.isRunning(), false);
+  assert.equal(FakeWorker.instances.at(-1), last);
+  assert.deepEqual(errors, []);
 });
 
 test('survival creation, posting, runtime and protocol errors stop without retrying', t => {

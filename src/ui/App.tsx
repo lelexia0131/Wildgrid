@@ -8,6 +8,7 @@ import { Art, FacilityArt } from './components/Art';
 import { GameTitle } from './components/GameTitle';
 import { MenuLandscapeBackground } from './components/MenuLandscapeBackground';
 import { SurvivalRewardPanel } from './components/SurvivalRewardPanel';
+import { SurvivalNotice } from './components/SurvivalNotice';
 import { HeroArt } from './components/HeroArt';
 import { version } from '../../package.json';
 import { Blueprint } from './components/Blueprint';
@@ -20,7 +21,7 @@ import { CompletionEmblem } from './components/CompletionEmblem';
 import { MenuIcon } from './components/MenuIcon';
 import type { SurvivalChallenge, SurvivalProgress, SurvivalRecord } from '../game-modes/survival/survivalChallenge';
 import { placementHints } from '../engine';
-import { levelUnlocked } from '../game-modes/adventure/adventureProgress';
+import { adventureContinueId, levelUnlocked } from '../game-modes/adventure/adventureProgress';
 import { levels, getLevelById, getSolution } from '../engine';
 import { facilityLibrary, facilityNames, facilityTips, shapeNames, terrainNames } from '../engine';
 import { audio } from '../platform/audio/WildernessAudio';
@@ -307,7 +308,8 @@ export default function App() {
       <div className="menu-copy"><div className="menu-buttons"><button className="primary menu-adventure" data-sound="confirm" onClick={() => { setScreen('adventure'); }}>{t("开始冒险")}<ArrowRight size={23}/></button><button className="secondary menu-journal" onClick={() => { setDiaryChapter(null); setScreen('levels'); }}><Map size={21}/>  {t("营地日记")}</button><button className="secondary menu-guide" onClick={() => { setManualOpen(true); }}><BookOpen size={21}/>  {t("野外手册")}</button></div></div>
     </main>}
 
-    {(screen === 'adventure' || screen === 'sandbox' || screen === 'sandbox-size' || screen === 'sandbox-import' || screen === 'local-maps') && <SandboxMenu key={screen} screen={screen} localMaps={localMaps} onOpenLocalMap={openLocalMap} onEditLocalMap={editLocalMap} onSurvival={openSurvivalMenu} onLocalMapsChange={sandbox.refreshLocalMaps} onBack={() => { setScreen(screen === 'adventure' ? 'menu' : screen === 'sandbox' || screen === 'local-maps' ? 'adventure' : 'sandbox'); }} onContinue={() => start(continueId)} onNavigate={setScreen} onCreate={openSandbox} onImport={importSandbox}/>}
+    {(screen === 'adventure' || screen === 'sandbox' || screen === 'sandbox-size' || screen === 'sandbox-import' || screen === 'local-maps') && <SandboxMenu key={screen} screen={screen} localMaps={localMaps} onOpenLocalMap={openLocalMap} onEditLocalMap={editLocalMap} onSurvival={openSurvivalMenu} onLocalMapsChange={sandbox.refreshLocalMaps} onBack={() => { setScreen(screen === 'adventure' ? 'menu' : screen === 'sandbox' || screen === 'local-maps' ? 'adventure' : 'sandbox'); }} onContinue={() => { if (!survivalController.continueAdventure()) start(adventureContinueId(save)); }} onNavigate={setScreen} onCreate={openSandbox} onImport={importSandbox}/>}
+    {screen === 'adventure' && survivalError && <div className="survival-notice-region"><SurvivalNotice message={survivalError}/></div>}
 
     {screen === 'survival' && <SurvivalMenu save={survival} generating={generating} generationScene={generationScene} error={survivalError} onStart={requestSurvival} onContinue={continueSurvival} onCancel={cancelGeneration} onBack={() => { setScreen('adventure'); }} onReview={reviewSurvival} canReview={record => !!record.code || localMaps.some(map => map.survival?.challengeId === record.id)}/> }
 

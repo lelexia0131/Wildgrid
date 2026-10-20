@@ -1,10 +1,7 @@
-import { parseRecentMaps } from '../engine/mapNovelty';
-import { decodeMap, encodeMap, evaluate, validatePlacements, MAX_HISTORY_STEPS } from '../engine';
+import { parseRecentMaps, decodeMap, encodeMap, evaluate, validatePlacements, MAX_HISTORY_STEPS } from '../engine';
 import type { Placement, Shape } from '../engine';
 import { createSurvivalSave, emptySurvivalProgress } from '../game-modes/survival/survivalChallenge';
 import type { SurvivalSave } from '../game-modes/survival/survivalChallenge';
-import { storedInventoryFits } from '../engine/generationConfig';
-import { SURVIVAL_DIFFICULTIES } from '../game-modes/survival/survivalDifficulty';
 
 const difficultyValid = (n: number) => Number.isInteger(n) && n >= 1 && n <= 10;
 export function parseSurvivalForWrite(stored: string | null): SurvivalSave {
@@ -39,8 +36,9 @@ export function parseSurvivalSave(stored: string | null): SurvivalSave {
     const c = raw.challenge, p = raw.progress;
     if (c && typeof c.id === 'string' && difficultyValid(c.difficulty) && Number.isInteger(c.seed) && typeof c.code === 'string' && p?.id === c.id && p.status === 'active') {
       try {
-      const draft = decodeMap(c.code), spec = SURVIVAL_DIFFICULTIES[c.difficulty - 1];
-      if (draft.level.size !== 8 || ((draft.level.pieces.length < spec.min || draft.level.pieces.length > spec.max) && !storedInventoryFits(draft.level,c.difficulty)) || !evaluate(draft.level, draft.placements).won) return save;
+      const draft = decodeMap(c.code);
+      // Generation limits change over time; a saved map is validated on its own rules.
+      if (draft.level.size !== 8 || !evaluate(draft.level, draft.placements).won) return save;
       const valid = (value: unknown): Placement[] => {
         const { placements, error } = validatePlacements(draft.level, value);
         if (error) throw new Error('挑战进度损坏');

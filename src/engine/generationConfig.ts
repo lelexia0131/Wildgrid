@@ -5,30 +5,41 @@ import { prepareBudget } from './generationBudget';
 import type { QuantityRange } from './generationBudget';
 import type { Level } from './types';
 
+export const MAX_GENERATED_LINE_OCCUPANCY = 6;
+
 // Source: supplied editable Excel, 设施与地形 B5:K18. Columns are difficulties 1–10.
 // Sheet 1 row 21 and the requested area budgets supersede the old total counts.
 const ranges = (values: readonly (number | readonly [number, number])[]): QuantityRange[] => values.map(v => typeof v === 'number' ? {min:v,max:v} : {min:v[0],max:v[1]});
 export const generationQuantities: { facilities: Record<string, QuantityRange[]>; terrain: Record<string, QuantityRange[]> } = {
   facilities: {
-    camp_single: ranges([[1,3],[2,3],[2,3],[1,4],[1,4],[2,4],[2,4],[2,4],[2,4],[1,5]]),
-    camp_domino: ranges([[0,1],[0,1],[0,1],[1,2],[1,2],[1,2],[1,2],[1,3],[1,3],[2,3]]),
-    camp_long: ranges([0,0,[0,1],[0,1],1,1,1,1,[1,2],[1,2]]),
-    camp_el: ranges([0,0,0,0,[0,1],[0,1],1,1,1,[1,2]]),
-    fire_single: ranges([[1,2],[2,3],[1,3],[1,3],[2,3],[2,3],[1,3],[1,3],[1,4],[2,4]]),
-    tower_single: ranges([[0,1],[1,2],[2,3],[2,3],[2,4],[2,4],[2,4],[3,4],[3,4],[3,4]]),
-    picnic_domino: ranges([0,0,[0,1],[0,1],1,[1,2],[1,2],[1,2],[1,2],[1,2]]),
+    camp_single: ranges([[1,3],[2,3],[2,3],[2,4],[2,4],[3,4],[3,4],[3,4],[3,5],[3,5]]),
+    camp_domino: ranges([[0,1],[0,1],[0,1],[0,2],[1,2],[1,2],[1,2],[1,2],[1,3],[1,3]]),
+    camp_long: ranges([0,0,0,[0,1],[0,1],[0,1],1,1,1,[1,2]]),
+    camp_el: ranges([0,0,0,0,0,[0,1],[0,1],[0,1],1,1]),
+    fire_single: ranges([[1,2],[1,2],[1,3],[1,3],[2,3],[2,3],[2,3],[1,3],[1,4],[2,4]]),
+    tower_single: ranges([[0,1],[1,2],[2,3],[2,3],[2,4],[2,4],[2,4],[2,4],[3,4],[3,4]]),
+    picnic_domino: ranges([0,0,[0,1],[0,1],1,1,1,[1,2],[1,2],[1,2]]),
     cabin_el: ranges([0,0,0,0,[0,1],[0,1],1,1,1,1]),
-    foodTruck_single: ranges([0,0,0,[0,1],[0,1],1,[1,2],[1,2],[1,3],[1,3]]),
-    powerTower_single: ranges([0,0,0,0,[0,1],1,1,[1,2],[1,2],[1,2]]),
-    pool_single: ranges([0,0,[0,1],[0,1],[0,1],1,[1,2],[1,2],[1,3],[1,3]]),
+    foodTruck_single: ranges([0,0,0,[0,1],[0,1],1,1,[1,2],[1,2],[1,2]]),
+    powerTower_single: ranges([0,0,0,0,[0,1],1,1,1,[1,2],[1,2]]),
+    pool_single: ranges([0,0,[0,1],[0,1],[0,1],1,1,[1,2],[1,2],[1,2]]),
   },
   terrain: {
-    water: ranges([[2,3],[2,4],[2,4],[3,4],[3,5],[4,5],[4,5],[4,5],[3,5],[4,5]]),
+    water: ranges([[2,3],[2,4],[2,4],[3,4],[3,5],[4,5],[4,6],[4,6],[5,6],[6,7]]),
     mountain: ranges([[0,2],[1,2],[1,3],[2,3],[2,3],[2,4],[2,4],[3,4],[3,5],[3,5]]),
-    forest: ranges([[1,2],[1,3],[2,3],[2,3],[2,4],[3,4],[3,5],[3,5],[3,5],[3,6]]),
+    forest: ranges([[1,2],[1,3],[2,3],[2,3],[2,4],[3,4],[4,5],[4,6],[4,6],[5,6]]),
   },
 };
 export const templateId = (piece: Level['pieces'][number]) => `${piece.kind}_${piece.shape}`;
+
+export const MIN_ALLOWED_FACILITIES = [3, 3, 4, 4, 5, 5, 6, 7, 8, 9];
+export function facilityRestrictionError(difficulty: number, disabled: readonly string[]): string | null {
+  const allowed = facilityLibrary.filter(p => !disabled.includes(templateId(p)));
+  if (!allowed.some(p => p.kind === 'camp')) return '至少需要保留一种营地';
+  const min = MIN_ALLOWED_FACILITIES[difficulty - 1];
+  if (allowed.length < min) return `${difficulty}难至少需要保留${min}种设施，请调整禁用设施。`;
+  return null;
+}
 
 export function generationBudgets(difficulty: number, disabled: readonly string[] = [], config = generationQuantities) {
   if (!Number.isInteger(difficulty) || difficulty < 1 || difficulty > 10) throw new Error('请选择 1难至10难');
@@ -64,17 +75,4 @@ export function inventoryViolations(level: Level, difficulty: number, disabled: 
     if (area < budget.min || area > budget.max) violations.push(`${name} budget`);
   }
   return violations;
-}
-
-// The existing save format does not store which templates were disabled.
-// Present quantities and the terrain budget can still be checked exactly.
-export function storedInventoryFits(level: Level, difficulty: number) {
-  const budget=generationBudgets(difficulty);
-  if(level.pieces.some(p=>!budget.facilities.items.some(i=>i.id===templateId(p)))) return false;
-  for(const item of budget.facilities.items) {
-    const count=level.pieces.filter(p=>templateId(p)===item.id).length;
-    if(count && (count<item.min || count>item.max)) return false;
-  }
-  const area=level.pieces.reduce((n,p)=>n+offsets(p.shape,0).length,0);
-  return area>0 && area<=budget.facilities.max && !inventoryViolations(level,difficulty).some(v=>v.startsWith('terrain'));
 }

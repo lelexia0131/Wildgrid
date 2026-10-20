@@ -5,7 +5,8 @@ import { formatDateTime } from '../../localization/dateTime';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Ban, Flag, X } from 'lucide-react';
 import { SurvivalBadge } from '../components/SurvivalBadge';
-import { Art } from '../components/Art';
+import { GenerationMap } from '../components/GenerationMap';
+import { GenerationMessage } from '../components/GenerationMessage';
 import { JournalChapterBackground } from '../components/JournalChapterBackground';
 import { MenuLandscapeBackground } from '../components/MenuLandscapeBackground';
 import { rankProgress, SURVIVAL_DIFFICULTIES, SURVIVAL_RANKS } from '../../game-modes/survival/survivalDifficulty';
@@ -26,8 +27,8 @@ export function SurvivalMenu({ save, generating, generationScene, error, onStart
   useEffect(() => { if (records) recordsRef.current?.showModal(); }, [records]);
   if (generating !== null) return <main className="survival-generation-page" data-scene={generationScene} aria-busy="true">
     <div className="generation-background" aria-hidden="true"><JournalChapterBackground chapter={generationScene}/></div>
-    <div className="generation-map" aria-hidden="true">{Array.from({ length: 25 }, (_, i) => <span key={i} style={{ '--cell-delay': `${i * 45}ms` } as React.CSSProperties}>{i % 7 === 0 ? <Art kind="water"/> : i === 12 ? <Art kind="camp"/> : i === 13 ? <Art kind="fire"/> : i % 3 === 0 ? <Art kind="mountain"/> : i % 2 === 0 ? <Art kind="forest"/> : null}</span>)}</div>
-    <h1 role="status">{t("地图生成中")}</h1><p>{t("难度 {0}", generating)}</p>
+    <GenerationMap/>
+    <GenerationMessage/><p>{t("难度 {0}", generating)}</p>
     <div className="generation-progress" role="progressbar" aria-label={t("地图生成进度")}><i/></div>
     <button className="secondary" data-sound="close" onClick={onCancel}><X size={18}/>{t("取消生成")}</button>
   </main>;

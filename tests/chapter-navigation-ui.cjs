@@ -15,7 +15,7 @@ app.whenReady().then(async () => {
   const contents = win.webContents, errors = [];
   contents.on('console-message', event => { if (event.level === 'error') errors.push(event.message); });
   const js = code => contents.executeJavaScript(code, true);
-  const settle = () => new Promise(resolve => setTimeout(resolve, 280));
+  const settle = () => new Promise(resolve => setTimeout(resolve, 480));
   let touch = false;
   async function click(selector) {
     if (touch) {
@@ -69,6 +69,50 @@ app.whenReady().then(async () => {
     }
     writeFileSync(path.join(output, `chapter-${chapter}-${viewport.width}x${viewport.height}.png`), (await contents.capturePage()).toPNG());
   }
+  async function checkSlide(next, target) {
+    const state = await js(`(async () => {
+      const selector = ${JSON.stringify(next ? '.journal-chapter-next' : '.journal-chapter-previous')};
+      const arrow = document.querySelector(selector), before = arrow.getBoundingClientRect();
+      const background = document.querySelector('.app > .journal-chapter-background').src;
+      const grid = document.querySelector('.level-grid').getBoundingClientRect();
+      const title = document.querySelector('.journal-chapter-page h1').getBoundingClientRect();
+      for (let i = 0; i < 10; i++) arrow.click();
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      const animations = document.querySelector('.app').getAnimations({ subtree: true }).filter(a => a.animationName?.startsWith('journal-'));
+      for (const animation of animations) { animation.pause(); animation.currentTime = 200; }
+      const pages = [...document.querySelectorAll('.journal-chapter-page')];
+      const rects = pages.map(page => ({ x: page.getBoundingClientRect().x, grid: page.querySelector('.level-grid').getBoundingClientRect().x, title: page.querySelector('h1').getBoundingClientRect().x }));
+      const after = arrow.getBoundingClientRect(), incoming = document.querySelector('.journal-chapter-background-incoming');
+      document.querySelector('.chapter-entering .level-card').click();
+      const result = {
+        pages: pages.length, levels: document.querySelectorAll('.level-card').length,
+        delta: rects[0].grid - grid.x, titleDelta: rects[0].title - title.x,
+        separation: Math.abs(rects[1].grid - rects[0].grid), width: grid.width,
+        arrowDelta: Math.abs(after.x - before.x) + Math.abs(after.y - before.y),
+        clipped: getComputedStyle(document.querySelector('.journal-chapter-viewport')).overflow,
+        backgroundChanged: incoming.querySelector('img').src !== background,
+        backgroundOpacity: Number(getComputedStyle(incoming).opacity),
+        busy: document.querySelector('.journal-level-navigation').getAttribute('aria-busy'),
+        inert: pages.every(page => page.inert), game: !!document.querySelector('.game-page'),
+        durations: animations.map(a => a.effect.getTiming().duration),
+      };
+      for (const animation of animations) animation.play();
+      return result;
+    })()`);
+    assert.equal(state.pages, 2); assert.equal(state.levels, 30);
+    assert.ok(next ? state.delta < 0 : state.delta > 0);
+    assert.ok(Math.abs(state.delta - state.titleDelta) < 1, JSON.stringify(state));
+    assert.ok(Math.abs(state.separation - state.width - 24) < 1, JSON.stringify(state));
+    assert.ok(state.arrowDelta < 1); assert.equal(state.clipped, 'hidden');
+    assert.ok(state.backgroundChanged && state.backgroundOpacity > 0 && state.backgroundOpacity < 1);
+    assert.equal(state.busy, 'true'); assert.ok(state.inert && !state.game);
+    assert.ok(state.durations.length >= 4 && state.durations.every(duration => duration === 400));
+    await settle();
+    assert.equal(await js(`document.querySelectorAll('.journal-chapter-page').length`), 1);
+    assert.equal(await js(`document.querySelector('.level-card').dataset.level`), String(target * 15 + 1));
+    assert.equal(await js(`getComputedStyle(document.querySelector('.journal-chapter-page')).transform`), 'none');
+    assert.equal(await js(`!!document.querySelector('.journal-chapter-background-incoming')`), false);
+  }
   try {
     contents.debugger.attach('1.3');
     for (const viewport of [{ width: 1280, height: 900, language: 'zh' }, { width: 390, height: 844, language: 'zh', touch: true }, { width: 360, height: 640, language: 'en', touch: true }, { width: 320, height: 568, language: 'zh', touch: true }, { width: 844, height: 390, language: 'en', touch: true }]) {
@@ -80,6 +124,7 @@ app.whenReady().then(async () => {
       const save = await js(`localStorage.getItem('wildgrid-save-v1')`);
       const timeOrigin = await js('performance.timeOrigin');
       await click('[data-chapter="0"]');
+      if (!touch) { await checkSlide(true, 1); await checkSlide(false, 0); }
       for (let chapter = 0; chapter < count; chapter++) {
         await checkChapter(chapter, count, viewport.language, viewport);
         assert.equal(await js(`document.querySelectorAll('.level-card.completed').length`), 15);

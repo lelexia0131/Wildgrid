@@ -7,6 +7,7 @@ export { terrainRegions, terrainDistribution, terrainPlacementScores } from './t
 import { terrainRegions, terrainDistribution } from './terrainLayout';
 import { terrainRegistry } from './terrainRegistry';
 import { TERRAIN_REQUIREMENTS } from './placementRules';
+import { MAX_GENERATED_LINE_OCCUPANCY } from './generationConfig';
 
 type QualityConstraints = { disabled: readonly string[]; requireSingle: boolean };
 export function mapQuality(draft: SandboxDraft, constraints?: QualityConstraints) {
@@ -36,6 +37,7 @@ export function mapQuality(draft: SandboxDraft, constraints?: QualityConstraints
   const clueEntropy = clues.reduce((s,v) => { const frequency = clues.filter(c => c === v).length / clues.length; return s - Math.log2(frequency) / clues.length; }, 0);
   const naturalness = regions.reduce((s,r) => s + r.patchCompactness * (terrainRegistry.find(t=>t.id===r.kind)?.compactnessBias??0) - r.branches*.2, 0);
   const violations: string[] = [...distribution.violations];
+  if (clues.some(value => value > MAX_GENERATED_LINE_OCCUPANCY)) violations.push('line occupancy');
   if (constraints) {
     if (level.pieces.some(p => constraints.disabled.includes(`${p.kind}_${p.shape}`))) violations.push('disabled facility');
     if (constraints.requireSingle && !level.pieces.some(p => p.kind === 'camp' && p.shape === 'single')) violations.push('required single camp');

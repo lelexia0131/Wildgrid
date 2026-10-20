@@ -86,15 +86,20 @@ export function terrainPlacementScores(terrain: readonly FixedTerrain[], kind: s
   });
 }
 
-export function layoutTerrain<K extends string>(random:()=>number, counts:Readonly<Record<string,number>>, definitions:readonly TerrainDefinition<K>[], budget:number) {
+export function layoutTerrain<K extends string>(random:()=>number, counts:Readonly<Record<string,number>>, definitions:readonly TerrainDefinition<K>[], budget:number, activity?:{cells:ReadonlySet<number>;terrainArea:number}) {
   const terrain:(Cell & {kind:K})[]=[],remaining=new Map(definitions.map(d=>[d.id,counts[d.id]??0]));
   const clustering=random()*.8-.3, jitter=1.2+random()*1.2;
   while([...remaining.values()].some(n=>n>0)) {
     const pending=definitions.filter(d=>remaining.get(d.id)!>0);
     const def=pending[Math.floor(random()*pending.length)];
-    const candidates=terrainPlacementScores(terrain,def.id,budget,definitions).map(p=>({...p,score:p.score+(p.component>def.cells.length?def.clusterBias+clustering:0)+random()*jitter})).sort((a,b)=>b.score-a.score);
+    const active=activity?terrain.filter(p=>activity.cells.has(p.r*8+p.c)).length:0;
+    const candidates=terrainPlacementScores(terrain,def.id,budget,definitions).filter(p=>{
+      if(!activity) return true;
+      const next=active+p.cells.filter(c=>activity.cells.has(c.r*8+c.c)).length;
+      return next<=activity.terrainArea && terrain.length+p.cells.length-next<=budget-activity.terrainArea;
+    }).map(p=>({...p,score:p.score+(p.component>def.cells.length?def.clusterBias+clustering:0)+random()*jitter})).sort((a,b)=>b.score-a.score);
     if(!candidates.length) return;
     terrain.push(...candidates[0].cells.map(p=>({...p,kind:def.id})));remaining.set(def.id,remaining.get(def.id)!-1);
   }
-  return terrainDistribution(terrain,terrainRegions(terrain,definitions),definitions).violations.length?undefined:terrain;
+  return (activity && terrain.filter(p=>activity.cells.has(p.r*8+p.c)).length!==activity.terrainArea) || terrainDistribution(terrain,terrainRegions(terrain,definitions),definitions).violations.length?undefined:terrain;
 }

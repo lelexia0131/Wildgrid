@@ -1,6 +1,6 @@
 import { generateSurvival } from '../game-modes/survival/survivalChallenge';
-import { MapGenerationSearchError } from '../engine/mapGeneration';
-import type { SurvivalGenerationRequest, SurvivalGenerationResult } from './workerTasks';
+import { MapGenerationSearchError } from '../engine';
+import type { SurvivalGenerationRequest, SurvivalGenerationResult } from './survivalProtocol';
 self.onmessage = (event: MessageEvent<SurvivalGenerationRequest>) => {
   let result: SurvivalGenerationResult;
   try { result = { status: 'success', challenge: generateSurvival(event.data.difficulty, event.data.seed, event.data.id, event.data.recent, event.data.disabled, event.data.history, event.data.budgetMs) }; }

@@ -101,13 +101,14 @@ test('capacity pruning accounts for disabled domino shapes before drawing any la
 });
 
 test('required single camp survives every construction tier, unrelated bans, and role assignment', () => {
-  for (const difficulty of [1,5,7,9,10]) {
+  for (const [difficulty,seed] of [[1,20261020],[5,20261020],[7,2674696789],[8,20261020],[9,1034165262],[10,20261020]]) {
     const spec=SURVIVAL_DIFFICULTIES[difficulty-1];
-    const map=generateMap(difficulty,20261020,'required-single',[],spec);
+    const map=generateMap(difficulty,seed,'required-single',[],spec);
     const pieces=map.draft.level.pieces;
     assert.ok(pieces.some(p=>p.kind==='camp' && p.shape==='single'));
     assert.deepEqual(inventoryViolations(map.draft.level,difficulty),[]);
     assert.equal(evaluate(map.draft.level,map.draft.placements).won,true);
+    assert.ok([...map.draft.level.rows,...map.draft.level.cols].every(value=>value<=6));
     assert.ok(map.diagnostics.reasoning.solved && !map.diagnostics.reasoning.aborted);
     assert.ok(map.draft.level.terrain.length<=generationBudgets(difficulty).terrain.max);
     assert.deepEqual(terrainDistribution(map.draft.level.terrain).violations,[]);

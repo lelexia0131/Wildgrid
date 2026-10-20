@@ -4,7 +4,7 @@ import { art } from '../../assets/art';
 import { SurvivalNotice } from './SurvivalNotice';
 import { FacilityArt } from './Art';
 import { useI18n } from '../../localization/LanguageContext';
-import { facilityNames, shapeNames } from '../../engine/facilityRegistry';
+import { facilityNames, shapeNames } from '../../engine';
 import { facilityKey, SURVIVAL_FACILITIES, facilityRestrictionError } from '../../game-modes/survival/survivalFacilities';
 import { readDisabledFacilities, writeDisabledFacilities } from '../../save-system/survivalFacilityStorage';
 

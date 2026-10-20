@@ -1,7 +1,5 @@
-import { mapFeatures } from '../../engine/mapNovelty';
-import type { MapFeatures } from '../../engine/mapNovelty';
-import { encodeMap, evaluate, generateMap } from '../../engine';
-import type { Placement, Shape, SandboxDraft } from '../../engine';
+import { mapFeatures, encodeMap, evaluate, generateMap } from '../../engine';
+import type { MapFeatures, Placement, Shape, SandboxDraft } from '../../engine';
 import { rankFor, SURVIVAL_DIFFICULTIES } from './survivalDifficulty';
 
 export type SurvivalChallenge = { id: string; difficulty: number; seed: number; startedAt?: number; draft: SandboxDraft; fingerprint: string };
@@ -16,6 +14,12 @@ export function survivalTotals(save: SurvivalSave) {
   return { counts, total: save.completed.length, xp: counts.reduce((sum, count, i) => sum + count * SURVIVAL_DIFFICULTIES[i].xp, 0) };
 }
 export const emptySurvivalProgress = (id: string): SurvivalProgress => ({ id, status: 'active', placements: [], past: [], future: [], rotations: {}, selectedId: null });
+
+export function survivalContinuation(save: SurvivalSave): SurvivalChallenge | null {
+  const current = save.challenge;
+  // A settled board in an older save must never be restored and settled again.
+  return current && !(save.completed.some(entry => entry.id === current.id) && evaluate(current.draft.level, save.progress?.placements || []).won) ? current : null;
+}
 
 export function generateSurvival(difficulty: number, seed: number, id: string, recent: string[] = [], disabled: readonly string[] = [], history: readonly MapFeatures[] = [], budgetMs?: number): SurvivalChallenge {
   const spec = SURVIVAL_DIFFICULTIES[difficulty - 1];

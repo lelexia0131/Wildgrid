@@ -132,7 +132,7 @@ app.whenReady().then(async () => {
     console.log('PASS 8x8: all multi-cell shapes, 20 rotations with undo/redo; proportional previews');
     await viewport(390,844,true); await prepare(1); await click('.mode-survival');
     await js(`window.Worker=class {postMessage(){} terminate(){}};void 0`); await click('.survival-difficulty');
-    assert.equal(await js(`document.querySelector('.survival-generation-page h1').textContent`),'地图生成中');
+    assert.ok(await js(`document.querySelector('.survival-generation-page h1[role="status"]').textContent.trim().length > 0`));
     assert.equal(await js(`!!document.querySelector('.survival-identity') || !!document.querySelector('.survival-generating')`),false);
     assert.ok(await js(`!!document.querySelector('.generation-progress[role="progressbar"]:not([aria-valuenow])')`));
     const scenes=[];

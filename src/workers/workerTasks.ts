@@ -1,8 +1,8 @@
-import type { MapFeatures } from '../engine/mapNovelty';
-import { encodeMap, MAP_GENERATION_TIMEOUT, generationBudget } from '../engine';
-import { inventoryViolations } from '../engine/generationConfig';
+import { encodeMap, MAP_GENERATION_TIMEOUT, generationBudget, inventoryViolations } from '../engine';
 import type { SandboxCheck, SandboxDraft } from '../engine';
 import type { SurvivalChallenge } from '../game-modes/survival/survivalChallenge';
+import type { SurvivalGenerationRequest, SurvivalGenerationResult } from './survivalProtocol';
+export type { SurvivalGenerationRequest, SurvivalGenerationResult } from './survivalProtocol';
 
 type TaskCallbacks<Result> = { onResult: (result: Result) => void; onError: (reason: 'error' | 'timeout', message?: string) => void };
 
@@ -53,6 +53,13 @@ export function createSurvivalGenerationTask() {
     clearTimeout(timer); timer = undefined;
   }
   function cancel() { account(); session = null; attempt.cancel(); }
+  function retry() {
+    if (!session) return;
+    account(); attempt.cancel();
+    session.request = { ...session.request, seed: (session.request.seed + 0x9e3779b9) >>> 0 };
+    session.elapsed = 0;
+    run();
+  }
   function run() {
     const current = session;
     if (!current || paused || attempt.isRunning()) return;
@@ -60,13 +67,13 @@ export function createSurvivalGenerationTask() {
       if (session !== current) return;
       cancel(); current.callbacks.onError(reason, message);
     };
-    // All construction attempts and seeds belong to this single worker run.
-    // Pausing terminates CPU work; resuming keeps the seed and active-time budget.
+    // Each search round is bounded; the session continues until success or cancellation.
+    // Pausing terminates CPU work and preserves this round's seed and active budget.
     const remaining = Math.min(MAP_GENERATION_TIMEOUT, generationBudget(current.request.difficulty) + 400) - current.elapsed;
-    if (remaining <= 0) { fail('timeout', '地图生成已用完计算预算，请重试或调整禁用设施。'); return; }
+    if (remaining <= 0) { retry(); return; }
     try {
       current.started = Date.now();
-      timer = setTimeout(() => fail('timeout', '地图生成已用完计算预算，请重试或调整禁用设施。'), remaining);
+      timer = setTimeout(retry, remaining);
       const request = { ...current.request, budgetMs: Math.max(1, remaining - 200) };
       attempt.start(request, {
         onError: reason => fail(reason),
@@ -75,6 +82,7 @@ export function createSurvivalGenerationTask() {
           account();
           if (!data || typeof data !== 'object' || !('status' in data)) { fail('error'); return; }
           const result = data as SurvivalGenerationResult;
+          if (result.status === 'search-failed' && typeof result.error === 'string') { retry(); return; }
           if (result.status !== 'success') { fail('error', typeof result.error === 'string' ? result.error : undefined); return; }
           try {
             const c = result.challenge;
@@ -100,6 +108,3 @@ export function createSurvivalGenerationTask() {
     },
   };
 }
-
-export type SurvivalGenerationRequest = { difficulty: number; seed: number; id: string; recent: string[]; disabled?: string[]; history?: MapFeatures[]; budgetMs?: number };
-export type SurvivalGenerationResult = { status: 'success'; challenge: SurvivalChallenge } | { status: 'search-failed' | 'error'; error: string };

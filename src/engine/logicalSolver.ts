@@ -49,18 +49,21 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
       const owned = groups.map((_, g) => state.required & ~roundUnions.reduce((m, u, h) => g === h ? m : m | u, 0n) & full);
       const combinations = state.domains.map((domain, g) => {
         if (counts[g] === 1 || domain.length > 24) return undefined;
-        const found: { mask: bigint; indices: number[] }[] = [];
+        const found: { mask: bigint; indices: number[]; lines:number[] }[] = [];
+        const totals=Array<number>(n*2).fill(0);
         let visits = 0, overflow = false;
         function enumerate(start: number, mask: bigint, selected: number[]) {
           if (++visits > 1600 || found.length >= 100) { overflow = true; return; }
           if (pop(owned[g] & ~mask) > (counts[g] - selected.length) * domain[0].cells.length) return;
-          if (selected.length === counts[g]) { if (owned[g] & ~mask || mask & state.forbidden) return; if (state.pinned[g].some(p => !selected.some(i => domain[i] === p))) return; found.push({ mask, indices: selected }); return; }
+          if (selected.length === counts[g]) { if (owned[g] & ~mask || mask & state.forbidden) return; if (state.pinned[g].some(p => !selected.some(i => domain[i] === p))) return; found.push({ mask, indices: selected, lines:[...totals] }); return; }
           for (let i = start; i <= domain.length - counts[g] + selected.length; i++) {
             const p = domain[i];
             if (p.mask & state.forbidden || mask & p.mask || selected.some(j => !compatible(p, groups[g].piece.kind, domain[j]))) continue;
             const next = mask | p.mask;
-            if (lines.some((line, l) => pop(next & line) > clues[l])) continue;
+            if (totals.some((v,l)=>v+(l<n?p.rows[l]:p.cols[l-n])>clues[l])) continue;
+            for(let l=0;l<n;l++){totals[l]+=p.rows[l];totals[l+n]+=p.cols[l];}
             enumerate(i + 1, next, [...selected, i]);
+            for(let l=0;l<n;l++){totals[l]-=p.rows[l];totals[l+n]-=p.cols[l];}
             if (overflow) return;
           }
         }
@@ -96,8 +99,8 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
       const unions = state.domains.map(domain => domain.reduce((m, p) => m | p.mask, 0n));
       const exclusive = groups.map((_, g) => required & ~unions.reduce((m, u, h) => h === g ? m : m | u, 0n) & full);
       const ownSupport = combinations.map(c => c ? new Set(c.flatMap(v => v.indices)) : undefined);
-      const min = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.min(...combinations[g]!.map(c => pop(c.mask & lines[line]))) : state.domains[g].map(p => line < n ? p.rows[line] : p.cols[line - n]).sort((a, b) => a - b).slice(0, counts[g]).reduce((a, b) => a + b, 0)));
-      const max = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.max(...combinations[g]!.map(c => pop(c.mask & lines[line]))) : state.domains[g].map(p => line < n ? p.rows[line] : p.cols[line - n]).sort((a, b) => b - a).slice(0, counts[g]).reduce((a, b) => a + b, 0)));
+      const min = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.min(...combinations[g]!.map(c => c.lines[line])) : state.domains[g].map(p => line < n ? p.rows[line] : p.cols[line - n]).sort((a, b) => a - b).slice(0, counts[g]).reduce((a, b) => a + b, 0)));
+      const max = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.max(...combinations[g]!.map(c => c.lines[line])) : state.domains[g].map(p => line < n ? p.rows[line] : p.cols[line - n]).sort((a, b) => b - a).slice(0, counts[g]).reduce((a, b) => a + b, 0)));
       const bounds = groups.map((_, g) => lines.map((_, l) => {
         const values = state.domains[g].map(p => l < n ? p.rows[l] : p.cols[l - n]).sort((a, b) => a - b);
         return [0, 1, 2, 3].map(value => {

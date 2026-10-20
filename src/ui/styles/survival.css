@@ -68,10 +68,12 @@
 .generation-background { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .generation-background > .journal-chapter-background { border-radius: 0; opacity: .9; }
 .generation-background::after { content: ''; position: absolute; inset: 0; background: var(--art-generation-vignette) center / 100% 100%; }
-.survival-generation-page h1 { font-size: 30px; color: #365d47; line-height: 1.25; }
+.survival-generation-page h1 { display: flex; align-items: center; justify-content: center; flex: none; width: min(480px, 100%); min-height: 2.5em; font-size: clamp(20px, 5vw, 30px); color: #365d47; line-height: 1.25; text-wrap: balance; }
 .survival-generation-page p { font-size: 16px; color: #71845c; }
 .generation-map { flex: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; width: min(230px, 45vw, 32dvh); aspect-ratio: 1; padding: 7px; border: 2px solid #81976b; border-radius: 12px; background: #a6b78a; box-shadow: 0 5px 0 #81976b; }
-.generation-map > span { aspect-ratio: 1; min-width: 0; min-height: 0; border-radius: 4px; background: #d5dfb4; animation: generation-cell 600ms var(--cell-delay) both ease-out; }
+.generation-map > span { position: relative; aspect-ratio: 1; min-width: 0; min-height: 0; border-radius: 4px; background: #d5dfb4; }
+.generation-map .art { animation: generation-cell 600ms var(--cell-delay) both ease-out; }
+.generation-map .generation-wide-art { position: absolute; inset: 0 auto auto 0; width: calc(200% + 4px); height: 100%; z-index: 1; }
 .generation-map > span:nth-child(3n) { background: #d1dcb0; }
 .generation-map > span:nth-child(5n) { background: #d9e2bb; }
 .generation-progress { flex: none; width: min(340px, 100%); height: 20px; padding: 3px; border: 2px solid #81976b; border-radius: 5px; background: #d8dfc7; overflow: hidden; }
@@ -121,7 +123,7 @@
   .local-maps-page:has(.survival-card-state) .local-map-browser { grid-template-rows: 150px auto; }
   .local-maps-page:has(.survival-card-state) .local-map-list { grid-auto-rows: minmax(92px, auto); }
 }
-@media (prefers-reduced-motion: reduce) { .survival-badge, .generation-map > span, .generation-progress > i { animation: none; } .generation-progress > i { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .survival-badge, .generation-map .art, .generation-progress > i { animation: none; } .generation-progress > i { width: 100%; } }
 
 .survival-identity-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .survival-identity-title p { margin: 0; }

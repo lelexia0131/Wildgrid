@@ -31,7 +31,8 @@ test('Engine stays independent; every layer uses public APIs without reverse dep
         if (['engine', 'game-modes', 'save-system', 'workers'].includes(layer)) assert.fail(`${file}: external dependency ${specifier}`);
         return;
       }
-      const target = path.resolve(path.dirname(file), specifier);
+      // Vite asset queries such as .svg?url refer to the same source file.
+      const target = path.resolve(path.dirname(file), specifier.replace(/[?#].*$/, ''));
       const resolved = [target, target + '.ts', target + '.tsx', path.join(target, 'index.ts')].find(candidate => existsSync(candidate) && statSync(candidate).isFile());
       assert.ok(resolved, `${file}: missing import ${specifier}`);
       const targetLayer = layerOf(target);

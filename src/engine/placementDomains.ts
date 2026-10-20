@@ -7,6 +7,7 @@ export type Position = { at: Placement; cells: Cell[]; mask: bigint; rows: numbe
 export type Candidate = Position;
 export const cellBit = (cell: Cell, size = 8) => 1n << BigInt(cell.r * size + cell.c);
 const cache = new Map<string, Position[]>();
+const terrainGeometry = new Map<string,{forbidden:bigint;required:bigint}>();
 export const boardCells = (size: number) => Array.from({ length: size * size }, (_, i) => ({ r: Math.floor(i / size), c: i % size }));
 
 // Shared immutable geometry: no terrain, IDs or seed-specific state is cached.
@@ -36,23 +37,48 @@ export function placementGeometry(piece: Piece, size: number): Position[] {
   return positions;
 }
 
-export function staticPositions(piece: Piece, level: Level): Position[] {
-  const terrainMask = level.terrain.reduce((m, p) => m | cellBit(p, level.size), 0n);
-  const need = TERRAIN_REQUIREMENTS[piece.kind];
-  return placementGeometry(piece, level.size).filter(p => !(p.mask & terrainMask)
+function terrainMasks(kind: FacilityKind, level: Level) {
+  const need=TERRAIN_REQUIREMENTS[kind],board=boardCells(level.size);
+  // Cache only immutable rule geometry for one terrain cell. A relocation or
+  // type swap recombines these masks; clues and mutable domains are never cached.
+  let forbidden=0n,required=0n;
+  for(const t of level.terrain) {
+    const key=`${level.size}/${kind}/${t.kind}/${t.r}/${t.c}`;
+    let masks=terrainGeometry.get(key);
+    if(!masks) {
+      masks={forbidden:0n,required:0n};
+      for(const p of board) {
+        if((t.r===p.r && t.c===p.c) || terrainConflict(kind,[p],t)) masks.forbidden|=cellBit(p,level.size);
+        if(t.kind===need && adjacent(p,t)) masks.required|=cellBit(p,level.size);
+      }
+      terrainGeometry.set(key,masks);
+    }
+    forbidden|=masks.forbidden;required|=masks.required;
+  }
+  return {forbidden,required:need?required:undefined};
+}
+
+function positionsWithTerrain(piece: Piece, level: Level, masks:ReturnType<typeof terrainMasks>):Position[] {
+  return placementGeometry(piece, level.size).filter(p => !(p.mask & masks.forbidden)
     && !p.rows.some((v, i) => v > level.rows[i]) && !p.cols.some((v, i) => v > level.cols[i])
-    && (!need || level.terrain.some(t => t.kind === need && p.cells.some(c => adjacent(c, t))))
-    && !level.terrain.some(t => terrainConflict(piece.kind, p.cells, t)));
+    && (masks.required===undefined || !!(p.mask&masks.required)));
+}
+
+export function staticPositions(piece: Piece, level: Level): Position[] {
+  return positionsWithTerrain(piece,level,terrainMasks(piece.kind,level));
 }
 
 export type PlacementGroup = { piece: Piece; ids: string[]; domain: Candidate[] };
 export function placementDomains(level: Level): PlacementGroup[] {
   const groups: PlacementGroup[] = [];
+  const constraints=new Map<FacilityKind,ReturnType<typeof terrainMasks>>();
   const terrainMask = level.terrain.reduce((m,p) => m | cellBit(p,level.size),0n);
   for (const piece of level.pieces) {
     const existing = groups.find(g => g.piece.kind === piece.kind && g.piece.shape === piece.shape);
     if (existing) { existing.ids.push(piece.id); continue; }
-    groups.push({ piece, ids: [piece.id], domain: staticPositions(piece, level).map(p => ({ ...p,
+    let masks=constraints.get(piece.kind);
+    if(!masks) {masks=terrainMasks(piece.kind,level);constraints.set(piece.kind,masks);}
+    groups.push({ piece, ids: [piece.id], domain: positionsWithTerrain(piece, level,masks).map(p => ({ ...p,
       at: { ...p.at, id: piece.id },
       connections: p.connections.filter(link => !(link.gap & terrainMask)),
     })) });
