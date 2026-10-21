@@ -94,6 +94,10 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
   const capacity=space.length;
   const nodeLimit=240;
   if(targetArea>Math.min(64-level.terrain.length-8,capacity===targetArea?capacity:capacity-ACTIVITY_LIMITS.spareCells) || limits.some((i,g)=>i.min>groups[g].domain.length)) {count('initial capacity');return;}
+  const possible=groups.reduce((m,g)=>g.domain.reduce((u,p)=>u|p.mask,m),0n);
+  const support=space.filter(c=>!!(possible&c.bit));
+  if([true,false].some(horizontal=>Array.from({length:8},(_,i)=>Math.min((horizontal?level.rows:level.cols)[i],support.filter(c=>(horizontal?c.r:c.c)===i).length)).reduce((a,b)=>a+b,0)<targetArea)
+    || 16-new Set(support.map(c=>c.r)).size-new Set(support.map(c=>c.c)).size>maxEmptyLines) {count('initial line capacity');return;}
   const reachability=new Map<string,boolean>();
   const canFinish=(remaining:number)=>{
     const key=counts.join(',');

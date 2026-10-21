@@ -27,11 +27,11 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
   const [checking, setChecking] = useState(false);
   const [editorDirty, setEditorDirty] = useState(false);
   const [terrainBrush, setTerrainBrush] = useState<TerrainKind | null>(null);
-  const checkerRef = useRef(createSandboxCheckTask());
+  const [checker] = useState(createSandboxCheckTask);
   const revisionRef = useRef(0);
 
   const cancelCheck = useCallback(() => {
-    checkerRef.current.cancel(); revisionRef.current++;
+    checker.cancel(); revisionRef.current++;
     setChecking(false);
   }, []);
   const invalidateCheck = useCallback(() => { cancelCheck(); setCheck(null); }, [cancelCheck]);
@@ -40,7 +40,7 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
     setLocalMapId(undefined); setSandboxDraft(null); setTerrainBrush(null);
   }, []);
   const markEditorDirty = useCallback(() => setEditorDirty(true), []);
-  useLayoutEffect(() => () => { checkerRef.current.cancel(); revisionRef.current++; }, []);
+  useLayoutEffect(() => () => { checker.cancel(); revisionRef.current++; }, []);
 
   function openSandbox(size: 6 | 8) {
     sound('confirm'); invalidateCheck(); resetSandboxContext();
@@ -62,13 +62,13 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
   }
   function runSandboxAction(action: 'save' | 'export') {
     if (mode === 'survival') return;
-    if (checking || checkerRef.current.isRunning()) { cancelCheck(); setCheck(null); setNotice('已取消营地质检'); sound('close'); return; }
+    if (checking || checker.isRunning()) { cancelCheck(); setCheck(null); setNotice('已取消营地质检'); sound('close'); return; }
     const draft = mode === 'sandbox-editor' ? present : sandboxDraft;
     if (!draft) return;
     const revision = revisionRef.current;
     setChecking(true); setCheck(null); setNotice('正在进行营地质检…');
     try {
-      checkerRef.current.start(draft, {
+      checker.start(draft, {
         onResult: result => {
           if (revision !== revisionRef.current) return;
           setCheck(result); setNotice(result.message);
@@ -86,7 +86,7 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
           setChecking(false); setCheck(null); setNotice('营地质检未能完成，请重试'); sound('error');
         },
       });
-    } catch { checkerRef.current.cancel(); setChecking(false); setNotice('营地质检未能启动，请重试'); sound('error'); }
+    } catch { checker.cancel(); setChecking(false); setNotice('营地质检未能启动，请重试'); sound('error'); }
   }
   async function exportSandbox(draft: SandboxDraft, revision: number) {
     try {

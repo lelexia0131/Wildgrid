@@ -1,5 +1,5 @@
-import type { Level, Placement } from '../../engine/types';
-import { key, occupied } from '../../engine/boardGeometry';
+import type { Level, Placement } from '../../engine';
+import { key, occupied } from '../../engine';
 
 export const ADVENTURE_BADGES = {
   gold: { name: '独立破解', material: '金色徽章', review: '全程未使用提示', condition: '完全未使用提示。' },

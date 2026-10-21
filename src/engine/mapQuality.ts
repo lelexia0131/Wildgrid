@@ -43,7 +43,7 @@ export function mapQuality(draft: SandboxDraft, constraints?: QualityConstraints
     if (constraints.requireSingle && !level.pieces.some(p => p.kind === 'camp' && p.shape === 'single')) violations.push('required single camp');
   }
   if (grass.length < 8 || linked !== dependencies.length) violations.push('activity space or relationships');
-  // Aesthetic metrics rank a fixed candidate batch. Legality, reasoning and
+  // Aesthetic metrics rank available candidates. Legality, reasoning and
   // uniqueness are verified separately; they cannot be compensated by a score.
   const score = naturalness + clueEntropy * .2 + kinds.size * .7 + shapes.size * .3 + campShapes * .65 + clueVariety * .2 + terrainLinks / Math.max(1, entries.length)
     + grassQuadrants.filter(v => v > 0).length * .3 + effectiveGrass / Math.max(1, grass.length)

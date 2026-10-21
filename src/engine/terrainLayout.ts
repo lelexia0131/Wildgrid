@@ -12,6 +12,24 @@ const windows = [3,4].map(size => Array.from({length:(9-size)**2},(_,i) => {
 const memberships = board.map((_,i)=>windows.map(group=>group.flatMap((cells,j)=>cells.includes(i)?[j]:[])));
 const quadrant = (p: Cell) => (p.r>=4?2:0)+(p.c>=4?1:0);
 
+// Active lines describe facility coverage, not a rectangle that must be tiled.
+// Keep eight grass cells on the whole board. Terrain
+// outside the rectangle still counts towards its independent quantity budget.
+export function activityRectangles(size:number, facilityArea:number, terrainArea:number, lineCapacity:number, maxEmptyLines:number) {
+  const plans:{r:number;c:number;terrainArea:number;grass:number}[]=[];
+  if(facilityArea+terrainArea+8>size*size) return plans;
+  for(let r=1;r<=size;r++) for(let c=1;c<=size;c++) {
+    if(2*size-r-c>maxEmptyLines || facilityArea<Math.max(r,c) || Math.min(r,c)*lineCapacity<facilityArea) continue;
+    let inside=Math.min(terrainArea,r*c-facilityArea);
+    // The packing heuristic supports either complete coverage or at least two
+    // spare cells. A one-cell gap is unnecessary; move one terrain cell outside.
+    if(r*c-facilityArea-inside===1) inside--;
+    if(inside<Math.max(0,terrainArea-(size*size-r*c))) continue;
+    plans.push({r,c,terrainArea:inside,grass:r*c-facilityArea-inside});
+  }
+  return plans.sort((a,b)=>a.r*a.c-b.r*b.c);
+}
+
 export function terrainRegions(terrain: readonly FixedTerrain[], definitions: readonly TerrainDefinition<string>[] = terrainRegistry) {
   return definitions.map(def => {
     const cells=terrain.filter(t=>t.kind===def.id), remaining=new Set(cells.map(t=>t.r*8+t.c));
@@ -87,6 +105,7 @@ export function terrainPlacementScores(terrain: readonly FixedTerrain[], kind: s
 }
 
 export function layoutTerrain<K extends string>(random:()=>number, counts:Readonly<Record<string,number>>, definitions:readonly TerrainDefinition<K>[], budget:number, activity?:{cells:ReadonlySet<number>;terrainArea:number}) {
+  if(activity && (!Number.isInteger(activity.terrainArea) || activity.terrainArea<0 || activity.terrainArea>Math.min(budget,activity.cells.size) || budget-activity.terrainArea>64-activity.cells.size)) return;
   const terrain:(Cell & {kind:K})[]=[],remaining=new Map(definitions.map(d=>[d.id,counts[d.id]??0]));
   const clustering=random()*.8-.3, jitter=1.2+random()*1.2;
   while([...remaining.values()].some(n=>n>0)) {

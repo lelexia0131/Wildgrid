@@ -1,3 +1,15 @@
+# 第三轮优化与修复（2026-10-21）
+
+当前验收和算法以 [第三轮修复报告](reports/generator-round3.md) 为准；逐种子、阶段和失败诊断见 [配对数据](reports/generator-round3-results.json)。下方保留 2026-10-20 的历史记录，其中旧数量目标、7/8 格容量策略和性能结果不代表当前实现。
+
+本轮核实真实可达设施面积：8 难 24–26、9 难 28–29、10 难 30–33；相应最大设施＋地形为 40、44、50 格，而空行列限制要求最小活动矩形为 40、48、56 格。旧“矩形必须填满”的规划在 9、10 难均完全不可达。现将区域内草地独立建模，数量和 ±10% 面积合同不变，行列占格上限仍为当前配置的 6 格。
+
+候选以有限构造前瞻和剩余预算调度，不再要求三张；改良使用可借用的阶段软预算，保留逻辑与最终证明空间，截止时保留已检查的地形改良。所有成功地图仍通过完整验收和唯一解证明。阶段截止可能影响结果时记录时间依赖。
+
+原有 13 场景保持 13/13，平均生成 2251.5→1724.3ms；默认高难四种子各一轮为 4/8→5/8，改善主要在 10 难。9 难成功率未提高，20261019 变慢；9 难 20261021/20261022、10 难 20261022 仍失败，详情及原因保留在报告。针对性测试 49/49，最后完整测试 148/148，构建通过；未修改旧关卡哈希或降低验收强度。
+
+---
+
 # 荒野求生生成器重构验收（2026-10-20）
 
 **状态：本轮实现与有限验收完成。原有 23 项针对性测试全部通过；新增 4 项回归后共 27/27 通过。默认 9、10 难各 6 个固定种子全部成功，原有 13 个场景也全部成功。** 有限样本不代表任意种子、设备或禁用组合都能成功，未完成的覆盖范围见文末。
@@ -149,14 +161,14 @@ Worker 取消、暂停剩余时间、过期回包隔离、单次接收、异常�
 | `src/engine/generationConfig.ts`、`src/engine/index.ts` | 共享限制校验与公开接口；140 项范围未改动 |
 | `src/workers/survivalProtocol.ts`、`workerTasks.ts`、`survival.worker.ts` | 独立协议类型与公开入口，生命周期逻辑不变 |
 | 生存设施／挑战、存档编解码、设施对话框 | 仅相关共享校验及导入入口调整 |
-| `tests/generation-search.test.ts` | 4 项新增算法回归 |
-| `tests/engine-boundaries.test.ts` | 正确解析资源查询串，原断言保留 |
+| `tests/engine/generation-search.test.ts` | 4 项新增算法回归 |
+| `tests/engine/engine-boundaries.test.ts` | 正确解析资源查询串，原断言保留 |
 | `scripts/check-generation-budget.ts` | 固定种子／难度选择、事件与阶段耗时、逐图验收及统计 |
 
 复现命令：
 
 ```powershell
-npx tsx --test tests/generation-budget.test.ts tests/map-generation.test.ts tests/save-protection.test.ts tests/worker-tasks.test.ts tests/generation-search.test.ts
+npx tsx --test tests/engine/generation-budget.test.ts tests/engine/map-generation.test.ts tests/storage/save-protection.test.ts tests/platform/worker-tasks.test.ts tests/engine/generation-search.test.ts
 npx tsx scripts/check-generation-budget.ts acceptance-verified --high --seeds=6
 npx tsx scripts/check-generation-budget.ts regression-verified
 npx tsx scripts/check-generation-budget.ts single-check --high --difficulty=10 --seed=20261021 --seeds=1

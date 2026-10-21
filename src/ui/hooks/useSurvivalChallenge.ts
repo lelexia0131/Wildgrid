@@ -1,6 +1,6 @@
 import { readDisabledFacilities } from '../../save-system/survivalFacilityStorage';
 import { facilityRestrictionError } from '../../game-modes/survival/survivalFacilities';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import type { audio } from '../../platform/audio/WildernessAudio';
 import { readLocalMaps, saveLocalMap, unlockSurvivalMaps } from '../../save-system/localMapStorage';
 import { completeSurvival, readSurvival, readSurvivalForWrite, writeSurvival } from '../../save-system/survivalStorage';
@@ -35,7 +35,7 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
   const [generating, setGenerating] = useState<number | null>(null);
   const [replaceChallenge, setReplaceChallenge] = useState<number | null>(null);
   const [abandonOpen, setAbandonOpen] = useState(false);
-  const generatorRef = useRef(createSurvivalGenerationTask());
+  const [generator] = useState(createSurvivalGenerationTask);
   const placements = history.present.placements;
 
   useLayoutEffect(() => {
@@ -49,11 +49,11 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
     catch (cause) { setSurvivalError(cause instanceof Error ? cause.message : '挑战进度保存失败'); }
   }, [active, challenge, history, placements, rotations, selected]);
   useLayoutEffect(() => {
-    if (!menuOpen) { generatorRef.current.cancel(); setGenerating(null); }
-    return () => generatorRef.current.cancel();
+    if (!menuOpen) { generator.cancel(); setGenerating(null); }
+    return () => generator.cancel();
   }, [menuOpen]);
   useEffect(() => {
-    const task = generatorRef.current;
+    const task = generator;
     const sync = () => task.setPaused(document.hidden);
     const hide = () => task.setPaused(true);
     sync();
@@ -90,10 +90,10 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
     return true;
   }
   function cancelGeneration() {
-    generatorRef.current.cancel(); setGenerating(null);
+    generator.cancel(); setGenerating(null);
   }
   function requestSurvival(difficulty: number) {
-    if (!menuOpen || generatorRef.current.isRunning()) return;
+    if (!menuOpen || generator.isRunning()) return;
     const restriction = facilityRestrictionError(difficulty, readDisabledFacilities());
     if (restriction) { setSurvivalError(restriction); sound('error'); return; }
     sound('confirm'); setSurvivalError('');
@@ -102,14 +102,14 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
     generateChallenge(difficulty);
   }
   function generateChallenge(difficulty: number) {
-    if (!menuOpen || generatorRef.current.isRunning()) return;
+    if (!menuOpen || generator.isRunning()) return;
     setReplaceChallenge(null); setGenerating(difficulty); setSurvivalError('');
     try {
       const seed = crypto.getRandomValues(new Uint32Array(1))[0];
       const id = `wild-${Date.now().toString(36)}-${Array.from(crypto.getRandomValues(new Uint32Array(2)), n => n.toString(36)).join('-')}`;
       const fail = (message: string) => { cancelGeneration(); setSurvivalError(message); sound('error'); };
       const latest = readSurvival();
-      generatorRef.current.start({ difficulty, seed, id, recent: latest.recent, disabled: readDisabledFacilities(), history: latest.recentMaps || [] }, {
+      generator.start({ difficulty, seed, id, recent: latest.recent, disabled: readDisabledFacilities(), history: latest.recentMaps || [] }, {
         onError: (reason, message) => fail(message || (reason === 'timeout' ? '地图生成超时，请重试或调整禁用设施。' : '地图生成失败，旧挑战仍然保留，请重试。')),
         onResult: result => {
           const current = { ...result, startedAt: Date.now() };

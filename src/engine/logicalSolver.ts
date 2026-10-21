@@ -28,9 +28,14 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
   const lines = Array.from({ length: n * 2 }, (_, i) => board.reduce((mask, p) => (i < n ? p.r === i : p.c === i - n) ? mask | cellBit(p, n) : mask, 0n));
   const clues = [...level.rows, ...level.cols], counts = groups.map(g => g.ids.length);
   const steps: LogicStep[] = [];
+  const singleBounds = [0, 1, 2, 3].map(value => ({ low: value, high: value }));
   const result: LogicResult = { solved: false, contradiction: false, aborted: false, steps, rounds: 0, initialForced: groups.reduce((s, g) => s + (g.domain.length === g.ids.length ? g.ids.length : 0), 0), deductions: 0, assumptions: 0, maxDepth: 0, remaining: 0, placements: [], initialPlacements: groups.flatMap(g => g.domain.length === g.ids.length ? g.domain.map((p, i) => ({ ...p.at, id: g.ids[i] })) : []) };
   const pop = (mask: bigint) => { let count = 0; while (mask) { mask &= mask - 1n; count++; } return count; };
   const expired = () => { if (Date.now() < (budget.deadline ?? Infinity)) return false; result.aborted = true; return true; };
+  // Unchanged groups recur across propagation rounds. Their combinations
+  // depend only on this domain, owned/forbidden cells and pinned placements.
+  // Cache only unpinned groups; clues and counts are fixed for this call.
+  const combinationCache=new WeakMap<Candidate[],Map<bigint,{value:{mask:bigint;indices:number[];lines:number[]}[]|undefined}>>();
   let branchTrace: LogicStep[] | undefined;
   const fail = (contradiction: string) => {
     branchTrace?.push({ rule: 'capacity', group: '*', removed: 0, remaining: 0, round: 0, contradiction });
@@ -49,6 +54,9 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
       const owned = groups.map((_, g) => state.required & ~roundUnions.reduce((m, u, h) => g === h ? m : m | u, 0n) & full);
       const combinations = state.domains.map((domain, g) => {
         if (counts[g] === 1 || domain.length > 24) return undefined;
+        const key=owned[g] | (state.forbidden<<BigInt(n*n));
+        let cached=combinationCache.get(domain);
+        if(!state.pinned[g].length && cached?.has(key)) return cached.get(key)!.value;
         const found: { mask: bigint; indices: number[]; lines:number[] }[] = [];
         const totals=Array<number>(n*2).fill(0);
         let visits = 0, overflow = false;
@@ -68,15 +76,23 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
           }
         }
         enumerate(0, 0n, []);
-        return overflow ? undefined : found;
+        const value=overflow?undefined:found;
+        if(!state.pinned[g].length) {
+          if(!cached) {cached=new Map();combinationCache.set(domain,cached);}
+          cached.set(key,{value});
+        }
+        return value;
       });
       if (combinations.some(c => c && !c.length)) return fail('同类设施的数量、形状和必占格无法同时满足');
       const mandatory = state.domains.map((domain, g) => {
         if (combinations[g]) return combinations[g]!.reduce((mask, c) => mask & c.mask, full);
+        if (counts[g] === 1) return domain.reduce((mask, p) => mask & p.mask, full) | state.pinned[g].reduce((mask, p) => mask | p.mask, 0n);
         // A cell appearing in more than D-k placements must be occupied by
         // at least one of the k selected placements (pigeonhole principle).
         let mask = state.pinned[g].reduce((m, p) => m | p.mask, 0n);
-        for (const p of board) { const bit = cellBit(p, n); if (domain.filter(c => !!(c.mask & bit)).length > domain.length - counts[g]) mask |= bit; }
+        const support = Array<number>(n * n).fill(0);
+        for (const p of domain) for (const cell of p.cells) support[cell.r * n + cell.c]++;
+        for (let i = 0; i < support.length; i++) if (support[i] > domain.length - counts[g]) mask |= cellBit(board[i], n);
         return mask;
       });
       let required = state.required, possible = 0n;
@@ -99,14 +115,20 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
       const unions = state.domains.map(domain => domain.reduce((m, p) => m | p.mask, 0n));
       const exclusive = groups.map((_, g) => required & ~unions.reduce((m, u, h) => h === g ? m : m | u, 0n) & full);
       const ownSupport = combinations.map(c => c ? new Set(c.flatMap(v => v.indices)) : undefined);
-      const min = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.min(...combinations[g]!.map(c => c.lines[line])) : state.domains[g].map(p => line < n ? p.rows[line] : p.cols[line - n]).sort((a, b) => a - b).slice(0, counts[g]).reduce((a, b) => a + b, 0)));
-      const max = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.max(...combinations[g]!.map(c => c.lines[line])) : state.domains[g].map(p => line < n ? p.rows[line] : p.cols[line - n]).sort((a, b) => b - a).slice(0, counts[g]).reduce((a, b) => a + b, 0)));
+      const lineValues = state.domains.map((domain, g) => lines.map((_, line) => {
+        const values = domain.map(p => line < n ? p.rows[line] : p.cols[line - n]);
+        return counts[g] === 1 ? values : values.sort((a, b) => a - b);
+      }));
+      const min = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.min(...combinations[g]!.map(c => c.lines[line])) : counts[g] === 1 ? Math.min(...lineValues[g][line]) : lineValues[g][line].slice(0, counts[g]).reduce((a, b) => a + b, 0)));
+      const max = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.max(...combinations[g]!.map(c => c.lines[line])) : counts[g] === 1 ? Math.max(...lineValues[g][line]) : lineValues[g][line].slice(-counts[g]).reduce((a, b) => a + b, 0)));
       const bounds = groups.map((_, g) => lines.map((_, l) => {
-        const values = state.domains[g].map(p => l < n ? p.rows[l] : p.cols[l - n]).sort((a, b) => a - b);
+        if (counts[g] === 1) return singleBounds;
+        const values = lineValues[g][l], prefix = [0], copies = counts[g] - 1;
+        for (const value of values) prefix.push(prefix[prefix.length - 1] + value);
         return [0, 1, 2, 3].map(value => {
-          const rest = [...values], index = rest.indexOf(value);
-          if (index >= 0) rest.splice(index, 1);
-          return { low: value + rest.slice(0, counts[g] - 1).reduce((a, b) => a + b, 0), high: value + (counts[g] === 1 ? 0 : rest.slice(-(counts[g] - 1)).reduce((a, b) => a + b, 0)) };
+          const index = values.indexOf(value), inLow = index >= 0 && index < copies, inHigh = index >= values.length - copies;
+          return { low: value + prefix[copies + Number(inLow)] - (inLow ? value : 0),
+            high: value + prefix[values.length] - prefix[values.length - copies - Number(inHigh)] - (inHigh ? value : 0) };
         });
       }));
       const totalMin = lines.map((_, l) => min.reduce((s, m) => s + m[l], 0)), totalMax = lines.map((_, l) => max.reduce((s, m) => s + m[l], 0));

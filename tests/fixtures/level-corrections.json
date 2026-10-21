@@ -1,0 +1,187 @@
+{
+  "commit": "7a1a02e61874ea08c7dc3c8bde632f94e744c918",
+  "reason": "Repair multiple solutions in diary levels 12, 14 and 15; reference answers and all other level fields remain unchanged.",
+  "corrections": [
+    {
+      "id": 12,
+      "before": [
+        {
+          "kind": "water",
+          "r": 2,
+          "c": 1
+        },
+        {
+          "kind": "water",
+          "r": 4,
+          "c": 4
+        },
+        {
+          "kind": "forest",
+          "r": 0,
+          "c": 3
+        },
+        {
+          "kind": "mountain",
+          "r": 1,
+          "c": 5
+        }
+      ],
+      "after": [
+        {
+          "kind": "water",
+          "r": 2,
+          "c": 1
+        },
+        {
+          "kind": "water",
+          "r": 4,
+          "c": 4
+        },
+        {
+          "kind": "forest",
+          "r": 1,
+          "c": 3
+        },
+        {
+          "kind": "mountain",
+          "r": 1,
+          "c": 5
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "before": [
+        {
+          "kind": "water",
+          "r": 1,
+          "c": 1
+        },
+        {
+          "kind": "water",
+          "r": 4,
+          "c": 5
+        },
+        {
+          "kind": "mountain",
+          "r": 0,
+          "c": 4
+        },
+        {
+          "kind": "mountain",
+          "r": 5,
+          "c": 1
+        },
+        {
+          "kind": "forest",
+          "r": 3,
+          "c": 0
+        },
+        {
+          "kind": "forest",
+          "r": 0,
+          "c": 0
+        }
+      ],
+      "after": [
+        {
+          "kind": "water",
+          "r": 1,
+          "c": 1
+        },
+        {
+          "kind": "water",
+          "r": 4,
+          "c": 5
+        },
+        {
+          "kind": "mountain",
+          "r": 0,
+          "c": 4
+        },
+        {
+          "kind": "mountain",
+          "r": 5,
+          "c": 1
+        },
+        {
+          "kind": "forest",
+          "r": 2,
+          "c": 4
+        },
+        {
+          "kind": "forest",
+          "r": 0,
+          "c": 0
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "before": [
+        {
+          "kind": "water",
+          "r": 1,
+          "c": 1
+        },
+        {
+          "kind": "water",
+          "r": 4,
+          "c": 5
+        },
+        {
+          "kind": "mountain",
+          "r": 0,
+          "c": 4
+        },
+        {
+          "kind": "mountain",
+          "r": 5,
+          "c": 1
+        },
+        {
+          "kind": "forest",
+          "r": 0,
+          "c": 0
+        },
+        {
+          "kind": "forest",
+          "r": 5,
+          "c": 5
+        }
+      ],
+      "after": [
+        {
+          "kind": "water",
+          "r": 1,
+          "c": 1
+        },
+        {
+          "kind": "water",
+          "r": 4,
+          "c": 5
+        },
+        {
+          "kind": "mountain",
+          "r": 0,
+          "c": 2
+        },
+        {
+          "kind": "mountain",
+          "r": 5,
+          "c": 1
+        },
+        {
+          "kind": "forest",
+          "r": 0,
+          "c": 4
+        },
+        {
+          "kind": "forest",
+          "r": 5,
+          "c": 5
+        }
+      ]
+    }
+  ]
+}

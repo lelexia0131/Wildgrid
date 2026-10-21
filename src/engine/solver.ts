@@ -2,6 +2,7 @@ import { placementDomains } from './placementDomains';
 import type { Candidate, PlacementGroup } from './placementDomains';
 import { CAMP_REQUIREMENTS, evaluate } from './placementRules';
 import { offsets } from './boardGeometry';
+import { reasonLevel, reasonedDomains } from './logicalSolver';
 import type { Cell, FacilityKind, Level, Placement } from './types';
 
 export type SolverResult = { count: number; solutions: Placement[][]; terrain: number; pieces: number; occupied: number; candidates: number; rotationCandidates: number; nodes: number; branches: number; aborted: boolean; forced: number };
@@ -12,7 +13,11 @@ export function solveLevel(level: Level, limit = 2, budget: { deadline?: number;
   const bits = Array.from({ length: n * n }, (_, i) => 1n << BigInt(i));
   const bit = (p: Cell) => bits[p.r * n + p.c];
   const board = Array.from({ length: n * n }, (_, i) => ({ r: Math.floor(i / n), c: i % n }));
-  const groups = prepared ?? placementDomains(level);
+  const original = prepared ?? placementDomains(level);
+  // Basic deductions are necessary conditions, independent of any reference
+  // answer. Reuse them before exhaustive search when no reduced domains were
+  // supplied. The search still proves uniqueness and observes the same budget.
+  const groups = prepared ? original : reasonedDomains(original,reasonLevel(level,{deadline:budget.deadline,maxAssumptions:0},original));
   const stats: SolverResult = { count: 0, solutions: [], terrain: level.terrain.length, pieces: level.pieces.length, occupied: 0, candidates: 0, rotationCandidates: 0, nodes: 0, branches: 0, aborted: false, forced: 0 };
   stats.occupied = level.pieces.reduce((sum, p) => sum + offsets(p.shape, 0).length, 0);
   stats.candidates = groups.reduce((s, g) => s + g.domain.length * g.ids.length, 0);

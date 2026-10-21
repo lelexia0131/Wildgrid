@@ -1,6 +1,6 @@
 # Wildgrid（野格）实际架构
 
-更新日期：2026-10-19（Asia/Shanghai）。本文描述第二阶段修改后的实际代码。回归测试与引擎校验仍使用的历史基线保存在 `tests/fixtures/`。
+更新日期：2026-10-21（Asia/Shanghai）。本文描述当前实际代码。原始历史基线及经提交记录确认的三项关卡修正保存在 `tests/fixtures/`。
 
 ## 目录与入口
 
@@ -53,7 +53,8 @@ Wildgrid/
 │   ├── workers/
 │   │   ├── workerTasks.ts             创建、消息、取消、超时和过期回复保护
 │   │   ├── sandbox.worker.ts          调用Engine自检，不维护规则副本
-│   │   └── survival.worker.ts         调用求生入口，最终复用Engine生成算法
+│   │   ├── survival.worker.ts         调用求生入口，最终复用Engine生成算法
+│   │   └── hint.worker.ts             调用公共冒险提示分析，复用规则与求解器
 │   ├── game-data/{levels,solutions}.json 原45关和参考答案（内容保留）
 │   ├── localization/                 中英文、反馈/手册文本、日期与LanguageContext
 │   └── assets/                       art.ts/art.css统一引用，字体、品牌、背景、插画、面板与徽章
@@ -63,7 +64,7 @@ Wildgrid/
 ├── build/                             Windows图标和NSIS安装逻辑
 ├── server/                            既有玩家ID服务与部署说明；本轮不修改
 ├── scripts/                           构建、关卡创作、校验及部署维护入口
-├── tests/                             规则、模式、存档、边界、Worker和既有UI测试
+├── tests/                             按engine、modes、storage、platform、ui分类的测试
 ├── tests/fixtures/                    回归测试与引擎校验使用的历史基线
 ├── release/                           忽略的当前版本发布产物与存档恢复备份
 ├── .desktop-smoke/                    忽略的截图、测试产物和图片审计清单
@@ -120,7 +121,7 @@ flowchart TD
 | UI / 表现 `ui/` | 玩家输入、渲染、导航、弹窗、动画；useGameSession连接纯Session | 原地更改权威快照、创建Worker、读写localStorage、复制正式规则 | 公共Engine、模式、存档、任务、平台、翻译；main.tsx调用 |
 | Tutorial Lessons / 教学课程 `ui/tutorial/tutorialLessons.ts` | matchesAction、finishLesson、resolveTutorial及UI目标/事件类型 | 偏好读写、棋盘规则 | 公共Engine类型、教学偏好契约、纯翻译类型；教学Hook/覆盖层调用 |
 | Platform / 平台能力 `platform/` | audio统一实例、write/readClipboard、resolvePlayerId、isAndroidPlatform、registerOfflineCache | 奖励、模式解锁、棋盘状态 | Capacitor、DOM、Web Audio、原生桥及Engine设置类型；UI/main调用 |
-| Worker Tasks / 后台任务 `workers/workerTasks.ts` | createSandboxCheckTask、createSurvivalGenerationTask；start/cancel/isRunning | 求解规则、页面反馈、存档替换 | Worker环境、公共Engine预算和类型；模式Hook调用 |
+| Worker Tasks / 后台任务 `workers/workerTasks.ts` | createSandboxCheckTask、createSurvivalGenerationTask、createAdventureHintTask；start/cancel/isRunning | 求解规则、页面反馈、存档替换 | Worker环境、公共Engine预算和类型；模式Hook调用 |
 | Localization / 本地化 `localization/` | DICTIONARIES、翻译表、createTranslator、useI18n、LanguageContext、formatDateTime | 游戏规则和存储IO | 公共Engine展示元数据、React上下文；UI及教学偏好Language类型引用 |
 | Game Data / 固定数据 `game-data/` 与 `engine/levels.ts` | levels、solutions、getLevelById、getSolution | 关卡流程、数据改写 | 原JSON；引擎生成、模式、UI、测试/创作脚本读取 |
 
@@ -165,7 +166,7 @@ flowchart TD
 
 所有模块另可依赖 `types.ts`。内部直接引用具体实现，不反向引用自己的barrel。外部只能导入 `engine` 或 `engine/index`。`facilityConflict`、`terrainConflict`、`campConnections`和连接要求表只供内部编译优化使用；公共出口不导出它们。
 
-Solver仍用原位集合剪枝、候选域和相同设施去排列策略；正式规则提供几何和设施约束，完整候选继续 `evaluate` 复核。没有替换高性能算法。生成保留原十档搜索策略、随机调用次序、节点/时间预算；模式提供设施数量、基础关卡、多格要求，XP和奖励留在模式层。
+Solver仍用原位集合剪枝、候选域和相同设施去排列策略；正式规则提供几何和设施约束，完整候选继续 `evaluate` 复核。没有替换高性能算法。生成保留十档约束、评分公式及节点/时间预算；每次构造使用由请求种子与尝试序号派生的独立随机流，避免一次局部修复消耗的随机数改变后续构造。模式提供设施数量和多格要求，XP和奖励留在模式层。
 
 ## Session状态与放置调用链
 
@@ -258,7 +259,7 @@ flowchart TD
 
 蓝图验证和WG1是通用地图数据契约，继续由Engine统一实现；地图导入/导出的交互、唯一解任务及剪贴板由沙盒Hook协调。Codec不执行奖励/解锁计算。教学课程与DOM目标属于UI，只有偏好读取/写入和旧进度经验推导在存档系统。
 
-`workerTasks.ts`内的共享任务机制只服务两个真实消费者。每个任务实例同时只有一个Worker；完成/错误/取消/超时释放Worker和计时器，旧Worker的迟到或重复消息通过实例身份被忽略。求生继续25秒外层超时、原24秒内部生成窗口；沙盒不新增超时预算。剪贴板异步完成仍由沙盒revision检查，编辑/离开后不会发布旧导出反馈。
+`workerTasks.ts`服务沙盒自检、求生生成、冒险提示三个消费者。每个任务实例同时只有一个Worker；完成/错误/取消/超时释放Worker和计时器，旧Worker的迟到或重复消息通过实例身份被忽略。求生每轮核心预算为2800/5000/7600ms，外围额外预留400ms且不超过8000ms；搜索失败或本轮超时会换种子继续，直到成功或用户取消。后台暂停会终止CPU工作并保留本轮种子和剩余预算。沙盒自检没有新增固定超时；提示核心预算2500ms，Worker兜底6000ms。剪贴板异步完成仍由沙盒revision检查，编辑/离开后不会发布旧导出反馈。
 
 ## 公共Engine API参数与结果
 
@@ -332,8 +333,14 @@ const { placements, result } = getState(session); // 不得原地修改placement
 
 ## 验证与实际限制
 
-`tests/engine-boundaries.test.ts`检查全部src层级、外部依赖、核心私有路径、静态/动态导入、require、Worker URL、UI创建Worker和模块循环。`tests/engine.test.ts`保留命令/历史测试，并用TypeScript预期错误验证嵌套只读契约。`tests/worker-tasks.test.ts`覆盖取消、迟到/重复结果、错误、postMessage失败和原25秒超时。
+`tests/engine/engine-boundaries.test.ts`检查全部src层级、外部依赖、核心私有路径、静态/动态导入、require、Worker URL、UI创建Worker和模块循环。`tests/engine/engine.test.ts`保留命令/历史测试，并用TypeScript预期错误验证嵌套只读契约。`tests/platform/worker-tasks.test.ts`覆盖取消、迟到/重复结果、错误、postMessage失败和逐轮超时/暂停预算。
 
-`node --import tsx scripts/check-engine-preservation.ts`使用源码修改前记录的 `tests/fixtures/phase2-engine-baseline.json`，比较45关完整Solver输出摘要、779次规则判定与45个WG1字节摘要。第12/14/15关在基线即有多个解；第16–45关要求并保持唯一解。没有通过修改关卡或规则消除这些基线特征。
+`node --import tsx scripts/check-engine-preservation.ts`使用源码修改前记录的 `tests/fixtures/phase2-engine-baseline.json`，比较45关完整解集、779次规则判定与45个WG1字节摘要。原始哈希保持不变；`level-corrections.json`只允许提交`7a1a02e`确认的第12/14/15关地形修正，当前这三关均要求唯一解，所有参考答案未变。`phase2-solver-solutions.json`在旧提交求解器逐关匹配原哈希后提取完整解集，避免将后续MRV搜索顺序、节点统计、新增branches字段及对象键顺序当作游戏规则合同。校验时将三关地形还原到历史值检查原始合同，并单独检查当前修正后的唯一性。
 
 运行 `npm test`、`npm run build` 和相关UI或平台测试获取当前验证结果；历史报告不能代表当前源码状态。构建通过不等于Windows安装/升级、Android真机或真实身份服务已验证。
+
+## 推理复核与冒险提示
+
+`generationReasoningBudget`统一生成与独立复核的假设次数、深度和未解决候选阈值。`generationDifficulty`接收明确难度（默认10难），结果区分`accepted`、`rejected`和`budget-exhausted`；生成验收与复核共用相同评分和拒绝标准，耗尽预算不等于地图不合法或不唯一。独立复核不再另用200ms/24次假设的隐藏短预算。
+
+冒险提示从公共Engine入口调用。逻辑演绎最多使用总预算的15%，寻找完整解最多使用前80%，必要性证明使用剩余预算并限制单次节点数。经过当前规则及已有落点验证的参考答案或已完成演绎结果可以作为可行解复用；只有排除对应足迹后的穷尽搜索证明无解，才标为必然放置。证明未完成时仍返回已验证的可行步骤。提示关闭后的棋盘变更仍使结果失效；悬停和其他无关重渲染复用已记忆的上下文。

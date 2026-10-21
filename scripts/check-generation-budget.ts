@@ -29,7 +29,8 @@ for(const {difficulty,seed,disabled} of cases) {
     assert.ok(parseSurvivalSave(serializeSurvivalSave(save)).challenge,'new inventory save roundtrip');
     const regions=terrainRegions(level.terrain),distribution=terrainDistribution(level.terrain,regions);
     assert.deepEqual(distribution.violations,[]);
-    const record={difficulty,seed,disabled,status:'success',ms:Math.round(performance.now()-started),
+    const record={difficulty,seed,disabled,status:'success',ms:Math.round(performance.now()-started),generationMs:map.diagnostics.elapsed,
+      candidatesGenerated:map.diagnostics.candidatesGenerated,candidatesValidated:map.diagnostics.candidatesValidated,proofs:map.diagnostics.proofs,proofExhaustions:map.diagnostics.proofExhaustions,logicChecks:map.diagnostics.logicChecks,cutoffs:map.diagnostics.cutoffs,timeDependent:map.diagnostics.timeDependent,
       facilities:Object.fromEntries(generationBudgets(difficulty,disabled).facilities.items.map(i=>[i.id,level.pieces.filter(p=>templateId(p)===i.id).length])),
       inventory:map.diagnostics.inventory,facilityDeviation:(map.diagnostics.inventory.facilities.area/map.diagnostics.inventory.facilities.target-1)*100,
       terrainDeviation:(map.diagnostics.inventory.terrain.area/map.diagnostics.inventory.terrain.target-1)*100,

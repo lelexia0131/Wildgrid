@@ -1,6 +1,45 @@
 export type QuantityRange = Readonly<{ min: number; max: number }>;
 export type BudgetItem = QuantityRange & Readonly<{ id: string; area: number }>;
 
+export type GenerationPhase = 'terrain' | 'construction' | 'facility refinement' | 'terrain refinement' | 'logical refinement' | 'logic' | 'witness search' | 'witness refinement' | 'proof';
+
+// Soft shares coordinate cumulative work; unused time is borrowable. Only the
+// overall deadline is hard. Optional work protects a full logic pass and proof;
+// logic can borrow everything except the final proof reserve.
+export function coordinateGenerationBudget(started:number, duration:number) {
+  const deadline=started+duration;
+  const shares:Record<GenerationPhase,number>={'terrain':.08,'construction':.35,'facility refinement':.03,'terrain refinement':.12,'logical refinement':.08,'logic':.20,'witness search':.04,'witness refinement':.06,'proof':.04};
+  const phases:Record<string,{calls:number;ms:number}>={},cutoffs:Record<string,number>={};
+  const proofReserve=()=>Math.max(Math.min(200,duration*.04),(phases.proof?.ms??0)/Math.max(1,phases.proof?.calls??0)*2);
+  const validationReserve=()=>proofReserve()+Math.max(duration*.02,phases.logic?phases.logic.ms/phases.logic.calls*2:duration*.12);
+  const remaining=()=>Math.max(0,deadline-Date.now());
+  return {deadline,phases,cutoffs,remaining,
+    urgent:()=>remaining()<=validationReserve()*2,
+    canConstruct:()=>remaining()>validationReserve(),
+    phaseDeadline(phase:GenerationPhase) {
+      if(phase==='proof') return deadline;
+      const reserve=phase==='logic'?proofReserve():validationReserve();
+      if(phase==='logic') return deadline-reserve;
+      const available=Math.max(0,remaining()-reserve);
+      const credit=Math.max(0,duration*shares[phase]-(phases[phase]?.ms??0));
+      // Construction can borrow broadly. Depleted optional improvement and
+      // witness phases borrow in small slices, so repeated repairs cannot each
+      // claim a quarter of the remaining round and starve exploration.
+      const optional=phase.includes('refinement') || phase==='witness search';
+      const loan=Math.min(available*.25,optional?duration*.002:Infinity);
+      return Math.min(deadline-reserve,Date.now()+Math.max(credit,loan));
+    },
+    measure<T>(phase:GenerationPhase, work:(until:number)=>T):T {
+      const until=this.phaseDeadline(phase),start=performance.now();
+      try {return work(until);}
+      finally {
+        const stats=phases[phase]??={calls:0,ms:0};stats.calls++;stats.ms+=performance.now()-start;
+        if(Date.now()>=until) cutoffs[phase]=(cutoffs[phase]??0)+1;
+      }
+    },
+  };
+}
+
 // Suffix reachability chooses the budget first, then samples only combinations
 // that can complete it. No rejection sampling and no per-type independent draw.
 export function prepareBudget(items: readonly BudgetItem[], maxCount = Infinity) {
@@ -28,7 +67,7 @@ export function prepareBudget(items: readonly BudgetItem[], maxCount = Infinity)
   }
   if (!budgets.length) throw new Error(`No integer generation budget in [${min}, ${max}] (target ${target}; ${items.map(i => i.id).join(', ')})`);
   const chooseArea=(random:()=>number)=>budgets[Math.floor(random()*budgets.length)];
-  return { items, target, min, max, chooseArea, sample(random: () => number) {
+  return { items, target, min, max, areas:budgets as readonly number[], chooseArea, sample(random: () => number) {
     const area = chooseArea(random), counts: Record<string, number> = {};
     let remaining = area, available = maxCount;
     for (let i = 0; i < items.length; i++) {

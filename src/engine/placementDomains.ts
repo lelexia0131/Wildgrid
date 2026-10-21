@@ -38,7 +38,8 @@ export function placementGeometry(piece: Piece, size: number): Position[] {
 }
 
 function terrainMasks(kind: FacilityKind, level: Level) {
-  const need=TERRAIN_REQUIREMENTS[kind],board=boardCells(level.size);
+  const need=TERRAIN_REQUIREMENTS[kind];
+  let board: Cell[] | undefined;
   // Cache only immutable rule geometry for one terrain cell. A relocation or
   // type swap recombines these masks; clues and mutable domains are never cached.
   let forbidden=0n,required=0n;
@@ -47,7 +48,7 @@ function terrainMasks(kind: FacilityKind, level: Level) {
     let masks=terrainGeometry.get(key);
     if(!masks) {
       masks={forbidden:0n,required:0n};
-      for(const p of board) {
+      for(const p of board ??= boardCells(level.size)) {
         if((t.r===p.r && t.c===p.c) || terrainConflict(kind,[p],t)) masks.forbidden|=cellBit(p,level.size);
         if(t.kind===need && adjacent(p,t)) masks.required|=cellBit(p,level.size);
       }

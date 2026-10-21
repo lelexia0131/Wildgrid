@@ -1,0 +1,232 @@
+{
+  "sourceCommit": "7ced25a",
+  "verifiedAgainst": "phase2-engine-baseline.json",
+  "reason": "Compare complete solution sets independently of MRV search order, node statistics, branches metadata and object property order introduced by subsequent generator optimizations.",
+  "puzzles": [
+    {
+      "id": 1,
+      "count": 1,
+      "solutionsHash": "bda194c41a9a99948a26cbbb1ad873127d3a52883199cef96ffe6229f12d9e3e"
+    },
+    {
+      "id": 2,
+      "count": 1,
+      "solutionsHash": "be6a038dd8f93fa5166997b2c0ae2d6e0fb48471bab9330ed487b949ed8925e0"
+    },
+    {
+      "id": 3,
+      "count": 1,
+      "solutionsHash": "92e8823b24f0c533329a7c76649bbff91da2ea64020293fe95bf045683bb77c5"
+    },
+    {
+      "id": 4,
+      "count": 1,
+      "solutionsHash": "3676af0ad59f39326d080902f1bf89defa59b2186ea1c54f7faef8c6146a47df"
+    },
+    {
+      "id": 5,
+      "count": 1,
+      "solutionsHash": "848b652a26d1bcb91aa9d1d11eb8d8dcf32486dcfea087f4cb55591228cc213b"
+    },
+    {
+      "id": 6,
+      "count": 1,
+      "solutionsHash": "b3d2bd03240702f21908ab7205b76cb38ed980b2afcb3e8d7ec6f231f765f5ba"
+    },
+    {
+      "id": 7,
+      "count": 1,
+      "solutionsHash": "451569a8387859dd2f8940bdb04526bcb03252331fca8f40fff045cf72a39f86"
+    },
+    {
+      "id": 8,
+      "count": 1,
+      "solutionsHash": "dc29629755630ac2b39dc8d4d636fe38c6241c9a5528d8c06303b8adc8cf9469"
+    },
+    {
+      "id": 9,
+      "count": 1,
+      "solutionsHash": "0b7c2d2b4e0c1ae980237e5cea9ff1a1f7d4d23f6304b774e27deb994a2f3332"
+    },
+    {
+      "id": 10,
+      "count": 1,
+      "solutionsHash": "7a64792ad572bdb6d855084738e9897e9a8ff9dcbcd009321eb95044387feaa6"
+    },
+    {
+      "id": 11,
+      "count": 1,
+      "solutionsHash": "a9124bb3ad9a45107f619c6abd3fb27544d621f280e8858f2c14a8609c001def"
+    },
+    {
+      "id": 12,
+      "count": 2,
+      "solutionsHash": "ab25ae60d2ed597f4c426ca10787d0b12d409f99e90243b1810acb8477d6b61c"
+    },
+    {
+      "id": 13,
+      "count": 1,
+      "solutionsHash": "a4d5b528065689b1e5f4f8707d8e3d6cb9c79b2253cfa44283abedb9af2e7097"
+    },
+    {
+      "id": 14,
+      "count": 3,
+      "solutionsHash": "b4e7f9929cf2fbab0be85f0bda1e3c85c46dcdade78401ff0587e9d5cc721599"
+    },
+    {
+      "id": 15,
+      "count": 4,
+      "solutionsHash": "c1c4569d75829a5e49a96e4ec8d0221d42af28d581d66df3841bafd3a5f8c15d"
+    },
+    {
+      "id": 16,
+      "count": 1,
+      "solutionsHash": "2ae3e0307bedea4e5f20dd1b307834ccb5c81df71f0911b733f0b2099d745589"
+    },
+    {
+      "id": 17,
+      "count": 1,
+      "solutionsHash": "c38cccef588bfd30d867c066737f828c80031289b3918b9e5c81e4589e285020"
+    },
+    {
+      "id": 18,
+      "count": 1,
+      "solutionsHash": "5897a93bcfe510c9d4279c7b50dd4c0e4cd14583e323c4f6e1e0f5cc521437c8"
+    },
+    {
+      "id": 19,
+      "count": 1,
+      "solutionsHash": "be3efd58ffba26e3576b375d8cb87caf13f171caaeb4b4f264178680dd20b24a"
+    },
+    {
+      "id": 20,
+      "count": 1,
+      "solutionsHash": "fb2f5cabb744e75adc6f8610e2abdc6b70d8bff8f1fdc83d2df67b0bc92af524"
+    },
+    {
+      "id": 21,
+      "count": 1,
+      "solutionsHash": "3f46960d8836aa781f20d0f0b309a42c76af2dc917284004535b0dc13c351b4f"
+    },
+    {
+      "id": 22,
+      "count": 1,
+      "solutionsHash": "4b969723ce05537db62a890b3faea46263225cbb5623e47f001268e1536a2c88"
+    },
+    {
+      "id": 23,
+      "count": 1,
+      "solutionsHash": "fa4bacf3decd753004b2cd501b449d9a4e5948706077474ddcbab7ee5cf62335"
+    },
+    {
+      "id": 24,
+      "count": 1,
+      "solutionsHash": "90c36b14625db94c333d20e07d4ba57e77505681e0b02ae48b4b64df6d1e0266"
+    },
+    {
+      "id": 25,
+      "count": 1,
+      "solutionsHash": "b843c1b56e33fcdaa42731ce93f08401591505147bb8981f2a49ec2502845e61"
+    },
+    {
+      "id": 26,
+      "count": 1,
+      "solutionsHash": "79a53b05cad7f1342c1ebaecd263aa96c3da81c399647b003c7e6a9550add380"
+    },
+    {
+      "id": 27,
+      "count": 1,
+      "solutionsHash": "d271a4948c1e98f28400f6a81c72565d2615f50bed3ee5b6f410dfad4d0fdb9a"
+    },
+    {
+      "id": 28,
+      "count": 1,
+      "solutionsHash": "c3682674f7d9de5ccde9a240194180eacda96ed7f3ca936cdf549b1db460ea5a"
+    },
+    {
+      "id": 29,
+      "count": 1,
+      "solutionsHash": "7d9b9b9ea52c54845aed81761485ac87fe4d66f8234794b2d42b9a681e3fdcd3"
+    },
+    {
+      "id": 30,
+      "count": 1,
+      "solutionsHash": "5d25be587f12fab1fd80f48ecc027073173dba60d4754551d5c2b7218b2e9a9c"
+    },
+    {
+      "id": 31,
+      "count": 1,
+      "solutionsHash": "34d3eb4cced7018698b48e4367412529333e48b50f6e6f37cd368aa36b09bf38"
+    },
+    {
+      "id": 32,
+      "count": 1,
+      "solutionsHash": "698f2a93e1e1a41f797c08749ed5de6eaeb320323a06cbd17a032f16b1f57c1e"
+    },
+    {
+      "id": 33,
+      "count": 1,
+      "solutionsHash": "040ac12e21c2940f93c7e18c528a2e2eb89a1b785d30c66162c346df98efbc67"
+    },
+    {
+      "id": 34,
+      "count": 1,
+      "solutionsHash": "eeea518c62f98d795d8a206c58f926ca6bb3a1954348779008d49fd55e777ea7"
+    },
+    {
+      "id": 35,
+      "count": 1,
+      "solutionsHash": "f33f0ae897f163440aa6e143c24a56a05cd1dc4683e015ab39f383fcd8a9719d"
+    },
+    {
+      "id": 36,
+      "count": 1,
+      "solutionsHash": "eba5a2f33b4a10382c5935f44fa322f3cb30529ce8efd7e673aed41b6ed90739"
+    },
+    {
+      "id": 37,
+      "count": 1,
+      "solutionsHash": "ffb4a4cfc5f5354e3c75ba0214281099fd682aef820ec4b123d5bcf9f0fda294"
+    },
+    {
+      "id": 38,
+      "count": 1,
+      "solutionsHash": "88567d831c53a3005c7bdb5b0c55d1913e93fd61ac9f24eb93d266a069af843e"
+    },
+    {
+      "id": 39,
+      "count": 1,
+      "solutionsHash": "1642fd4bccd09be4afdb5c776fd4ac12d0756c0696bd3d950837a76d92e947e8"
+    },
+    {
+      "id": 40,
+      "count": 1,
+      "solutionsHash": "0d602975f49697ccaf5946d9b9e026c33da0eabfa8cf1d8f03571285ac0266a7"
+    },
+    {
+      "id": 41,
+      "count": 1,
+      "solutionsHash": "44f152ed47acccac8be8cb6429cc8ae254631b81491818171db98fcc8f05a5e3"
+    },
+    {
+      "id": 42,
+      "count": 1,
+      "solutionsHash": "03f17ef620eee4b6844b0e5d277a3fbdfd6e17157cbe9e66c79f2477c47ddda7"
+    },
+    {
+      "id": 43,
+      "count": 1,
+      "solutionsHash": "f8e567126bbfbc4ea162388f0e11513b0bb76067bdf31c79f83824a8f86bdadd"
+    },
+    {
+      "id": 44,
+      "count": 1,
+      "solutionsHash": "5f8f9efb116f701061c56f0a46e78573ffd00e130629e07d48df3c5e9bbc3e64"
+    },
+    {
+      "id": 45,
+      "count": 1,
+      "solutionsHash": "793d85510382b780f72cbe2169530bfd025f80884e1812beeddf5f26a940b615"
+    }
+  ]
+}

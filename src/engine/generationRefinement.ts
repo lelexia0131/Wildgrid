@@ -103,7 +103,8 @@ export function refineTerrain(level: Level, entries: FacilityEntry[], random:()=
   };
   let score=cost(groups)+witnessCost(current);
   for(let step=0;step<(witnesses.length?1:2) && Date.now()<deadline;step++) {
-    const moves:{level:Level;groups:typeof groups;score:number}[]=[];
+    let best:{level:Level;groups:typeof groups;score:number}|undefined;
+    const completed=()=>best && best.score<score-.001?best.level:current;
     const currentWitnessCost=witnessCost(current);
     const consider=(terrain:Terrain[])=>{
       if(terrain.some(t=>(used&cellBit(t)) || entries.some(e=>terrainConflict(e.piece.kind,e.p.cells,t)))) return;
@@ -115,7 +116,7 @@ export function refineTerrain(level: Level, entries: FacilityEntry[], random:()=
       const next={...current,terrain},witnessScore=witnessCost(next);
       if(witnesses.length && witnessScore>=currentWitnessCost) return;
       const domains=placementDomains(next),value=cost(domains)+witnessScore+random()*.001;
-      moves.push({level:next,groups:domains,score:value});
+      if(value<(best?.score??Infinity)) best={level:next,groups:domains,score:value};
     };
     const units:{kind:Terrain['kind'];cells:{r:number;c:number}[];shape:string}[]=[];
     for(const def of terrainRegistry) {
@@ -127,25 +128,19 @@ export function refineTerrain(level: Level, entries: FacilityEntry[], random:()=
         units.push({kind:def.id,cells:unit,shape:def.cells.map(p=>`${p.r},${p.c}`).sort().join(';')});
         const base=current.terrain.filter(t=>t.kind!==def.id || !unit.some(p=>p.r===t.r && p.c===t.c));
         for(const candidate of terrainPlacementScores(base,def.id,current.terrain.length)) {
-          if(Date.now()>=deadline) return current;
+          if(Date.now()>=deadline) return completed();
           const terrain=[...base,...candidate.cells.map(p=>({...p,kind:def.id}))];
           consider(terrain);
         }
       }
     }
     for(let i=0;i<units.length;i++) for(let j=i+1;j<units.length;j++) {
-      if(Date.now()>=deadline) return current;
+      if(Date.now()>=deadline) return completed();
       const a=units[i],b=units[j];
       if(a.kind===b.kind || a.shape!==b.shape) continue;
       consider(current.terrain.map(t=>a.cells.some(p=>p.r===t.r && p.c===t.c)?{...t,kind:b.kind}:b.cells.some(p=>p.r===t.r && p.c===t.c)?{...t,kind:a.kind}:t));
     }
-    let best: {level:Level;groups:typeof groups;score:number}|undefined;
-    for(const move of moves.sort((a,b)=>a.score-b.score).slice(0,8)) {
-      if(Date.now()>=deadline) break;
-      const value=move.score;
-      if(value<(best?.score??score)-.001) best=move;
-    }
-    if(!best) break;
+    if(!best || best.score>=score-.001) break;
     current=best.level;groups=best.groups;score=best.score;
   }
   return current;

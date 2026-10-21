@@ -1,14 +1,15 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { ADVENTURE_HINT_COSTS, adventureHintBoardKey, adventureHintUsage, evaluateAdventureBadge } from '../../game-modes/adventure/adventureBadges';
 import type { AdventureBadgeTier, AdventureHintAction } from '../../game-modes/adventure/adventureBadges';
 import { recordAdventureHint } from '../../game-modes/adventure/adventureProgress';
 import type { AdventureSave } from '../../game-modes/adventure/adventureProgress';
-import type { Level, Placement } from '../../engine/types';
+import type { Level, Placement } from '../../engine';
 
 export type HintBadgeConfirmation = { from: AdventureBadgeTier; to: AdventureBadgeTier; cost: number };
 export function useAdventureHintAccess(enabled: boolean, save: AdventureSave, level: Level, placements: readonly Placement[], record: (id: number, placements: readonly Placement[], action: AdventureHintAction) => void) {
   const levelId = level.id;
-  const context = JSON.stringify([enabled, levelId, save.attempts[levelId]?.revision ?? 0, adventureHintBoardKey(level, placements)]);
+  const revision = save.attempts[levelId]?.revision ?? 0;
+  const context = useMemo(() => enabled ? JSON.stringify([levelId, revision, adventureHintBoardKey(level, placements)]) : 'disabled', [enabled, levelId, revision, level, placements]);
   const currentContext = useRef(context); currentContext.current = context;
   const request = useRef<{ context: string; grant: () => void; resolve: (allowed: boolean) => void } | null>(null);
   const [pending, setPending] = useState<HintBadgeConfirmation | null>(null);

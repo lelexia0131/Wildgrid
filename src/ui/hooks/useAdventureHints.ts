@@ -1,13 +1,12 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createAdventureHintTask } from '../../workers/workerTasks';
-import type { AdventureHint } from '../../engine/adventureHints';
-import type { Level, Placement } from '../../engine/types';
+import type { AdventureHint, Level, Placement } from '../../engine';
 import type { AdventureHintAction } from '../../game-modes/adventure/adventureBadges';
 
 type Analysis = { key: string; hint?: AdventureHint; stage: number; loading: boolean; error: boolean };
 export function useAdventureHints(enabled: boolean, level: Level, placements: readonly Placement[], introduced: readonly string[], requestUse: (action: AdventureHintAction) => Promise<boolean>, revision: number) {
   const task = useMemo(createAdventureHintTask, []);
-  const key = JSON.stringify([level, [...placements].sort((a, b) => a.id.localeCompare(b.id)), revision]);
+  const key = useMemo(() => enabled ? JSON.stringify([level, [...placements].sort((a, b) => a.id.localeCompare(b.id)), revision]) : 'disabled', [enabled, level, placements, revision]);
   const access = useRef(requestUse); access.current = requestUse;
   const currentKey = useRef(key); currentKey.current = key;
   const [open, setOpen] = useState(false);

@@ -1,8 +1,8 @@
-import { encodeMap, MAP_GENERATION_TIMEOUT, generationBudget, inventoryViolations } from '../engine';
+import { encodeMap, MAP_GENERATION_TIMEOUT, generationBudget, nextGenerationSeed, inventoryViolations } from '../engine';
 import type { SandboxCheck, SandboxDraft } from '../engine';
 import type { SurvivalChallenge } from '../game-modes/survival/survivalChallenge';
 import type { SurvivalGenerationRequest, SurvivalGenerationResult } from './survivalProtocol';
-import type { AdventureHint, HintRequest } from '../engine/adventureHints';
+import type { AdventureHint, HintRequest } from '../engine';
 export type { SurvivalGenerationRequest, SurvivalGenerationResult } from './survivalProtocol';
 
 type TaskCallbacks<Result> = { onResult: (result: Result) => void; onError: (reason: 'error' | 'timeout', message?: string) => void };
@@ -61,7 +61,7 @@ export function createSurvivalGenerationTask() {
   function retry() {
     if (!session) return;
     account(); attempt.cancel();
-    session.request = { ...session.request, seed: (session.request.seed + 0x9e3779b9) >>> 0 };
+    session.request = { ...session.request, seed: nextGenerationSeed(session.request.seed) };
     session.elapsed = 0;
     run();
   }

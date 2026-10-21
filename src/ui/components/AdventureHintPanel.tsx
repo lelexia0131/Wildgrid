@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
-import { facilityNames, shapeNames } from '../../engine/facilityRegistry';
-import { occupied } from '../../engine/boardGeometry';
-import type { Level } from '../../engine/types';
+import { facilityNames, shapeNames, occupied } from '../../engine';
+import type { Level } from '../../engine';
 import type { useAdventureHints } from '../hooks/useAdventureHints';
 import { useI18n } from '../../localization/LanguageContext';
 import { CampToolIcon } from './CampToolIcon';

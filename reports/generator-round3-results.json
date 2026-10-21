@@ -1,0 +1,6021 @@
+{
+  "date": "2026-10-21",
+  "method": "Same host, sequential single-round calls, unchanged seeds/settings; ms uses generation diagnostics, excluding external verification. No automatic seed retries. Baseline frozen before edits; before/after runs were not simultaneous. Single samples are sensitive to load/JIT.",
+  "summary": {
+    "pairedStandard": {
+      "before": {
+        "successes": 13,
+        "total": 13,
+        "meanMs": 2251.5,
+        "maxMs": 6295,
+        "attempts": 1353,
+        "nodes": 183990,
+        "candidatesGenerated": 141,
+        "candidatesValidated": 125,
+        "logicChecks": 492,
+        "proofs": 13,
+        "proofExhaustions": 0
+      },
+      "after": {
+        "successes": 13,
+        "total": 13,
+        "meanMs": 1724.3,
+        "maxMs": 3877,
+        "attempts": 1033,
+        "nodes": 131030,
+        "candidatesGenerated": 113,
+        "candidatesValidated": 98,
+        "logicChecks": 393,
+        "proofs": 13,
+        "proofExhaustions": 0
+      }
+    },
+    "all": {
+      "before": {
+        "successes": 13,
+        "total": 17,
+        "meanMs": 3510.0,
+        "maxMs": 7600,
+        "attempts": 1590,
+        "nodes": 390176,
+        "candidatesGenerated": 268,
+        "candidatesValidated": 247,
+        "logicChecks": 984,
+        "proofs": 13,
+        "proofExhaustions": 0
+      },
+      "after": {
+        "successes": 14,
+        "total": 17,
+        "meanMs": 3014.4,
+        "maxMs": 7248,
+        "attempts": 1468,
+        "nodes": 427022,
+        "candidatesGenerated": 267,
+        "candidatesValidated": 252,
+        "logicChecks": 1010,
+        "proofs": 14,
+        "proofExhaustions": 0
+      }
+    },
+    "high": [
+      {
+        "difficulty": 9,
+        "before": {
+          "successes": 2,
+          "total": 4,
+          "meanMs": 5432.2,
+          "maxMs": 7600,
+          "attempts": 136,
+          "nodes": 149179,
+          "candidatesGenerated": 87,
+          "candidatesValidated": 86,
+          "logicChecks": 389,
+          "proofs": 2,
+          "proofExhaustions": 0
+        },
+        "after": {
+          "successes": 2,
+          "total": 4,
+          "meanMs": 5484.0,
+          "maxMs": 7248,
+          "attempts": 199,
+          "nodes": 184215,
+          "candidatesGenerated": 102,
+          "candidatesValidated": 100,
+          "logicChecks": 475,
+          "proofs": 2,
+          "proofExhaustions": 0
+        }
+      },
+      {
+        "difficulty": 10,
+        "before": {
+          "successes": 2,
+          "total": 4,
+          "meanMs": 5607.0,
+          "maxMs": 7600,
+          "attempts": 223,
+          "nodes": 161974,
+          "candidatesGenerated": 97,
+          "candidatesValidated": 91,
+          "logicChecks": 300,
+          "proofs": 2,
+          "proofExhaustions": 0
+        },
+        "after": {
+          "successes": 3,
+          "total": 4,
+          "meanMs": 4609.0,
+          "maxMs": 7248,
+          "attempts": 368,
+          "nodes": 198466,
+          "candidatesGenerated": 101,
+          "candidatesValidated": 101,
+          "logicChecks": 325,
+          "proofs": 3,
+          "proofExhaustions": 0
+        }
+      }
+    ],
+    "phases": [
+      {
+        "phase": "terrain",
+        "before": 1388.7,
+        "after": 1097.7
+      },
+      {
+        "phase": "construction",
+        "before": 3452.4,
+        "after": 2770.9
+      },
+      {
+        "phase": "facility refinement",
+        "before": 691.4,
+        "after": 523.3
+      },
+      {
+        "phase": "terrain refinement",
+        "before": 5132.6,
+        "after": 3973.9
+      },
+      {
+        "phase": "logical refinement",
+        "before": 7230.1,
+        "after": 4147.3
+      },
+      {
+        "phase": "logic",
+        "before": 5838.0,
+        "after": 5242.3
+      },
+      {
+        "phase": "witness search",
+        "before": 1396.1,
+        "after": 1239.5
+      },
+      {
+        "phase": "witness refinement",
+        "before": 3902.8,
+        "after": 3184.4
+      },
+      {
+        "phase": "proof",
+        "before": 3.9,
+        "after": 4.4
+      }
+    ]
+  },
+  "before": [
+    {
+      "difficulty": 1,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 62,
+      "generationMs": 59,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 1,
+      "facilities": {
+        "camp_single": 1,
+        "fire_single": 1,
+        "tower_single": 1,
+        "camp_domino": 1,
+        "camp_long": 0,
+        "camp_el": 0,
+        "picnic_domino": 0,
+        "cabin_el": 0,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 1,
+            "fire_single": 1,
+            "tower_single": 1,
+            "camp_domino": 1,
+            "camp_long": 0,
+            "camp_el": 0,
+            "picnic_domino": 0,
+            "cabin_el": 0,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        },
+        "terrain": {
+          "counts": {
+            "water": 3,
+            "mountain": 1,
+            "forest": 1
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": 0,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.05357142857142857,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "mountain",
+          "compactness": 1,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 1,
+          "components": 1,
+          "largest": 1,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 1,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 1,
+          "components": 1,
+          "largest": 1,
+          "singletons": 1
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          1,
+          2,
+          1,
+          1
+        ],
+        "halves": [
+          3,
+          2,
+          2,
+          3
+        ],
+        "max3": 2,
+        "max4": 2,
+        "imbalance": 0.2,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "mountain": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "forest": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 2,
+        "deductions": 4,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 2,
+        "relationships": 1,
+        "initialForced": 2
+      },
+      "attempts": 3,
+      "failures": {},
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 3.564300000000003
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 16.77230000000003
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 1.4504000000000588
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 32.53159999999997
+        },
+        "logic": {
+          "calls": 1,
+          "ms": 1.3759000000000015
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.5267000000000053
+        }
+      },
+      "construction": {
+        "searches": 3,
+        "nodes": 40,
+        "connection infeasible": 5,
+        "completed": 3,
+        "completion ambiguity": 12
+      }
+    },
+    {
+      "difficulty": 1,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 40,
+      "generationMs": 39,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 1,
+      "facilities": {
+        "camp_single": 1,
+        "fire_single": 1,
+        "tower_single": 1,
+        "camp_domino": 1,
+        "camp_long": 0,
+        "camp_el": 0,
+        "picnic_domino": 0,
+        "cabin_el": 0,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 1,
+            "fire_single": 1,
+            "tower_single": 1,
+            "camp_domino": 1,
+            "camp_long": 0,
+            "camp_el": 0,
+            "picnic_domino": 0,
+            "cabin_el": 0,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        },
+        "terrain": {
+          "counts": {
+            "water": 3,
+            "mountain": 1,
+            "forest": 1
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": 0,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.0625,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "mountain",
+          "compactness": 1,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 1,
+          "components": 1,
+          "largest": 1,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 1,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 1,
+          "components": 1,
+          "largest": 1,
+          "singletons": 1
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          1,
+          2,
+          1,
+          1
+        ],
+        "halves": [
+          3,
+          2,
+          2,
+          3
+        ],
+        "max3": 2,
+        "max4": 2,
+        "imbalance": 0.2,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "mountain": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "forest": [
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 2,
+        "deductions": 6,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 2,
+        "relationships": 0,
+        "initialForced": 2
+      },
+      "attempts": 3,
+      "failures": {},
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 2.782600000000059
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 1.848700000000008
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 1.9782000000000153
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 31.140700000000095
+        },
+        "logic": {
+          "calls": 1,
+          "ms": 0.22560000000004266
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.1561999999999557
+        }
+      },
+      "construction": {
+        "searches": 3,
+        "nodes": 19,
+        "connection infeasible": 4,
+        "completed": 3
+      }
+    },
+    {
+      "difficulty": 5,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 170,
+      "generationMs": 168,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 1,
+      "facilities": {
+        "camp_single": 2,
+        "fire_single": 2,
+        "tower_single": 2,
+        "camp_domino": 1,
+        "camp_long": 1,
+        "camp_el": 0,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 2,
+            "fire_single": 2,
+            "tower_single": 2,
+            "camp_domino": 1,
+            "camp_long": 1,
+            "camp_el": 0,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 16,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        },
+        "terrain": {
+          "counts": {
+            "water": 4,
+            "mountain": 3,
+            "forest": 3
+          },
+          "area": 10,
+          "target": 9.5,
+          "min": 9,
+          "max": 10
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": 5.263157894736836,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.08333333333333333,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 4,
+          "largest": 1,
+          "singletons": 4
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.3,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 2,
+          "largest": 2,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.21428571428571427,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          2,
+          3,
+          4,
+          1
+        ],
+        "halves": [
+          5,
+          5,
+          6,
+          4
+        ],
+        "max3": 3,
+        "max4": 4,
+        "imbalance": 0.3,
+        "halfImbalance": 0.1,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          1,
+          2,
+          0
+        ],
+        "mountain": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "forest": [
+          0,
+          0,
+          2,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 9,
+        "deductions": 48,
+        "assumptions": 4,
+        "maxDepth": 1,
+        "techniques": 6,
+        "relationships": 11,
+        "initialForced": 0
+      },
+      "attempts": 3,
+      "failures": {},
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 4.852200000000039
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 52.5625
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 13.04099999999994
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 91.24579999999986
+        },
+        "logic": {
+          "calls": 1,
+          "ms": 3.9081999999999653
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.35000000000002274
+        }
+      },
+      "construction": {
+        "searches": 10,
+        "nodes": 1967,
+        "connection infeasible": 644,
+        "search cutoff": 7,
+        "node limit": 7,
+        "completed": 3,
+        "completion ambiguity": 11
+      }
+    },
+    {
+      "difficulty": 5,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 138,
+      "generationMs": 137,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 6,
+      "facilities": {
+        "camp_single": 2,
+        "fire_single": 2,
+        "tower_single": 2,
+        "camp_domino": 2,
+        "camp_long": 1,
+        "camp_el": 0,
+        "picnic_domino": 1,
+        "cabin_el": 0,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 2,
+            "fire_single": 2,
+            "tower_single": 2,
+            "camp_domino": 2,
+            "camp_long": 1,
+            "camp_el": 0,
+            "picnic_domino": 1,
+            "cabin_el": 0,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 15,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        },
+        "terrain": {
+          "counts": {
+            "water": 4,
+            "mountain": 3,
+            "forest": 3
+          },
+          "area": 10,
+          "target": 9.5,
+          "min": 9,
+          "max": 10
+        }
+      },
+      "facilityDeviation": -6.25,
+      "terrainDeviation": 5.263157894736836,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.09523809523809523,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 4,
+          "largest": 1,
+          "singletons": 4
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.1875,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 2,
+          "largest": 2,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.07142857142857142,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          4,
+          1,
+          3,
+          2
+        ],
+        "halves": [
+          5,
+          5,
+          7,
+          3
+        ],
+        "max3": 3,
+        "max4": 4,
+        "imbalance": 0.3,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "mountain": [
+          2,
+          0,
+          1,
+          0
+        ],
+        "forest": [
+          1,
+          0,
+          1,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 5,
+        "deductions": 35,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 5,
+        "relationships": 5,
+        "initialForced": 2
+      },
+      "attempts": 3,
+      "failures": {
+        "witness multiple": 5
+      },
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 4.046699999999987
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 5.519999999999868
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 19.505700000000047
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 57.94569999999999
+        },
+        "logic": {
+          "calls": 6,
+          "ms": 16.497700000000123
+        },
+        "witness search": {
+          "calls": 5,
+          "ms": 2.3460999999999785
+        },
+        "witness refinement": {
+          "calls": 5,
+          "ms": 27.951099999999883
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.27500000000009095
+        }
+      },
+      "construction": {
+        "searches": 3,
+        "nodes": 64,
+        "completed": 3,
+        "connection infeasible": 8
+      }
+    },
+    {
+      "difficulty": 7,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 1154,
+      "generationMs": 1151,
+      "candidatesGenerated": 6,
+      "candidatesValidated": 4,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 16,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 2,
+        "tower_single": 2,
+        "camp_domino": 1,
+        "camp_long": 1,
+        "camp_el": 0,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 2,
+            "tower_single": 2,
+            "camp_domino": 1,
+            "camp_long": 1,
+            "camp_el": 0,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 20,
+          "target": 20,
+          "min": 18,
+          "max": 22
+        },
+        "terrain": {
+          "counts": {
+            "water": 6,
+            "mountain": 3,
+            "forest": 4
+          },
+          "area": 13,
+          "target": 12.5,
+          "min": 12,
+          "max": 13
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": 4.0000000000000036,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.09375,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 4,
+          "largest": 2,
+          "singletons": 2
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.0625,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.14285714285714285,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 4,
+          "largest": 1,
+          "singletons": 4
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          3,
+          2,
+          4,
+          4
+        ],
+        "halves": [
+          5,
+          8,
+          7,
+          6
+        ],
+        "max3": 3,
+        "max4": 5,
+        "imbalance": 0.15384615384615385,
+        "halfImbalance": 0.15384615384615385,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          3,
+          0,
+          1,
+          2
+        ],
+        "mountain": [
+          0,
+          1,
+          1,
+          1
+        ],
+        "forest": [
+          0,
+          1,
+          2,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 10,
+        "deductions": 85,
+        "assumptions": 5,
+        "maxDepth": 2,
+        "techniques": 6,
+        "relationships": 28,
+        "initialForced": 0
+      },
+      "attempts": 326,
+      "failures": {
+        "combination layout": 317,
+        "terrain planning": 3,
+        "witness multiple": 15,
+        "logic budget": 3
+      },
+      "phases": {
+        "terrain": {
+          "calls": 326,
+          "ms": 341.7960000000012
+        },
+        "construction": {
+          "calls": 323,
+          "ms": 259.7616999999999
+        },
+        "facility refinement": {
+          "calls": 6,
+          "ms": 0.5568000000000666
+        },
+        "terrain refinement": {
+          "calls": 6,
+          "ms": 144.96359999999981
+        },
+        "logical refinement": {
+          "calls": 6,
+          "ms": 11.207100000000196
+        },
+        "logic": {
+          "calls": 16,
+          "ms": 275.93619999999953
+        },
+        "witness search": {
+          "calls": 15,
+          "ms": 9.30809999999974
+        },
+        "witness refinement": {
+          "calls": 15,
+          "ms": 94.42489999999975
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.2767999999998665
+        }
+      },
+      "construction": {
+        "searches": 323,
+        "nodes": 12012,
+        "exhausted": 138,
+        "initial capacity": 147,
+        "connection infeasible": 2044,
+        "domain infeasible": 1038,
+        "remaining space infeasible": 500,
+        "completion ambiguity": 182,
+        "search cutoff": 32,
+        "node limit": 32,
+        "completed": 6
+      }
+    },
+    {
+      "difficulty": 7,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 3324,
+      "generationMs": 3322,
+      "candidatesGenerated": 21,
+      "candidatesValidated": 21,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 67,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 2,
+        "tower_single": 2,
+        "camp_domino": 1,
+        "camp_long": 1,
+        "camp_el": 0,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 2,
+            "tower_single": 2,
+            "camp_domino": 1,
+            "camp_long": 1,
+            "camp_el": 0,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 20,
+          "target": 20,
+          "min": 18,
+          "max": 22
+        },
+        "terrain": {
+          "counts": {
+            "water": 5,
+            "mountain": 3,
+            "forest": 4
+          },
+          "area": 12,
+          "target": 12.5,
+          "min": 12,
+          "max": 13
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": -4.0000000000000036,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.08928571428571429,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 2,
+          "largest": 2,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.09523809523809523,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 3,
+          "largest": 2,
+          "singletons": 2
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          4,
+          2,
+          3,
+          3
+        ],
+        "halves": [
+          6,
+          6,
+          7,
+          5
+        ],
+        "max3": 3,
+        "max4": 4,
+        "imbalance": 0.16666666666666666,
+        "halfImbalance": 0.08333333333333333,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          0,
+          1,
+          3
+        ],
+        "mountain": [
+          2,
+          0,
+          1,
+          0
+        ],
+        "forest": [
+          1,
+          2,
+          1,
+          0
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 6,
+        "deductions": 84,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 5,
+        "relationships": 17,
+        "initialForced": 4
+      },
+      "attempts": 831,
+      "failures": {
+        "combination layout": 810,
+        "witness multiple": 57,
+        "logic budget": 15,
+        "reasoning tier high": 4,
+        "logic stalled": 1
+      },
+      "phases": {
+        "terrain": {
+          "calls": 831,
+          "ms": 779.0479999999882
+        },
+        "construction": {
+          "calls": 831,
+          "ms": 630.095599999994
+        },
+        "facility refinement": {
+          "calls": 21,
+          "ms": 1.7234000000007654
+        },
+        "terrain refinement": {
+          "calls": 21,
+          "ms": 455.2907
+        },
+        "logical refinement": {
+          "calls": 21,
+          "ms": 21.15039999999908
+        },
+        "logic": {
+          "calls": 67,
+          "ms": 1036.6647000000034
+        },
+        "witness search": {
+          "calls": 60,
+          "ms": 32.75590000000193
+        },
+        "witness refinement": {
+          "calls": 57,
+          "ms": 330.5499000000018
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.21309999999994034
+        }
+      },
+      "construction": {
+        "searches": 831,
+        "nodes": 36253,
+        "domain infeasible": 3170,
+        "exhausted": 342,
+        "connection infeasible": 6504,
+        "search cutoff": 104,
+        "node limit": 104,
+        "remaining space infeasible": 1460,
+        "completion ambiguity": 376,
+        "initial capacity": 364,
+        "completed": 21
+      }
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 2955,
+      "generationMs": 2944,
+      "candidatesGenerated": 12,
+      "candidatesValidated": 12,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 59,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 1,
+        "tower_single": 4,
+        "camp_domino": 3,
+        "camp_long": 1,
+        "camp_el": 1,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 1,
+            "tower_single": 4,
+            "camp_domino": 3,
+            "camp_long": 1,
+            "camp_el": 1,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 28,
+          "target": 30.5,
+          "min": 28,
+          "max": 33
+        },
+        "terrain": {
+          "counts": {
+            "water": 6,
+            "mountain": 3,
+            "forest": 5
+          },
+          "area": 14,
+          "target": 14.5,
+          "min": 14,
+          "max": 15
+        }
+      },
+      "facilityDeviation": -8.196721311475407,
+      "terrainDeviation": -3.4482758620689613,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 6,
+          "largest": 1,
+          "singletons": 6
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.08333333333333333,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          5,
+          2,
+          2,
+          5
+        ],
+        "halves": [
+          7,
+          7,
+          7,
+          7
+        ],
+        "max3": 4,
+        "max4": 5,
+        "imbalance": 0.21428571428571427,
+        "halfImbalance": 0,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          2,
+          1,
+          1,
+          2
+        ],
+        "mountain": [
+          1,
+          0,
+          1,
+          1
+        ],
+        "forest": [
+          2,
+          1,
+          0,
+          2
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 7,
+        "deductions": 185,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 5,
+        "relationships": 33,
+        "initialForced": 0
+      },
+      "attempts": 19,
+      "failures": {
+        "combination layout": 7,
+        "witness multiple": 49,
+        "witness budget": 7,
+        "logic stalled": 9,
+        "logic budget": 2
+      },
+      "phases": {
+        "terrain": {
+          "calls": 19,
+          "ms": 27.001299999998082
+        },
+        "construction": {
+          "calls": 19,
+          "ms": 362.89430000000084
+        },
+        "facility refinement": {
+          "calls": 12,
+          "ms": 95.08859999999913
+        },
+        "terrain refinement": {
+          "calls": 12,
+          "ms": 463.0115000000005
+        },
+        "logical refinement": {
+          "calls": 12,
+          "ms": 700.2006000000001
+        },
+        "logic": {
+          "calls": 59,
+          "ms": 562.1045000000058
+        },
+        "witness search": {
+          "calls": 56,
+          "ms": 228.23509999999806
+        },
+        "witness refinement": {
+          "calls": 49,
+          "ms": 480.1710000000012
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.3692000000000917
+        }
+      },
+      "construction": {
+        "searches": 91,
+        "nodes": 19329,
+        "search cutoff": 79,
+        "node limit": 79,
+        "connection infeasible": 1610,
+        "completion ambiguity": 3517,
+        "domain infeasible": 666,
+        "completed": 12,
+        "empty lines": 12
+      }
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 3645,
+      "generationMs": 3585,
+      "candidatesGenerated": 15,
+      "candidatesValidated": 15,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 52,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 1,
+        "tower_single": 3,
+        "camp_domino": 3,
+        "camp_long": 1,
+        "camp_el": 1,
+        "picnic_domino": 2,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 1,
+            "tower_single": 3,
+            "camp_domino": 3,
+            "camp_long": 1,
+            "camp_el": 1,
+            "picnic_domino": 2,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 29,
+          "target": 30.5,
+          "min": 28,
+          "max": 33
+        },
+        "terrain": {
+          "counts": {
+            "water": 6,
+            "mountain": 3,
+            "forest": 5
+          },
+          "area": 14,
+          "target": 14.5,
+          "min": 14,
+          "max": 15
+        }
+      },
+      "facilityDeviation": -4.918032786885251,
+      "terrainDeviation": -3.4482758620689613,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.09375,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 5,
+          "largest": 2,
+          "singletons": 4
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.08571428571428572,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.10416666666666667,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 4,
+          "largest": 2,
+          "singletons": 3
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          2,
+          4,
+          4,
+          4
+        ],
+        "halves": [
+          6,
+          8,
+          6,
+          8
+        ],
+        "max3": 4,
+        "max4": 5,
+        "imbalance": 0.14285714285714285,
+        "halfImbalance": 0.14285714285714285,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          2,
+          2,
+          1
+        ],
+        "mountain": [
+          0,
+          2,
+          1,
+          0
+        ],
+        "forest": [
+          1,
+          0,
+          1,
+          3
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 10,
+        "deductions": 185,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 5,
+        "relationships": 30,
+        "initialForced": 0
+      },
+      "attempts": 20,
+      "failures": {
+        "witness multiple": 42,
+        "logic budget": 6,
+        "witness budget": 6,
+        "logic stalled": 8,
+        "combination layout": 5
+      },
+      "phases": {
+        "terrain": {
+          "calls": 20,
+          "ms": 26.13589999999931
+        },
+        "construction": {
+          "calls": 20,
+          "ms": 341.2622999999958
+        },
+        "facility refinement": {
+          "calls": 15,
+          "ms": 94.1357999999982
+        },
+        "terrain refinement": {
+          "calls": 15,
+          "ms": 657.7738999999965
+        },
+        "logical refinement": {
+          "calls": 15,
+          "ms": 1217.8519000000033
+        },
+        "logic": {
+          "calls": 52,
+          "ms": 655.9441999999981
+        },
+        "witness search": {
+          "calls": 49,
+          "ms": 161.50609999999688
+        },
+        "witness refinement": {
+          "calls": 42,
+          "ms": 404.8154000000013
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.30670000000100117
+        }
+      },
+      "construction": {
+        "searches": 101,
+        "nodes": 21461,
+        "connection infeasible": 1653,
+        "search cutoff": 86,
+        "node limit": 86,
+        "completion ambiguity": 3537,
+        "completed": 15,
+        "domain infeasible": 2626
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 6309,
+      "generationMs": 6295,
+      "candidatesGenerated": 27,
+      "candidatesValidated": 26,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 78,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 2,
+        "tower_single": 3,
+        "camp_domino": 1,
+        "camp_long": 2,
+        "camp_el": 1,
+        "picnic_domino": 2,
+        "cabin_el": 1,
+        "foodTruck_single": 2,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 2,
+            "tower_single": 3,
+            "camp_domino": 1,
+            "camp_long": 2,
+            "camp_el": 1,
+            "picnic_domino": 2,
+            "cabin_el": 1,
+            "foodTruck_single": 2,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 30,
+          "target": 32.5,
+          "min": 30,
+          "max": 35
+        },
+        "terrain": {
+          "counts": {
+            "water": 7,
+            "mountain": 3,
+            "forest": 5
+          },
+          "area": 15,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        }
+      },
+      "facilityDeviation": -7.692307692307687,
+      "terrainDeviation": -6.25,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 7,
+          "components": 6,
+          "largest": 2,
+          "singletons": 5
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.08928571428571429,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          5,
+          6,
+          3,
+          1
+        ],
+        "halves": [
+          11,
+          4,
+          8,
+          7
+        ],
+        "max3": 4,
+        "max4": 6,
+        "imbalance": 0.3333333333333333,
+        "halfImbalance": 0.26666666666666666,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          2,
+          2,
+          3,
+          0
+        ],
+        "mountain": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "forest": [
+          2,
+          2,
+          0,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 19,
+        "deductions": 209,
+        "assumptions": 11,
+        "maxDepth": 2,
+        "techniques": 6,
+        "relationships": 50,
+        "initialForced": 0
+      },
+      "attempts": 78,
+      "failures": {
+        "combination layout": 51,
+        "witness multiple": 54,
+        "witness budget": 21,
+        "logic stalled": 25
+      },
+      "phases": {
+        "terrain": {
+          "calls": 78,
+          "ms": 110.3062999999911
+        },
+        "construction": {
+          "calls": 78,
+          "ms": 1227.3866000000053
+        },
+        "facility refinement": {
+          "calls": 27,
+          "ms": 236.48760000000402
+        },
+        "terrain refinement": {
+          "calls": 27,
+          "ms": 1281.9936000000034
+        },
+        "logical refinement": {
+          "calls": 27,
+          "ms": 2086.372699999989
+        },
+        "logic": {
+          "calls": 78,
+          "ms": 302.31529999998565
+        },
+        "witness search": {
+          "calls": 76,
+          "ms": 380.87830000001304
+        },
+        "witness refinement": {
+          "calls": 54,
+          "ms": 623.5682999999935
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.3132000000005064
+        }
+      },
+      "construction": {
+        "searches": 278,
+        "nodes": 61696,
+        "completion ambiguity": 14048,
+        "connection infeasible": 4629,
+        "search cutoff": 251,
+        "node limit": 251,
+        "empty lines": 3753,
+        "completed": 27,
+        "domain infeasible": 706,
+        "remaining space infeasible": 47
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 984,
+      "generationMs": 933,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 2,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 8,
+      "facilities": {
+        "camp_single": 4,
+        "fire_single": 2,
+        "tower_single": 3,
+        "camp_domino": 2,
+        "camp_long": 2,
+        "camp_el": 1,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 4,
+            "fire_single": 2,
+            "tower_single": 3,
+            "camp_domino": 2,
+            "camp_long": 2,
+            "camp_el": 1,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 30,
+          "target": 32.5,
+          "min": 30,
+          "max": 35
+        },
+        "terrain": {
+          "counts": {
+            "water": 7,
+            "mountain": 3,
+            "forest": 5
+          },
+          "area": 15,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        }
+      },
+      "facilityDeviation": -7.692307692307687,
+      "terrainDeviation": -6.25,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.109375,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 7,
+          "components": 6,
+          "largest": 2,
+          "singletons": 5
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.16666666666666666,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.14285714285714285,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          3,
+          6,
+          3,
+          3
+        ],
+        "halves": [
+          9,
+          6,
+          6,
+          9
+        ],
+        "max3": 4,
+        "max4": 6,
+        "imbalance": 0.2,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          2,
+          2,
+          2,
+          1
+        ],
+        "mountain": [
+          0,
+          2,
+          0,
+          1
+        ],
+        "forest": [
+          1,
+          2,
+          1,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 21,
+        "deductions": 218,
+        "assumptions": 57,
+        "maxDepth": 2,
+        "techniques": 6,
+        "relationships": 52,
+        "initialForced": 0
+      },
+      "attempts": 5,
+      "failures": {
+        "combination layout": 2,
+        "witness multiple": 7,
+        "logic budget": 1
+      },
+      "phases": {
+        "terrain": {
+          "calls": 5,
+          "ms": 6.995599999998376
+        },
+        "construction": {
+          "calls": 5,
+          "ms": 45.26440000000366
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 7.834800000000541
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 111.14760000000024
+        },
+        "logical refinement": {
+          "calls": 3,
+          "ms": 518.5347000000002
+        },
+        "logic": {
+          "calls": 8,
+          "ms": 166.119200000001
+        },
+        "witness search": {
+          "calls": 7,
+          "ms": 5.870099999996455
+        },
+        "witness refinement": {
+          "calls": 7,
+          "ms": 65.84000000000015
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.38320000000021537
+        }
+      },
+      "construction": {
+        "searches": 13,
+        "nodes": 2481,
+        "connection infeasible": 151,
+        "completed": 3,
+        "empty lines": 134,
+        "search cutoff": 10,
+        "node limit": 10,
+        "domain infeasible": 242,
+        "completion ambiguity": 303
+      }
+    },
+    {
+      "difficulty": 1,
+      "seed": 20261019,
+      "disabled": [
+        "camp_single"
+      ],
+      "status": "success",
+      "ms": 29,
+      "generationMs": 29,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 1,
+      "facilities": {
+        "fire_single": 1,
+        "tower_single": 0,
+        "camp_domino": 1,
+        "camp_long": 0,
+        "camp_el": 0,
+        "picnic_domino": 0,
+        "cabin_el": 0,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "fire_single": 1,
+            "tower_single": 0,
+            "camp_domino": 1,
+            "camp_long": 0,
+            "camp_el": 0,
+            "picnic_domino": 0,
+            "cabin_el": 0,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 3,
+          "target": 3,
+          "min": 3,
+          "max": 3
+        },
+        "terrain": {
+          "counts": {
+            "water": 3,
+            "mountain": 0,
+            "forest": 2
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": 0,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.16666666666666666,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0,
+          "patchCompactness": 0,
+          "branches": 0,
+          "bends": 0,
+          "count": 0,
+          "components": 0,
+          "largest": 0,
+          "singletons": 0
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.3333333333333333,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 2,
+          "components": 2,
+          "largest": 1,
+          "singletons": 2
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          1,
+          1,
+          2,
+          1
+        ],
+        "halves": [
+          2,
+          3,
+          3,
+          2
+        ],
+        "max3": 2,
+        "max4": 3,
+        "imbalance": 0.2,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          0,
+          1,
+          1,
+          1
+        ],
+        "mountain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "forest": [
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 2,
+        "deductions": 1,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 1,
+        "relationships": 0,
+        "initialForced": 1
+      },
+      "attempts": 3,
+      "failures": {},
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 1.5802999999978056
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 1.0516999999963446
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 0.21169999999983702
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 25.566899999997986
+        },
+        "logic": {
+          "calls": 1,
+          "ms": 0.06179999999949359
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.04380000000310247
+        }
+      },
+      "construction": {
+        "searches": 3,
+        "nodes": 35,
+        "completed": 3,
+        "connection infeasible": 1
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [
+        "camp_el",
+        "foodTruck_single"
+      ],
+      "status": "success",
+      "ms": 5348,
+      "generationMs": 5317,
+      "candidatesGenerated": 21,
+      "candidatesValidated": 20,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 95,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 2,
+        "tower_single": 3,
+        "camp_domino": 1,
+        "camp_long": 2,
+        "picnic_domino": 2,
+        "cabin_el": 1,
+        "powerTower_single": 2,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 2,
+            "tower_single": 3,
+            "camp_domino": 1,
+            "camp_long": 2,
+            "picnic_domino": 2,
+            "cabin_el": 1,
+            "powerTower_single": 2,
+            "pool_single": 1
+          },
+          "area": 26,
+          "target": 28,
+          "min": 26,
+          "max": 30
+        },
+        "terrain": {
+          "counts": {
+            "water": 7,
+            "mountain": 4,
+            "forest": 6
+          },
+          "area": 17,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        }
+      },
+      "facilityDeviation": -7.14285714285714,
+      "terrainDeviation": 6.25,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 7,
+          "components": 5,
+          "largest": 2,
+          "singletons": 3
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.0625,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 4,
+          "largest": 1,
+          "singletons": 4
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.10714285714285714,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 6,
+          "largest": 1,
+          "singletons": 6
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          4,
+          4,
+          6,
+          3
+        ],
+        "halves": [
+          8,
+          9,
+          10,
+          7
+        ],
+        "max3": 4,
+        "max4": 6,
+        "imbalance": 0.17647058823529413,
+        "halfImbalance": 0.11764705882352941,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          2,
+          2,
+          3,
+          0
+        ],
+        "mountain": [
+          1,
+          0,
+          2,
+          1
+        ],
+        "forest": [
+          1,
+          2,
+          1,
+          2
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 20,
+        "deductions": 135,
+        "assumptions": 34,
+        "maxDepth": 2,
+        "techniques": 6,
+        "relationships": 39,
+        "initialForced": 0
+      },
+      "attempts": 36,
+      "failures": {
+        "combination layout": 15,
+        "witness multiple": 80,
+        "logic stalled": 13,
+        "logic budget": 6,
+        "witness budget": 9
+      },
+      "phases": {
+        "terrain": {
+          "calls": 36,
+          "ms": 45.39210000000094
+        },
+        "construction": {
+          "calls": 36,
+          "ms": 354.88330000000497
+        },
+        "facility refinement": {
+          "calls": 21,
+          "ms": 132.55120000000898
+        },
+        "terrain refinement": {
+          "calls": 21,
+          "ms": 826.4421999999795
+        },
+        "logical refinement": {
+          "calls": 21,
+          "ms": 1375.0725999999922
+        },
+        "logic": {
+          "calls": 95,
+          "ms": 1439.1939000000093
+        },
+        "witness search": {
+          "calls": 90,
+          "ms": 248.88380000001416
+        },
+        "witness refinement": {
+          "calls": 80,
+          "ms": 858.843699999994
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.28399999999965075
+        }
+      },
+      "construction": {
+        "searches": 112,
+        "nodes": 22839,
+        "connection infeasible": 292,
+        "completion ambiguity": 5759,
+        "empty lines": 5939,
+        "search cutoff": 91,
+        "node limit": 91,
+        "completed": 21,
+        "domain infeasible": 279
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261020,
+      "disabled": [
+        "pool_single"
+      ],
+      "status": "success",
+      "ms": 5330,
+      "generationMs": 5291,
+      "candidatesGenerated": 21,
+      "candidatesValidated": 20,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 107,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 3,
+        "tower_single": 3,
+        "camp_domino": 2,
+        "camp_long": 2,
+        "camp_el": 1,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 3,
+            "tower_single": 3,
+            "camp_domino": 2,
+            "camp_long": 2,
+            "camp_el": 1,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1
+          },
+          "area": 29,
+          "target": 31,
+          "min": 28,
+          "max": 34
+        },
+        "terrain": {
+          "counts": {
+            "water": 7,
+            "mountain": 4,
+            "forest": 5
+          },
+          "area": 16,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        }
+      },
+      "facilityDeviation": -6.451612903225811,
+      "terrainDeviation": 0,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.109375,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 7,
+          "components": 7,
+          "largest": 1,
+          "singletons": 7
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.08163265306122448,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 4,
+          "largest": 1,
+          "singletons": 4
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.16666666666666666,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          3,
+          4,
+          5,
+          4
+        ],
+        "halves": [
+          7,
+          9,
+          8,
+          8
+        ],
+        "max3": 4,
+        "max4": 6,
+        "imbalance": 0.125,
+        "halfImbalance": 0.0625,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          3,
+          2,
+          1
+        ],
+        "mountain": [
+          0,
+          1,
+          2,
+          1
+        ],
+        "forest": [
+          2,
+          0,
+          1,
+          2
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 16,
+        "deductions": 206,
+        "assumptions": 15,
+        "maxDepth": 2,
+        "techniques": 6,
+        "relationships": 31,
+        "initialForced": 0
+      },
+      "attempts": 23,
+      "failures": {
+        "witness multiple": 90,
+        "witness budget": 8,
+        "logic stalled": 16,
+        "logic budget": 3,
+        "combination layout": 2
+      },
+      "phases": {
+        "terrain": {
+          "calls": 23,
+          "ms": 35.22659999999087
+        },
+        "construction": {
+          "calls": 23,
+          "ms": 153.1091999999917
+        },
+        "facility refinement": {
+          "calls": 21,
+          "ms": 86.80259999999544
+        },
+        "terrain refinement": {
+          "calls": 21,
+          "ms": 953.5246000000006
+        },
+        "logical refinement": {
+          "calls": 21,
+          "ms": 1299.6718
+        },
+        "logic": {
+          "calls": 107,
+          "ms": 1377.6123000000007
+        },
+        "witness search": {
+          "calls": 99,
+          "ms": 326.3181999999979
+        },
+        "witness refinement": {
+          "calls": 90,
+          "ms": 1016.596300000012
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.3815000000031432
+        }
+      },
+      "construction": {
+        "searches": 41,
+        "nodes": 5794,
+        "empty lines": 354,
+        "completed": 21,
+        "completion ambiguity": 1775,
+        "connection infeasible": 231,
+        "search cutoff": 20,
+        "node limit": 20,
+        "domain infeasible": 1
+      }
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261021,
+      "disabled": [],
+      "status": "failed",
+      "ms": 7600,
+      "error": "预算内未找到满足地形质量、逻辑路径和唯一解的地图（40 次构造；发现多个解 118, 缺少可解释路径 22, 多解诊断预算 13）。请重试。",
+      "elapsed": 7600,
+      "candidatesGenerated": 30,
+      "candidatesValidated": 29,
+      "proofExhaustions": 0,
+      "attempts": 40,
+      "proofs": 0,
+      "logicChecks": 139,
+      "failures": {
+        "witness multiple": 118,
+        "logic stalled": 22,
+        "witness budget": 13,
+        "combination layout": 10,
+        "logic budget": 7
+      },
+      "phases": {
+        "terrain": {
+          "calls": 40,
+          "ms": 64.21640000000076
+        },
+        "construction": {
+          "calls": 40,
+          "ms": 816.9465000000032
+        },
+        "facility refinement": {
+          "calls": 30,
+          "ms": 222.10299999999876
+        },
+        "terrain refinement": {
+          "calls": 30,
+          "ms": 1369.7253999999994
+        },
+        "logical refinement": {
+          "calls": 30,
+          "ms": 2067.8468999999986
+        },
+        "logic": {
+          "calls": 139,
+          "ms": 1330.9865000000054
+        },
+        "witness search": {
+          "calls": 132,
+          "ms": 505.80169999999976
+        },
+        "witness refinement": {
+          "calls": 118,
+          "ms": 1155.7170999999967
+        }
+      },
+      "construction": {
+        "searches": 202,
+        "nodes": 42840,
+        "search cutoff": 172,
+        "node limit": 172,
+        "completion ambiguity": 8221,
+        "connection infeasible": 3404,
+        "completed": 30,
+        "domain infeasible": 2996,
+        "empty lines": 19
+      }
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261022,
+      "disabled": [],
+      "status": "failed",
+      "ms": 7600,
+      "error": "预算内未找到满足地形质量、逻辑路径和唯一解的地图（57 次构造；发现多个解 115, 联合布局未找到 27, 缺少可解释路径 22）。请重试。",
+      "elapsed": 7600,
+      "candidatesGenerated": 30,
+      "candidatesValidated": 30,
+      "proofExhaustions": 0,
+      "attempts": 57,
+      "proofs": 0,
+      "logicChecks": 139,
+      "failures": {
+        "combination layout": 27,
+        "witness multiple": 115,
+        "logic stalled": 22,
+        "witness budget": 14,
+        "logic budget": 8
+      },
+      "phases": {
+        "terrain": {
+          "calls": 57,
+          "ms": 70.2727999999961
+        },
+        "construction": {
+          "calls": 57,
+          "ms": 1104.9620999999934
+        },
+        "facility refinement": {
+          "calls": 30,
+          "ms": 150.1306999999988
+        },
+        "terrain refinement": {
+          "calls": 30,
+          "ms": 1231.3061000000016
+        },
+        "logical refinement": {
+          "calls": 30,
+          "ms": 2081.131900000002
+        },
+        "logic": {
+          "calls": 139,
+          "ms": 1388.7387000000053
+        },
+        "witness search": {
+          "calls": 131,
+          "ms": 398.2017000000069
+        },
+        "witness refinement": {
+          "calls": 115,
+          "ms": 1117.805400000012
+        }
+      },
+      "construction": {
+        "searches": 298,
+        "nodes": 65549,
+        "connection infeasible": 6247,
+        "completion ambiguity": 12499,
+        "search cutoff": 268,
+        "node limit": 268,
+        "completed": 30,
+        "domain infeasible": 3922,
+        "empty lines": 6
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261021,
+      "disabled": [],
+      "status": "failed",
+      "ms": 7600,
+      "error": "预算内未找到满足地形质量、逻辑路径和唯一解的地图（68 次构造；发现多个解 60, 联合布局未找到 36, 缺少可解释路径 30）。请重试。",
+      "elapsed": 7600,
+      "candidatesGenerated": 32,
+      "candidatesValidated": 30,
+      "proofExhaustions": 0,
+      "attempts": 68,
+      "proofs": 0,
+      "logicChecks": 89,
+      "failures": {
+        "combination layout": 36,
+        "witness multiple": 60,
+        "witness budget": 28,
+        "logic stalled": 30
+      },
+      "phases": {
+        "terrain": {
+          "calls": 68,
+          "ms": 92.35650000000896
+        },
+        "construction": {
+          "calls": 68,
+          "ms": 1003.6727999999748
+        },
+        "facility refinement": {
+          "calls": 32,
+          "ms": 222.19100000000617
+        },
+        "terrain refinement": {
+          "calls": 32,
+          "ms": 1399.87819999999
+        },
+        "logical refinement": {
+          "calls": 32,
+          "ms": 3338.283400000004
+        },
+        "logic": {
+          "calls": 89,
+          "ms": 292.47599999999693
+        },
+        "witness search": {
+          "calls": 88,
+          "ms": 528.9566000000214
+        },
+        "witness refinement": {
+          "calls": 60,
+          "ms": 671.0770999999895
+        }
+      },
+      "construction": {
+        "searches": 227,
+        "nodes": 48914,
+        "connection infeasible": 4031,
+        "search cutoff": 195,
+        "node limit": 195,
+        "empty lines": 2078,
+        "completion ambiguity": 11280,
+        "completed": 32,
+        "domain infeasible": 1170
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261022,
+      "disabled": [],
+      "status": "failed",
+      "ms": 7600,
+      "error": "预算内未找到满足地形质量、逻辑路径和唯一解的地图（72 次构造；发现多个解 98, 联合布局未找到 37, 缺少可解释路径 30）。请重试。",
+      "elapsed": 7600,
+      "candidatesGenerated": 35,
+      "candidatesValidated": 33,
+      "proofExhaustions": 0,
+      "attempts": 72,
+      "proofs": 0,
+      "logicChecks": 125,
+      "failures": {
+        "combination layout": 37,
+        "witness multiple": 98,
+        "witness budget": 19,
+        "logic stalled": 30,
+        "logic budget": 3
+      },
+      "phases": {
+        "terrain": {
+          "calls": 72,
+          "ms": 94.36049999998431
+        },
+        "construction": {
+          "calls": 72,
+          "ms": 1020.3544000000184
+        },
+        "facility refinement": {
+          "calls": 35,
+          "ms": 212.46099999999205
+        },
+        "terrain refinement": {
+          "calls": 35,
+          "ms": 1408.0017999999982
+        },
+        "logical refinement": {
+          "calls": 35,
+          "ms": 2811.4989000000096
+        },
+        "logic": {
+          "calls": 125,
+          "ms": 588.0537000000004
+        },
+        "witness search": {
+          "calls": 118,
+          "ms": 444.6041000000223
+        },
+        "witness refinement": {
+          "calls": 98,
+          "ms": 959.5706000000027
+        }
+      },
+      "construction": {
+        "searches": 232,
+        "nodes": 48883,
+        "connection infeasible": 2958,
+        "completion ambiguity": 12110,
+        "search cutoff": 197,
+        "node limit": 197,
+        "domain infeasible": 220,
+        "empty lines": 2154,
+        "completed": 35,
+        "remaining space infeasible": 1
+      }
+    }
+  ],
+  "after": [
+    {
+      "difficulty": 1,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 60,
+      "generationMs": 57,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 1,
+      "cutoffs": {},
+      "timeDependent": false,
+      "facilities": {
+        "camp_single": 1,
+        "fire_single": 1,
+        "tower_single": 1,
+        "camp_domino": 1,
+        "camp_long": 0,
+        "camp_el": 0,
+        "picnic_domino": 0,
+        "cabin_el": 0,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 1,
+            "fire_single": 1,
+            "tower_single": 1,
+            "camp_domino": 1,
+            "camp_long": 0,
+            "camp_el": 0,
+            "picnic_domino": 0,
+            "cabin_el": 0,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        },
+        "terrain": {
+          "counts": {
+            "water": 3,
+            "mountain": 1,
+            "forest": 1
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": 0,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.05357142857142857,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "mountain",
+          "compactness": 1,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 1,
+          "components": 1,
+          "largest": 1,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 1,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 1,
+          "components": 1,
+          "largest": 1,
+          "singletons": 1
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          1,
+          2,
+          1,
+          1
+        ],
+        "halves": [
+          3,
+          2,
+          2,
+          3
+        ],
+        "max3": 2,
+        "max4": 2,
+        "imbalance": 0.2,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "mountain": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "forest": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 2,
+        "deductions": 4,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 2,
+        "relationships": 1,
+        "initialForced": 2
+      },
+      "attempts": 3,
+      "failures": {},
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 3.5275000000000034
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 15.418599999999998
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 1.4126999999999725
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 31.613200000000006
+        },
+        "logic": {
+          "calls": 1,
+          "ms": 1.3467999999999734
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.535000000000025
+        }
+      },
+      "construction": {
+        "searches": 3,
+        "nodes": 40,
+        "connection infeasible": 5,
+        "completed": 3,
+        "completion ambiguity": 12
+      }
+    },
+    {
+      "difficulty": 1,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 28,
+      "generationMs": 27,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 1,
+      "cutoffs": {},
+      "timeDependent": false,
+      "facilities": {
+        "camp_single": 1,
+        "fire_single": 1,
+        "tower_single": 1,
+        "camp_domino": 1,
+        "camp_long": 0,
+        "camp_el": 0,
+        "picnic_domino": 0,
+        "cabin_el": 0,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 1,
+            "fire_single": 1,
+            "tower_single": 1,
+            "camp_domino": 1,
+            "camp_long": 0,
+            "camp_el": 0,
+            "picnic_domino": 0,
+            "cabin_el": 0,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        },
+        "terrain": {
+          "counts": {
+            "water": 3,
+            "mountain": 1,
+            "forest": 1
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": 0,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.0625,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "mountain",
+          "compactness": 1,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 1,
+          "components": 1,
+          "largest": 1,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 1,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 1,
+          "components": 1,
+          "largest": 1,
+          "singletons": 1
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          1,
+          2,
+          1,
+          1
+        ],
+        "halves": [
+          3,
+          2,
+          2,
+          3
+        ],
+        "max3": 2,
+        "max4": 2,
+        "imbalance": 0.2,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "mountain": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "forest": [
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 2,
+        "deductions": 6,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 2,
+        "relationships": 0,
+        "initialForced": 2
+      },
+      "attempts": 3,
+      "failures": {},
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 1.3681999999999448
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 2.137700000000052
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 1.7139000000000237
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 20.81660000000005
+        },
+        "logic": {
+          "calls": 1,
+          "ms": 0.1856000000000222
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.10649999999998272
+        }
+      },
+      "construction": {
+        "searches": 3,
+        "nodes": 19,
+        "connection infeasible": 4,
+        "completed": 3
+      }
+    },
+    {
+      "difficulty": 5,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 163,
+      "generationMs": 159,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 1,
+      "cutoffs": {},
+      "timeDependent": false,
+      "facilities": {
+        "camp_single": 2,
+        "fire_single": 2,
+        "tower_single": 2,
+        "camp_domino": 1,
+        "camp_long": 1,
+        "camp_el": 0,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 2,
+            "fire_single": 2,
+            "tower_single": 2,
+            "camp_domino": 1,
+            "camp_long": 1,
+            "camp_el": 0,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 16,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        },
+        "terrain": {
+          "counts": {
+            "water": 4,
+            "mountain": 3,
+            "forest": 3
+          },
+          "area": 10,
+          "target": 9.5,
+          "min": 9,
+          "max": 10
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": 5.263157894736836,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.08333333333333333,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 4,
+          "largest": 1,
+          "singletons": 4
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.3,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 2,
+          "largest": 2,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.21428571428571427,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          2,
+          3,
+          4,
+          1
+        ],
+        "halves": [
+          5,
+          5,
+          6,
+          4
+        ],
+        "max3": 3,
+        "max4": 4,
+        "imbalance": 0.3,
+        "halfImbalance": 0.1,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          1,
+          2,
+          0
+        ],
+        "mountain": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "forest": [
+          0,
+          0,
+          2,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 9,
+        "deductions": 48,
+        "assumptions": 4,
+        "maxDepth": 1,
+        "techniques": 6,
+        "relationships": 11,
+        "initialForced": 0
+      },
+      "attempts": 3,
+      "failures": {},
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 3.143100000000061
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 52.68799999999999
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 13.135199999999998
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 83.29569999999995
+        },
+        "logic": {
+          "calls": 1,
+          "ms": 4.527499999999975
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.35070000000001755
+        }
+      },
+      "construction": {
+        "searches": 10,
+        "nodes": 1967,
+        "connection infeasible": 644,
+        "search cutoff": 7,
+        "node limit": 7,
+        "completed": 3,
+        "completion ambiguity": 11
+      }
+    },
+    {
+      "difficulty": 5,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 133,
+      "generationMs": 132,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 6,
+      "cutoffs": {},
+      "timeDependent": false,
+      "facilities": {
+        "camp_single": 2,
+        "fire_single": 2,
+        "tower_single": 2,
+        "camp_domino": 2,
+        "camp_long": 1,
+        "camp_el": 0,
+        "picnic_domino": 1,
+        "cabin_el": 0,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 2,
+            "fire_single": 2,
+            "tower_single": 2,
+            "camp_domino": 2,
+            "camp_long": 1,
+            "camp_el": 0,
+            "picnic_domino": 1,
+            "cabin_el": 0,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 15,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        },
+        "terrain": {
+          "counts": {
+            "water": 4,
+            "mountain": 3,
+            "forest": 3
+          },
+          "area": 10,
+          "target": 9.5,
+          "min": 9,
+          "max": 10
+        }
+      },
+      "facilityDeviation": -6.25,
+      "terrainDeviation": 5.263157894736836,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.09523809523809523,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 4,
+          "largest": 1,
+          "singletons": 4
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.1875,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 2,
+          "largest": 2,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.07142857142857142,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          4,
+          1,
+          3,
+          2
+        ],
+        "halves": [
+          5,
+          5,
+          7,
+          3
+        ],
+        "max3": 3,
+        "max4": 4,
+        "imbalance": 0.3,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "mountain": [
+          2,
+          0,
+          1,
+          0
+        ],
+        "forest": [
+          1,
+          0,
+          1,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 5,
+        "deductions": 35,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 5,
+        "relationships": 5,
+        "initialForced": 2
+      },
+      "attempts": 3,
+      "failures": {
+        "witness multiple": 5
+      },
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 2.502700000000061
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 5.657899999999927
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 20.84269999999998
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 54.295100000000105
+        },
+        "logic": {
+          "calls": 6,
+          "ms": 15.586099999999988
+        },
+        "witness search": {
+          "calls": 5,
+          "ms": 2.29200000000003
+        },
+        "witness refinement": {
+          "calls": 5,
+          "ms": 27.153800000000047
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.24430000000006658
+        }
+      },
+      "construction": {
+        "searches": 3,
+        "nodes": 64,
+        "completed": 3,
+        "connection infeasible": 8
+      }
+    },
+    {
+      "difficulty": 7,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 294,
+      "generationMs": 291,
+      "candidatesGenerated": 2,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 3,
+      "cutoffs": {},
+      "timeDependent": false,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 2,
+        "tower_single": 2,
+        "camp_domino": 1,
+        "camp_long": 1,
+        "camp_el": 0,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 2,
+            "tower_single": 2,
+            "camp_domino": 1,
+            "camp_long": 1,
+            "camp_el": 0,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 20,
+          "target": 20,
+          "min": 18,
+          "max": 22
+        },
+        "terrain": {
+          "counts": {
+            "water": 6,
+            "mountain": 2,
+            "forest": 4
+          },
+          "area": 12,
+          "target": 12.5,
+          "min": 12,
+          "max": 13
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": -4.0000000000000036,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 5,
+          "largest": 2,
+          "singletons": 4
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.5,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 2,
+          "components": 2,
+          "largest": 1,
+          "singletons": 2
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.16,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 4,
+          "largest": 1,
+          "singletons": 4
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          3,
+          3,
+          3,
+          3
+        ],
+        "halves": [
+          6,
+          6,
+          6,
+          6
+        ],
+        "max3": 3,
+        "max4": 4,
+        "imbalance": 0,
+        "halfImbalance": 0,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          0,
+          3,
+          1,
+          2
+        ],
+        "mountain": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "forest": [
+          2,
+          0,
+          1,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 13,
+        "deductions": 120,
+        "assumptions": 20,
+        "maxDepth": 2,
+        "techniques": 6,
+        "relationships": 32,
+        "initialForced": 0
+      },
+      "attempts": 8,
+      "failures": {
+        "combination layout": 6,
+        "witness multiple": 2
+      },
+      "phases": {
+        "terrain": {
+          "calls": 10,
+          "ms": 10.70860000000016
+        },
+        "construction": {
+          "calls": 8,
+          "ms": 23.9789999999997
+        },
+        "facility refinement": {
+          "calls": 2,
+          "ms": 9.444400000000087
+        },
+        "terrain refinement": {
+          "calls": 2,
+          "ms": 74.96130000000005
+        },
+        "logical refinement": {
+          "calls": 2,
+          "ms": 115.2174
+        },
+        "logic": {
+          "calls": 3,
+          "ms": 36.17030000000011
+        },
+        "witness search": {
+          "calls": 2,
+          "ms": 1.298599999999965
+        },
+        "witness refinement": {
+          "calls": 2,
+          "ms": 15.389300000000048
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.48879999999996926
+        }
+      },
+      "construction": {
+        "activity planned": 8,
+        "searches": 12,
+        "nodes": 1080,
+        "exhausted": 4,
+        "initial capacity": 2,
+        "activity fallback": 2,
+        "connection infeasible": 13,
+        "completion ambiguity": 122,
+        "search cutoff": 4,
+        "node limit": 4,
+        "completed": 2
+      }
+    },
+    {
+      "difficulty": 7,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 3682,
+      "generationMs": 3679,
+      "candidatesGenerated": 21,
+      "candidatesValidated": 21,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 72,
+      "cutoffs": {},
+      "timeDependent": false,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 2,
+        "tower_single": 2,
+        "camp_domino": 1,
+        "camp_long": 1,
+        "camp_el": 0,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 2,
+            "tower_single": 2,
+            "camp_domino": 1,
+            "camp_long": 1,
+            "camp_el": 0,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 20,
+          "target": 20,
+          "min": 18,
+          "max": 22
+        },
+        "terrain": {
+          "counts": {
+            "water": 5,
+            "mountain": 3,
+            "forest": 4
+          },
+          "area": 12,
+          "target": 12.5,
+          "min": 12,
+          "max": 13
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": -4.0000000000000036,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 2,
+          "largest": 2,
+          "singletons": 1
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.09523809523809523,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 3,
+          "largest": 2,
+          "singletons": 2
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          3,
+          3,
+          3,
+          3
+        ],
+        "halves": [
+          6,
+          6,
+          6,
+          6
+        ],
+        "max3": 3,
+        "max4": 3,
+        "imbalance": 0,
+        "halfImbalance": 0,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          0,
+          1,
+          1,
+          3
+        ],
+        "mountain": [
+          2,
+          0,
+          1,
+          0
+        ],
+        "forest": [
+          1,
+          2,
+          1,
+          0
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 6,
+        "deductions": 84,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 5,
+        "relationships": 17,
+        "initialForced": 4
+      },
+      "attempts": 833,
+      "failures": {
+        "combination layout": 812,
+        "witness multiple": 62,
+        "logic budget": 14,
+        "reasoning tier high": 5,
+        "logic stalled": 1
+      },
+      "phases": {
+        "terrain": {
+          "calls": 833,
+          "ms": 854.0380000000026
+        },
+        "construction": {
+          "calls": 833,
+          "ms": 569.192399999997
+        },
+        "facility refinement": {
+          "calls": 21,
+          "ms": 2.6231999999987465
+        },
+        "terrain refinement": {
+          "calls": 21,
+          "ms": 493.32820000000083
+        },
+        "logical refinement": {
+          "calls": 21,
+          "ms": 25.745100000000207
+        },
+        "logic": {
+          "calls": 72,
+          "ms": 1219.4716000000012
+        },
+        "witness search": {
+          "calls": 64,
+          "ms": 46.148199999998496
+        },
+        "witness refinement": {
+          "calls": 62,
+          "ms": 418.8897000000013
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.24459999999999127
+        }
+      },
+      "construction": {
+        "activity planned": 833,
+        "searches": 833,
+        "nodes": 26252,
+        "domain infeasible": 2192,
+        "exhausted": 275,
+        "connection infeasible": 4534,
+        "search cutoff": 71,
+        "node limit": 71,
+        "remaining space infeasible": 696,
+        "completion ambiguity": 376,
+        "initial capacity": 366,
+        "initial line capacity": 100,
+        "completed": 21,
+        "activity completed": 21
+      }
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 3881,
+      "generationMs": 3877,
+      "candidatesGenerated": 14,
+      "candidatesValidated": 13,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 66,
+      "cutoffs": {
+        "logical refinement": 6,
+        "witness search": 1
+      },
+      "timeDependent": true,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 1,
+        "tower_single": 3,
+        "camp_domino": 3,
+        "camp_long": 1,
+        "camp_el": 1,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 2,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 1,
+            "tower_single": 3,
+            "camp_domino": 3,
+            "camp_long": 1,
+            "camp_el": 1,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 2,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 28,
+          "target": 30.5,
+          "min": 28,
+          "max": 33
+        },
+        "terrain": {
+          "counts": {
+            "water": 5,
+            "mountain": 5,
+            "forest": 4
+          },
+          "area": 14,
+          "target": 14.5,
+          "min": 14,
+          "max": 15
+        }
+      },
+      "facilityDeviation": -8.196721311475407,
+      "terrainDeviation": -3.4482758620689613,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.14285714285714285,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.11904761904761904,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.13333333333333333,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 4,
+          "components": 4,
+          "largest": 1,
+          "singletons": 4
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          2,
+          5,
+          3,
+          4
+        ],
+        "halves": [
+          7,
+          7,
+          5,
+          9
+        ],
+        "max3": 3,
+        "max4": 5,
+        "imbalance": 0.21428571428571427,
+        "halfImbalance": 0.14285714285714285,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          0,
+          2,
+          1,
+          2
+        ],
+        "mountain": [
+          1,
+          3,
+          0,
+          1
+        ],
+        "forest": [
+          1,
+          0,
+          2,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 8,
+        "deductions": 184,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 5,
+        "relationships": 30,
+        "initialForced": 0
+      },
+      "attempts": 25,
+      "failures": {
+        "combination layout": 11,
+        "witness multiple": 55,
+        "witness budget": 8,
+        "logic stalled": 10,
+        "logic budget": 2
+      },
+      "phases": {
+        "terrain": {
+          "calls": 25,
+          "ms": 30.635800000001836
+        },
+        "construction": {
+          "calls": 25,
+          "ms": 419.1864000000005
+        },
+        "facility refinement": {
+          "calls": 14,
+          "ms": 110.51260000000184
+        },
+        "terrain refinement": {
+          "calls": 14,
+          "ms": 553.3818000000019
+        },
+        "logical refinement": {
+          "calls": 14,
+          "ms": 688.4285000000018
+        },
+        "logic": {
+          "calls": 66,
+          "ms": 1096.6991000000044
+        },
+        "witness search": {
+          "calls": 63,
+          "ms": 336.7496000000019
+        },
+        "witness refinement": {
+          "calls": 55,
+          "ms": 603.547000000005
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.41300000000046566
+        }
+      },
+      "construction": {
+        "searches": 99,
+        "nodes": 21003,
+        "search cutoff": 85,
+        "node limit": 85,
+        "connection infeasible": 1768,
+        "completion ambiguity": 3768,
+        "activity planned": 7,
+        "domain infeasible": 666,
+        "completed": 14,
+        "empty lines": 12,
+        "activity completed": 3
+      }
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 3567,
+      "generationMs": 3563,
+      "candidatesGenerated": 18,
+      "candidatesValidated": 17,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 64,
+      "cutoffs": {
+        "logical refinement": 12
+      },
+      "timeDependent": true,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 1,
+        "tower_single": 3,
+        "camp_domino": 3,
+        "camp_long": 1,
+        "camp_el": 1,
+        "picnic_domino": 2,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 1,
+            "tower_single": 3,
+            "camp_domino": 3,
+            "camp_long": 1,
+            "camp_el": 1,
+            "picnic_domino": 2,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 29,
+          "target": 30.5,
+          "min": 28,
+          "max": 33
+        },
+        "terrain": {
+          "counts": {
+            "water": 6,
+            "mountain": 3,
+            "forest": 5
+          },
+          "area": 14,
+          "target": 14.5,
+          "min": 14,
+          "max": 15
+        }
+      },
+      "facilityDeviation": -4.918032786885251,
+      "terrainDeviation": -3.4482758620689613,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.09375,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 5,
+          "largest": 2,
+          "singletons": 4
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.08571428571428572,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.10416666666666667,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 4,
+          "largest": 2,
+          "singletons": 3
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          2,
+          4,
+          4,
+          4
+        ],
+        "halves": [
+          6,
+          8,
+          6,
+          8
+        ],
+        "max3": 4,
+        "max4": 5,
+        "imbalance": 0.14285714285714285,
+        "halfImbalance": 0.14285714285714285,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          2,
+          2,
+          1
+        ],
+        "mountain": [
+          0,
+          2,
+          1,
+          0
+        ],
+        "forest": [
+          1,
+          0,
+          1,
+          3
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 10,
+        "deductions": 185,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 5,
+        "relationships": 30,
+        "initialForced": 0
+      },
+      "attempts": 27,
+      "failures": {
+        "witness multiple": 52,
+        "logic budget": 5,
+        "witness budget": 8,
+        "logic stalled": 11,
+        "combination layout": 9
+      },
+      "phases": {
+        "terrain": {
+          "calls": 27,
+          "ms": 35.803900000000795
+        },
+        "construction": {
+          "calls": 27,
+          "ms": 414.8784999999971
+        },
+        "facility refinement": {
+          "calls": 18,
+          "ms": 118.39309999999932
+        },
+        "terrain refinement": {
+          "calls": 18,
+          "ms": 766.111600000002
+        },
+        "logical refinement": {
+          "calls": 18,
+          "ms": 783.2940000000035
+        },
+        "logic": {
+          "calls": 64,
+          "ms": 651.8208000000013
+        },
+        "witness search": {
+          "calls": 60,
+          "ms": 233.86100000000806
+        },
+        "witness refinement": {
+          "calls": 52,
+          "ms": 521.6951000000063
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.2963999999992666
+        }
+      },
+      "construction": {
+        "searches": 108,
+        "nodes": 22488,
+        "connection infeasible": 1840,
+        "search cutoff": 90,
+        "node limit": 90,
+        "completion ambiguity": 3542,
+        "completed": 18,
+        "domain infeasible": 2682,
+        "activity planned": 5,
+        "activity completed": 1
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [],
+      "status": "success",
+      "ms": 3467,
+      "generationMs": 3463,
+      "candidatesGenerated": 16,
+      "candidatesValidated": 16,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 47,
+      "cutoffs": {
+        "logical refinement": 9
+      },
+      "timeDependent": true,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 2,
+        "tower_single": 3,
+        "camp_domino": 1,
+        "camp_long": 2,
+        "camp_el": 1,
+        "picnic_domino": 2,
+        "cabin_el": 1,
+        "foodTruck_single": 2,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 2,
+            "tower_single": 3,
+            "camp_domino": 1,
+            "camp_long": 2,
+            "camp_el": 1,
+            "picnic_domino": 2,
+            "cabin_el": 1,
+            "foodTruck_single": 2,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 30,
+          "target": 32.5,
+          "min": 30,
+          "max": 35
+        },
+        "terrain": {
+          "counts": {
+            "water": 7,
+            "mountain": 3,
+            "forest": 5
+          },
+          "area": 15,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        }
+      },
+      "facilityDeviation": -7.692307692307687,
+      "terrainDeviation": -6.25,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 7,
+          "components": 6,
+          "largest": 2,
+          "singletons": 5
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.08928571428571429,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          5,
+          6,
+          3,
+          1
+        ],
+        "halves": [
+          11,
+          4,
+          8,
+          7
+        ],
+        "max3": 4,
+        "max4": 6,
+        "imbalance": 0.3333333333333333,
+        "halfImbalance": 0.26666666666666666,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          2,
+          2,
+          3,
+          0
+        ],
+        "mountain": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "forest": [
+          2,
+          2,
+          0,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 19,
+        "deductions": 209,
+        "assumptions": 11,
+        "maxDepth": 2,
+        "techniques": 6,
+        "relationships": 50,
+        "initialForced": 0
+      },
+      "attempts": 77,
+      "failures": {
+        "combination layout": 61,
+        "witness multiple": 31,
+        "witness budget": 14,
+        "logic stalled": 15
+      },
+      "phases": {
+        "terrain": {
+          "calls": 77,
+          "ms": 97.22719999999026
+        },
+        "construction": {
+          "calls": 77,
+          "ms": 927.0424000000057
+        },
+        "facility refinement": {
+          "calls": 16,
+          "ms": 72.25690000000213
+        },
+        "terrain refinement": {
+          "calls": 16,
+          "ms": 720.8232999999927
+        },
+        "logical refinement": {
+          "calls": 16,
+          "ms": 740.1902000000009
+        },
+        "logic": {
+          "calls": 47,
+          "ms": 277.5044000000071
+        },
+        "witness search": {
+          "calls": 45,
+          "ms": 239.62220000000343
+        },
+        "witness refinement": {
+          "calls": 31,
+          "ms": 353.50570000000516
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.49870000000009895
+        }
+      },
+      "construction": {
+        "searches": 190,
+        "nodes": 41968,
+        "completion ambiguity": 9656,
+        "connection infeasible": 2866,
+        "search cutoff": 172,
+        "node limit": 172,
+        "activity planned": 38,
+        "completed": 16,
+        "activity completed": 6,
+        "empty lines": 1903,
+        "domain infeasible": 455,
+        "initial capacity": 2,
+        "remaining space infeasible": 2
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261020,
+      "disabled": [],
+      "status": "success",
+      "ms": 647,
+      "generationMs": 641,
+      "candidatesGenerated": 1,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 6,
+      "cutoffs": {},
+      "timeDependent": false,
+      "facilities": {
+        "camp_single": 4,
+        "fire_single": 2,
+        "tower_single": 3,
+        "camp_domino": 2,
+        "camp_long": 2,
+        "camp_el": 1,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 4,
+            "fire_single": 2,
+            "tower_single": 3,
+            "camp_domino": 2,
+            "camp_long": 2,
+            "camp_el": 1,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 30,
+          "target": 32.5,
+          "min": 30,
+          "max": 35
+        },
+        "terrain": {
+          "counts": {
+            "water": 7,
+            "mountain": 3,
+            "forest": 5
+          },
+          "area": 15,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        }
+      },
+      "facilityDeviation": -7.692307692307687,
+      "terrainDeviation": -6.25,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.109375,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 7,
+          "components": 6,
+          "largest": 2,
+          "singletons": 5
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.16666666666666666,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.14285714285714285,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          3,
+          6,
+          3,
+          3
+        ],
+        "halves": [
+          9,
+          6,
+          6,
+          9
+        ],
+        "max3": 4,
+        "max4": 6,
+        "imbalance": 0.2,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          2,
+          2,
+          2,
+          1
+        ],
+        "mountain": [
+          0,
+          2,
+          0,
+          1
+        ],
+        "forest": [
+          1,
+          2,
+          1,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 21,
+        "deductions": 218,
+        "assumptions": 57,
+        "maxDepth": 2,
+        "techniques": 6,
+        "relationships": 52,
+        "initialForced": 0
+      },
+      "attempts": 3,
+      "failures": {
+        "combination layout": 2,
+        "witness multiple": 5
+      },
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 3.3597000000008848
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 20.97280000000137
+        },
+        "facility refinement": {
+          "calls": 1,
+          "ms": 4.515500000001339
+        },
+        "terrain refinement": {
+          "calls": 1,
+          "ms": 36.85250000000087
+        },
+        "logical refinement": {
+          "calls": 1,
+          "ms": 387.0235999999986
+        },
+        "logic": {
+          "calls": 6,
+          "ms": 121.26910000000134
+        },
+        "witness search": {
+          "calls": 5,
+          "ms": 5.616200000004028
+        },
+        "witness refinement": {
+          "calls": 5,
+          "ms": 57.82029999999759
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.49319999999897846
+        }
+      },
+      "construction": {
+        "searches": 6,
+        "nodes": 1230,
+        "connection infeasible": 15,
+        "completed": 1,
+        "activity planned": 1,
+        "completion ambiguity": 152,
+        "search cutoff": 5,
+        "node limit": 5,
+        "empty lines": 116,
+        "domain infeasible": 161
+      }
+    },
+    {
+      "difficulty": 1,
+      "seed": 20261019,
+      "disabled": [
+        "camp_single"
+      ],
+      "status": "success",
+      "ms": 27,
+      "generationMs": 26,
+      "candidatesGenerated": 3,
+      "candidatesValidated": 1,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 1,
+      "cutoffs": {},
+      "timeDependent": false,
+      "facilities": {
+        "fire_single": 1,
+        "tower_single": 0,
+        "camp_domino": 1,
+        "camp_long": 0,
+        "camp_el": 0,
+        "picnic_domino": 0,
+        "cabin_el": 0,
+        "foodTruck_single": 0,
+        "powerTower_single": 0,
+        "pool_single": 0
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "fire_single": 1,
+            "tower_single": 0,
+            "camp_domino": 1,
+            "camp_long": 0,
+            "camp_el": 0,
+            "picnic_domino": 0,
+            "cabin_el": 0,
+            "foodTruck_single": 0,
+            "powerTower_single": 0,
+            "pool_single": 0
+          },
+          "area": 3,
+          "target": 3,
+          "min": 3,
+          "max": 3
+        },
+        "terrain": {
+          "counts": {
+            "water": 3,
+            "mountain": 0,
+            "forest": 2
+          },
+          "area": 5,
+          "target": 5,
+          "min": 5,
+          "max": 5
+        }
+      },
+      "facilityDeviation": 0,
+      "terrainDeviation": 0,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.16666666666666666,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0,
+          "patchCompactness": 0,
+          "branches": 0,
+          "bends": 0,
+          "count": 0,
+          "components": 0,
+          "largest": 0,
+          "singletons": 0
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.3333333333333333,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 2,
+          "components": 2,
+          "largest": 1,
+          "singletons": 2
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          1,
+          1,
+          2,
+          1
+        ],
+        "halves": [
+          2,
+          3,
+          3,
+          2
+        ],
+        "max3": 2,
+        "max4": 3,
+        "imbalance": 0.2,
+        "halfImbalance": 0.2,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          0,
+          1,
+          1,
+          1
+        ],
+        "mountain": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "forest": [
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 2,
+        "deductions": 1,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 1,
+        "relationships": 0,
+        "initialForced": 1
+      },
+      "attempts": 3,
+      "failures": {},
+      "phases": {
+        "terrain": {
+          "calls": 3,
+          "ms": 1.3417999999983294
+        },
+        "construction": {
+          "calls": 3,
+          "ms": 1.2344000000030064
+        },
+        "facility refinement": {
+          "calls": 3,
+          "ms": 0.2150000000019645
+        },
+        "terrain refinement": {
+          "calls": 3,
+          "ms": 22.874299999999494
+        },
+        "logic": {
+          "calls": 1,
+          "ms": 0.10059999999975844
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.06599999999889405
+        }
+      },
+      "construction": {
+        "searches": 3,
+        "nodes": 35,
+        "completed": 3,
+        "connection infeasible": 1
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [
+        "camp_el",
+        "foodTruck_single"
+      ],
+      "status": "success",
+      "ms": 3596,
+      "generationMs": 3592,
+      "candidatesGenerated": 14,
+      "candidatesValidated": 13,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 63,
+      "cutoffs": {
+        "logical refinement": 9,
+        "witness refinement": 1
+      },
+      "timeDependent": true,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 2,
+        "tower_single": 4,
+        "camp_domino": 2,
+        "camp_long": 2,
+        "picnic_domino": 1,
+        "cabin_el": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 2,
+            "tower_single": 4,
+            "camp_domino": 2,
+            "camp_long": 2,
+            "picnic_domino": 1,
+            "cabin_el": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 26,
+          "target": 28,
+          "min": 26,
+          "max": 30
+        },
+        "terrain": {
+          "counts": {
+            "water": 6,
+            "mountain": 5,
+            "forest": 6
+          },
+          "area": 17,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        }
+      },
+      "facilityDeviation": -7.14285714285714,
+      "terrainDeviation": 6.25,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.09375,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 5,
+          "largest": 2,
+          "singletons": 4
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.17857142857142858,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 4,
+          "largest": 2,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 4,
+          "largest": 3,
+          "singletons": 3
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          4,
+          4,
+          4,
+          5
+        ],
+        "halves": [
+          8,
+          9,
+          8,
+          9
+        ],
+        "max3": 4,
+        "max4": 5,
+        "imbalance": 0.058823529411764705,
+        "halfImbalance": 0.058823529411764705,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          1,
+          0,
+          1,
+          4
+        ],
+        "mountain": [
+          2,
+          3,
+          0,
+          0
+        ],
+        "forest": [
+          1,
+          1,
+          3,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 9,
+        "deductions": 141,
+        "assumptions": 2,
+        "maxDepth": 1,
+        "techniques": 6,
+        "relationships": 13,
+        "initialForced": 0
+      },
+      "attempts": 28,
+      "failures": {
+        "combination layout": 14,
+        "witness multiple": 52,
+        "logic budget": 5,
+        "logic stalled": 7,
+        "witness budget": 6
+      },
+      "phases": {
+        "terrain": {
+          "calls": 28,
+          "ms": 33.62850000000253
+        },
+        "construction": {
+          "calls": 28,
+          "ms": 211.92679999997927
+        },
+        "facility refinement": {
+          "calls": 14,
+          "ms": 103.41529999999875
+        },
+        "terrain refinement": {
+          "calls": 14,
+          "ms": 585.2569000000021
+        },
+        "logical refinement": {
+          "calls": 14,
+          "ms": 735.3115000000016
+        },
+        "logic": {
+          "calls": 63,
+          "ms": 1133.9734999999964
+        },
+        "witness search": {
+          "calls": 58,
+          "ms": 161.55800000003
+        },
+        "witness refinement": {
+          "calls": 52,
+          "ms": 596.3439999999937
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.31859999999869615
+        }
+      },
+      "construction": {
+        "searches": 59,
+        "nodes": 10967,
+        "connection infeasible": 229,
+        "completion ambiguity": 3207,
+        "empty lines": 2987,
+        "search cutoff": 43,
+        "node limit": 43,
+        "completed": 14,
+        "activity planned": 14,
+        "activity completed": 4,
+        "domain infeasible": 283,
+        "initial capacity": 2
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261020,
+      "disabled": [
+        "pool_single"
+      ],
+      "status": "success",
+      "ms": 2913,
+      "generationMs": 2909,
+      "candidatesGenerated": 12,
+      "candidatesValidated": 11,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 62,
+      "cutoffs": {
+        "logical refinement": 5,
+        "witness refinement": 2
+      },
+      "timeDependent": true,
+      "facilities": {
+        "camp_single": 3,
+        "fire_single": 2,
+        "tower_single": 3,
+        "camp_domino": 1,
+        "camp_long": 2,
+        "camp_el": 1,
+        "picnic_domino": 2,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 3,
+            "fire_single": 2,
+            "tower_single": 3,
+            "camp_domino": 1,
+            "camp_long": 2,
+            "camp_el": 1,
+            "picnic_domino": 2,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1
+          },
+          "area": 28,
+          "target": 31,
+          "min": 28,
+          "max": 34
+        },
+        "terrain": {
+          "counts": {
+            "water": 6,
+            "mountain": 5,
+            "forest": 5
+          },
+          "area": 16,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        }
+      },
+      "facilityDeviation": -9.677419354838712,
+      "terrainDeviation": 0,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.10714285714285714,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 5,
+          "largest": 2,
+          "singletons": 4
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.10204081632653061,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 5,
+          "components": 5,
+          "largest": 1,
+          "singletons": 5
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          4,
+          4,
+          3,
+          5
+        ],
+        "halves": [
+          8,
+          8,
+          7,
+          9
+        ],
+        "max3": 3,
+        "max4": 6,
+        "imbalance": 0.125,
+        "halfImbalance": 0.0625,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          0,
+          2,
+          1,
+          3
+        ],
+        "mountain": [
+          3,
+          1,
+          1,
+          0
+        ],
+        "forest": [
+          1,
+          1,
+          1,
+          2
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 7,
+        "deductions": 198,
+        "assumptions": 0,
+        "maxDepth": 0,
+        "techniques": 5,
+        "relationships": 20,
+        "initialForced": 0
+      },
+      "attempts": 17,
+      "failures": {
+        "combination layout": 5,
+        "witness multiple": 51,
+        "logic stalled": 7,
+        "logic budget": 3,
+        "witness budget": 5
+      },
+      "phases": {
+        "terrain": {
+          "calls": 17,
+          "ms": 20.39429999999993
+        },
+        "construction": {
+          "calls": 17,
+          "ms": 106.55430000000342
+        },
+        "facility refinement": {
+          "calls": 12,
+          "ms": 64.85700000001088
+        },
+        "terrain refinement": {
+          "calls": 12,
+          "ms": 530.3381999999947
+        },
+        "logical refinement": {
+          "calls": 12,
+          "ms": 672.0675000000047
+        },
+        "logic": {
+          "calls": 62,
+          "ms": 683.6585999999988
+        },
+        "witness search": {
+          "calls": 57,
+          "ms": 212.3716000000095
+        },
+        "witness refinement": {
+          "calls": 51,
+          "ms": 590.0380999999979
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.3594999999986612
+        }
+      },
+      "construction": {
+        "searches": 25,
+        "nodes": 3917,
+        "empty lines": 180,
+        "completed": 12,
+        "activity planned": 8,
+        "connection infeasible": 163,
+        "completion ambiguity": 1456,
+        "search cutoff": 13,
+        "node limit": 13,
+        "activity completed": 4,
+        "domain infeasible": 1
+      }
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261021,
+      "disabled": [],
+      "status": "failed",
+      "ms": 7249,
+      "error": "预算内未找到满足地形质量、逻辑路径和唯一解的地图（58 次构造；发现多个解 147, 缺少可解释路径 31, 联合布局未找到 23）。请重试。",
+      "elapsed": 7248,
+      "attempts": 58,
+      "proofs": 0,
+      "logicChecks": 175,
+      "failures": {
+        "witness multiple": 147,
+        "logic stalled": 31,
+        "witness budget": 18,
+        "combination layout": 23,
+        "logic budget": 4,
+        "search budget": 1
+      },
+      "phases": {
+        "terrain": {
+          "calls": 58,
+          "ms": 72.96780000000027
+        },
+        "construction": {
+          "calls": 58,
+          "ms": 1075.6444999999974
+        },
+        "facility refinement": {
+          "calls": 35,
+          "ms": 271.2505000000029
+        },
+        "terrain refinement": {
+          "calls": 35,
+          "ms": 1130.845600000001
+        },
+        "logical refinement": {
+          "calls": 35,
+          "ms": 995.1539999999975
+        },
+        "logic": {
+          "calls": 175,
+          "ms": 1344.8489000000063
+        },
+        "witness search": {
+          "calls": 166,
+          "ms": 738.7119999999996
+        },
+        "witness refinement": {
+          "calls": 147,
+          "ms": 1531.0127
+        }
+      },
+      "construction": {
+        "searches": 262,
+        "nodes": 56218,
+        "search cutoff": 227,
+        "node limit": 227,
+        "completion ambiguity": 10403,
+        "connection infeasible": 4619,
+        "completed": 35,
+        "domain infeasible": 3993,
+        "empty lines": 19,
+        "activity planned": 13,
+        "activity completed": 3
+      },
+      "candidatesGenerated": 35,
+      "candidatesValidated": 35,
+      "proofExhaustions": 0,
+      "cutoffs": {
+        "logical refinement": 25,
+        "terrain refinement": 15,
+        "witness refinement": 4,
+        "witness search": 3,
+        "facility refinement": 1,
+        "terrain": 1,
+        "construction": 1
+      },
+      "timeDependent": true
+    },
+    {
+      "difficulty": 9,
+      "seed": 20261022,
+      "disabled": [],
+      "status": "failed",
+      "ms": 7248,
+      "error": "预算内未找到满足地形质量、逻辑路径和唯一解的地图（89 次构造；发现多个解 142, 联合布局未找到 54, 缺少可解释路径 28）。请重试。",
+      "elapsed": 7248,
+      "attempts": 89,
+      "proofs": 0,
+      "logicChecks": 170,
+      "failures": {
+        "combination layout": 54,
+        "witness multiple": 142,
+        "logic stalled": 28,
+        "witness budget": 19,
+        "logic budget": 7,
+        "search budget": 1
+      },
+      "phases": {
+        "terrain": {
+          "calls": 89,
+          "ms": 98.92370000001483
+        },
+        "construction": {
+          "calls": 89,
+          "ms": 1559.7178999999978
+        },
+        "facility refinement": {
+          "calls": 35,
+          "ms": 176.87700000000314
+        },
+        "terrain refinement": {
+          "calls": 35,
+          "ms": 1097.8958999999968
+        },
+        "logical refinement": {
+          "calls": 35,
+          "ms": 975.5275999999931
+        },
+        "logic": {
+          "calls": 170,
+          "ms": 1113.1547999999984
+        },
+        "witness search": {
+          "calls": 162,
+          "ms": 651.9758000000038
+        },
+        "witness refinement": {
+          "calls": 142,
+          "ms": 1494.318500000004
+        }
+      },
+      "construction": {
+        "searches": 380,
+        "nodes": 84506,
+        "connection infeasible": 8735,
+        "completion ambiguity": 16665,
+        "search cutoff": 344,
+        "node limit": 344,
+        "completed": 35,
+        "activity planned": 29,
+        "domain infeasible": 4400,
+        "activity completed": 5,
+        "empty lines": 6,
+        "remaining space infeasible": 2,
+        "deadline": 1
+      },
+      "candidatesGenerated": 35,
+      "candidatesValidated": 35,
+      "proofExhaustions": 0,
+      "cutoffs": {
+        "logical refinement": 24,
+        "witness refinement": 1,
+        "terrain refinement": 13,
+        "witness search": 2,
+        "construction": 1
+      },
+      "timeDependent": true
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261021,
+      "disabled": [],
+      "status": "success",
+      "ms": 7092,
+      "generationMs": 7084,
+      "candidatesGenerated": 42,
+      "candidatesValidated": 42,
+      "proofs": 1,
+      "proofExhaustions": 0,
+      "logicChecks": 125,
+      "cutoffs": {
+        "logical refinement": 35,
+        "witness refinement": 6,
+        "witness search": 8,
+        "terrain refinement": 22
+      },
+      "timeDependent": true,
+      "facilities": {
+        "camp_single": 5,
+        "fire_single": 2,
+        "tower_single": 3,
+        "camp_domino": 1,
+        "camp_long": 2,
+        "camp_el": 1,
+        "picnic_domino": 2,
+        "cabin_el": 1,
+        "foodTruck_single": 1,
+        "powerTower_single": 1,
+        "pool_single": 1
+      },
+      "inventory": {
+        "facilities": {
+          "counts": {
+            "camp_single": 5,
+            "fire_single": 2,
+            "tower_single": 3,
+            "camp_domino": 1,
+            "camp_long": 2,
+            "camp_el": 1,
+            "picnic_domino": 2,
+            "cabin_el": 1,
+            "foodTruck_single": 1,
+            "powerTower_single": 1,
+            "pool_single": 1
+          },
+          "area": 31,
+          "target": 32.5,
+          "min": 30,
+          "max": 35
+        },
+        "terrain": {
+          "counts": {
+            "water": 7,
+            "mountain": 3,
+            "forest": 6
+          },
+          "area": 16,
+          "target": 16,
+          "min": 15,
+          "max": 17
+        }
+      },
+      "facilityDeviation": -4.61538461538461,
+      "terrainDeviation": 0,
+      "regions": [
+        {
+          "kind": "water",
+          "compactness": 0.16666666666666666,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 7,
+          "components": 6,
+          "largest": 2,
+          "singletons": 5
+        },
+        {
+          "kind": "mountain",
+          "compactness": 0.2,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 3,
+          "components": 3,
+          "largest": 1,
+          "singletons": 3
+        },
+        {
+          "kind": "forest",
+          "compactness": 0.125,
+          "patchCompactness": 1,
+          "branches": 0,
+          "bends": 0,
+          "count": 6,
+          "components": 6,
+          "largest": 1,
+          "singletons": 6
+        }
+      ],
+      "distribution": {
+        "quadrants": [
+          6,
+          1,
+          6,
+          3
+        ],
+        "halves": [
+          7,
+          9,
+          12,
+          4
+        ],
+        "max3": 4,
+        "max4": 6,
+        "imbalance": 0.3125,
+        "halfImbalance": 0.3125,
+        "violations": []
+      },
+      "terrainQuadrants": {
+        "water": [
+          2,
+          0,
+          3,
+          2
+        ],
+        "mountain": [
+          2,
+          0,
+          1,
+          0
+        ],
+        "forest": [
+          2,
+          1,
+          2,
+          1
+        ]
+      },
+      "unique": 1,
+      "logic": {
+        "status": "solved",
+        "solved": true,
+        "rounds": 19,
+        "deductions": 201,
+        "assumptions": 55,
+        "maxDepth": 2,
+        "techniques": 5,
+        "relationships": 31,
+        "initialForced": 0
+      },
+      "attempts": 147,
+      "failures": {
+        "combination layout": 105,
+        "witness budget": 39,
+        "logic stalled": 41,
+        "witness multiple": 84
+      },
+      "phases": {
+        "terrain": {
+          "calls": 147,
+          "ms": 180.9060999999947
+        },
+        "construction": {
+          "calls": 147,
+          "ms": 1790.0998000000145
+        },
+        "facility refinement": {
+          "calls": 42,
+          "ms": 268.6776999999893
+        },
+        "terrain refinement": {
+          "calls": 42,
+          "ms": 1240.258999999991
+        },
+        "logical refinement": {
+          "calls": 42,
+          "ms": 1184.8770000000059
+        },
+        "logic": {
+          "calls": 125,
+          "ms": 351.6105000000134
+        },
+        "witness search": {
+          "calls": 123,
+          "ms": 921.0055000000175
+        },
+        "witness refinement": {
+          "calls": 84,
+          "ms": 1061.3689999999842
+        },
+        "proof": {
+          "calls": 1,
+          "ms": 0.5064999999995052
+        }
+      },
+      "construction": {
+        "searches": 365,
+        "nodes": 79955,
+        "connection infeasible": 6380,
+        "search cutoff": 322,
+        "node limit": 322,
+        "empty lines": 3908,
+        "completion ambiguity": 19305,
+        "activity planned": 73,
+        "completed": 42,
+        "domain infeasible": 1858,
+        "activity completed": 9,
+        "remaining space infeasible": 18,
+        "initial line capacity": 1
+      }
+    },
+    {
+      "difficulty": 10,
+      "seed": 20261022,
+      "disabled": [],
+      "status": "failed",
+      "ms": 7248,
+      "error": "预算内未找到满足地形质量、逻辑路径和唯一解的地图（141 次构造；发现多个解 107, 联合布局未找到 99, 缺少可解释路径 41）。请重试。",
+      "elapsed": 7248,
+      "attempts": 141,
+      "proofs": 0,
+      "logicChecks": 147,
+      "failures": {
+        "combination layout": 99,
+        "witness multiple": 107,
+        "logic budget": 1,
+        "witness budget": 34,
+        "logic stalled": 41,
+        "search budget": 1
+      },
+      "phases": {
+        "terrain": {
+          "calls": 141,
+          "ms": 170.8367999999973
+        },
+        "construction": {
+          "calls": 141,
+          "ms": 1678.4237000000103
+        },
+        "facility refinement": {
+          "calls": 42,
+          "ms": 264.46340000000055
+        },
+        "terrain refinement": {
+          "calls": 42,
+          "ms": 1223.6203000000096
+        },
+        "logical refinement": {
+          "calls": 42,
+          "ms": 1169.215899999992
+        },
+        "logic": {
+          "calls": 147,
+          "ms": 538.6507999999958
+        },
+        "witness search": {
+          "calls": 141,
+          "ms": 881.2711000000054
+        },
+        "witness refinement": {
+          "calls": 107,
+          "ms": 1237.3952999999965
+        }
+      },
+      "construction": {
+        "searches": 348,
+        "nodes": 75313,
+        "connection infeasible": 5706,
+        "completion ambiguity": 18746,
+        "search cutoff": 305,
+        "node limit": 305,
+        "activity planned": 70,
+        "completed": 42,
+        "activity completed": 12,
+        "empty lines": 3510,
+        "domain infeasible": 855,
+        "remaining space infeasible": 1,
+        "deadline": 1
+      },
+      "candidatesGenerated": 42,
+      "candidatesValidated": 42,
+      "proofExhaustions": 0,
+      "cutoffs": {
+        "logical refinement": 36,
+        "witness refinement": 11,
+        "witness search": 6,
+        "terrain refinement": 21,
+        "facility refinement": 1,
+        "construction": 1
+      },
+      "timeDependent": true
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { key, occupied } from '../../engine/boardGeometry';
-import type { Cell, Level, Placement } from '../../engine/types';
+import { key, occupied } from '../../engine';
+import type { Cell, Level, Placement } from '../../engine';
 import { FacilityArt, FootprintSurface } from './Art';
 
 export function HintBoardOverlay({ level, region = [], placement }: { level: Level; region?: readonly Cell[]; placement?: Placement }) {

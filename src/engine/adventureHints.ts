@@ -4,6 +4,7 @@ import type { PlacementGroup } from './placementDomains';
 import { evaluate } from './placementRules';
 import { solveLevel } from './solver';
 import { reasonLevel } from './logicalSolver';
+import { getSolution } from './levels';
 import type { LogicStep } from './logicalSolver';
 import type { Cell, Level, Placement } from './types';
 
@@ -29,19 +30,30 @@ export function hintDomains(level: Level, placements: readonly Placement[]): Pla
 }
 
 export function analyzeAdventureHint({ level, placements, introduced = [] }: HintRequest, budgetMs = 2500): AdventureHint {
-  const deadline = Date.now() + budgetMs;
+  const started = Date.now(), deadline = started + budgetMs;
   const current = evaluate(level, placements);
   if (current.won) return { status: 'complete' };
   const conflicts = placements.filter(at => current.issues[at.id]?.status === 'INVALID');
   if (conflicts.length) return { status: 'conflict', cells: conflicts.flatMap(at => occupied(level.pieces.find(p => p.id === at.id)!, at)), reasons: [...new Set(conflicts.flatMap(at => current.issues[at.id].reasons))] };
   const original = hintDomains(level, placements);
-  const logic = reasonLevel(level, { deadline, maxAssumptions: 0 }, original);
+  const logic = reasonLevel(level, { deadline: Math.min(deadline, started + budgetMs * .15), maxAssumptions: 0 }, original);
   // A representative ID distinguishes pinned and unused groups of the same
   // kind/shape. Only unconditional top-level eliminations are reused.
   const signature = (at: Placement) => `${at.id}/${at.r}/${at.c}/${at.rotation}`;
   const eliminated = new Set(logic.steps.flatMap(step => step.eliminated ?? []).map(signature));
   const groups = original.map(g => ({ ...g, domain: g.domain.filter(p => !eliminated.has(signature(p.at))) }));
-  const first = solveLevel(level, 1, { deadline }, groups);
+  const reference = getSolution(level.id);
+  // A validated authored completion is reusable evidence of possibility, never
+  // evidence of necessity. Match pinned footprints, including equivalent rotations.
+  const reusable = reference && reference.length === level.pieces.length
+    && reference.every(at => level.pieces.some(p => p.id === at.id)) && evaluate(level, reference).won
+    && placements.every(at => {
+      const piece = level.pieces.find(p => p.id === at.id)!, known = reference.find(p => p.id === at.id)!;
+      return occupied(piece, at).map(key).sort().join(';') === occupied(piece, known).map(key).sort().join(';');
+    });
+  const first = reusable ? { count: 1, aborted: false, solutions: [reference] }
+    : logic.solved ? { count: 1, aborted: false, solutions: [logic.placements] }
+    : solveLevel(level, 1, { deadline: Math.min(deadline, started + budgetMs * .8) }, groups);
   if (!first.count) return first.aborted ? { status: 'unknown' } : { status: 'conflict', cells: placements.flatMap(at => occupied(level.pieces.find(p => p.id === at.id)!, at)), reasons: [] };
   const fixed = groups.filter(g => g.ids.length === 1 && placements.some(at => at.id === g.ids[0]));
   const options = first.solutions[0].filter(at => !placements.some(p => p.id === at.id)).map(at => {
@@ -67,7 +79,7 @@ export function analyzeAdventureHint({ level, placements, introduced = [] }: Hin
     if (Date.now() >= deadline) break;
     const mask = option.cells.map(key).sort().join(';');
     const excluded = groups.map(g => g === option.group ? { ...g, domain: g.domain.filter(p => p.cells.map(key).sort().join(';') !== mask) } : g);
-    const proof = solveLevel(level, 1, { deadline }, excluded);
+    const proof = solveLevel(level, 1, { deadline, maxNodes: 12000 }, excluded);
     if (!proof.count && !proof.aborted) { selected = option; forced = true; break; }
   }
   const { at, cells, axis, line, remaining, candidates } = selected;

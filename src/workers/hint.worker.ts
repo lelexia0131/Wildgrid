@@ -1,4 +1,4 @@
-import { analyzeAdventureHint } from '../engine/adventureHints';
-import type { HintRequest } from '../engine/adventureHints';
+import { analyzeAdventureHint } from '../engine';
+import type { HintRequest } from '../engine';
 
 self.onmessage = (event: MessageEvent<HintRequest>) => self.postMessage(analyzeAdventureHint(event.data));
