@@ -13,7 +13,7 @@ import type { Level, Terrain, Placement } from './types';
 
 // Refine the clue information itself. Domain entropy alone misses layouts in
 // which many candidates survive every deduction, despite small static domains.
-export function refineLogicalLayout(draft:SandboxDraft, entries:FacilityEntry[], groups:PlacementGroup[], random:()=>number, deadline:number):SandboxDraft {
+export function refineLogicalLayout(draft:SandboxDraft, entries:FacilityEntry[], groups:PlacementGroup[], random:()=>number, deadline:number,maxEmptyLines=16):SandboxDraft {
   const makeDraft=():SandboxDraft=>{
     const rows=Array<number>(8).fill(0),cols=Array<number>(8).fill(0);
     for(const e of entries) for(let i=0;i<8;i++){rows[i]+=e.p.rows[i];cols[i]+=e.p.cols[i];}
@@ -22,6 +22,7 @@ export function refineLogicalLayout(draft:SandboxDraft, entries:FacilityEntry[],
   const clueScores=new Map<string,{value:number;prepared:PlacementGroup[]}>();
   const score=(candidate:SandboxDraft)=>{
     if([...candidate.level.rows,...candidate.level.cols].some(value=>value>MAX_GENERATED_LINE_OCCUPANCY)) return Infinity;
+    if([...candidate.level.rows,...candidate.level.cols].filter(value=>value===0).length>maxEmptyLines) return Infinity;
     const key=[...candidate.level.rows,...candidate.level.cols].join(',');
     let cached=clueScores.get(key);
     if(!cached) {

@@ -33,6 +33,8 @@ test('ten seeded tiers generate legal unique 8×8 puzzles within their facility 
     }
     assert.ok(map, `difficulty ${difficulty} failed within the 45s session budget`);
     assert.equal(map.draft.level.size, 8);
+    assert.ok(map.draft.level.pieces.length<=[5,6,7,8,10,12,14,16,18,20][difficulty-1],`${difficulty} difficulty facility count`);
+    if(difficulty>=8) assert.ok([...map.draft.level.rows,...map.draft.level.cols].filter(value=>value===0).length<=11-difficulty,`${difficulty} difficulty empty rows and columns`);
     assert.deepEqual(inventoryViolations(map.draft.level,difficulty),[]);
     assert.ok(map.draft.level.pieces.some(p => p.kind === 'camp'));
     assert.equal(evaluate(map.draft.level, map.draft.placements).won, true);

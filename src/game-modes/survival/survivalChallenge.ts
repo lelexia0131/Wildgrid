@@ -22,9 +22,7 @@ export function survivalContinuation(save: SurvivalSave): SurvivalChallenge | nu
 }
 
 export function generateSurvival(difficulty: number, seed: number, id: string, recent: string[] = [], disabled: readonly string[] = [], history: readonly MapFeatures[] = [], budgetMs?: number): SurvivalChallenge {
-  const spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
-  if (!spec) throw new Error('请选择 1难至10难');
-  const { draft, fingerprint } = generateMap(difficulty, seed, id, recent, spec, disabled, history, budgetMs);
+  const { draft, fingerprint } = generateMap(difficulty, seed, id, recent, disabled, history, budgetMs);
   return { id, difficulty, seed, draft, fingerprint };
 }
 

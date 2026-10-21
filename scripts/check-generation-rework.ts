@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { generateMap, MapGenerationSearchError, planTerrain, seeded } from '../src/engine/mapGeneration';
 import { inventoryViolations } from '../src/engine/generationConfig';
-import { SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
 import { evaluate } from '../src/engine/placementRules';
 import { solveLevel } from '../src/engine/solver';
 import { encodeMap } from '../src/engine/mapBlueprint';
@@ -20,8 +19,7 @@ cases.push({ difficulty: 1, seed: 20261019, disabled: ['camp_single'] },
 for (const { difficulty, seed, disabled } of cases.filter(c => !/^\d+$/.test(process.argv[3]??'') || c.difficulty === Number(process.argv[3]))) {
   const started = performance.now();
   try {
-    const spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
-    const map = generateMap(difficulty, seed, 'check', [], spec, disabled);
+    const map = generateMap(difficulty, seed, 'check', [], disabled);
     const ms = Math.round(performance.now() - started), { level, placements } = map.draft;
     const proof = solveLevel(level, 2, { maxNodes: 100000, deadline: Date.now() + 1500 });
     assert.ok(evaluate(level, placements).won);

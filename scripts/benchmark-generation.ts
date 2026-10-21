@@ -7,7 +7,6 @@ import { evaluate } from '../src/engine/placementRules';
 import { occupied } from '../src/engine/boardGeometry';
 import { encodeMap } from '../src/engine/mapBlueprint';
 import { mapFeatures } from '../src/engine/mapNovelty';
-import { SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
 
 const output = '.desktop-smoke/generation-benchmark';
 mkdirSync(output, { recursive: true });
@@ -22,8 +21,7 @@ cases.push(...([
 function run(difficulty: number, seed: number, disabled: string[], recent: Generated[] = []) {
   const started = performance.now();
   try {
-    const spec = SURVIVAL_DIFFICULTIES[difficulty - 1];
-    const map = generateMap(difficulty, seed, `bench-${records.length}`, recent.map(m => m.fingerprint), spec, disabled, recent.map(m => mapFeatures(m.draft, difficulty)));
+    const map = generateMap(difficulty, seed, `bench-${records.length}`, recent.map(m => m.fingerprint), disabled, recent.map(m => mapFeatures(m.draft, difficulty)));
     const ms = Math.round(performance.now() - started);
     const proof = solveLevel(map.draft.level, 2, { deadline: Date.now() + 1000, maxNodes: 100000 });
     if (proof.aborted || proof.count !== 1 || !evaluate(map.draft.level, map.draft.placements).won || map.draft.level.pieces.some(p => disabled.includes(`${p.kind}_${p.shape}`)) || inventoryViolations(map.draft.level,difficulty,disabled).length > 0 || !map.diagnostics.reasoning.solved) throw new Error('Benchmark verification failed');

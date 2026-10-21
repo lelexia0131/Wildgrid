@@ -9,7 +9,7 @@ import type { BudgetItem } from './generationBudget';
 export type FacilityEntry = { piece: Piece; p: Candidate };
 export const ACTIVITY_LIMITS = { spareCells: 2 } as const;
 
-export function activityDomains(level: Level, groups: PlacementGroup[], inventory: readonly BudgetItem[], area: number, random:()=>number, deadline:number, diagnostics:Record<string,number>={}) {
+export function activityDomains(level: Level, groups: PlacementGroup[], inventory: readonly BudgetItem[], area: number, random:()=>number, deadline:number, diagnostics:Record<string,number>={}, maxCount=Infinity, maxEmptyLines=16) {
   type Plan={groups:PlacementGroup[];rows:readonly number[];cols:readonly number[];score:number};
   let frontier:Plan[]=[{groups,rows:level.rows,cols:level.cols,score:Infinity}];
   const plans:Plan[]=[],seen=new Set<string>();
@@ -19,6 +19,7 @@ export function activityDomains(level: Level, groups: PlacementGroup[], inventor
       if((line<8?plan.rows[line]:plan.cols[line-8])===0) continue;
       const rows=[...plan.rows],cols=[...plan.cols];
       if(line<8) rows[line]=0;else cols[line-8]=0;
+      if([...rows,...cols].filter(value=>value===0).length>maxEmptyLines) continue;
       const key=[...rows,...cols].join(',');if(seen.has(key)) continue;seen.add(key);
       const next=plan.groups.map(g=>({...g,domain:g.domain.filter(p=>!(line<8?p.rows[line]:p.cols[line-8]))}));
       if(next.some(g=>g.domain.length<(inventory.find(i=>i.id===templateId(g.piece))?.min??0))) continue;
@@ -35,7 +36,7 @@ export function activityDomains(level: Level, groups: PlacementGroup[], inventor
   for(const plan of [...plans,{groups,rows:level.rows,cols:level.cols,score:Infinity}]) {
     if(Date.now()>=deadline) return;
     const next={...level,rows:plan.rows,cols:plan.cols};
-    const entries=tileFacilityBudget(next,plan.groups,inventory,area,random,deadline,diagnostics);
+    const entries=tileFacilityBudget(next,plan.groups,inventory,area,random,deadline,diagnostics,maxCount,maxEmptyLines);
     if(entries) return {groups:plan.groups,level:next,entries};
   }
 
@@ -84,7 +85,7 @@ export function tileFacilities(level: Level, groups: PlacementGroup[], inventory
 
 // Choose counts and positions together under one exact area budget. Every step
 // reserves all outstanding minima and checks residual integer reachability.
-export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:readonly BudgetItem[],targetArea:number,random:()=>number,deadline=Infinity,diagnostics:Record<string,number>={}):FacilityEntry[]|undefined {
+export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:readonly BudgetItem[],targetArea:number,random:()=>number,deadline=Infinity,diagnostics:Record<string,number>={},maxCount=Infinity,maxEmptyLines=16):FacilityEntry[]|undefined {
   const count=(name:string)=>{diagnostics[name]=(diagnostics[name]??0)+1;};
   count('searches');
   const entries:FacilityEntry[]=[],counts=groups.map(()=>0),rows=Array<number>(8).fill(0),cols=Array<number>(8).fill(0);
@@ -97,11 +98,12 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
   const canFinish=(remaining:number)=>{
     const key=counts.join(',');
     const cached=reachability.get(key);if(cached!==undefined) return cached;
-    let reachable=new Set([0]);
+    let reachable=new Map([[0,0]]);
+    const available=maxCount-counts.reduce((s,c)=>s+c,0);
     for(let g=0;g<groups.length;g++) {
-      const next=new Set<number>(),item=limits[g];
-      for(let n=Math.max(0,item.min-counts[g]);n<=item.max-counts[g] && n*item.area<=remaining;n++) for(const sum of reachable)
-        if(sum+n*item.area<=remaining) next.add(sum+n*item.area);
+      const next=new Map<number,number>(),item=limits[g];
+      for(let n=Math.max(0,item.min-counts[g]);n<=item.max-counts[g] && n*item.area<=remaining;n++) for(const [sum,count] of reachable)
+        if(sum+n*item.area<=remaining && count+n<=available) next.set(sum+n*item.area,Math.min(next.get(sum+n*item.area)??Infinity,count+n));
       reachable=next;
     }
     const result=reachable.has(remaining);reachability.set(key,result);return result;
@@ -111,6 +113,7 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
   function search(used:bigint,providers:bigint,remaining:number,domains:Candidate[][]):boolean {
     count('nodes');
     if(++nodes>nodeLimit || (nodes%16===0 && Date.now()>=deadline)) {count('search cutoff');return false;}
+    if([...rows,...cols].filter(value=>value===0).length-remaining*2>maxEmptyLines) {count('empty lines');return false;}
     if(!remaining) {
       if(!limits.every((i,g)=>counts[g]>=i.min) || entries.some(e=>CAMP_REQUIREMENTS[e.piece.kind] && !e.p.connections.some(link=>(link.camp&providers) && !(link.gap&used)))) return false;
       if(hasRoleSwap(entries,groups) || repartitionCount(entries,groups)) {count('completion ambiguity');return false;}
@@ -156,6 +159,7 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
       const piece=groups[move.g].piece;
       const ranked=move.valid.map(p=>({p,score:
         (p.rows.reduce((n,v,i)=>n+v*rows[i],0)+p.cols.reduce((n,v,i)=>n+v*cols[i],0)+p.cells.reduce((n,c)=>n+8/coverage[c.r*8+c.c],0))/p.cells.length
+        +(maxEmptyLines>1 && maxEmptyLines<16?(p.rows.filter((v,i)=>v>0 && rows[i]===0).length+p.cols.filter((v,i)=>v>0 && cols[i]===0).length)*4:0)
         -groups.reduce((n,g,i)=>n+Number(g.piece.kind!==piece.kind && g.piece.shape===piece.shape && masks[i].has(p.mask)),0)+random()*4
         -entries.reduce((n,e)=>n+Number(e.piece.kind===piece.kind && p.cells.some(c=>e.p.cells.some(q=>adjacent(c,q))))*8,0)
         -(capacity===targetArea?groups.reduce((n,_,g)=>n+Math.max(0,limits[g].min-counts[g]-Number(g===move.g))*limits[g].area**2
@@ -186,7 +190,7 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
 
 // Coordinate descent changes positions, never the inventory or terrain budget.
 // Rank clue-domain entropy cheaply; only completed candidates reach the solvers.
-export function refineFacilities(entries: FacilityEntry[], groups: PlacementGroup[], random: () => number, deadline: number) {
+export function refineFacilities(entries: FacilityEntry[], groups: PlacementGroup[], random: () => number, deadline: number, maxEmptyLines=16) {
   const inventory = groups.map(g=>entries.filter(e=>templateId(e.piece)===templateId(g.piece)).length);
   const lines = () => {
     const rows=Array<number>(8).fill(0),cols=Array<number>(8).fill(0);
@@ -196,6 +200,7 @@ export function refineFacilities(entries: FacilityEntry[], groups: PlacementGrou
   function cost() {
     const {rows,cols}=lines();
     if([...rows,...cols].some(value=>value>MAX_GENERATED_LINE_OCCUPANCY)) return Infinity;
+    if([...rows,...cols].filter(value=>value===0).length>maxEmptyLines) return Infinity;
     let forced=0;
     const entropy=groups.reduce((score,g,i)=>{
       const count=g.domain.filter(p=>!p.rows.some((v,r)=>v>rows[r]) && !p.cols.some((v,c)=>v>cols[c])).length;

@@ -6,9 +6,10 @@ import type { QuantityRange } from './generationBudget';
 import type { Level } from './types';
 
 export const MAX_GENERATED_LINE_OCCUPANCY = 6;
+export const MAX_GENERATED_EMPTY_LINES = [16, 16, 16, 16, 16, 16, 16, 3, 2, 1];
 
 // Source: supplied editable Excel, 设施与地形 B5:K18. Columns are difficulties 1–10.
-// Sheet 1 row 21 and the requested area budgets supersede the old total counts.
+// Area budgets also respect the difficulty-specific total facility count caps.
 const ranges = (values: readonly (number | readonly [number, number])[]): QuantityRange[] => values.map(v => typeof v === 'number' ? {min:v,max:v} : {min:v[0],max:v[1]});
 export const generationQuantities: { facilities: Record<string, QuantityRange[]>; terrain: Record<string, QuantityRange[]> } = {
   facilities: {
@@ -33,6 +34,7 @@ export const generationQuantities: { facilities: Record<string, QuantityRange[]>
 export const templateId = (piece: Level['pieces'][number]) => `${piece.kind}_${piece.shape}`;
 
 export const MIN_ALLOWED_FACILITIES = [3, 3, 4, 4, 5, 5, 6, 7, 8, 9];
+export const MAX_GENERATED_FACILITIES = [5, 6, 7, 8, 10, 12, 14, 16, 18, 20];
 export function facilityRestrictionError(difficulty: number, disabled: readonly string[]): string | null {
   const allowed = facilityLibrary.filter(p => !disabled.includes(templateId(p)));
   if (!allowed.some(p => p.kind === 'camp')) return '至少需要保留一种营地';
@@ -54,12 +56,14 @@ export function generationBudgets(difficulty: number, disabled: readonly string[
   }
   const facilities = items(facilityLibrary.map(p => ({id:p.id,area:offsets(p.shape,0).length})),config.facilities);
   for (const id of disabled) if (!facilityLibrary.some(p => p.id === id)) throw new Error(`Unknown disabled facility: ${id}`);
-  return { facilities: prepareBudget(facilities.filter(p => !disabled.includes(p.id))),
+  return { facilities: prepareBudget(facilities.filter(p => !disabled.includes(p.id)),MAX_GENERATED_FACILITIES[difficulty-1]),
     terrain: prepareBudget(items(terrainRegistry.map(t => ({id:t.id,area:t.cells.length})),config.terrain)) };
 }
 
 export function inventoryViolations(level: Level, difficulty: number, disabled: readonly string[] = []) {
   const budgets = generationBudgets(difficulty, disabled), violations: string[] = [];
+  if (level.pieces.length > MAX_GENERATED_FACILITIES[difficulty-1]) violations.push('facility count');
+  if ([...level.rows,...level.cols].filter(value=>value===0).length > MAX_GENERATED_EMPTY_LINES[difficulty-1]) violations.push('empty lines');
   for (const [name, budget, ids] of [
     ['facility', budgets.facilities, level.pieces.map(templateId)],
     ['terrain', budgets.terrain, level.terrain.map(t => t.kind)],

@@ -4,7 +4,6 @@ const { mkdirSync, writeFileSync } = require('node:fs');
 const path = require('node:path');
 require('tsx/cjs');
 const { generateMap, evaluate } = require('../src/engine/index.ts');
-const { SURVIVAL_DIFFICULTIES } = require('../src/game-modes/survival/survivalDifficulty.ts');
 
 const root = path.resolve(__dirname, '..'), output = path.join(root, '.desktop-smoke/generation');
 mkdirSync(output, { recursive: true });
@@ -71,7 +70,7 @@ app.whenReady().then(async () => {
       assert.equal(await js(`window.__workers.length`), beforeRetries + round + 1);
       assert.equal(await js(`!!document.querySelector('.survival-notice')`), false);
     }
-    const { draft, fingerprint } = generateMap(1, 2, 'fixture', [], SURVIVAL_DIFFICULTIES[0]);
+    const { draft, fingerprint } = generateMap(1, 2, 'fixture', []);
     await js(`window.__workers.at(-1).reply({status:'success',challenge:Object.assign({},window.__workers.at(-1).request,${JSON.stringify({draft,fingerprint})})})`);
     await wait(150);
     assert.ok(await js(`!!document.querySelector('.survival-game')`));

@@ -4,13 +4,13 @@ import { facilityLibrary } from '../src/engine/facilityRegistry';
 import { evaluate } from '../src/engine/placementRules';
 import { occupied } from '../src/engine/boardGeometry';
 import { boardCells, cellBit, domainsWithClues, placementDomains, staticPositions } from '../src/engine/placementDomains';
-import { hasRoleSwap, tileFacilities } from '../src/engine/facilityConstruction';
+import { hasRoleSwap, refineFacilities, tileFacilities, tileFacilityBudget } from '../src/engine/facilityConstruction';
 import { mapQuality, terrainDistribution, terrainPlacementScores, terrainRegions } from '../src/engine/mapQuality';
 import { campConnections } from '../src/engine/placementRules';
-import { SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
 import { reasonLevel, reasonedDomains } from '../src/engine/logicalSolver';
+import type { LogicStep } from '../src/engine/logicalSolver';
 import { solveLevel } from '../src/engine/solver';
-import { generateMap, planTerrain, seeded, MapGenerationConstraintError, MapGenerationSearchError } from '../src/engine/mapGeneration';
+import { generateMap, generationDifficulty, planTerrain, seeded, MapGenerationConstraintError, MapGenerationSearchError } from '../src/engine/mapGeneration';
 import { facilityRestrictionError } from '../src/game-modes/survival/survivalFacilities';
 import { generationBudgets, inventoryViolations } from '../src/engine/generationConfig';
 import type { Level } from '../src/engine/types';
@@ -46,15 +46,15 @@ test('logical cardinality handles interchangeable IDs; ambiguity and interrupted
 test('range-driven restrictions and exhausted generation budgets fail explicitly', () => {
   const disabled=facilityLibrary.filter(p=>p.shape!=='single').map(p=>`${p.kind}_${p.shape}`);
   assert.equal(facilityRestrictionError(2,disabled),null);
-  const singles=generateMap(2,1,'no-multi',[],SURVIVAL_DIFFICULTIES[1],disabled);
+  const singles=generateMap(2,1,'no-multi',[],disabled);
   assert.deepEqual(inventoryViolations(singles.draft.level,2,disabled),[]);
   assert.ok(singles.draft.level.pieces.every(p=>p.shape==='single'));
-  assert.throws(()=>generateMap(10,1,'no-camps',[],SURVIVAL_DIFFICULTIES[9],facilityLibrary.filter(p=>p.kind==='camp').map(p=>`${p.kind}_${p.shape}`)),MapGenerationConstraintError);
-  assert.throws(()=>generateMap(1,1,'budget',[],{min:4,max:5,multi:0},[],[],0),error=>error instanceof MapGenerationSearchError && error.diagnostics?.proofs===0 && error.diagnostics.attempts===0);
+  assert.throws(()=>generateMap(10,1,'no-camps',[],facilityLibrary.filter(p=>p.kind==='camp').map(p=>`${p.kind}_${p.shape}`)),MapGenerationConstraintError);
+  assert.throws(()=>generateMap(1,1,'budget',[],[],[],0),error=>error instanceof MapGenerationSearchError && error.diagnostics?.proofs===0 && error.diagnostics.attempts===0);
 });
 
 test('a disabled single-cell camp is replaced by a legal multigrid camp even in tier one', () => {
-  const map=generateMap(1,20261019,'no-single',[],{min:4,max:5,multi:0},['camp_single']);
+  const map=generateMap(1,20261019,'no-single',[],['camp_single']);
   assert.ok(map.draft.level.pieces.some(p=>p.kind==='camp'));
   assert.ok(map.draft.level.pieces.every(p=>p.kind!=='camp'||p.shape!=='single'));
   const proof=solveLevel(map.draft.level,2);
@@ -100,15 +100,65 @@ test('capacity pruning accounts for disabled domino shapes before drawing any la
   assert.equal(draws,0);
 });
 
+test('facility construction counts multigrid facilities as one and rejects unreachable count caps', () => {
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces:facilityLibrary.filter(p=>p.id==='camp_single'||p.id==='camp_domino'),terrain:[{r:1,c:0,kind:'water'},{r:1,c:2,kind:'water'},{r:1,c:4,kind:'water'}],rows:Array(8).fill(6),cols:Array(8).fill(6)};
+  const masks=[1n,4n,16n,3n];
+  const groups=placementDomains(level).map(g=>({...g,domain:g.domain.filter(p=>masks.includes(p.mask))}));
+  const items=[{id:'camp_single',area:1,min:0,max:3},{id:'camp_domino',area:2,min:0,max:1}];
+  const entries=tileFacilityBudget(level,groups,items,3,seeded(1),Infinity,{},2);
+  assert.ok(entries);
+  assert.equal(entries.length,2);
+  assert.equal(entries.reduce((sum,e)=>sum+e.p.cells.length,0),3);
+  assert.equal(tileFacilityBudget(level,groups,items,3,seeded(1),Infinity,{},1),undefined);
+});
+
+test('inventory rejects excess facilities even when their type and area ranges are valid', () => {
+  const counts={camp_single:3,fire_single:2,tower_single:2};
+  const pieces=facilityLibrary.flatMap(p=>Array.from({length:counts[p.id as keyof typeof counts]??0},(_,i)=>({...p,id:`${p.id}-${i}`})));
+  const allocation=generationBudgets(2).terrain.sample(seeded(1));
+  const terrain=Object.entries(allocation.counts).flatMap(([kind,count])=>Array.from({length:count},()=>({r:0,c:0,kind:kind as Level['terrain'][number]['kind']})));
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces,terrain,rows:Array(8).fill(0),cols:Array(8).fill(0)};
+  assert.deepEqual(inventoryViolations(level,2),['facility count']);
+});
+
+test('high tiers limit empty rows and columns together, including the exact boundary', () => {
+  for(const [difficulty,limit] of [[8,3],[9,2],[10,1]]) for(const empty of [0,limit,limit+1]) for(const rowEmpty of [0,Math.floor(empty/2),empty]) {
+    const level:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces:[],terrain:[],rows:Array.from({length:8},(_,i)=>Number(i>=rowEmpty)),cols:Array.from({length:8},(_,i)=>Number(i>=empty-rowEmpty))};
+    assert.equal(inventoryViolations(level,difficulty).includes('empty lines'),empty>limit,`${difficulty} difficulty, ${rowEmpty} empty rows, ${empty-rowEmpty} empty columns`);
+    assert.ok(!inventoryViolations(level,7).includes('empty lines'));
+  }
+});
+
+test('construction and position refinement preserve row and column coverage', () => {
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces:facilityLibrary.filter(p=>p.id==='powerTower_single'),terrain:[],rows:Array(8).fill(6),cols:Array(8).fill(6)};
+  const groups=placementDomains(level).map(g=>({...g,domain:g.domain.filter(p=>[1n,2n,1n<<63n].includes(p.mask))}));
+  const items=[{id:'powerTower_single',area:1,min:2,max:2}];
+  const entries=tileFacilityBudget(level,groups,items,2,seeded(1),Infinity,{},2,12);
+  assert.ok(entries);
+  refineFacilities(entries,groups,seeded(1),Date.now()+1000,12);
+  const cells=entries.flatMap(e=>e.p.cells);
+  assert.equal(new Set(cells.map(p=>p.r)).size+new Set(cells.map(p=>p.c)).size,4);
+  assert.equal(tileFacilityBudget(level,groups,items,2,seeded(1),Infinity,{},2,11),undefined);
+});
+
+test('the highest reasoning score stays within the ten-tier scale', () => {
+  const level=make([{id:'p',kind:'powerTower',shape:'single'}],[],[1,0,0],[1,0,0]);
+  const logic=reasonLevel(level);
+  const rules:LogicStep['rule'][]=['line','capacity','shape','overlap',...Array<LogicStep['rule']>(20).fill('relationship'),...Array<LogicStep['rule']>(10).fill('assumption')];
+  logic.rounds=100;
+  logic.steps=rules.map(rule=>({rule,group:'*',removed:1,remaining:0,round:1}));
+  assert.equal(generationDifficulty({level,placements:logic.placements},solveLevel(level,2),logic).score,10);
+});
+
 test('required single camp survives every construction tier, unrelated bans, and role assignment', () => {
-  for (const [difficulty,seed] of [[1,20261020],[5,20261020],[7,2674696789],[8,20261020],[9,1034165262],[10,20261020]]) {
-    const spec=SURVIVAL_DIFFICULTIES[difficulty-1];
-    const map=generateMap(difficulty,seed,'required-single',[],spec);
+  for (const [difficulty,seed] of [[1,20261020],[5,20261020],[7,2674696789],[8,20261021],[9,2674696788],[10,20261020]]) {
+    const map=generateMap(difficulty,seed,'required-single',[]);
     const pieces=map.draft.level.pieces;
     assert.ok(pieces.some(p=>p.kind==='camp' && p.shape==='single'));
     assert.deepEqual(inventoryViolations(map.draft.level,difficulty),[]);
     assert.equal(evaluate(map.draft.level,map.draft.placements).won,true);
     assert.ok([...map.draft.level.rows,...map.draft.level.cols].every(value=>value<=6));
+    if(difficulty>=8) assert.ok([...map.draft.level.rows,...map.draft.level.cols].filter(value=>value===0).length<=11-difficulty,`${difficulty} difficulty empty rows and columns`);
     assert.ok(map.diagnostics.reasoning.solved && !map.diagnostics.reasoning.aborted);
     assert.ok(map.draft.level.terrain.length<=generationBudgets(difficulty).terrain.max);
     assert.deepEqual(terrainDistribution(map.draft.level.terrain).violations,[]);
@@ -116,11 +166,11 @@ test('required single camp survives every construction tier, unrelated bans, and
     assert.ok(!proof.aborted && proof.count===1);
     if (difficulty===10) assert.ok(pieces.some(p=>p.kind==='camp' && p.shape!=='single'));
   }
-  const banned=generateMap(1,20261020,'unrelated-ban',[],SURVIVAL_DIFFICULTIES[0],['pool_single']);
+  const banned=generateMap(1,20261020,'unrelated-ban',[],['pool_single']);
   assert.ok(banned.draft.level.pieces.some(p=>p.kind==='camp' && p.shape==='single'));
   assert.ok(banned.draft.level.pieces.every(p=>p.kind!=='pool'));
   const missing={...banned.draft,level:{...banned.draft.level,pieces:banned.draft.level.pieces.filter(p=>p.kind!=='camp'||p.shape!=='single')},placements:banned.draft.placements.filter(at=>banned.draft.level.pieces.find(p=>p.id===at.id)?.kind!=='camp')};
-  assert.ok(mapQuality(missing,{disabled:[],requireSingle:true,...SURVIVAL_DIFFICULTIES[0]}).violations.includes('required single camp'));
+  assert.ok(mapQuality(missing,{disabled:[],requireSingle:true}).violations.includes('required single camp'));
 });
 
 test('terrain frontiers reject merged oversized components and mixed high-density windows at edges too', () => {
@@ -160,12 +210,11 @@ test('fixed terrain seeds vary in count and clustering without growing with the 
 });
 
 test('seed order is independent of wall-clock speed; an expired run cannot choose a fallback', t => {
-  const spec=SURVIVAL_DIFFICULTIES[0];
-  const fast=generateMap(1,20261020,'fast',[],spec);
+  const fast=generateMap(1,20261020,'fast',[]);
   let clock=0;
   t.mock.method(Date,'now',()=>clock++);
-  const slow=generateMap(1,20261020,'slow',[],spec);
+  const slow=generateMap(1,20261020,'slow',[]);
   assert.equal(slow.fingerprint,fast.fingerprint);
   assert.equal(slow.diagnostics.attempts,fast.diagnostics.attempts);
-  assert.throws(()=>generateMap(1,20261020,'expired',[],spec,[],[],1),MapGenerationSearchError);
+  assert.throws(()=>generateMap(1,20261020,'expired',[],[],[],1),MapGenerationSearchError);
 });

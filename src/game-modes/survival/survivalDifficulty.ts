@@ -1,14 +1,14 @@
 export const SURVIVAL_DIFFICULTIES = [
-  { min: 4, max: 5, xp: 1, label: '非常简单', multi: 0 },
-  { min: 6, max: 7, xp: 3, label: '简单', multi: 1 },
-  { min: 8, max: 9, xp: 6, label: '较简单', multi: 2 },
-  { min: 9, max: 11, xp: 10, label: '普通', multi: 2 },
-  { min: 11, max: 13, xp: 15, label: '中等', multi: 3 },
-  { min: 13, max: 14, xp: 25, label: '中等偏难', multi: 4 },
-  { min: 14, max: 16, xp: 36, label: '困难', multi: 5 },
-  { min: 15, max: 17, xp: 50, label: '很困难', multi: 5 },
-  { min: 17, max: 19, xp: 70, label: '极困难', multi: 5 },
-  { min: 18, max: 20, xp: 100, label: '最高难度', multi: 6 },
+  { xp: 1 },
+  { xp: 3 },
+  { xp: 6 },
+  { xp: 10 },
+  { xp: 15 },
+  { xp: 25 },
+  { xp: 36 },
+  { xp: 50 },
+  { xp: 70 },
+  { xp: 100 },
 ];
 const identities = ['荒野新人', '露营学徒', '荒野探索者', '荒野专家', '荒野传奇'];
 const badges = ['newcomer', 'apprentice', 'explorer', 'veteran', 'legend'];

@@ -7,7 +7,7 @@ import { solveLevel } from './solver';
 import type { SolverResult } from './solver';
 import { reasonLevel, reasonedDomains } from './logicalSolver';
 import { mapQuality } from './mapQuality';
-import { facilityRestrictionError, generationBudgets, inventoryViolations, templateId, MAX_GENERATED_LINE_OCCUPANCY } from './generationConfig';
+import { facilityRestrictionError, generationBudgets, inventoryViolations, templateId, MAX_GENERATED_LINE_OCCUPANCY, MAX_GENERATED_FACILITIES, MAX_GENERATED_EMPTY_LINES } from './generationConfig';
 import { terrainRegistry } from './terrainRegistry';
 import { layoutTerrain } from './terrainLayout';
 import { refineTerrain, refineLogicalLayout } from './generationRefinement';
@@ -24,7 +24,6 @@ export class MapGenerationSearchError extends Error {
   constructor(message: string, readonly diagnostics?: { elapsed: number; attempts: number; proofs: number; logicChecks: number; failures: Record<string, number>; phases: Record<string, {calls:number;ms:number}>; construction: Record<string,number> }) { super(message); }
 }
 export class MapGenerationConstraintError extends Error {}
-export type MapGenerationSpec = { readonly min: number; readonly max: number; readonly multi: number };
 export function seeded(seed: number) {
   let value = seed >>> 0;
   return () => { value += 0x6D2B79F5; let n = Math.imul(value ^ value >>> 15, value | 1); n ^= n + Math.imul(n ^ n >>> 7, n | 61); return ((n ^ n >>> 14) >>> 0) / 4294967296; };
@@ -34,7 +33,7 @@ export function generationDifficulty(draft: SandboxDraft, solved: Pick<SolverRes
   const count = draft.level.pieces.length;
   const relationships = logic.steps.filter(s => s.rule === 'relationship' || s.rule === 'overlap').length;
   const techniques = new Set(logic.steps.map(s => s.rule)).size;
-  const score = 1 + Math.min(4, logic.rounds * .28) + Math.min(2, relationships * .12) + Math.min(2, logic.steps.filter(s => s.rule === 'assumption').length * .3) + (techniques - 1) * .25;
+  const score = Math.min(10, 1 + Math.min(4, logic.rounds * .28) + Math.min(2, relationships * .12) + Math.min(2, logic.steps.filter(s => s.rule === 'assumption').length * .3) + (techniques - 1) * .25);
   return { score, density: solved.occupied / 64, facilityDensity: count / 64, candidates: solved.candidates / count,
     dependencies: draft.level.pieces.filter(p => CAMP_REQUIREMENTS[p.kind]).length / count,
     forced: logic.initialForced / count, nodes: solved.nodes, branches: solved.branches,
@@ -48,8 +47,7 @@ export function planTerrain(random: () => number, difficulty: number) {
   return terrain ? {terrain, budget:allocation.area, allocation} : undefined;
 }
 
-// Keep the adapter signature; legacy total-count specs no longer set inventory.
-export function generateMap(difficulty: number, seed: number, id: string, recent: string[], _spec: MapGenerationSpec, disabled: readonly string[] = [], history: readonly MapFeatures[] = [], budgetMs = generationBudget(difficulty)) {
+export function generateMap(difficulty: number, seed: number, id: string, recent: string[], disabled: readonly string[] = [], history: readonly MapFeatures[] = [], budgetMs = generationBudget(difficulty)) {
   const restriction = facilityRestrictionError(difficulty, disabled);
   if (restriction) throw new MapGenerationConstraintError(restriction);
   const allowed = facilityLibrary.filter(p => !disabled.includes(`${p.kind}_${p.shape}`));
@@ -59,6 +57,7 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
   if (budgets.facilities.min + budgets.terrain.min + 8 > 64) throw new MapGenerationConstraintError('设施与地形最低预算超过可用棋盘空间。');
   const started = Date.now(), deadline = started + Math.min(generationBudget(difficulty), budgetMs);
   const random=seeded(seed);
+  const maxEmptyLines=MAX_GENERATED_EMPTY_LINES[difficulty-1];
   const previous = history.filter(m => m.difficulty === difficulty).slice(-40);
   const failures: Record<string, number> = {};
   const phases: Record<string,{calls:number;ms:number}> = {}, construction: Record<string,number> = {};
@@ -78,7 +77,7 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
     let terrainActivity:{cells:Set<number>;terrainArea:number}|undefined;
     if(difficulty>=7) {
       const options=[];
-      for(let r=4;r<=8;r++) for(let c=4;c<=8;c++) if(Math.min(r,c)*lineCapacity>=allocation.area && r*c>=allocation.area+2 && r*c<=allocation.area+terrainAllocation.area) options.push({r,c});
+      for(let r=4;r<=8;r++) for(let c=4;c<=8;c++) if(16-r-c<=maxEmptyLines && Math.min(r,c)*lineCapacity>=allocation.area && r*c>=allocation.area+2 && r*c<=allocation.area+terrainAllocation.area) options.push({r,c});
       const plan=options[Math.floor(random()*options.length)];
       if(plan) {
         const shuffled=()=>Array.from({length:8},(_,i)=>({i,order:random()})).sort((a,b)=>a.order-b.order).map(p=>p.i);
@@ -94,11 +93,11 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
     // Zero lines and terrain capacity are planned together. The packing search
     // still chooses every facility count, position and rotation from domains.
     const baseLevel: Level = { id: 0, name: `荒野求生 · ${difficulty}难`, chapter: '荒野求生', tip: '结合行列占格数、地形与设施规则，完成这片营地。', size: 8, terrain, pieces: piecesToPlace, rows, cols };
-    const activity=measure('construction',()=>activityDomains(baseLevel,placementDomains(baseLevel),budgets.facilities.items,allocation.area,random,deadline,construction));
+    const activity=measure('construction',()=>activityDomains(baseLevel,placementDomains(baseLevel),budgets.facilities.items,allocation.area,random,deadline,construction,MAX_GENERATED_FACILITIES[difficulty-1],maxEmptyLines));
     if (!activity) { reject('combination layout'); continue; }
     const {level,groups,entries}=activity;
     for(const item of budgets.facilities.items) allocation.counts[item.id]=entries.filter(e=>templateId(e.piece)===item.id).length;
-    measure('facility refinement',()=>refineFacilities(entries,groups,random,deadline));
+    measure('facility refinement',()=>refineFacilities(entries,groups,random,deadline,maxEmptyLines));
     const pieces = entries.map(e => e.piece), placements = entries.map(e => ({ ...e.p.at, id: e.piece.id }));
     const initial = withEditorPlacements({ level: { ...level, pieces }, placements }, placements);
     if(repartitionCount(entries,groups)) {reject('partition ambiguity');continue;}
@@ -106,7 +105,7 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
     if(difficulty>=7) {
       const active=placementDomains({...draft.level,rows:level.rows,cols:level.cols});
       for(const e of entries) e.p=active.find(g=>templateId(g.piece)===templateId(e.piece))!.domain.find(p=>p.mask===e.p.mask)!;
-      draft=measure('logical refinement',()=>refineLogicalLayout(draft,entries,active,random,deadline));
+      draft=measure('logical refinement',()=>refineLogicalLayout(draft,entries,active,random,deadline,maxEmptyLines));
     }
     const prepared = draft.level===initial.level?domainsWithClues(groups,draft.level):placementDomains(draft.level);
     const quality = mapQuality(draft);

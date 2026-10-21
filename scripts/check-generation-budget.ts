@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {generateMap,MapGenerationSearchError} from '../src/engine/mapGeneration';
 import {generationBudgets,inventoryViolations,templateId} from '../src/engine/generationConfig';
-import {SURVIVAL_DIFFICULTIES} from '../src/game-modes/survival/survivalDifficulty';
 import {evaluate} from '../src/engine/placementRules';
 import {solveLevel} from '../src/engine/solver';
 import {terrainRegions,terrainDistribution} from '../src/engine/terrainLayout';
@@ -20,7 +19,7 @@ const records:Record<string,unknown>[]=[];
 for(const {difficulty,seed,disabled} of cases) {
   const started=performance.now();
   try {
-    const map=generateMap(difficulty,seed,'budget-check',[],SURVIVAL_DIFFICULTIES[difficulty-1],disabled),{level,placements}=map.draft;
+    const map=generateMap(difficulty,seed,'budget-check',[],disabled),{level,placements}=map.draft;
     assert.deepEqual(inventoryViolations(level,difficulty,disabled),[]);
     assert.ok(evaluate(level,placements).won);
     assert.equal(level.pieces.some(p=>templateId(p)==='camp_single'),!disabled.includes('camp_single'));

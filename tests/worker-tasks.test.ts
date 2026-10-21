@@ -1,5 +1,4 @@
 import { generateMap } from '../src/engine/mapGeneration';
-import { SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createSandbox, getLevelById, getSolution, MAP_GENERATION_TIMEOUT, generationBudget, withEditorPlacements } from '../src/engine';
@@ -62,7 +61,7 @@ test('survival replaces timed-out rounds indefinitely and accepts a result only 
   start(); const final = FakeWorker.instances.at(-1)!, request = final.request as { id: string; seed: number; difficulty: number };
   assert.notEqual(request.seed, 2);
   assert.equal(request.id, 'bounded');
-  const {level,placements}=generateMap(1,2,'worker-fixture',[],SURVIVAL_DIFFICULTIES[0]).draft;
+  const {level,placements}=generateMap(1,2,'worker-fixture',[]).draft;
   const challenge = { ...request, draft: withEditorPlacements({ level, placements }, placements), fingerprint: 'test' };
   final.reply({ status: 'success', challenge }); final.reply({ status: 'success', challenge });
   assert.deepEqual(results, [challenge]); assert.equal(task.isRunning(), false);

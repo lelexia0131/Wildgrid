@@ -1,9 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import legacy from './fixtures/survival-before-limit-change.json';
-import { decodeMap, inventoryViolations } from '../src/engine';
+import { decodeMap, inventoryViolations, MAX_GENERATED_FACILITIES } from '../src/engine';
 import { createSurvivalSave, emptySurvivalProgress, replaceSurvivalChallenge, abandonSurvivalChallenge } from '../src/game-modes/survival/survivalChallenge';
-import { SURVIVAL_DIFFICULTIES } from '../src/game-modes/survival/survivalDifficulty';
 import { parseSurvivalForWrite, serializeSurvivalSave } from '../src/save-system/survivalSaveCodec';
 import { readSurvivalForWrite, writeSurvival } from '../src/save-system/survivalStorage';
 
@@ -14,7 +13,7 @@ const save = { ...createSurvivalSave(), completed: [{ id: 'earlier-win', difficu
 const stored = serializeSurvivalSave(save);
 
 test('a real challenge from before the limit update preserves its map, progress and ledger', () => {
-  assert.ok(draft.level.pieces.length > SURVIVAL_DIFFICULTIES[legacy.difficulty-1].max);
+  assert.ok(draft.level.pieces.length > MAX_GENERATED_FACILITIES[legacy.difficulty-1]);
   assert.ok(inventoryViolations(draft.level, legacy.difficulty).length > 0);
   const restored = parseSurvivalForWrite(stored);
   assert.equal(restored.challenge?.id, challenge.id);
