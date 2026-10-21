@@ -55,7 +55,6 @@
 .manual-cell.camp, .manual-cell.picnic, .manual-cell.cabin { background: #eee0b7; }
 .manual-clue-demo { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; padding: 15px 0; }
 .manual-clue-demo > span { display: inline-flex; gap: 5px; align-items: center; }
-.manual-clue-demo i { width: 15px; height: 5px; background: #dfb748; border-radius: 3px; }
 .manual-shapes, .manual-rotation { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin: 12px 0; }
 .manual-shape { display: inline-grid; gap: 2px; vertical-align: middle; }
 .manual-shape i { width: 12px; height: 12px; border-radius: 2px; background: #c9a35d; }
@@ -67,9 +66,8 @@
 .manual-cell { width: 32px; height: 32px; }
 .manual-example { min-width: 170px; }
 .manual-row-checks { line-height: 35px; }
-.manual-column-demo { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.manual-column-dashes { display: flex; flex-direction: column; gap: 4px; }
-.manual-column-dashes i { display: block; width: 15px; height: 5px; border-radius: 3px; background: #dfb748; }
+.manual-clue-dashes { display: inline-flex; flex-direction: column; gap: 4px; flex: none; }
+.manual-clue-dashes i { display: block; flex: none; width: 15px; height: 5px; border-radius: 3px; background: #dfb748; }
 .manual-intro { display: block; padding: 0 24px; text-align: center; }
 .manual-intro h2 { font-size: 30px; letter-spacing: 5px; margin: 0 0 12px; }
 .manual-cell.manual-multi { background: transparent; }

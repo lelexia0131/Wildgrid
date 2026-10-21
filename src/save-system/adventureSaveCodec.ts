@@ -1,8 +1,9 @@
 import { levels as fixedLevels, validatePlacements } from '../engine';
 import type { Level } from '../engine';
 import type { AdventureSave } from '../game-modes/adventure/adventureProgress';
+import { migrateAdventureBadges } from '../game-modes/adventure/adventureBadges';
 
-export const createAdventureSave = (): AdventureSave => ({ version: 1, completed: [], current: 1, progress: {}, settings: { music: 0.35, effects: 0.65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true } });
+export const createAdventureSave = (): AdventureSave => ({ version: 1, completed: [], current: 1, progress: {}, badges: {}, attempts: {}, settings: { music: 0.35, effects: 0.65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true } });
 const volume = (v: unknown, fallback: number) => typeof v === 'number' && Number.isFinite(v) ? Math.max(0, Math.min(1, v)) : fallback;
 
 export function parseAdventureSave(stored: string | null, levels: readonly Level[] = fixedLevels): AdventureSave {
@@ -11,6 +12,14 @@ export function parseAdventureSave(stored: string | null, levels: readonly Level
   const save = createAdventureSave();
   save.completed = Array.isArray(raw.completed) ? [...new Set<number>(raw.completed.filter((id: number) => levels.some(l => l.id === id)))] : [];
   save.current = levels.some(l => l.id === raw.current) ? raw.current : 1;
+  save.badges = migrateAdventureBadges(save.completed, raw.badges);
+  for (const level of levels) {
+    if (save.completed.includes(level.id)) continue;
+    const attempt = raw.attempts?.[level.id];
+    if (!attempt || !Number.isSafeInteger(attempt.revision) || attempt.revision < 0 || !attempt.seen || typeof attempt.seen !== 'object' || Array.isArray(attempt.seen)) continue;
+    const seen = Object.fromEntries(Object.entries(attempt.seen).filter((entry): entry is [string, number] => Number.isInteger(entry[1]) && (entry[1] as number) > 0 && (entry[1] as number) <= 15));
+    save.attempts[level.id] = { revision: attempt.revision, seen };
+  }
   for (const l of levels) save.progress[l.id] = validatePlacements(l, raw.progress?.[l.id], 'recover').placements;
   save.settings = { music: volume(raw.settings?.music, .35), effects: volume(raw.settings?.effects, .65), muted: raw.settings?.muted === true, facilityTips: raw.settings?.facilityTips !== false, continuousPlacement: raw.settings?.continuousPlacement !== false, facilityNames: raw.settings?.facilityNames === true, ruleDisplay: raw.settings?.ruleDisplay !== false };
   return save;

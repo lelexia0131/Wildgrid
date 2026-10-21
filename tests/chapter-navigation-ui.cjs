@@ -72,7 +72,7 @@ app.whenReady().then(async () => {
   async function checkSlide(next, target) {
     const state = await js(`(async () => {
       const selector = ${JSON.stringify(next ? '.journal-chapter-next' : '.journal-chapter-previous')};
-      const arrow = document.querySelector(selector), before = arrow.getBoundingClientRect();
+      const arrow = document.querySelector(selector), before = document.querySelector('.journal-level-controls').getBoundingClientRect();
       const background = document.querySelector('.app > .journal-chapter-background').src;
       const grid = document.querySelector('.level-grid').getBoundingClientRect();
       const title = document.querySelector('.journal-chapter-page h1').getBoundingClientRect();
@@ -82,7 +82,7 @@ app.whenReady().then(async () => {
       for (const animation of animations) { animation.pause(); animation.currentTime = 200; }
       const pages = [...document.querySelectorAll('.journal-chapter-page')];
       const rects = pages.map(page => ({ x: page.getBoundingClientRect().x, grid: page.querySelector('.level-grid').getBoundingClientRect().x, title: page.querySelector('h1').getBoundingClientRect().x }));
-      const after = arrow.getBoundingClientRect(), incoming = document.querySelector('.journal-chapter-background-incoming');
+      const after = document.querySelector('.journal-level-controls').getBoundingClientRect(), incoming = document.querySelector('.journal-chapter-background-incoming');
       document.querySelector('.chapter-entering .level-card').click();
       const result = {
         pages: pages.length, levels: document.querySelectorAll('.level-card').length,
@@ -93,6 +93,7 @@ app.whenReady().then(async () => {
         backgroundChanged: incoming.querySelector('img').src !== background,
         backgroundOpacity: Number(getComputedStyle(incoming).opacity),
         busy: document.querySelector('.journal-level-navigation').getAttribute('aria-busy'),
+        previous: !!document.querySelector('.journal-chapter-previous'), next: !!document.querySelector('.journal-chapter-next'),
         inert: pages.every(page => page.inert), game: !!document.querySelector('.game-page'),
         durations: animations.map(a => a.effect.getTiming().duration),
       };
@@ -106,6 +107,8 @@ app.whenReady().then(async () => {
     assert.ok(state.arrowDelta < 1); assert.equal(state.clipped, 'hidden');
     assert.ok(state.backgroundChanged && state.backgroundOpacity > 0 && state.backgroundOpacity < 1);
     assert.equal(state.busy, 'true'); assert.ok(state.inert && !state.game);
+    assert.equal(state.previous, target > 0, 'Previous arrow must follow the incoming chapter before the animation ends');
+    assert.equal(state.next, target < levels.length / 15 - 1, 'Next arrow must follow the incoming chapter before the animation ends');
     assert.ok(state.durations.length >= 4 && state.durations.every(duration => duration === 400));
     await settle();
     assert.equal(await js(`document.querySelectorAll('.journal-chapter-page').length`), 1);
@@ -128,11 +131,11 @@ app.whenReady().then(async () => {
       for (let chapter = 0; chapter < count; chapter++) {
         await checkChapter(chapter, count, viewport.language, viewport);
         assert.equal(await js(`document.querySelectorAll('.level-card.completed').length`), 15);
-        if (chapter < count - 1) { if (touch) await swipe(true); else await click('.journal-chapter-next'); }
+        if (chapter < count - 1) { if (touch) await swipe(true); else await checkSlide(true, chapter + 1); }
       }
       if (touch) { await swipe(true); await checkChapter(count - 1, count, viewport.language, viewport); }
       for (let chapter = count - 2; chapter >= 0; chapter--) {
-        if (touch) await swipe(false); else await click('.journal-chapter-previous');
+        if (touch) await swipe(false); else await checkSlide(false, chapter);
         await checkChapter(chapter, count, viewport.language, viewport);
         assert.equal(await js(`document.querySelector('.journal-level-navigation').dataset.direction`), 'previous');
       }

@@ -2,7 +2,7 @@ import { generateMap } from '../src/engine/mapGeneration';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createSandbox, getLevelById, getSolution, MAP_GENERATION_TIMEOUT, generationBudget, withEditorPlacements } from '../src/engine';
-import { createSandboxCheckTask, createSurvivalGenerationTask } from '../src/workers/workerTasks';
+import { createAdventureHintTask, createSandboxCheckTask, createSurvivalGenerationTask } from '../src/workers/workerTasks';
 
 class FakeWorker {
   static instances: FakeWorker[] = [];
@@ -18,6 +18,27 @@ class FakeWorker {
   terminate() { this.terminated = true; }
   reply(data: unknown) { this.onmessage?.({ data } as MessageEvent); }
 }
+
+test('Adventure hints cancel old work, isolate stale replies and release timeouts', t => {
+  const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'Worker');
+  Object.defineProperty(globalThis, 'Worker', { configurable: true, value: FakeWorker });
+  t.after(() => { if (descriptor) Object.defineProperty(globalThis, 'Worker', descriptor); else Reflect.deleteProperty(globalThis, 'Worker'); });
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const task = createAdventureHintTask(), results: unknown[] = [], errors: string[] = [];
+  const callbacks = { onResult: (result: unknown) => results.push(result), onError: (reason: string) => errors.push(reason) };
+  task.start({ level: getLevelById(1)!, placements: [] }, callbacks);
+  const old = FakeWorker.instances.at(-1)!;
+  task.cancel();
+  task.start({ level: getLevelById(2)!, placements: [] }, callbacks);
+  const current = FakeWorker.instances.at(-1)!;
+  old.reply({ status: 'conflict', reasons: ['stale'] });
+  assert.deepEqual(results, []); assert.equal(old.terminated, true);
+  current.reply({ status: 'ready' }); current.reply({ status: 'complete' });
+  assert.deepEqual(results, [{ status: 'ready' }]);
+  task.start({ level: getLevelById(3)!, placements: [] }, callbacks);
+  t.mock.timers.tick(6000);
+  assert.deepEqual(errors, ['timeout']); assert.equal(task.isRunning(), false);
+});
 
 test('worker tasks cancel, ignore stale/duplicate replies, release errors and clean up failed posts', t => {
   const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'Worker');

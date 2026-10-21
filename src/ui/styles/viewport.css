@@ -233,7 +233,7 @@ input[type=range] { height: 22px; }
 .camp-tools .camp-tool { position: relative; display: flex; align-items: center; justify-content: center; min-width: 0; height: 38px; min-height: 36px; padding: 2px; border: 1px solid #c9d4b9; border-radius: 8px; background: linear-gradient(#faf5e3, #e8ead3); box-shadow: 0 3px 0 #acba9859, inset 0 1px 0 #fffdf3; transition: transform .15s, background .15s; }
 .camp-tools .camp-tool > .camp-tool-art { width: 32px; height: 32px; }
 .camp-tools .camp-tool.tool-blueprint { background: linear-gradient(#edf5ee, #d3e5dc); border-color: #b6cdc0; }
-.camp-tools .camp-tool.tool-journal, .camp-tools .camp-tool.tool-export { background: linear-gradient(#fff1d5, #efe0b9); border-color: #d4c29b; }
+.camp-tools .camp-tool.tool-export { background: linear-gradient(#fff1d5, #efe0b9); border-color: #d4c29b; }
 .camp-tools .camp-tool.tool-abandon { background: linear-gradient(#f9ece0, #ecd6c6); border-color: #d5b6a2; }
 .camp-tools .camp-tool:hover:enabled { transform: translateY(-2px); background: #f5edcd; }
 .camp-tools .camp-tool:active:enabled { transform: translateY(2px); box-shadow: none; }
@@ -558,7 +558,7 @@ input[type=range] { height: 22px; }
   .camp-diary.chapter-levels { width: calc(100% - 16px); padding: 2px 6px 12px; gap: 10px; }
   .chapter-levels .page-heading { min-height: 40px; margin: 0 0 4px; }
   .camp-diary .page-heading h1 { font-size: 27px; }
-  .chapter-grid { grid-template-columns: minmax(0, 1fr); align-content: center; gap: 15px; padding-top: 5px; }
+  .chapter-grid { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 15px; padding-top: 5px; }
   .chapter-card { aspect-ratio: auto; min-height: 155px; height: clamp(155px, 22dvh, 220px); padding: 10px 22px 10px 8px; flex-direction: row; align-items: center; border-radius: 23px; }
   .chapter-art { flex: 1 1 60%; height: 100%; width: 60%; }
   .chapter-caption { flex: 1 1 40%; min-width: 0; gap: 10px; }

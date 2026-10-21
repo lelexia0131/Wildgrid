@@ -5,6 +5,7 @@ import { evaluate, facilityNames, terrainNames, key, occupied } from '../../engi
 import type { Cell, GameMode, Level, Placement, Status } from '../../engine';
 import { useI18n } from '../../localization/LanguageContext';
 import { Art, FacilityArt, FootprintSurface } from './Art';
+import { HintBoardOverlay } from './HintBoardOverlay';
 
 const names = { ...facilityNames, ...terrainNames };
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
   celebration: 'board' | 'dialog' | null; showFacilityNames: boolean;
   hover: Cell | null; ghost: readonly Cell[]; ghostBlocked: boolean;
   ruleHints?: Record<string, Status>; setHover: (cell: Cell | null) => void;
+  hintRegion?: readonly Cell[]; hintPlacement?: Placement;
   clickCell: (cell: Cell) => void; rotatePlaced: (at: Placement, pivot: Cell) => void;
 };
 
@@ -33,7 +35,7 @@ function ClueCounter({ target, used, column = false }: { target: number; used: n
   </div>;
 }
 
-export function GameBoard({ boardRef, mode, level, placements, result, celebration, showFacilityNames, hover, ghost, ghostBlocked, ruleHints, setHover, clickCell, rotatePlaced }: Props) {
+export function GameBoard({ boardRef, mode, level, placements, result, celebration, showFacilityNames, hover, ghost, ghostBlocked, ruleHints, hintRegion = [], hintPlacement, setHover, clickCell, rotatePlaced }: Props) {
   const { t, localize } = useI18n();
   return <section ref={boardRef} className={`board-section ${celebration ? 'celebrating' : ''} ${mode === 'survival' ? 'reward-board' : ''}`} aria-label={t("营地棋盘")}><div className="board-topline"><span><Compass size={16}/>  {t("营地规划图")}</span></div>
         <div className="board-with-clues" key={`${mode}-${level.id}`} style={{ '--size': level.size } as React.CSSProperties}>
@@ -67,6 +69,7 @@ export function GameBoard({ boardRef, mode, level, placements, result, celebrati
             const issue = result.issues[at.id];
             return <div className={`placed-facility-art ${issue.status.toLowerCase()} ${hover && cells.some(p => key(p) === key(hover)) ? 'hovered' : ''}`} key={at.id} data-art-id={at.id} data-kind={piece.kind} data-rotation={at.rotation} style={{ gridRow: `${row + 1} / span ${height}`, gridColumn: `${column + 1} / span ${width}` }}><FootprintSurface shape={piece.shape} rotation={at.rotation}/><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at.rotation}/></div>;
           })}</div><div className="facility-art-layer departure-art-layer" aria-hidden="true"/>
+          {mode === 'adventure' && <HintBoardOverlay level={level} region={hintRegion} placement={hintPlacement}/>}
           {celebration && <div className="board-celebration" aria-hidden="true"><div className="board-golden-ring"/>{Array.from({ length: 8 }, (_, i) => <i key={i} style={{ '--particle': i, left: `${12 + (i * 29) % 78}%`, top: `${18 + (i * 37) % 70}%` } as React.CSSProperties}>{i % 3 === 0 ? <Leaf size={13}/> : '✦'}</i>)}</div>}
           </div>
         </div>

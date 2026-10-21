@@ -1,5 +1,7 @@
 import { MANUAL_ENGLISH } from './manual';
 import { FEEDBACK_ENGLISH } from './feedback';
+import { HINT_ENGLISH } from './hints';
+import { ADVENTURE_BADGE_ENGLISH } from './adventureBadges';
 
 // Chinese strings are stable lookup keys for the existing presentation metadata.
 // Gameplay and save data keep their original values; localization happens at display time.
@@ -26,7 +28,7 @@ export const UI_ENGLISH = {
   '历史地图未保存': 'Historical map unavailable', '暂无记录': 'No records yet',
   '导出': 'Export',
   '{0}难 · 复盘': 'Level {0} · Review',
-  ...MANUAL_ENGLISH, ...FEEDBACK_ENGLISH,
+  ...MANUAL_ENGLISH, ...FEEDBACK_ENGLISH, ...HINT_ENGLISH, ...ADVENTURE_BADGE_ENGLISH,
   '需占 {0} 格，已占 {1} 格{2}': 'Target: {0} cells. Filled: {1}{2}',
   '{0}：{1}': '{0}: {1}', '{0}，点击拿起': '{0}, tap to pick up',
   '，超出提示': ', over target', '需要 {0} 格 · 已占 {1} 格': 'Target {0} · Filled {1}',
@@ -40,7 +42,7 @@ export const UI_ENGLISH = {
   '自动生成行列目标': 'Clues generated automatically', '待占格数': 'Cells left to fill', '地形画笔可修改': 'Edit with terrain tools', '固定地形不可移动': 'Terrain stays fixed', '点击放置 / 拿起': 'Tap to place / pick up',
   '设施库': 'Facility Library', '待放设施': 'Facilities', '地形画笔': 'Terrain tools', '点击空地放置{0}，再次点击移除': 'Tap empty grass to place {0}; tap again to remove',
   '选择{0}{1}{2}': 'Select {0} {1}{2}', '，不限数量': ', unlimited', '，剩余 {0}': ', {0} left',
-  '要求': 'Requires', '禁止': 'Avoid', '提示': 'Tip', '再次点击卡片旋转': 'Select the card again to rotate', '选择或悬停设施，查看要求与禁止事项。': 'Select or hover over a facility to see its requirements.',
+  '要求': 'Requires', '禁止': 'Avoid', '提示': 'Hint', '再次点击卡片旋转': 'Select the card again to rotate', '选择或悬停设施，查看要求与禁止事项。': 'Select or hover over a facility to see its requirements.',
   '营地工具': 'Camp Tools', '旋转': 'Rotate', '撤销': 'Undo', '重新游玩': 'Restart', '保存': 'Save', '放弃': 'Abandon', '正在质检…': 'Checking…', '导出地图': 'Export Map',
   '查看图纸': 'View blueprint', '通关后解锁': 'Unlocks after completion', '通关或放弃荒野求生挑战后解锁': 'Unlocks after completing or abandoning this Survival challenge', '图纸': 'Blueprint',
   '{0}：{1}；禁止{2}': '{0}: {1}; avoid {2}', '处待调整': 'to adjust', '重试结算': 'Retry rewards', '浏览器存储不可用，进度暂未保存': 'Storage unavailable. Progress has not been saved.',

@@ -2,6 +2,7 @@ import { encodeMap, MAP_GENERATION_TIMEOUT, generationBudget, inventoryViolation
 import type { SandboxCheck, SandboxDraft } from '../engine';
 import type { SurvivalChallenge } from '../game-modes/survival/survivalChallenge';
 import type { SurvivalGenerationRequest, SurvivalGenerationResult } from './survivalProtocol';
+import type { AdventureHint, HintRequest } from '../engine/adventureHints';
 export type { SurvivalGenerationRequest, SurvivalGenerationResult } from './survivalProtocol';
 
 type TaskCallbacks<Result> = { onResult: (result: Result) => void; onError: (reason: 'error' | 'timeout', message?: string) => void };
@@ -39,6 +40,10 @@ function createWorkerTask<Request, Result>(createWorker: () => Worker, timeoutMs
 
 export function createSandboxCheckTask() {
   return createWorkerTask<SandboxDraft, SandboxCheck>(() => new Worker(new URL('./sandbox.worker.ts', import.meta.url), { type: 'module' }));
+}
+
+export function createAdventureHintTask() {
+  return createWorkerTask<HintRequest, AdventureHint>(() => new Worker(new URL('./hint.worker.ts', import.meta.url), { type: 'module' }), 6000);
 }
 
 export function createSurvivalGenerationTask() {

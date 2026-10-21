@@ -1,0 +1,35 @@
+.adventure-badge-icon { display: block; width: 32px; height: 35px; flex: none; overflow: visible; }
+.level-card-top > .adventure-badge-icon { width: 26px; height: 29px; }
+.adventure-badge-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; flex: none; }
+.adventure-badge-stats > div { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 7px; border: 1px solid #d0be9580; border-radius: 12px; background: #fbf2d6cc; }
+.adventure-badge-stats span { display: grid; gap: 2px; color: #706d51; font-size: 11px; }
+.adventure-badge-stats strong { color: #546f49; font: 22px/1.1 var(--number-font); }
+.adventure-badge-award { --badge-glow: #e4b74566; position: relative; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 8px 12px; border: 1px solid #d4c49a; border-radius: 16px; background: #f5ebcc; text-align: left; }
+.adventure-badge-award.badge-silver { --badge-glow: #b6cdce55; background: #ecede1; border-color: #bfcac0; }
+.adventure-badge-award.badge-bronze { --badge-glow: #cb976b33; background: #f1e2cb; border-color: #cbb08c; }
+.adventure-badge-award.badge-wood { --badge-glow: #b19b7522; background: #eee3cc; border-color: #c8b492; }
+.adventure-badge-display { position: relative; flex: none; }
+.adventure-badge-display > .adventure-badge-icon { width: 66px; height: 72px; }
+.adventure-badge-award strong { font-size: 18px; color: #766034; line-height: 1.3; }
+.app .adventure-badge-award p { margin: 4px 0 0; font-size: 12px; line-height: 1.4; color: #756e50; }
+.adventure-badge-particles { position: absolute; inset: -12px; pointer-events: none; }
+.adventure-badge-particles i { position: absolute; font-style: normal; color: #d9ac42; opacity: 0; }
+.win-modal[open] .is-awarded .adventure-badge-display { animation: badge-arrive 700ms cubic-bezier(.2,.75,.3,1.2) both; }
+.win-modal[open] .is-awarded .adventure-badge-icon { filter: drop-shadow(0 0 7px var(--badge-glow)); }
+.win-modal[open] .is-awarded.badge-gold .adventure-badge-icon { animation: badge-glow 1400ms ease-out; }
+.win-modal[open] .is-awarded .adventure-badge-particles i { animation: badge-particle 1000ms calc(var(--particle) * 65ms) ease-out; }
+.win-modal[open] .is-awarded.badge-silver .adventure-badge-display { animation-duration: 550ms; }
+.win-modal[open] .is-awarded.badge-bronze .adventure-badge-display { animation-duration: 450ms; }
+.win-modal[open] .is-awarded.badge-wood .adventure-badge-display { animation-duration: 350ms; }
+.hint-badge-change { display: flex; align-items: center; justify-content: center; gap: 20px; margin: 12px 0; color: #8b805d; font-size: 24px; }
+.hint-badge-change .adventure-badge-icon { width: 62px; height: 68px; }
+.hint-badge-confirmation h2 { font-size: 22px; }
+.hint-badge-confirmation p { font-size: 14px; line-height: 1.7; }
+.manual-badge-table .adventure-badge-icon { width: 28px; height: 31px; margin: auto; }
+@keyframes badge-arrive { from { opacity: 0; transform: scale(.65) rotate(-12deg); } 65% { opacity: 1; transform: scale(1.08) rotate(3deg); } to { transform: scale(1) rotate(0); } }
+@keyframes badge-glow { 35% { filter: drop-shadow(0 0 16px #efc45a); } }
+@keyframes badge-particle { 25% { opacity: .9; } to { opacity: 0; transform: translateY(-20px) rotate(30deg) scale(.65); } }
+@media (max-width: 600px) { .adventure-badge-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; } }
+@media (max-height: 560px) { .adventure-badge-display > .adventure-badge-icon { width: 44px; height: 48px; } .adventure-badge-award { gap: 8px; padding: 5px 8px; } .adventure-badge-award strong { font-size: 16px; } }
+@media (max-height: 560px) and (min-width: 560px) { .app .win-modal:has(.adventure-badge-award) .completion-emblem { grid-row: 1 / span 6; } }
+@media (prefers-reduced-motion: reduce) { .is-awarded *, .is-awarded *::after { animation: none !important; } .adventure-badge-particles { display: none; } }

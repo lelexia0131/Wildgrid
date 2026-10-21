@@ -1,6 +1,6 @@
-# 野格 v1.0.0
+# 野格 v1.1.0
 
-原创露营主题逻辑益智游戏。React + TypeScript + Vite，无账户、无外部媒体请求；Windows 和 Android 使用独立的匿名玩家 ID 服务。冒险模式有 45 个固定关卡，1–15 关为 6×6，16–45 关为 8×8；荒野求生提供 10 档难度的随机挑战，沙盒模式支持创造、导入与保存本地地图。支持电脑鼠标和手机点击。当前版本 v1.0.0，更新日期 2026-10-09。
+原创露营主题逻辑益智游戏。React + TypeScript + Vite，无账户、无外部媒体请求；Windows 和 Android 使用独立的匿名玩家 ID 服务。冒险模式有 45 个固定关卡，1–15 关为 6×6，16–45 关为 8×8；荒野求生提供 10 档难度的随机挑战，沙盒模式支持创造、导入与保存本地地图。支持电脑鼠标和手机点击。当前版本 v1.1.0，更新日期 2026-10-21。
 
 ## 运行
 
@@ -63,7 +63,7 @@ ARCHITECTURE.md             API、状态所有权、依赖方向和扩展约定
 
 旋律、和声及音效均由项目代码原创合成，无商业采样或旧项目素材。菜单与关卡共享主题旋律，节奏不同。浏览器需要首次用户操作才能启用声音。后台标签页暂停音频。
 
-冒险存档位于当前站点 localStorage 的 `wildgrid-save-v1`，包括已完成/解锁进度、各关棋盘、当前关卡、音量及“设施提示”“连续放置”开关。本地地图使用 `wildgrid-local-maps-v1`，荒野求生使用 `wildgrid-survival-v1`，三者分别保存。v1.0.0 沿用这些存档格式。“连续放置”默认开启，关闭后每次放置会取消选择。“设施提示”开关实时控制游玩界面的动态规则卡，关闭时完全移除并把空间还给设施列表；首页说明书不受影响，旧存档默认开启。不同域名和端口不共享存档。清除站点数据会删除存档；存储被禁用时会显示提示。
+冒险存档位于当前站点 localStorage 的 `wildgrid-save-v1`，包括已完成/解锁进度、各关棋盘、当前关卡、音量及“设施提示”“连续放置”开关。本地地图使用 `wildgrid-local-maps-v1`，荒野求生使用 `wildgrid-survival-v1`，三者分别保存。v1.1.0 沿用这些存档格式。“连续放置”默认开启，关闭后每次放置会取消选择。“设施提示”开关实时控制游玩界面的动态规则卡，关闭时完全移除并把空间还给设施列表；首页说明书不受影响，旧存档默认开启。不同域名和端口不共享存档。清除站点数据会删除存档；存储被禁用时会显示提示。
 
 ## 教程引导
 
@@ -115,13 +115,13 @@ Android 需要执行 `npm run android:apk` 重新生成 APK；新增剪贴板使
 
 生产构建生成 manifest 和 Service Worker，首次成功加载并缓存后可离线启动。PWA 需要 HTTPS 或 localhost，开发服务器不注册 Service Worker；安装入口由浏览器提供。首次安装后刷新一次即可由 Service Worker 控制。更新在旧标签页关闭后启用，避免游玩中切换版本。
 
-Windows 桌面版使用 Electron 加载本地 `wildgrid://game` 资源，无需启动 Web 服务。执行 `npm run package:win` 生成 `release/Wildgrid-Setup-1.0.0-x64.exe`；向导支持选择安装目录，并在快捷方式页面勾选或取消桌面快捷方式。开始菜单入口会保留。安装包未配置代码签名证书。
+Windows 桌面版使用 Electron 加载本地 `wildgrid://game` 资源，无需启动 Web 服务。执行 `npm run package:win` 生成 `release/Wildgrid-Setup-1.1.0-x64.exe`；向导支持选择安装目录，并在快捷方式页面勾选或取消桌面快捷方式。开始菜单入口会保留。安装包未配置代码签名证书。
 
 `npm run desktop` 可启动桌面开发构建；`npm run icons` 从 `public/icon.svg` 导出暖色 PNG 与包含 16–256px 尺寸的 `build/icon.ico`。桌面存档保存在 Electron 的用户数据目录，与浏览器存档分别保存。安装位置改变不影响桌面存档。
 
 ## Android 测试 APK
 
-Android 使用 Capacitor 8 封装同一份 `dist`，应用名“野格”，包名 `com.wildgrid.game`，versionName `1.0.0`、versionCode `4`。需要 Node.js 22+、JDK 21 和 Android SDK 36；设置 `ANDROID_HOME` / `ANDROID_SDK_ROOT`，`JAVA_HOME` 指向 JDK 21。Windows 构建脚本也会查找 SDK 同级 AndroidStudio 或标准安装目录中的 JDK。
+Android 使用 Capacitor 8 封装同一份 `dist`，应用名“野格”，包名 `com.wildgrid.game`，versionName `1.1.0`、versionCode `5`。需要 Node.js 22+、JDK 21 和 Android SDK 36；设置 `ANDROID_HOME` / `ANDROID_SDK_ROOT`，`JAVA_HOME` 指向 JDK 21。Windows 构建脚本也会查找 SDK 同级 AndroidStudio 或标准安装目录中的 JDK。
 
 ```sh
 npm run android:sync # 构建 Web、生成游戏图标、同步 Android
@@ -129,7 +129,7 @@ npm run android:open # 在 Android Studio 打开原生容器
 npm run android:apk  # 使用 Gradle wrapper 生成签名的 debug APK
 ```
 
-APK 输出：`release/野格-v1.0.0.apk`，Gradle 原始输出仍位于 `android/app/build/outputs/apk/debug/app-debug.apk`。可以直接安装测试，或执行 `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`。Android 源码保留在仓库，APK、Gradle 缓存和同步的 Web 构建产物均忽略。
+APK 输出：`release/野格-v1.1.0.apk`，Gradle 原始输出仍位于 `android/app/build/outputs/apk/debug/app-debug.apk`。可以直接安装测试，或执行 `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`。Android 源码保留在仓库，APK、Gradle 缓存和同步的 Web 构建产物均忽略。
 
 手机竖屏采用大棋盘与下方固定高度设施区，横屏采用棋盘与工具并排；列表、关卡选择和说明书各自可滚动。安全区使用 `env(safe-area-inset-*)` 和 Capacitor 的 inset 变量兼容旧 WebView。沿用 localStorage 保存进度和设置，强制退出再启动仍可恢复；清除应用数据或卸载会删除存档。音频仅在第一次用户交互时启动，后台暂停。Android 使用本地打包资源，不注册 Web Service Worker，避免旧缓存覆盖新版 APK。
 

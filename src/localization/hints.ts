@@ -1,0 +1,18 @@
+export const HINT_ENGLISH = {
+  '探险指引': 'Trail Guide', '关闭指引': 'Close guide',
+  '提示等级 {0} / 3': 'Hint level {0} / 3',
+  '观察提示': 'Observe', '区域提示': 'Narrow down', '操作提示': 'Placement',
+  '再给我一点提示': 'A little more help', '查看放置位置': 'Show placement',
+  '正在寻找推理线索…': 'Looking for a useful clue…', '暂未完成分析，请重试。': 'Analysis is unfinished. Please retry.', '重试': 'Retry',
+  '营地已经规划完成，所有规则与行列目标均已满足。': 'Your campsite is complete. Every rule and row and column target is satisfied.',
+  '当前摆放无法完成关卡，先检查已有设施与行列目标。': 'The current layout cannot complete this puzzle. Check your facilities and line targets first.',
+  '这些放置组合无法同时满足全部规则，无法确定唯一错误来源。': 'These placements cannot satisfy all rules together. A single source of error cannot be identified.',
+  '检查金色区域，尝试拿起或撤销相关放置后重新分析；这不代表区域内每个设施都有错误。': 'Check the golden region. Try picking up or undoing a related placement, then analyze again. This does not mean every facility in the region is wrong.',
+  '第 {0} 行': 'row {0}', '第 {0} 列': 'column {0}', '第 {0} 行第 {1} 列': 'row {0}, column {1}',
+  '关注{0}的剩余占格数，并结合{1}的放置规则。': 'Look at the remaining cells in {0}, together with the rules for {1}.',
+  '{0}还需 {1} 格。结合地形和周围设施，{2}只剩一个位置可以放。看看金色区域，试着找一找。': '{0} still needs {1} filled cells. With the terrain and nearby facilities, only one spot remains for {2}. Look in the golden region and try to find it.',
+  '{0}还需 {1} 格。结合地形和周围设施，{2}还有 {3} 处可以考虑的位置。看看金色区域，比较一下这些位置。': '{0} still needs {1} filled cells. With the terrain and nearby facilities, there are {3} spots to consider for {2}. Look in the golden region and compare them.',
+  '必然放置': 'Forced placement', '一种可行放置': 'One possible placement',
+  '{0}：占用{1}。': '{0}: fills {1}.',
+  '方向：从初始形状顺时针旋转 {0} 次。': 'Clockwise quarter-turns from the initial shape: {0}.',
+} as const;

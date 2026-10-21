@@ -116,7 +116,7 @@ app.whenReady().then(async () => {
       }
       // Game information opens from settings and returns without closing the dialog.
       await click('.header [aria-label="设置"]', viewport.touch);
-      assert.equal(await js(`document.querySelector('.settings-note').textContent`), 'v1.0.0');
+      assert.equal(await js(`document.querySelector('.settings-note').textContent`), 'v1.1.0');
       assert.equal(await js(`document.querySelector('.settings-about').nextElementSibling === document.querySelector('.settings-note')`), true);
       await click('.settings-about', viewport.touch);
       const about = await js(`(() => {
@@ -128,8 +128,8 @@ app.whenReady().then(async () => {
       assert.equal(about.heading, '游戏说明');
       assert.equal(about.author, 'lelexia');
       assert.equal(about.date, '2026-10-07');
-      assert.equal(about.version, 'v1.0.0');
-      assert.equal(about.updated, '2026-10-08');
+      assert.equal(about.version, 'v1.1.0');
+      assert.equal(about.updated, '2026-10-21');
       assert.equal(about.modes, true);
       assert.equal(about.project, 'https://github.com/lelexia0131/Wildgrid');
       assert.ok(about.copyright && about.thanks);
