@@ -34,13 +34,48 @@ app.whenReady().then(async () => {
     return Math.ceil(levels.length / 15);
   }
   async function swipe(next, dx = 120, dy = 0) {
-    const point = await js(`(() => { const r = document.querySelector('.journal-level-stage').getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+Math.min(100,r.height/2)}; })()`);
+    const point = await js(`(() => { const r = document.querySelector('.journal-level-stage, .chapter-grid').getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+Math.min(100,r.height/2)}; })()`);
     await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
     for (let step = 1; step <= 6; step++) {
       await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: point.x + (next ? -dx : dx) * step / 6, y: point.y + dy * step / 6 }] });
     }
     await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     await settle();
+  }
+  async function checkOverviewSlide(next) {
+    const state = await js(`(async () => {
+      const arrow = document.querySelector('.chapter-pagination ${next ? '.next-page' : '.previous-page'}');
+      const heading = document.querySelector('.chapter-selection .page-heading').getBoundingClientRect();
+      for (let i = 0; i < 10; i++) arrow.click();
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      const grids = [...document.querySelectorAll('.chapter-grid')];
+      if (grids.length !== 2) return { pages: grids.length };
+      const animations = grids.flatMap(grid => grid.getAnimations());
+      for (const animation of animations) { animation.pause(); animation.currentTime = 200; }
+      grids.at(-1).querySelector('.chapter-card').click();
+      const after = document.querySelector('.chapter-selection .page-heading').getBoundingClientRect();
+      const result = {
+        pages: grids.length, inert: grids.every(grid => grid.inert),
+        offsets: grids.map(grid => new DOMMatrix(getComputedStyle(grid).transform).m41),
+        opacities: grids.map(grid => Number(getComputedStyle(grid).opacity)),
+        durations: animations.map(animation => animation.effect.getTiming().duration),
+        headingDelta: Math.abs(after.x - heading.x) + Math.abs(after.y - heading.y),
+        entered: !!document.querySelector('.chapter-levels'),
+        overflow: document.documentElement.scrollWidth > innerWidth,
+      };
+      for (const animation of animations) animation.play();
+      return result;
+    })()`);
+    assert.equal(state.pages, 2, 'Theme pages must coexist during the slide');
+    assert.ok(state.inert && !state.entered, 'Cards cannot open chapters during the slide');
+    assert.ok(next ? state.offsets[0] < 0 && state.offsets[1] > 0 : state.offsets[0] > 0 && state.offsets[1] < 0);
+    assert.ok(state.opacities.every(value => value > 0 && value < 1));
+    assert.deepEqual(state.durations, [400, 400]);
+    assert.equal(state.headingDelta, 0); assert.equal(state.overflow, false);
+    await settle();
+    assert.deepEqual(await js(`[...document.querySelectorAll('.chapter-card')].map(card => card.dataset.chapter)`), next ? ['3'] : ['0', '1', '2']);
+    assert.equal(await js(`document.querySelectorAll('.chapter-grid').length`), 1);
+    assert.equal(await js(`document.querySelector('.chapter-grid').inert`), false);
   }
   async function checkChapter(chapter, count, language, viewport) {
     assert.equal(await js(`!!document.querySelector('.journal-chapter-previous')`), chapter > 0);
@@ -186,6 +221,13 @@ app.whenReady().then(async () => {
       const count = await load(levels.map(level => level.id), viewport.language);
       const save = await js(`localStorage.getItem('wildgrid-save-v1')`);
       const timeOrigin = await js('performance.timeOrigin');
+      await checkOverviewSlide(true); await checkOverviewSlide(false);
+      if (touch) {
+        await swipe(true);
+        assert.deepEqual(await js(`[...document.querySelectorAll('.chapter-card')].map(card => card.dataset.chapter)`), ['3']);
+        await swipe(false);
+        assert.equal(await js(`document.querySelectorAll('.chapter-card').length`), 3);
+      }
       await click('[data-chapter="0"]');
       if (!touch) { await checkSlide(true, 1); await checkSlide(false, 0); }
       for (let chapter = 0; chapter < count; chapter++) {
@@ -233,9 +275,21 @@ app.whenReady().then(async () => {
     assert.equal(await js(`document.querySelector('[data-level="32"]').disabled`), true);
     await click('[data-level="32"]');
     assert.equal(await js(`!!document.querySelector('.chapter-levels')`), true);
+    await load(levels.filter(level => level.id < 45).map(level => level.id));
+    await click('.chapter-pagination .next-page');
+    assert.equal(await js(`document.querySelector('[data-chapter="3"]').disabled`), true);
+    await click('[data-chapter="3"]');
+    assert.equal(await js(`!!document.querySelector('.chapter-selection')`), true);
+    await click('.chapter-pagination .previous-page'); await click('[data-chapter="2"]');
+    assert.equal(await js(`document.querySelector('.journal-chapter-next').disabled`), true);
     await contents.debugger.sendCommand('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
     await click('.journal-chapter-previous');
     assert.equal(await js(`getComputedStyle(document.querySelector('.level-grid')).animationName`), 'none');
+    await click('.camp-diary > .back-link');
+    await click('.chapter-pagination .next-page');
+    assert.equal(await js(`document.querySelectorAll('.chapter-grid').length`), 1);
+    assert.equal(await js(`document.querySelector('.chapter-overview-viewport').getAttribute('aria-busy')`), 'false');
+    assert.equal(await js(`getComputedStyle(document.querySelector('.chapter-grid')).animationName`), 'none');
     assert.deepEqual(errors, []);
     console.log('Chapter navigation UI passed: first/middle/last, desktop arrows, mobile swipes, unlocks, saves, level entry, SVGs, centering, Chinese/English, portrait/landscape, reduced motion and no page reload.');
     clearTimeout(timeout); app.exit(0);

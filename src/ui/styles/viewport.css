@@ -474,6 +474,14 @@ input[type=range] { height: 22px; }
 .camp-diary .page-heading h1 { font-size: 32px; margin: 0; }
 .chapter-levels .page-heading { min-height: 52px; margin: 2px 0 10px; }
 .chapter-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; gap: 24px; padding: 12px 5px 24px; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; scrollbar-width: none; }
+.chapter-overview-viewport { --journal-slide-direction: 1; --journal-slide-distance: calc(100% + 24px); flex: 1; min-height: 0; min-width: 0; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); overflow: hidden; touch-action: pan-y; }
+.chapter-overview-viewport[data-direction='previous'] { --journal-slide-direction: -1; }
+.chapter-overview-viewport > .chapter-grid { grid-area: 1 / 1; min-width: 0; }
+.chapter-grid:is(.overview-exiting, .overview-entering) { animation: .4s cubic-bezier(.45, 0, .25, 1) both; will-change: transform, opacity; }
+.chapter-grid.overview-exiting { animation-name: journal-overview-out; }
+.chapter-grid.overview-entering { animation-name: journal-overview-in; }
+@keyframes journal-overview-out { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(calc(-1 * var(--journal-slide-distance) * var(--journal-slide-direction))); } }
+@keyframes journal-overview-in { from { opacity: 0; transform: translateX(calc(var(--journal-slide-distance) * var(--journal-slide-direction))); } to { opacity: 1; transform: translateX(0); } }
 .camp-diary :is(.chapter-grid, .journal-level-stage, .level-grid)::-webkit-scrollbar { display: none; }
 .chapter-card { position: relative; isolation: isolate; display: flex; flex-direction: column; min-width: 0; padding: 18px 12px 22px; aspect-ratio: .79; max-height: 430px; border: 3px solid #acba91; border-radius: 26px; background: #edf0d8; box-shadow: 0 7px 0 #91a17b, 0 13px 20px #49614616; transition: transform .18s, box-shadow .18s; }
 .chapter-card.chapter-1 { background: #d9e4ca; border-color: #8aa385; }

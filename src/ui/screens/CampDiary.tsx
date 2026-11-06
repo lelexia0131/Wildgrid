@@ -25,8 +25,11 @@ export function CampDiary({ completed, badges, currentId, chapter, page, onPage,
   const { t, language } = useI18n();
   const [direction, setDirection] = useState<'previous' | 'next'>('next');
   const [transition, setTransition] = useState<number | null>(null);
+  const [overviewTransition, setOverviewTransition] = useState<number | null>(null);
   const navigationChapter = transition ?? chapter ?? 0;
+  const navigationPage = overviewTransition ?? page;
   const turningTo = useRef<number | null>(null);
+  const overviewTurningTo = useRef<number | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const spreadRef = useRef<HTMLDivElement>(null);
   const controlsRef = useRef<HTMLDivElement>(null);
@@ -60,9 +63,26 @@ export function CampDiary({ completed, badges, currentId, chapter, page, onPage,
     const timeout = window.setTimeout(finishTurn, 500);
     return () => window.clearTimeout(timeout);
   }, [transition, onChapter]);
+  function finishOverviewTurn() {
+    const next = overviewTurningTo.current;
+    if (next === null) return;
+    overviewTurningTo.current = null;
+    setOverviewTransition(null);
+    onPage(next);
+  }
+  useEffect(() => {
+    if (overviewTransition === null) return;
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onMotionChange = () => { if (motion.matches) finishOverviewTurn(); };
+    onMotionChange();
+    motion.addEventListener('change', onMotionChange);
+    const timeout = window.setTimeout(finishOverviewTurn, 500);
+    return () => { window.clearTimeout(timeout); motion.removeEventListener('change', onMotionChange); };
+  }, [overviewTransition, onPage]);
   const recommended = levels.find(l => l.id === currentId && !completed.includes(l.id) && levelUnlocked(l.id, completed))
     || levels.find(l => !completed.includes(l.id) && levelUnlocked(l.id, completed));
   function turnChapter(next: number | null) {
+    if (overviewTurningTo.current !== null) return;
     if (turningTo.current !== null && next !== null) return;
     if (next === chapter) return;
     if (next !== null && (!JOURNAL_CHAPTERS[next] || !levelUnlocked(levels[next * 15]?.id, completed))) return;
@@ -90,20 +110,26 @@ export function CampDiary({ completed, badges, currentId, chapter, page, onPage,
     else turnChapter(chapter + (dx < 0 ? 1 : -1));
   }
   function turnOverview(next: number) {
-    if (next < 0 || next >= Math.ceil(JOURNAL_CHAPTERS.length / 3) || next === page) return;
-    audio.feedback('page'); onPage(next);
+    if (overviewTurningTo.current !== null || next < 0 || next >= Math.ceil(JOURNAL_CHAPTERS.length / 3) || next === page) return;
+    audio.feedback('page');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { onPage(next); return; }
+    setDirection(next < page ? 'previous' : 'next');
+    overviewTurningTo.current = next;
+    setOverviewTransition(next);
   }
   return <>{chapter === null ? <MenuLandscapeBackground scene="diary"/> : <><JournalChapterBackground chapter={chapter}/>{transition !== null && <div className="journal-chapter-background-incoming"><JournalChapterBackground chapter={transition}/></div>}</>}<main className={`levels-page camp-diary ${chapter === null ? 'chapter-selection' : `chapter-levels diary-${JOURNAL_CHAPTERS[transition ?? chapter].theme}`}`}>
     <button className="back-link" data-sound={chapter === null ? 'close' : 'handled'} onClick={() => chapter === null ? onBack() : turnChapter(null)}><ArrowLeft size={18}/>{chapter === null ? t('返回营地') : t('返回板块选择')}</button>
-    {chapter === null ? <><div className="page-heading"><h1>{t('营地日记')}</h1><nav className="chapter-pagination" aria-label={t('营地日记')}>{page > 0 && <button type="button" className="previous-page" aria-label={t('上一页')} data-sound="handled" onClick={() => turnOverview(page - 1)}><img src={chapterArrow} alt="" draggable={false}/></button>}{page < Math.ceil(JOURNAL_CHAPTERS.length / 3) - 1 && <button type="button" data-sound="handled" aria-label={t('下一页')} className="next-page" onClick={() => turnOverview(page + 1)}><img src={chapterArrow} alt="" draggable={false}/></button>}</nav></div><AdventureBadgeStats badges={badges}/><div className={`chapter-grid ${page > 0 ? 'chapter-grid-second' : ''}`} onTouchStart={event => { const touch = event.touches[0]; touchStart.current = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY } : null; }} onTouchEnd={finishSwipe} onClickCapture={event => { if (performance.now() < suppressClickUntil.current) { event.preventDefault(); event.stopPropagation(); } }}>{JOURNAL_CHAPTERS.slice(page * 3, page * 3 + 3).map(({ name }, offset) => {
-      const index = page * 3 + offset;
+    {chapter === null ? <><div className="page-heading"><h1>{t('营地日记')}</h1><nav className="chapter-pagination" aria-label={t('营地日记')}>{navigationPage > 0 && <button type="button" className="previous-page" aria-label={t('上一页')} data-sound="handled" onClick={() => turnOverview(navigationPage - 1)}><img src={chapterArrow} alt="" draggable={false}/></button>}{navigationPage < Math.ceil(JOURNAL_CHAPTERS.length / 3) - 1 && <button type="button" data-sound="handled" aria-label={t('下一页')} className="next-page" onClick={() => turnOverview(navigationPage + 1)}><img src={chapterArrow} alt="" draggable={false}/></button>}</nav></div><AdventureBadgeStats badges={badges}/><div className="chapter-overview-viewport" data-direction={direction} aria-busy={overviewTransition !== null} onTouchStart={event => { const touch = event.touches[0]; touchStart.current = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY } : null; }} onTouchEnd={finishSwipe} onTouchCancel={() => { touchStart.current = null; }} onClickCapture={event => { if (performance.now() < suppressClickUntil.current) { event.preventDefault(); event.stopPropagation(); } }}>{(overviewTransition === null ? [page] : [page, overviewTransition]).map(overviewPage => <div key={overviewPage} className={`chapter-grid ${overviewPage > 0 ? 'chapter-grid-second' : ''}${overviewTransition === null ? '' : overviewPage === page ? ' overview-exiting' : ' overview-entering'}`} inert={overviewTransition !== null} aria-hidden={overviewTransition !== null && overviewPage === page} onAnimationEnd={event => {
+      if (event.target === event.currentTarget && event.animationName === 'journal-overview-in') finishOverviewTurn();
+    }}>{JOURNAL_CHAPTERS.slice(overviewPage * 3, overviewPage * 3 + 3).map(({ name }, offset) => {
+      const index = overviewPage * 3 + offset;
       const start = index * 15 + 1, locked = !levelUnlocked(start, completed);
       const count = completed.filter(id => id >= start && id < start + 15).length;
       return <button key={name} data-chapter={index} data-sound="handled" className={`chapter-card chapter-${index} ${locked ? 'locked' : ''} ${recommended && Math.floor((recommended.id - 1) / 15) === index ? 'recommended' : ''}`} disabled={locked} onClick={() => turnChapter(index)}>
         <ChapterArtwork chapter={index}/><span className="chapter-state">{locked ? <LockKeyhole size={23}/> : count === 15 ? <Check size={23}/> : <ArrowRight size={23}/>}</span>
         <span className="chapter-caption"><strong>{t(name)}</strong><span>{count}/15</span></span>
       </button>;
-    })}</div></> : <div className="journal-level-navigation" data-direction={direction} aria-busy={transition !== null} onTouchStart={event => {
+    })}</div>)}</div></> : <div className="journal-level-navigation" data-direction={direction} aria-busy={transition !== null} onTouchStart={event => {
       const touch = event.touches[0];
       touchStart.current = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY } : null;
       suppressClickUntil.current = 0;

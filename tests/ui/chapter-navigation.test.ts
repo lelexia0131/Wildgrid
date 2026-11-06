@@ -67,3 +67,15 @@ test('overview pages contain only three themes and icon-only navigation above th
     if(page===1) assert.match(markup,/data-chapter="3"/);
   }
 });
+
+test('Cloudsea and Day 46 stay locked until Day 45 is completed', () => {
+  const before45 = completed.filter((id: number) => id < 45);
+  assert.match(render(null, before45, 'zh', 1), /<button[^>]*data-chapter="3"[^>]*disabled/);
+  assert.match(render(2, before45), /<button[^>]*journal-chapter-next[^>]*disabled/);
+  assert.match(render(3, before45), /<button[^>]*data-level="46"[^>]*disabled/);
+  const after45 = [...before45, 45];
+  assert.doesNotMatch(render(null, after45, 'zh', 1), /<button[^>]*data-chapter="3"[^>]*disabled/);
+  assert.doesNotMatch(render(2, after45), /<button[^>]*journal-chapter-next[^>]*disabled/);
+  assert.doesNotMatch(render(3, after45), /<button[^>]*data-level="46"[^>]*disabled/);
+  assert.match(render(3, after45), /<button[^>]*data-level="47"[^>]*disabled/);
+});
