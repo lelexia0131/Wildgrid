@@ -13,9 +13,10 @@ import { rankProgress, SURVIVAL_DIFFICULTIES, SURVIVAL_RANKS } from '../../game-
 import { survivalTotals } from '../../game-modes/survival/survivalChallenge';
 import type { SurvivalRecord, SurvivalSave } from '../../game-modes/survival/survivalChallenge';
 import { audio } from '../../platform/audio/WildernessAudio';
+import type { SurvivalGenerationProgress } from '../../workers/workerTasks';
 
-export function SurvivalMenu({ save, generating, generationScene, error, onStart, onContinue, onBack, onCancel, onReview, canReview }: {
-  save: SurvivalSave; generating: number | null; generationScene: number; error: string;
+export function SurvivalMenu({ save, generating, generationProgress, generationScene, error, onStart, onContinue, onBack, onCancel, onReview, canReview }: {
+  save: SurvivalSave; generating: number | null; generationProgress?: SurvivalGenerationProgress | null; generationScene: number; error: string;
   onStart: (difficulty: number) => void; onContinue: () => void; onBack: () => void; onCancel: () => void;
   onReview: (record: SurvivalRecord) => void; canReview: (record: SurvivalRecord) => boolean;
 }) {
@@ -25,11 +26,13 @@ export function SurvivalMenu({ save, generating, generationScene, error, onStart
   const [records, setRecords] = useState(false);
   const recordsRef = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (records) recordsRef.current?.showModal(); }, [records]);
+  const progressText=generationProgress?t("第 {0} 次尝试 · 已等待 {1} 秒 · 最多 {2} 秒",generationProgress.round,Math.floor(generationProgress.elapsedMs/1000),generationProgress.limitMs/1000):undefined;
   if (generating !== null) return <main className="survival-generation-page" data-scene={generationScene} aria-busy="true">
     <div className="generation-background" aria-hidden="true"><JournalChapterBackground chapter={generationScene}/></div>
     <GenerationMap/>
     <GenerationMessage/><p>{t("难度 {0}", generating)}</p>
-    <div className="generation-progress" role="progressbar" aria-label={t("地图生成进度")}><i/></div>
+    {progressText && <p>{progressText}</p>}
+    <div className="generation-progress" role="progressbar" aria-label={t("地图生成进度")} aria-valuetext={progressText}><i/></div>
     <button className="secondary" data-sound="close" onClick={onCancel}><X size={18}/>{t("取消生成")}</button>
   </main>;
   const { counts, xp } = survivalTotals(save), { rank, next, fill: progress } = rankProgress(xp);

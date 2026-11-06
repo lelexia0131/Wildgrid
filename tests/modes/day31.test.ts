@@ -61,7 +61,7 @@ test('Days 31–45 are unique, retain all old maps and answers, and stay within 
   });
   assert.equal(digest(historicalLevels),preserved.levels);
   assert.equal(digest(Object.fromEntries(Object.entries(solutions).filter(([id])=>+id<=30))),preserved.solutions);
-  for(const level of levels.filter(l=>l.id>=31)) {
+  for(const level of levels.filter(l=>l.id>=31 && l.id<=45)) {
     const result=solveLevel(level,2,{maxNodes:350000});
     assert.equal(result.aborted,false,`Day ${level.id}`);assert.equal(result.count,1,`Day ${level.id}`);
     assert.equal(evaluate(level,solutions[level.id]).won,true);

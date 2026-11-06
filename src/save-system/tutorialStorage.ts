@@ -4,14 +4,14 @@ import { getLevelById } from '../engine';
 
 export const TUTORIAL_STORAGE_KEY = 'wildgrid-tutorial-v1';
 export const BASIC_LESSONS = ['orientation', 'placing', 'adjusting', 'rotation', 'completion'] as const;
-export const TUTORIAL_DAYS = [1, 2, 5, 8, 10, 11, 13, 19, 24, 31, 34, 38] as const;
+export const TUTORIAL_DAYS = [1, 2, 5, 8, 10, 11, 13, 19, 24, 31, 34, 38, 46, 49, 53] as const;
 export type BasicLesson = typeof BASIC_LESSONS[number];
 export type TutorialState = {
   version: 1; enabled: boolean; language: Language; basicComplete: boolean;
   basicSeen: BasicLesson[]; facilitiesSeen: FacilityKind[]; skipped: string[];
   daysSeen: number[]; activeStep?: { day: number; index: number };
 };
-const FACILITY_KINDS: FacilityKind[] = ['camp', 'fire', 'tower', 'picnic', 'cabin', 'foodTruck', 'powerTower', 'pool'];
+const FACILITY_KINDS: FacilityKind[] = ['camp', 'fire', 'tower', 'picnic', 'cabin', 'foodTruck', 'powerTower', 'pool', 'balloon', 'airship', 'kite'];
 let readFailed = false;
 export function freshTutorial(experienced = false, language: Language = 'zh'): TutorialState {
   return { version: 1, enabled: true, language, basicComplete: experienced, basicSeen: experienced ? [...BASIC_LESSONS] : [], facilitiesSeen: [], skipped: [], daysSeen: [] };

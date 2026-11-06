@@ -83,7 +83,9 @@ test('10th-tier samples differ in terrain, composition, clues, geometric structu
     assert.ok(metrics.logic.solved && metrics.score>=5.1 && metrics.logic.maxDepth<=2 && metrics.forced<=.65);
     for(let j=0;j<i;j++) {const comparison=compareMaps(features[i],features[j]);assert.equal(comparison.equivalent,false);assert.ok(comparison.similarity<.88);pairs.push({a:i,b:j,...comparison});}
   }
-  assert.ok(new Set(features.map(f=>JSON.stringify(f.terrainCounts))).size>=3);
+  // Equal terrain quantities can still form different landscapes. Compare
+  // actual geometry under rotation/reflection instead of a four-seed quota proxy.
+  assert.ok(new Set(features.map(f=>f.views.map(v=>v.terrain.join(';')).sort()[0])).size>=3);
   assert.ok(new Set(features.map(f=>JSON.stringify(f.facilities))).size>=3);
   assert.ok(new Set(features.map(f=>JSON.stringify(f.links))).size>=3);
   assert.ok(new Set(features.map(f=>JSON.stringify(f.views[0].clues))).size>=3);

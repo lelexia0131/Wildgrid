@@ -14,7 +14,7 @@ export function FootprintSurface({ shape, rotation }: { shape: Shape; rotation: 
     const after = { x:p.x+Math.sign(next.x-p.x)*8, y:p.y+Math.sign(next.y-p.y)*8 };
     return `${i ? 'L' : 'M'}${before.x} ${before.y}Q${p.x} ${p.y} ${after.x} ${after.y}`;
   }).join('')+'Z';
-  return <svg className="facility-footprint" data-shape={shape} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><defs><clipPath id={clip}><path d={outline}/></clipPath></defs><path className="footprint-fill" d={outline}/><path className="footprint-outline" d={outline} fill="none" vectorEffect="non-scaling-stroke" clipPath={`url(#${clip})`}/></svg>;
+  return <svg className="facility-footprint" data-shape={shape} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" aria-hidden="true"><defs><clipPath id={clip}><path d={outline}/></clipPath><linearGradient id={`${clip}-fill`} x2="0" y2="1"><stop stopColor="var(--footprint-top, var(--footprint-color))"/><stop offset="1" stopColor="var(--footprint-color)"/></linearGradient></defs><path className="footprint-fill" style={{fill:`url(#${clip}-fill)`}} d={outline}/><path className="footprint-outline" d={outline} fill="none" vectorEffect="non-scaling-stroke" clipPath={`url(#${clip})`}/></svg>;
 }
 
 function FootprintArt({ shape, rotation, children }: { shape: Shape; rotation: number; children: React.ReactNode }) {
@@ -149,6 +149,7 @@ function TentArt({ shape, rotation }: { shape: Shape; rotation: number }) {
 }
 
 export function FacilityArt({ kind, shape, rotation = 0 }: { kind: FacilityKind; shape: Shape; rotation?: number }) {
+  if (kind === 'airship' || kind === 'kite') return <SkyArt kind={kind} rotation={rotation}/>;
   if (shape === 'single') return <Art kind={kind}/>;
   if (kind === 'picnic') return <PicnicArt shape={shape} rotation={rotation}/>;
   if (kind === 'camp') return <TentArt shape={shape} rotation={rotation}/>;
@@ -156,7 +157,95 @@ export function FacilityArt({ kind, shape, rotation = 0 }: { kind: FacilityKind;
 }
 
 
-export function Art({ kind, className = '' }: { kind: FacilityKind | TerrainKind; className?: string }) {
+export function SkyArt({ kind, rotation = 0, className = '' }: { kind: 'balloon' | 'airship' | 'kite' | 'anchor' | 'cloud'; rotation?: number; className?: string }) {
+  const id = `sky-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
+  const length = kind === 'airship' ? 200 : kind === 'kite' ? 300 : 100, vertical = rotation % 2 !== 0 && length > 100;
+  const paint = (name: string) => `url(#${id}-${name})`;
+  return <svg className={`art sky-object ${className}`} data-sky-art={kind} viewBox={`0 0 ${vertical ? 100 : length} ${vertical ? length : 100}`} fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id={`${id}-linen`} x1=".1" y1="0" x2=".7" y2="1"><stop stopColor="#fff6d9"/><stop offset=".44" stopColor="#f4dfb1"/><stop offset="1" stopColor="#c8a271"/></linearGradient>
+      <linearGradient id={`${id}-coral`} x1=".1" y1="0" x2=".85" y2="1"><stop stopColor="#f4c099"/><stop offset=".5" stopColor="#df9b76"/><stop offset="1" stopColor="#ad7056"/></linearGradient>
+      <linearGradient id={`${id}-teal`} x1=".1" y1="0" x2=".8" y2="1"><stop stopColor="#c7dfd5"/><stop offset=".48" stopColor="#8bb8b5"/><stop offset="1" stopColor="#598c90"/></linearGradient>
+      <linearGradient id={`${id}-wood`} x1="0" y1="0" x2="1" y2="1"><stop stopColor="#e0bd8b"/><stop offset=".4" stopColor="#bd9061"/><stop offset="1" stopColor="#85684e"/></linearGradient>
+      <linearGradient id={`${id}-cloud`} x2=".3" y2="1"><stop stopColor="#fffdf1"/><stop offset=".6" stopColor="#edf5f2"/><stop offset="1" stopColor="#b2d0db"/></linearGradient>
+      <clipPath id={`${id}-envelope`}><path d="M20 33C17 13 34 5 49 5S82 15 80 34C79 48 68 58 60 69H40C33 59 21 49 20 33Z"/></clipPath>
+    </defs>
+    <g transform={vertical ? `translate(100 0) rotate(90)` : undefined} strokeLinecap="round" strokeLinejoin="round">
+      {kind === 'balloon' && <>
+        <path d="m38 65 4 15m20-15-4 15M45 68l1 11m9-11-1 11" stroke="#947453" strokeWidth="1.4"/>
+        <path d="M20 33C17 13 34 5 49 5S82 15 80 34C79 48 68 58 60 69H40C33 59 21 49 20 33Z" fill={paint('coral')} stroke="#a47b61" strokeWidth="1.2"/>
+        <g clipPath={`url(#${id}-envelope)`}>
+          <path d="M49 5C26 22 32 47 44 69H55C68 47 71 23 49 5Z" fill={paint('linen')}/>
+          <path d="M28 13C22 33 31 51 41 67L36 69C20 51 10 28 28 13Z" fill="#fff1c7" opacity=".54"/>
+          <path d="M64 10C77 29 67 52 59 68L67 68C87 44 87 24 64 10Z" fill="#9f654e" opacity=".18"/>
+          <path d="M49 5C43 27 44 48 48 69M49 5C65 25 61 50 55 69M49 5C30 24 35 51 44 69" stroke="#a87e5b" strokeWidth=".7" opacity=".6"/>
+          <path d="M22 31Q48 38 79 31M29 50Q50 57 72 48" stroke="#fff5d8" strokeWidth=".65" opacity=".65"/>
+          <path d="M31 15q-6 6-6 14" stroke="#fff9e2" strokeWidth="3.2" opacity=".72"/>
+        </g>
+        <path d="M40 67h20l-2 5H43Z" fill="#98734f"/><path d="M44 69h11" stroke="#eacb93" strokeWidth="1.5"/>
+        <path d="M39 78h23l-3 15-16 2-5-4Z" fill={paint('wood')} stroke="#947453" strokeWidth="1.1"/>
+        <path d="m55 79 7-1-3 15-6 1Z" fill="#8b6e50" opacity=".35"/>
+        <path d="M40 81l20-1m-18 5 17-1m-16 5 15-1m-12-6 1 11m4-12v12m4-12-1 12" stroke="#f5d4a0" strokeWidth=".8" opacity=".75"/>
+        <path d="M38 78q10-5 25-1l-1 4q-12-3-23 2Z" fill="#dfbd8b" stroke="#9e7c58" strokeWidth=".8"/>
+        <path d="M47 77v-4h7v4" stroke="#776751" strokeWidth="1.5"/>
+        <path d="m41 85-3 3 2 5 4-1m14-8 4 2-1 5-4-1" fill="#ead2a3" stroke="#a88a61" strokeWidth=".7"/>
+      </>}
+      {kind === 'airship' && <>
+        <path d="m153 30 25-16-2 22 15 12-28 5m-12 3 23 20-1-20" fill={paint('teal')} stroke="#668d87" strokeWidth="1.2"/>
+        <path d="m157 31 18-12-5 17m-12 21 13 12" stroke="#ecf3d9" strokeWidth="1.3"/>
+        <path d="M12 43C19 12 115 1 161 31q16 12 0 26C115 86 22 74 12 43Z" fill={paint('linen')} stroke="#9f9976" strokeWidth="1.3"/>
+        <path d="M13 43q69-29 156 0-77 27-156 0Z" fill={paint('teal')}/>
+        <path d="M26 30q59-26 121-4M25 57q61 24 125 4" stroke="#fff9df" strokeWidth="2" opacity=".85"/>
+        <path d="M45 19q-19 24 2 48m30-54q-16 28 1 59m31-58q-12 28 1 55m27-45q-5 17 1 37" stroke="#a3a68b" strokeWidth=".8" opacity=".6"/>
+        <path d="M16 43h149" stroke="#e6eed6" strokeWidth=".7" opacity=".7"/>
+        <path d="m65 69 5 11m45-10-5 10" stroke="#9c8762" strokeWidth="1.2"/>
+        <path d="m66 78 45-1 8 8-7 7-36 1-9-6Z" fill={paint('wood')} stroke="#8f785b" strokeWidth="1.1"/>
+        <path d="M73 79h30v7H74Z" fill="#a9c9c6" stroke="#7b9f9a" strokeWidth=".8"/>
+        <path d="M82 79v7m10-7v7m11-6 7 5-7 1Z" stroke="#f4e4bb" strokeWidth="1.3"/>
+        <path d="M77 90h32" stroke="#f3d49b" strokeWidth="1"/>
+        <path d="M118 84h11m-2-8v16" stroke="#647e76" strokeWidth="1.7"/><ellipse cx="127" cy="84" rx="3" ry="10" stroke="#b5baa1" strokeWidth="1"/>
+        <path d="m88 92 1 4h10l1-4" fill="#dbc18d" stroke="#a58d65" strokeWidth=".7"/>
+        <circle cx="28" cy="43" r="2" fill="#f9eed2"/><circle cx="154" cy="43" r="1.5" fill="#f5e8c5"/>
+      </>}
+      {kind === 'kite' && <>
+        <path d="M109 50c31-33 48 40 78 1s57 27 95-9" stroke="#738f8933" strokeWidth="7" transform="translate(0 2)"/>
+        <path d="M109 50c31-33 48 40 78 1s57 27 95-9" stroke="#d5ac7d" strokeWidth="4"/>
+        <path d="M109 48c31-33 48 40 78 1s57 27 95-9" stroke="#f7e2b4" strokeWidth="1.1"/>
+        {[155,207,256].map((x,i)=><g key={x} transform={`translate(${x} ${[53,48,52][i]}) rotate(${[25,-20,18][i]})`}><path d="M0 0-12-8-8 10 0 3 11 10 13-8Z" fill={i===1?paint('teal'):paint('coral')} stroke="#a18c69" strokeWidth=".8"/><path d="m-8-5 7 6 10-5" stroke="#f8e5bd" strokeWidth="1"/></g>)}
+        <path d="m14 48 47-41 53 41-52 45Z" fill={paint('linen')} stroke="#7c927f" strokeWidth="1.4"/>
+        <path d="m14 48 47-41 1 86Z" fill={paint('teal')}/>
+        <path d="m61 7 53 41-52 45V49Z" fill={paint('coral')} opacity=".76"/>
+        <path d="m22 48 39-33 44 33-43 36Z" stroke="#fff3d0" strokeWidth=".9" strokeDasharray="2 3"/>
+        <path d="M14 48h100M61 7l1 86" stroke="#8e7955" strokeWidth="1.4"/>
+        <path d="M17 47h94M60 10l1 79" stroke="#f5e5bc" strokeWidth=".8"/>
+        <circle cx="62" cy="49" r="9" fill={paint('wood')} stroke="#f7e2b7" strokeWidth="1.2"/>
+        <circle cx="62" cy="49" r="5.5" fill="#f7efd6"/><path d="m62 49 2-3m-6 3h1m6 0h1" stroke="#587e7d" strokeWidth="1"/>
+        <path d="M62 93q14-1 22-8" stroke="#997d58" strokeWidth="1.2"/>
+      </>}
+      {kind === 'anchor' && <>
+        <ellipse cx="50" cy="82" rx="29" ry="7" fill="#648469" opacity=".18"/>
+        <path d="M36 26 58 22l8 8-3 48-23 5-5-7Z" fill={paint('wood')} stroke="#8d7152" strokeWidth="1.4"/>
+        <path d="m58 23 8 7-3 48-8 2Z" fill="#8e704e" opacity=".38"/>
+        <ellipse cx="47" cy="26" rx="12" ry="5" transform="rotate(-8 47 26)" fill="#ebd2a1" stroke="#a5875e" strokeWidth="1"/>
+        <ellipse cx="47" cy="26" rx="6" ry="2.4" fill="none" stroke="#ba986d" strokeWidth=".9"/>
+        <path d="M41 34v38m7-38-1 39m7-41-1 42" stroke="#f0cd94" strokeWidth="1" opacity=".65"/>
+        <path d="M29 48c0-15 45-21 47-4 1 12-42 24-46 9m0 1c1 11 45 8 45-4" stroke="#9d825b" strokeWidth="6"/>
+        <path d="M29 46c0-15 45-21 47-4 1 12-42 24-46 9m0 1c1 11 45 8 45-4" stroke="#f3dbab" strokeWidth="4"/>
+        <path d="m72 48 12 11-10 3-3-13" stroke="#e8c995" strokeWidth="3"/>
+      </>}
+      {kind === 'cloud' && <>
+        <ellipse cx="51" cy="75" rx="31" ry="5" fill="#6f9aac" opacity=".12"/>
+        <path d="M16 70C1 64 5 42 21 40c0-21 29-32 42-14 13-8 26 1 27 14 17 8 12 31-5 33H26Z" fill={paint('cloud')} stroke="#8baeb9" strokeWidth="1.4"/>
+        <path d="M10 57c5 15 16 11 23 13h49q12-1 14-9" stroke="#a6c9d5" strokeWidth="2" opacity=".5"/>
+        <path d="M16 47q5-5 12-3m2-9q11-15 25-3m15 5q10-5 14 5" stroke="#fffef4" strokeWidth="2.7" opacity=".9"/>
+        <path d="M29 61q16 5 31 1" stroke="#fffdf1" strokeWidth="1.4" opacity=".7"/>
+      </>}
+    </g>
+  </svg>;
+}
+
+export function Art({ kind, className = '' }: { kind: FacilityKind | TerrainKind | 'anchor' | 'cloud'; className?: string }) {
+  if (kind === 'balloon' || kind === 'airship' || kind === 'kite' || kind === 'anchor' || kind === 'cloud') return <SkyArt kind={kind} className={className}/>;
   return <img className={`art ${className}`} src={art.object(kind)} alt="" draggable={false} aria-hidden="true"/>;
 }
 

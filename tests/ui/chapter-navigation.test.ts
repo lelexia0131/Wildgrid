@@ -13,9 +13,9 @@ const { JOURNAL_CHAPTERS } = await server.ssrLoadModule('/src/ui/components/jour
 const { LanguageContext } = await server.ssrLoadModule('/src/localization/LanguageContext.tsx');
 const { levels } = await server.ssrLoadModule('/src/engine/levels.ts');
 const completed = levels.map((level: { id: number }) => level.id);
-const render = (chapter: number | null, progress = completed, language = 'zh') => renderToStaticMarkup(
+const render = (chapter: number | null, progress = completed, language = 'zh', page = 0) => renderToStaticMarkup(
   createElement(LanguageContext.Provider, { value: language }, createElement(CampDiary, {
-    chapter, completed: progress, badges: {}, currentId: 1, onChapter: () => {}, onStart: () => {}, onBack: () => {},
+    chapter, page, onPage: () => {}, completed: progress, badges: {}, currentId: 1, onChapter: () => {}, onStart: () => {}, onBack: () => {},
   })),
 );
 
@@ -54,4 +54,16 @@ test('arrow labels support both languages without adding visible text', () => {
   }
   const svg = readFileSync('src/assets/icons/tool-chapter-next.svg', 'utf8');
   assert.doesNotMatch(svg, /<text|<script|<image|href=/);
+});
+
+test('overview pages contain only three themes and icon-only navigation above the badges', () => {
+  for(const page of [0,1]) {
+    const markup=render(null,completed,'zh',page);
+    const nav=markup.match(/<nav class="chapter-pagination"[^>]*>[\s\S]*?<\/nav>/)![0];
+    assert.match(nav,/tool-chapter-next\.svg/);
+    assert.doesNotMatch(nav,/>上一页<|>下一页</);
+    assert.ok(markup.indexOf('chapter-pagination')<markup.indexOf('首次通关徽章统计'));
+    assert.equal((markup.match(/data-chapter="/g)||[]).length,page===0?3:1);
+    if(page===1) assert.match(markup,/data-chapter="3"/);
+  }
 });

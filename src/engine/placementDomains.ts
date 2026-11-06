@@ -1,5 +1,5 @@
-import { adjacent, occupied, offsets } from './boardGeometry';
-import { campConnections, facilityConflict, terrainConflict, TERRAIN_REQUIREMENTS } from './placementRules';
+import { adjacent, occupied, offsets, solverBoard, solverCell, fixedCells } from './boardGeometry';
+import { campConnections, evaluate, facilityConflict, terrainConflict, TERRAIN_REQUIREMENTS } from './placementRules';
 import { facilities } from './facilityRegistry';
 import type { Cell, FacilityKind, Level, Piece, Placement } from './types';
 
@@ -11,26 +11,27 @@ const terrainGeometry = new Map<string,{forbidden:bigint;required:bigint}>();
 export const boardCells = (size: number) => Array.from({ length: size * size }, (_, i) => ({ r: Math.floor(i / size), c: i % size }));
 
 // Shared immutable geometry: no terrain, IDs or seed-specific state is cached.
-export function placementGeometry(piece: Piece, size: number): Position[] {
-  const key = `${size}/${piece.kind}/${piece.shape}`;
+export function placementGeometry(piece: Piece, size: number, layered = false): Position[] {
+  const key = `${size}/${piece.kind}/${piece.shape}/${layered}`;
   const cached = cache.get(key);
   if (cached) return cached;
-  const board = boardCells(size), seen = new Set<string>(), positions: Position[] = [];
+  const board = boardCells(size), seen = new Set<string>(), positions: Position[] = [], dimension = layered ? size * 2 : size;
   for (let rotation = 0; rotation < 4; rotation++) {
     const signature = offsets(piece.shape, rotation).map(p => `${p.r},${p.c}`).sort().join(';');
     if (seen.has(signature)) continue;
     seen.add(signature);
     for (const origin of board) {
-      const at = { ...origin, rotation, id: '' }, cells = occupied(piece, at);
-      if (cells.some(p => p.r >= size || p.c >= size)) continue;
-      const rows = Array<number>(size).fill(0), cols = Array<number>(size).fill(0);
+      const at = { ...origin, rotation, id: '' }, footprint = occupied(piece, at);
+      if (footprint.some(p => p.r >= size || p.c >= size)) continue;
+      const cells = footprint.map(p => solverCell(p, piece.kind, size, layered));
+      const rows = Array<number>(dimension).fill(0), cols = Array<number>(dimension).fill(0);
       for (const cell of cells) { rows[cell.r]++; cols[cell.c]++; }
       const forbidden = facilities.flatMap(({kind}) => {
-        const mask = board.reduce((m, p) => facilityConflict(piece.kind, cells, kind, [p]) ? m | cellBit(p, size) : m, 0n);
+        const mask = board.reduce((m, p) => facilityConflict(piece.kind, footprint, kind, [p]) ? m | cellBit(solverCell(p, kind, size, layered), dimension) : m, 0n);
         return mask ? [{ kind, mask }] : [];
       });
-      const connections = campConnections(piece.kind, cells, board, []).map(link => ({ camp: cellBit(link.camp, size), gap: link.gap ? cellBit(link.gap, size) : 0n }));
-      positions.push({ at, cells, rows, cols, forbidden, connections, mask: cells.reduce((m, p) => m | cellBit(p, size), 0n) });
+      const connections = campConnections(piece.kind, footprint, board, []).map(link => ({ camp: cellBit(link.camp, dimension), gap: link.gap ? cellBit(link.gap, dimension) : 0n }));
+      positions.push({ at, cells, rows, cols, forbidden, connections, mask: cells.reduce((m, p) => m | cellBit(p, dimension), 0n) });
     }
   }
   cache.set(key, positions);
@@ -66,6 +67,7 @@ function positionsWithTerrain(piece: Piece, level: Level, masks:ReturnType<typeo
 }
 
 export function staticPositions(piece: Piece, level: Level): Position[] {
+  if (level.sky) return placementGeometry(piece, level.size, true).filter(p => evaluate(level, [{ ...p.at, id: piece.id }], { staticOnly: true }).status !== 'INVALID');
   return positionsWithTerrain(piece,level,terrainMasks(piece.kind,level));
 }
 
@@ -73,13 +75,13 @@ export type PlacementGroup = { piece: Piece; ids: string[]; domain: Candidate[] 
 export function placementDomains(level: Level): PlacementGroup[] {
   const groups: PlacementGroup[] = [];
   const constraints=new Map<FacilityKind,ReturnType<typeof terrainMasks>>();
-  const terrainMask = level.terrain.reduce((m,p) => m | cellBit(p,level.size),0n);
+  const terrainMask = fixedCells(level, 'ground').reduce((m,p) => m | cellBit(p,solverBoard(level).size),0n);
   for (const piece of level.pieces) {
     const existing = groups.find(g => g.piece.kind === piece.kind && g.piece.shape === piece.shape);
     if (existing) { existing.ids.push(piece.id); continue; }
     let masks=constraints.get(piece.kind);
     if(!masks) {masks=terrainMasks(piece.kind,level);constraints.set(piece.kind,masks);}
-    groups.push({ piece, ids: [piece.id], domain: positionsWithTerrain(piece, level,masks).map(p => ({ ...p,
+    groups.push({ piece, ids: [piece.id], domain: (level.sky ? staticPositions(piece, level) : positionsWithTerrain(piece, level,masks)).map(p => ({ ...p,
       at: { ...p.at, id: piece.id },
       connections: p.connections.filter(link => !(link.gap & terrainMask)),
     })) });

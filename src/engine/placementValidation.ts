@@ -1,4 +1,4 @@
-import { key, occupied } from './boardGeometry';
+import { key, occupied, facilityLayer, fixedCells } from './boardGeometry';
 import { placementBlock } from './placementRules';
 import type { Level, Placement } from './types';
 
@@ -31,7 +31,7 @@ export function validatePlacements(level: Level, value: unknown, mode: 'strict' 
         // Classify the rules module's rejection for mode-specific error text.
         const cells = occupied(piece, placement);
         if (cells.some(cell => cell.r < 0 || cell.c < 0 || cell.r >= level.size || cell.c >= level.size)) error = { code: 'bounds', id: piece.id, message };
-        else if (cells.some(cell => level.terrain.some(terrain => key(cell) === key(terrain)))) error = { code: 'terrain', id: piece.id, message };
+        else if (cells.some(cell => fixedCells(level, facilityLayer(piece.kind)).some(terrain => key(cell) === key(terrain)))) error = { code: 'terrain', id: piece.id, message };
         else {
           const other = placements.find(other => occupied(level.pieces.find(item => item.id === other.id)!, other).some(cell => cells.some(candidate => key(cell) === key(candidate))));
           error = { code: 'overlap', id: piece.id, otherId: other?.id, message };

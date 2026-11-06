@@ -21,7 +21,7 @@ Wildgrid/
 │   │   ├── solver.ts                   位集合搜索、唯一解检查和搜索统计
 │   │   ├── mapBlueprint.ts             编辑归一化、完整蓝图校验、WG1编解码
 │   │   ├── mapGeneration.ts            原有随机搜索与修复算法、预算和指纹
-│   │   └── levels.ts                   45关和参考答案的ID查询
+│   │   └── levels.ts                   60关和参考答案的ID查询
 │   ├── game-modes/
 │   │   ├── adventure/adventureProgress.ts 主线解锁、完成和重玩/恢复决策
 │   │   ├── sandbox/
@@ -55,7 +55,7 @@ Wildgrid/
 │   │   ├── sandbox.worker.ts          调用Engine自检，不维护规则副本
 │   │   ├── survival.worker.ts         调用求生入口，最终复用Engine生成算法
 │   │   └── hint.worker.ts             调用公共冒险提示分析，复用规则与求解器
-│   ├── game-data/{levels,solutions}.json 原45关和参考答案（内容保留）
+│   ├── game-data/{levels,solutions}.json 60关和参考答案（前45关保留）
 │   ├── localization/                 中英文、反馈/手册文本、日期与LanguageContext
 │   └── assets/                       art.ts/art.css统一引用，字体、品牌、背景、插画、面板与徽章
 ├── public/                            PWA图标、manifest与字体许可证
@@ -166,7 +166,9 @@ flowchart TD
 
 所有模块另可依赖 `types.ts`。内部直接引用具体实现，不反向引用自己的barrel。外部只能导入 `engine` 或 `engine/index`。`facilityConflict`、`terrainConflict`、`campConnections`和连接要求表只供内部编译优化使用；公共出口不导出它们。
 
-Solver仍用原位集合剪枝、候选域和相同设施去排列策略；正式规则提供几何和设施约束，完整候选继续 `evaluate` 复核。没有替换高性能算法。生成保留十档约束、评分公式及节点/时间预算；每次构造使用由请求种子与尝试序号派生的独立随机流，避免一次局部修复消耗的随机数改变后续构造。模式提供设施数量和多格要求，XP和奖励留在模式层。
+Solver仍用原位集合剪枝、候选域和相同设施去排列策略；正式规则提供几何和设施约束，完整候选继续 `evaluate` 复核。生成保留十档约束、推理难度评分及节点/时间预算；原布局与局部组合使用各自的种子序列，避免组合尝试跳过原布局序列中的候选，也避免一次局部修复消耗的随机数改变后续构造。模式提供设施数量和多格要求，XP和奖励留在模式层。
+
+`facilityConstruction.ts`内置五类三件活动组合及低难度营地＋篝火双件组合，支持营地形状变化、旋转和镜像。每图最多两个不同主题，组合前缀与自由布局共享240节点预算；后续设施和地形修复保留组合成员及餐车草地间隔。组合只影响构造和候选排序，不成为求解器的隐藏约束；最终仍用完整正式规则验证。歧义检查按不可变候选域数组复用位置索引，域替换后使用新索引。美感评分同时考察草地连贯性及无关建筑的过度接触。
 
 ## Session状态与放置调用链
 
@@ -259,7 +261,7 @@ flowchart TD
 
 蓝图验证和WG1是通用地图数据契约，继续由Engine统一实现；地图导入/导出的交互、唯一解任务及剪贴板由沙盒Hook协调。Codec不执行奖励/解锁计算。教学课程与DOM目标属于UI，只有偏好读取/写入和旧进度经验推导在存档系统。
 
-`workerTasks.ts`服务沙盒自检、求生生成、冒险提示三个消费者。每个任务实例同时只有一个Worker；完成/错误/取消/超时释放Worker和计时器，旧Worker的迟到或重复消息通过实例身份被忽略。求生每轮核心预算为2800/5000/7600ms，外围额外预留400ms且不超过8000ms；搜索失败或本轮超时会换种子继续，直到成功或用户取消。后台暂停会终止CPU工作并保留本轮种子和剩余预算。沙盒自检没有新增固定超时；提示核心预算2500ms，Worker兜底6000ms。剪贴板异步完成仍由沙盒revision检查，编辑/离开后不会发布旧导出反馈。
+`workerTasks.ts`服务沙盒自检、求生生成、冒险提示三个消费者。每个任务实例同时只有一个Worker；完成/错误/取消/超时释放Worker和计时器，旧Worker的迟到或重复消息通过实例身份被忽略。求生每轮核心预算为2800/5000/7600ms，外围额外预留400ms且不超过8000ms；搜索失败或本轮超时会换种子继续，整个会话累计前台计算最多30000ms。界面显示实际尝试轮数和累计等待时间，达到总上限后停止并保留旧挑战。后台暂停会终止CPU工作并保留本轮种子、本轮剩余预算和会话剩余预算，后台时间不计入等待上限。沙盒自检没有新增固定超时；提示核心预算2500ms，Worker兜底6000ms。剪贴板异步完成仍由沙盒revision检查，编辑/离开后不会发布旧导出反馈。
 
 ## 公共Engine API参数与结果
 
@@ -283,7 +285,7 @@ flowchart TD
 | placementHints | level,placements,piece,rotation,baselineIssues | 坐标→Status；复用evaluate预测落点 |
 | getLevelById | id | 只读Level或undefined；稳定ID查询 |
 | getSolution | id | 只读Placement[]或undefined；参考答案 |
-| levels / solutions | 只读查询数据，无参数 | 45关列表/ID答案表；原公开名称保留 |
+| levels / solutions | 只读查询数据，无参数 | 60关列表/ID答案表；原公开名称保留 |
 | facilities / facilityLibrary | 定义列表/稳定模板，无参数 | UI展示、合法设施形状和WG1模板；不执行规则 |
 | facilityNames / facilityTips / shapeNames / terrainNames | 只读查询元数据，无参数 | 名称和说明；原公开名称保留 |
 | solveLevel | level,limit=2,{deadline?,maxNodes?}={} | SolverResult；count/solutions/aborted及搜索统计 |
@@ -344,3 +346,11 @@ const { placements, result } = getState(session); // 不得原地修改placement
 `generationReasoningBudget`统一生成与独立复核的假设次数、深度和未解决候选阈值。`generationDifficulty`接收明确难度（默认10难），结果区分`accepted`、`rejected`和`budget-exhausted`；生成验收与复核共用相同评分和拒绝标准，耗尽预算不等于地图不合法或不唯一。独立复核不再另用200ms/24次假设的隐藏短预算。
 
 冒险提示从公共Engine入口调用。逻辑演绎最多使用总预算的15%，寻找完整解最多使用前80%，必要性证明使用剩余预算并限制单次节点数。经过当前规则及已有落点验证的参考答案或已完成演绎结果可以作为可行解复用；只有排除对应足迹后的穷尽搜索证明无解，才标为必然放置。证明未完成时仍返回已验证的可行步骤。提示关闭后的棋盘变更仍使结果失效；悬停和其他无关重渲染复用已记忆的上下文。
+
+## 云海驻营双层扩展
+
+`Level.sky` 为可选字段，含独立的 `rows/cols`、地面固定 `anchors` 与天空固定 `clouds`。设施层由稳定 kind 决定，Placement 仍保存原8×8坐标和实例ID。几何模块提供层查询；正式规则统一负责同层占用、跨层禁飞及补给关系。旧关卡不带sky时，evaluate的返回结构与既有语义完全保留。
+
+求解候选把两层放入互不相交的虚拟象限，分别统计行列并使用独立位集合；最终答案仍用原坐标经evaluate复核。逻辑提示使用同一候选域，展示前还原坐标并携带层信息。地面随机生成和WG1继续采用原单层模板库，`adventureFacilityLibrary`仅为新增冒险设施提供展示模板。
+
+主线v1存档允许可选 `layers` 视角记录；旧记录默认ground。UI只显示当前层，切层不产生棋盘历史，撤销根据前后Placement差异显示实际受影响的层。

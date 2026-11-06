@@ -2290,5 +2290,851 @@
       "c": 4,
       "rotation": 0
     }
+  ],
+  "46": [
+    {
+      "id": "camp-1",
+      "r": 2,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-2",
+      "r": 2,
+      "c": 4,
+      "rotation": 0
+    }
+  ],
+  "47": [
+    {
+      "id": "camp-1",
+      "r": 2,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 5,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "fire-3",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-4",
+      "r": 2,
+      "c": 3,
+      "rotation": 0
+    }
+  ],
+  "48": [
+    {
+      "id": "camp-1",
+      "r": 2,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 5,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "fire-3",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "tower-4",
+      "r": 6,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-5",
+      "r": 2,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-6",
+      "r": 5,
+      "c": 4,
+      "rotation": 0
+    }
+  ],
+  "49": [
+    {
+      "id": "camp-1",
+      "r": 3,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-2",
+      "r": 3,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "airship-3",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    }
+  ],
+  "50": [
+    {
+      "id": "camp-1",
+      "r": 1,
+      "c": 2,
+      "rotation": 1
+    },
+    {
+      "id": "camp-2",
+      "r": 5,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "fire-3",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-4",
+      "r": 2,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "airship-5",
+      "r": 1,
+      "c": 2,
+      "rotation": 1
+    }
+  ],
+  "51": [
+    {
+      "id": "camp-1",
+      "r": 2,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 5,
+      "c": 3,
+      "rotation": 1
+    },
+    {
+      "id": "fire-3",
+      "r": 2,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "tower-4",
+      "r": 6,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-5",
+      "r": 2,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "airship-6",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "airship-7",
+      "r": 5,
+      "c": 3,
+      "rotation": 1
+    }
+  ],
+  "52": [
+    {
+      "id": "camp-1",
+      "r": 1,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 5,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "fire-3",
+      "r": 2,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "foodTruck-4",
+      "r": 3,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "powerTower-5",
+      "r": 6,
+      "c": 0,
+      "rotation": 0
+    },
+    {
+      "id": "pool-6",
+      "r": 4,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-7",
+      "r": 2,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "airship-8",
+      "r": 5,
+      "c": 3,
+      "rotation": 0
+    }
+  ],
+  "53": [
+    {
+      "id": "camp-1",
+      "r": 4,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "fire-2",
+      "r": 4,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "kite-3",
+      "r": 2,
+      "c": 3,
+      "rotation": 0
+    }
+  ],
+  "54": [
+    {
+      "id": "camp-1",
+      "r": 2,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 6,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "fire-3",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-4",
+      "r": 1,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "airship-5",
+      "r": 6,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "kite-6",
+      "r": 2,
+      "c": 4,
+      "rotation": 1
+    }
+  ],
+  "55": [
+    {
+      "id": "camp-1",
+      "r": 1,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 5,
+      "c": 3,
+      "rotation": 1
+    },
+    {
+      "id": "fire-3",
+      "r": 3,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "tower-4",
+      "r": 7,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "picnic-5",
+      "r": 6,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-6",
+      "r": 2,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "airship-7",
+      "r": 5,
+      "c": 3,
+      "rotation": 1
+    },
+    {
+      "id": "kite-8",
+      "r": 1,
+      "c": 5,
+      "rotation": 1
+    }
+  ],
+  "56": [
+    {
+      "id": "camp-1",
+      "r": 1,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 4,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "camp-3",
+      "r": 2,
+      "c": 5,
+      "rotation": 1
+    },
+    {
+      "id": "camp-4",
+      "r": 6,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "fire-5",
+      "r": 2,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "fire-6",
+      "r": 6,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "tower-7",
+      "r": 4,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "tower-8",
+      "r": 7,
+      "c": 0,
+      "rotation": 0
+    },
+    {
+      "id": "picnic-9",
+      "r": 6,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "foodTruck-10",
+      "r": 6,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "pool-11",
+      "r": 7,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-12",
+      "r": 1,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-13",
+      "r": 5,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "airship-14",
+      "r": 1,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "kite-15",
+      "r": 3,
+      "c": 7,
+      "rotation": 1
+    }
+  ],
+  "57": [
+    {
+      "id": "camp-1",
+      "r": 1,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 1,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "camp-3",
+      "r": 5,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "camp-4",
+      "r": 6,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "fire-5",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "fire-6",
+      "r": 2,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "tower-7",
+      "r": 3,
+      "c": 7,
+      "rotation": 0
+    },
+    {
+      "id": "tower-8",
+      "r": 5,
+      "c": 0,
+      "rotation": 0
+    },
+    {
+      "id": "picnic-9",
+      "r": 7,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "foodTruck-10",
+      "r": 4,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "powerTower-11",
+      "r": 7,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "pool-12",
+      "r": 5,
+      "c": 7,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-13",
+      "r": 1,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-14",
+      "r": 4,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "airship-15",
+      "r": 5,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "kite-16",
+      "r": 4,
+      "c": 0,
+      "rotation": 1
+    }
+  ],
+  "58": [
+    {
+      "id": "camp-1",
+      "r": 1,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 2,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "camp-3",
+      "r": 5,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "camp-4",
+      "r": 6,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "fire-5",
+      "r": 2,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "fire-6",
+      "r": 1,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "tower-7",
+      "r": 1,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "tower-8",
+      "r": 5,
+      "c": 7,
+      "rotation": 0
+    },
+    {
+      "id": "cabin-9",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "picnic-10",
+      "r": 7,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "foodTruck-11",
+      "r": 4,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "powerTower-12",
+      "r": 7,
+      "c": 0,
+      "rotation": 0
+    },
+    {
+      "id": "pool-13",
+      "r": 3,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-14",
+      "r": 3,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-15",
+      "r": 6,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "airship-16",
+      "r": 5,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "kite-17",
+      "r": 0,
+      "c": 3,
+      "rotation": 0
+    }
+  ],
+  "59": [
+    {
+      "id": "camp-1",
+      "r": 1,
+      "c": 2,
+      "rotation": 1
+    },
+    {
+      "id": "camp-2",
+      "r": 1,
+      "c": 5,
+      "rotation": 1
+    },
+    {
+      "id": "camp-3",
+      "r": 4,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "camp-4",
+      "r": 6,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "fire-5",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "fire-6",
+      "r": 5,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "tower-7",
+      "r": 1,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "tower-8",
+      "r": 6,
+      "c": 7,
+      "rotation": 0
+    },
+    {
+      "id": "cabin-9",
+      "r": 3,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "picnic-10",
+      "r": 7,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "foodTruck-11",
+      "r": 6,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "powerTower-12",
+      "r": 6,
+      "c": 0,
+      "rotation": 0
+    },
+    {
+      "id": "pool-13",
+      "r": 7,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-14",
+      "r": 0,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-15",
+      "r": 2,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "airship-16",
+      "r": 0,
+      "c": 2,
+      "rotation": 1
+    },
+    {
+      "id": "airship-17",
+      "r": 6,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "kite-18",
+      "r": 3,
+      "c": 7,
+      "rotation": 1
+    }
+  ],
+  "60": [
+    {
+      "id": "camp-1",
+      "r": 1,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "camp-2",
+      "r": 4,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "camp-3",
+      "r": 2,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "camp-4",
+      "r": 6,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "camp-5",
+      "r": 0,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "fire-6",
+      "r": 2,
+      "c": 1,
+      "rotation": 0
+    },
+    {
+      "id": "fire-7",
+      "r": 6,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "tower-8",
+      "r": 4,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "tower-9",
+      "r": 7,
+      "c": 0,
+      "rotation": 0
+    },
+    {
+      "id": "cabin-10",
+      "r": 3,
+      "c": 2,
+      "rotation": 0
+    },
+    {
+      "id": "picnic-11",
+      "r": 6,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "foodTruck-12",
+      "r": 6,
+      "c": 3,
+      "rotation": 0
+    },
+    {
+      "id": "pool-13",
+      "r": 7,
+      "c": 6,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-14",
+      "r": 1,
+      "c": 4,
+      "rotation": 0
+    },
+    {
+      "id": "balloon-15",
+      "r": 5,
+      "c": 5,
+      "rotation": 0
+    },
+    {
+      "id": "airship-16",
+      "r": 4,
+      "c": 1,
+      "rotation": 1
+    },
+    {
+      "id": "airship-17",
+      "r": 0,
+      "c": 6,
+      "rotation": 1
+    },
+    {
+      "id": "kite-18",
+      "r": 3,
+      "c": 7,
+      "rotation": 1
+    }
   ]
 }

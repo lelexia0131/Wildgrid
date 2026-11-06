@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import { createSession, dispatch } from '../../engine';
 import type { Snapshot } from '../../engine';
 
-export function useGameSession(initial: () => Snapshot, onChange: () => void, onRestore: () => void, onAction?: (type: 'undo' | 'redo') => void) {
+export function useGameSession(initial: () => Snapshot, onChange: () => void, onRestore: (before: Snapshot, after: Snapshot) => void, onAction?: (type: 'undo' | 'redo') => void) {
   const [history, setHistory] = useState(() => createSession({ mode: 'adventure', present: initial() }));
   const current = useRef(history);
   const execute = useCallback((command: Parameters<typeof dispatch>[1]) => {
@@ -15,12 +15,12 @@ export function useGameSession(initial: () => Snapshot, onChange: () => void, on
   const undo = useCallback(() => {
     const before = current.current;
     if (execute({ type: 'undo' }).session !== before) onAction?.('undo');
-    onRestore();
+    onRestore(before.present, current.current.present);
   }, [execute, onRestore, onAction]);
   const redo = useCallback(() => {
     const before = current.current;
     if (execute({ type: 'redo' }).session !== before) onAction?.('redo');
-    onRestore();
+    onRestore(before.present, current.current.present);
   }, [execute, onRestore, onAction]);
   const restore = useCallback((config: Parameters<typeof createSession>[0]) => {
     const next = createSession(config); current.current = next; setHistory(next);

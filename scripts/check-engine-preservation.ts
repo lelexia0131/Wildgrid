@@ -12,7 +12,7 @@ const baseline = JSON.parse(readFileSync('tests/fixtures/phase2-engine-baseline.
   puzzles: { id: number; solverHash: string; evaluationHash: string; mapCodeHash: string }[];
 };
 // Retain the original baseline. Only the documented terrain corrections may differ.
-const historicalLevels = levels.map(level => {
+const historicalLevels = levels.filter(l => l.id <= 45).map(level => {
   const correction = corrections.corrections.find(item => item.id === level.id);
   if (!correction) return level;
   assert.deepEqual(level.terrain, correction.after, `Day ${level.id}: approved terrain correction changed`);
@@ -21,7 +21,7 @@ const historicalLevels = levels.map(level => {
   return { ...level, terrain: correction.before } as Level;
 });
 assert.equal(hash(historicalLevels), baseline.dataHash, 'Unapproved authored level data change');
-assert.equal(levels.length, baseline.puzzles.length);
+assert.equal(historicalLevels.length, baseline.puzzles.length);
 let evaluations = 0;
 const multiple: number[] = [];
 for (const expected of baseline.puzzles) {
@@ -40,4 +40,4 @@ for (const expected of baseline.puzzles) {
   if (solved.count > 1) multiple.push(level.id);
   evaluations += results.length;
 }
-console.log(`Preserved all ${levels.length} historical levels, ${evaluations} rule evaluations, complete solver solution sets and WG1 codes. Approved unique-solution terrain corrections from ${corrections.commit}: ${corrections.corrections.map(item => item.id).join(', ')}. All other current level fields and reference answers retain the historical contract; historical multiple-solution levels: ${multiple.join(', ') || 'none'}.`);
+console.log(`Preserved all ${historicalLevels.length} historical levels, ${evaluations} rule evaluations, complete solver solution sets and WG1 codes. Approved unique-solution terrain corrections from ${corrections.commit}: ${corrections.corrections.map(item => item.id).join(', ')}. All other current level fields and reference answers retain the historical contract; historical multiple-solution levels: ${multiple.join(', ') || 'none'}.`);

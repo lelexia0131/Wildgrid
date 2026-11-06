@@ -16,11 +16,12 @@ import type { AdventureBadgeTier } from '../../game-modes/adventure/adventureBad
 
 type Props = {
   completed: number[]; currentId: number; chapter: number | null;
+  page: number; onPage: (page: number) => void;
   badges: Readonly<Record<number, AdventureBadgeTier>>;
   onChapter: (chapter: number | null) => void; onStart: (id: number) => void; onBack: () => void;
 };
 
-export function CampDiary({ completed, badges, currentId, chapter, onChapter, onStart, onBack }: Props) {
+export function CampDiary({ completed, badges, currentId, chapter, page, onPage, onChapter, onStart, onBack }: Props) {
   const { t, language } = useI18n();
   const [direction, setDirection] = useState<'previous' | 'next'>('next');
   const [transition, setTransition] = useState<number | null>(null);
@@ -66,6 +67,7 @@ export function CampDiary({ completed, badges, currentId, chapter, onChapter, on
     if (next === chapter) return;
     if (next !== null && (!JOURNAL_CHAPTERS[next] || !levelUnlocked(levels[next * 15]?.id, completed))) return;
     audio.feedback('page');
+    if (next !== null) onPage(Math.floor(next / 3));
     if (chapter !== null && next !== null) {
       setDirection(next < chapter ? 'previous' : 'next');
       turningTo.current = next;
@@ -79,16 +81,22 @@ export function CampDiary({ completed, badges, currentId, chapter, onChapter, on
   function finishSwipe(event: TouchEvent<HTMLDivElement>) {
     const start = touchStart.current;
     touchStart.current = null;
-    if (!start || chapter === null) return;
+    if (!start) return;
     const touch = event.changedTouches[0];
     const dx = touch.clientX - start.x, dy = touch.clientY - start.y;
     if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
     suppressClickUntil.current = performance.now() + 400;
-    turnChapter(chapter + (dx < 0 ? 1 : -1));
+    if (chapter === null) turnOverview(page + (dx < 0 ? 1 : -1));
+    else turnChapter(chapter + (dx < 0 ? 1 : -1));
+  }
+  function turnOverview(next: number) {
+    if (next < 0 || next >= Math.ceil(JOURNAL_CHAPTERS.length / 3) || next === page) return;
+    audio.feedback('page'); onPage(next);
   }
   return <>{chapter === null ? <MenuLandscapeBackground scene="diary"/> : <><JournalChapterBackground chapter={chapter}/>{transition !== null && <div className="journal-chapter-background-incoming"><JournalChapterBackground chapter={transition}/></div>}</>}<main className={`levels-page camp-diary ${chapter === null ? 'chapter-selection' : `chapter-levels diary-${JOURNAL_CHAPTERS[transition ?? chapter].theme}`}`}>
     <button className="back-link" data-sound={chapter === null ? 'close' : 'handled'} onClick={() => chapter === null ? onBack() : turnChapter(null)}><ArrowLeft size={18}/>{chapter === null ? t('返回营地') : t('返回板块选择')}</button>
-    {chapter === null ? <><div className="page-heading"><h1>{t('营地日记')}</h1></div><AdventureBadgeStats badges={badges}/><div className="chapter-grid">{JOURNAL_CHAPTERS.map(({ name }, index) => {
+    {chapter === null ? <><div className="page-heading"><h1>{t('营地日记')}</h1><nav className="chapter-pagination" aria-label={t('营地日记')}>{page > 0 && <button type="button" className="previous-page" aria-label={t('上一页')} data-sound="handled" onClick={() => turnOverview(page - 1)}><img src={chapterArrow} alt="" draggable={false}/></button>}{page < Math.ceil(JOURNAL_CHAPTERS.length / 3) - 1 && <button type="button" data-sound="handled" aria-label={t('下一页')} className="next-page" onClick={() => turnOverview(page + 1)}><img src={chapterArrow} alt="" draggable={false}/></button>}</nav></div><AdventureBadgeStats badges={badges}/><div className={`chapter-grid ${page > 0 ? 'chapter-grid-second' : ''}`} onTouchStart={event => { const touch = event.touches[0]; touchStart.current = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY } : null; }} onTouchEnd={finishSwipe} onClickCapture={event => { if (performance.now() < suppressClickUntil.current) { event.preventDefault(); event.stopPropagation(); } }}>{JOURNAL_CHAPTERS.slice(page * 3, page * 3 + 3).map(({ name }, offset) => {
+      const index = page * 3 + offset;
       const start = index * 15 + 1, locked = !levelUnlocked(start, completed);
       const count = completed.filter(id => id >= start && id < start + 15).length;
       return <button key={name} data-chapter={index} data-sound="handled" className={`chapter-card chapter-${index} ${locked ? 'locked' : ''} ${recommended && Math.floor((recommended.id - 1) / 15) === index ? 'recommended' : ''}`} disabled={locked} onClick={() => turnChapter(index)}>

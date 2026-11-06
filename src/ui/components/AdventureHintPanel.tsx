@@ -23,7 +23,7 @@ export function AdventureHintPanel({ hints, level }: { hints: ReturnType<typeof 
   else if (hint.status === 'ready') {
     const piece = level.pieces.find(p => p.id === hint.placement.id)!;
     const name = `${localize(shapeNames[piece.shape])} ${localize(facilityNames[piece.kind])}`;
-    const line = t(hint.axis === 'row' ? "第 {0} 行" : "第 {0} 列", hint.line + 1);
+    const line = (level.sky ? `${t(hint.layer === 'sky' ? '天空' : '地面')} · ` : '') + t(hint.axis === 'row' ? "第 {0} 行" : "第 {0} 列", hint.line + 1);
     const cells = occupied(piece, hint.placement).sort((a, b) => a.r - b.r || a.c - b.c);
     content = <>
       {stage === 1 && <p>{t("关注{0}的剩余占格数，并结合{1}的放置规则。", line, name)}</p>}

@@ -1,10 +1,11 @@
-import type { Level, Placement, Settings } from '../../engine';
+import type { BoardLayer, Level, Placement, Settings } from '../../engine';
 import { evaluate, getLevelById, levels } from '../../engine';
 import { adventureHintBoardKey, adventureHintUsage, evaluateAdventureBadge, recordAttemptHint } from './adventureBadges';
 import type { AdventureAttempt, AdventureBadgeTier, AdventureHintAction } from './adventureBadges';
 
-export type AdventureSave = { version: 1; completed: number[]; current: number; progress: Record<number, readonly Placement[]>; settings: Settings; badges: Record<number, AdventureBadgeTier>; attempts: Record<number, AdventureAttempt> };
+export type AdventureSave = { version: 1; completed: number[]; current: number; progress: Record<number, readonly Placement[]>; layers?: Record<number, BoardLayer>; settings: Settings; badges: Record<number, AdventureBadgeTier>; attempts: Record<number, AdventureAttempt> };
 export function levelUnlocked(id: number, completed: number[]): boolean {
+  if (id >= 46) return completed.includes(45) && (id === 46 || completed.includes(id - 1));
   if (id >= 31) return completed.includes(15) && (id === 31 || completed.includes(id - 1));
   return id <= Math.min(30, Math.max(1, ...completed.filter(day => day <= 30).map(day => day + 1)));
 }

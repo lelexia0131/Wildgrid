@@ -23,6 +23,11 @@ const FACILITY_TEMPLATES: [FacilityKind, Shape][] = [
   ['powerTower', 'single'], ['pool', 'single'],
 ];
 export const facilityLibrary: readonly Piece[] = FACILITY_TEMPLATES.map(([kind, shape]) => ({ id: `${kind}_${shape}`, kind, shape }));
+export const adventureFacilityLibrary: readonly Piece[] = [...facilityLibrary,
+  { id: 'balloon_single', kind: 'balloon', shape: 'single' },
+  { id: 'airship_domino', kind: 'airship', shape: 'domino' },
+  { id: 'kite_long', kind: 'kite', shape: 'long' },
+];
 
 // These FACILITY_DESCRIPTIONS are presentation metadata. Actual legality belongs to
 // placementRules.ts; the registry has no dependency on the rule evaluator.
@@ -35,11 +40,14 @@ const FACILITY_DESCRIPTIONS: Omit<FacilityDefinition, 'shapes'>[] = [
  {kind:'foodTruck',name:'餐车',tips:['与至少一个营地占格上下左右间隔一格空草地','上下左右直接挨着营地'],require:'与至少一个营地占格上下左右间隔一格空草地。多格营地按实际占格判断。',forbid:'上下左右直接挨着任何营地。',good:['WCC.V'],bad:['WCCV'],why:'餐车直接挨着营地，中间必须留一格。',extra:[{map:['WCBV'],why:'中间有篝火，不能作为空出的间隔格。'}]},
  {kind:'powerTower',name:'电塔',tips:['与篝火、营地保持距离','邻篝火（含斜角）、上下左右邻营地'],require:'与篝火、营地保持规定距离；可以斜角挨着营地。',forbid:'周围八格出现篝火；上下左右挨着营地。',good:['WC.','..E'],bad:['WCB.','...E'],why:'篝火在电塔斜角，仍然禁止。',extra:[{map:['WCE'],why:'电塔上下左右挨着营地，必须移开。'}]},
  {kind:'pool',name:'泳池',tips:['上下左右邻水，周围八格至少有一格营地','仅斜角邻水、周围没有营地'],require:'上下左右挨着至少一格水源，周围八格至少有一个营地占格。',forbid:'水源只有斜角相邻；周围八格没有营地。',good:['.WC','.S.'],bad:['WC.','.S.'],why:'营地虽然相邻，但水源只在泳池斜角。',extra:[{map:['WS..','...W','...C'],why:'泳池邻水，但周围八格没有营地。'}]},
+ {kind:'balloon',name:'系留气球',tips:['地面投影上下左右邻系留桩','正下方有篝火或电塔'],require:'放在天空。地面投影需上下左右挨着系留桩，绳索才能固定；一个桩可系留多个气球。',forbid:'正下方有篝火或电塔；覆盖低云、同层重叠或越界。',good:[],bad:[],why:'斜角不算邻桩，桩正上方也不算。'},
+ {kind:'airship',name:'补给飞艇',tips:['至少一格正下方是营地','任意一格正下方有篝火或电塔'],require:'放在天空，占双格，可旋转。至少一格正对营地的实际占格，才能投递补给。',forbid:'任意一格正下方有篝火或电塔；覆盖低云、同层重叠或越界。',good:[],bad:[],why:'飞艇可以先放，等地面的营地补齐。'},
+ {kind:'kite',name:'气象风筝',tips:['至少一格正下方是山地','邻低云（含斜角），下方有篝火或电塔'],require:'放在天空，占直线三格，可旋转。至少一格正对山地，借山脊气流观测天气。',forbid:'任何一格邻近低云（包括斜角），以保持观测视野；正下方有篝火或电塔；同层重叠或越界。',good:[],bad:[],why:'风筝的全部占格都要远离低云，斜角也不行。'},
 ];
 
 export const facilities: readonly FacilityDefinition[] = FACILITY_DESCRIPTIONS.map(facility => ({
   ...facility,
-  shapes: facilityLibrary.filter(piece => piece.kind === facility.kind).map(piece => piece.shape),
+  shapes: adventureFacilityLibrary.filter(piece => piece.kind === facility.kind).map(piece => piece.shape),
 }));
 export const facilityNames = Object.fromEntries(facilities.map(facility => [facility.kind, facility.name])) as Readonly<Record<FacilityKind, string>>;
 export const facilityTips = Object.fromEntries(facilities.map(facility => [facility.kind, facility.tips])) as Readonly<Record<FacilityKind, readonly [string, string]>>;

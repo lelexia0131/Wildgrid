@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { levels } from '../../src/engine';
-import { facilityLibrary } from '../../src/engine';
+import { facilityLibrary, adventureFacilityLibrary, facilityLayer } from '../../src/engine';
 import { checkSandbox, createSandbox, decodeMap, encodeMap, withEditorPlacements } from '../../src/engine';
 import type { SandboxDraft } from '../../src/engine';
 
@@ -12,8 +12,9 @@ function camps(): SandboxDraft {
   return withEditorPlacements(draft, [{ id: 'a', r: 1, c: 1, rotation: 0 }, { id: 'b', r: 1, c: 2, rotation: 0 }]);
 }
 
-test('sandbox library covers adventure definitions and map codes restore both sizes exactly', () => {
-  assert.deepEqual(new Set(facilityLibrary.map(p => `${p.kind}_${p.shape}`)), new Set(levels.flatMap(l => l.pieces.map(p => `${p.kind}_${p.shape}`))));
+test('sandbox library covers ground definitions and map codes restore both sizes exactly', () => {
+  assert.deepEqual(new Set(facilityLibrary.map(p => `${p.kind}_${p.shape}`)), new Set(levels.flatMap(l => l.pieces.filter(p=>facilityLayer(p.kind)==='ground').map(p => `${p.kind}_${p.shape}`))));
+  assert.deepEqual(new Set(adventureFacilityLibrary.map(p=>`${p.kind}_${p.shape}`)),new Set(levels.flatMap(l=>l.pieces.map(p=>`${p.kind}_${p.shape}`))));
   const initial = createSandbox(8), eight = { ...initial, level: { ...initial.level } };
   eight.level.terrain = [{ kind: 'water', r: 3, c: 1 }, { kind: 'forest', r: 7, c: 7 }, { kind: 'mountain', r: 0, c: 6 }];
   eight.level.pieces = [{ id: 'rotated-camp', kind: 'camp', shape: 'domino' }];

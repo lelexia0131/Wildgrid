@@ -8,7 +8,7 @@ const root = path.resolve(__dirname, '../..'), output = path.join(root, '.deskto
 mkdirSync(output, { recursive: true });
 app.disableHardwareAcceleration();
 app.setPath('userData', path.join(output, `profile-${process.pid}`));
-const timeout = setTimeout(() => { console.error('Chapter navigation UI timed out'); app.exit(1); }, 60000);
+const timeout = setTimeout(() => { console.error('Chapter navigation UI timed out'); app.exit(1); }, 180000);
 
 app.whenReady().then(async () => {
   const win = new BrowserWindow({ width: 1280, height: 900, useContentSize: true, show: false, webPreferences: { offscreen: true, backgroundThrottling: false } });
@@ -30,7 +30,8 @@ app.whenReady().then(async () => {
     await js(`localStorage.clear(); localStorage.setItem('wildgrid-tutorial-v1', ${JSON.stringify(JSON.stringify({ version: 1, enabled: false, language }))}); localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({ version: 1, completed, current: 1, progress: { 1: solutions[1].slice(0, 1) }, settings: { muted: true } }))}); void 0;`);
     await win.loadFile(path.join(root, 'dist', 'index.html')); await settle();
     await click('.menu-journal');
-    return js(`document.querySelectorAll('.chapter-card').length`);
+    assert.equal(await js(`document.querySelectorAll('.chapter-card').length`), 3);
+    return Math.ceil(levels.length / 15);
   }
   async function swipe(next, dx = 120, dy = 0) {
     const point = await js(`(() => { const r = document.querySelector('.journal-level-stage').getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+Math.min(100,r.height/2)}; })()`);
@@ -73,7 +74,7 @@ app.whenReady().then(async () => {
     const state = await js(`(async () => {
       const selector = ${JSON.stringify(next ? '.journal-chapter-next' : '.journal-chapter-previous')};
       const arrow = document.querySelector(selector), before = document.querySelector('.journal-level-controls').getBoundingClientRect();
-      const background = document.querySelector('.app > .journal-chapter-background').src;
+      const background = document.querySelector('.app > .journal-chapter-background').outerHTML;
       const grid = document.querySelector('.level-grid').getBoundingClientRect();
       const title = document.querySelector('.journal-chapter-page h1').getBoundingClientRect();
       for (let i = 0; i < 10; i++) arrow.click();
@@ -90,7 +91,7 @@ app.whenReady().then(async () => {
         separation: Math.abs(rects[1].grid - rects[0].grid), width: grid.width,
         arrowDelta: Math.abs(after.x - before.x) + Math.abs(after.y - before.y),
         clipped: getComputedStyle(document.querySelector('.journal-chapter-viewport')).overflow,
-        backgroundChanged: incoming.querySelector('img').src !== background,
+        backgroundChanged: incoming.firstElementChild.outerHTML !== background,
         backgroundOpacity: Number(getComputedStyle(incoming).opacity),
         busy: document.querySelector('.journal-level-navigation').getAttribute('aria-busy'),
         previous: !!document.querySelector('.journal-chapter-previous'), next: !!document.querySelector('.journal-chapter-next'),
@@ -116,8 +117,67 @@ app.whenReady().then(async () => {
     assert.equal(await js(`getComputedStyle(document.querySelector('.journal-chapter-page')).transform`), 'none');
     assert.equal(await js(`!!document.querySelector('.journal-chapter-background-incoming')`), false);
   }
+  async function checkCloudsea() {
+    for (const viewport of [{width:1280,height:900,language:'zh'}, {width:390,height:844,language:'zh',touch:true}, {width:360,height:640,language:'en',touch:true}, {width:844,height:390,language:'en',touch:true}]) {
+      touch=!!viewport.touch;
+      win.setContentSize(viewport.width,viewport.height);
+      await contents.debugger.sendCommand('Emulation.setDeviceMetricsOverride',{width:viewport.width,height:viewport.height,deviceScaleFactor:1,mobile:touch});
+      await contents.debugger.sendCommand('Emulation.setTouchEmulationEnabled',{enabled:touch});
+      await load(levels.filter(l=>l.id<=45).map(l=>l.id),viewport.language);
+      assert.equal(await js(`document.querySelectorAll('.chapter-card').length`),3);
+      await click('.chapter-pagination .next-page');
+      assert.deepEqual(await js(`[...document.querySelectorAll('.chapter-card')].map(e=>e.dataset.chapter)`),['3']);
+      assert.doesNotMatch(await js(`document.querySelector('.camp-diary').textContent`),/主题.*1.*2|新篇章|Theme.*1.*2/);
+      writeFileSync(path.join(output,`cloudsea-overview-${viewport.width}.png`),(await contents.capturePage()).toPNG());
+      await click('[data-chapter="3"]');
+      assert.equal(await js(`document.querySelectorAll('.level-card').length`),15);
+      assert.equal(await js(`document.querySelector('[data-level="46"]').disabled`),false);
+      assert.equal(await js(`document.querySelector('[data-level="47"]').disabled`),true);
+      await click('.camp-diary > .back-link');
+      assert.deepEqual(await js(`[...document.querySelectorAll('.chapter-card')].map(e=>e.dataset.chapter)`),['3']);
+      const level=levels.find(l=>l.id===60), missing=level.pieces.filter(p=>p.kind==='balloon'||p.kind==='airship').slice(0,1).concat(level.pieces.filter(p=>p.kind==='airship').slice(0,1));
+      const partial=solutions[60].filter(at=>!missing.some(p=>p.id===at.id));
+      const save={version:1,completed:levels.filter(l=>l.id<60).map(l=>l.id),current:60,progress:{60:partial},layers:{60:'sky'},settings:{muted:true}};
+      await js(`localStorage.setItem('wildgrid-save-v1',${JSON.stringify(JSON.stringify(save))}); void 0;`);
+      await win.loadFile(path.join(root,'dist','index.html'));await settle();
+      await click('.menu-adventure');await click('.mode-adventure');
+      assert.equal(await js(`document.querySelector('.board-section').dataset.layer`),'sky');
+      assert.deepEqual(await js(`[...document.querySelectorAll('.facility-card')].map(e=>e.dataset.facility).sort()`),['airship','balloon','kite']);
+      const fit=await js(`(()=>{const b=document.querySelector('.board').getBoundingClientRect(),tabs=document.querySelector('.board-layer-switch').getBoundingClientRect(),tools=document.querySelector('.tools-panel').getBoundingClientRect();return {overflow:document.documentElement.scrollWidth>innerWidth,board:b.width,inside:b.left>=0&&b.right<=innerWidth+1,tabs:tabs.height,overlap:tools.left<b.right&&tools.right>b.left&&tools.top<b.bottom&&tools.bottom>b.top};})()`);
+      assert.equal(fit.overflow,false);assert.equal(fit.inside,true);assert.equal(fit.overlap,false);assert.ok(fit.tabs>=17);assert.ok(fit.board >= (viewport.height < 500 ? 210 : 240));
+      assert.equal(await js(`document.querySelector('.projection-toggle').getAttribute('aria-pressed')`),'true');
+      await click('.projection-toggle');
+      await click('[data-facility="airship"]');
+      assert.equal(await js(`document.querySelectorAll('.cell-projection').length`),0,'selection respects projection-off');
+      await click('.projection-toggle');
+      assert.ok(await js(`document.querySelectorAll('.cell-projection').length>0`));
+      assert.ok(await js(`document.querySelector('.facility-list').clientHeight>=52`));
+      assert.equal(await js(`!!document.querySelector('.board-topline > span')?.textContent`),true);
+      await click('.board [data-cell="2,0"]');
+      assert.match(await js(`document.querySelector('.guide-strip').textContent`),viewport.language==='zh'?/正下方不能有篝火或电塔/:/directly above a campfire/);
+      await click('.tool-undo');
+      assert.equal(await js(`JSON.parse(localStorage.getItem('wildgrid-save-v1')).progress[60].length`),partial.length);
+      await click('[data-facility="airship"]');await click('[data-facility="airship"]');
+      const target=solutions[60].find(at=>at.id===missing.find(p=>p.kind==='airship').id);
+      await click(`.board [data-cell="${target.r},${target.c}"]`);
+      await click('[data-layer-button="ground"]');
+      assert.ok(await js(`document.querySelectorAll('.facility-card').length>3`));
+      await click('.tool-undo');
+      assert.equal(await js(`document.querySelector('.board-section').dataset.layer`),'sky','undo reveals its affected layer');
+      writeFileSync(path.join(output,`cloudsea-sky-${viewport.width}.png`),(await contents.capturePage()).toPNG());
+      await click('[data-layer-button="ground"]');
+      writeFileSync(path.join(output,`cloudsea-ground-${viewport.width}.png`),(await contents.capturePage()).toPNG());
+      if(viewport.language==='en') assert.doesNotMatch(await js(`document.querySelector('.game-page').textContent`),/[\u3400-\u9fff]/u);
+      await click('.game-title .icon-button');await click('.camp-diary > .back-link');
+      assert.deepEqual(await js(`[...document.querySelectorAll('.chapter-card')].map(e=>e.dataset.chapter)`),['3']);
+    }
+    assert.deepEqual(errors,[]);
+    console.log('Cloudsea UI passed: pagination, 15 numbered levels, unlocks, two layers, projections, cross-layer rules, undo, saves, Chinese/English and desktop/mobile layouts.');
+  }
   try {
     contents.debugger.attach('1.3');
+    if(process.argv.includes('--sky')) {await checkCloudsea();clearTimeout(timeout);app.exit(0);return;}
+
     for (const viewport of [{ width: 1280, height: 900, language: 'zh' }, { width: 390, height: 844, language: 'zh', touch: true }, { width: 360, height: 640, language: 'en', touch: true }, { width: 320, height: 568, language: 'zh', touch: true }, { width: 844, height: 390, language: 'en', touch: true }]) {
       touch = !!viewport.touch;
       win.setContentSize(viewport.width, viewport.height);
@@ -179,5 +239,5 @@ app.whenReady().then(async () => {
     assert.deepEqual(errors, []);
     console.log('Chapter navigation UI passed: first/middle/last, desktop arrows, mobile swipes, unlocks, saves, level entry, SVGs, centering, Chinese/English, portrait/landscape, reduced motion and no page reload.');
     clearTimeout(timeout); app.exit(0);
-  } catch (error) { console.error(error); clearTimeout(timeout); app.exit(1); }
+  } catch (error) { console.error(error); writeFileSync(path.join(output,'failure.png'),(await contents.capturePage()).toPNG()); clearTimeout(timeout); app.exit(1); }
 });

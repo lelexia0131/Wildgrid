@@ -30,6 +30,9 @@ const zh: Dictionary = {
     el: { title: 'L 形的空格', text: 'L 形营地占三个格，拐角里的空格没有被占用，可以留给别的设施。旋转会改变三个占用格的方向，计数仍然是三格。' },
   },
   facilities: {
+    balloon: { title: '系留气球', text: "看，系留气球已经准备好啦！咱们点右上角的「天空」，找找系留桩。让气球的地面投影上下左右挨着桩，绳索才系得住。别停在篝火或电塔上方，也别钻进低云里。两层的格数要分开看哦。" },
+    airship: { title: '补给飞艇', text: "补给飞艇来啦！它占两格，再点一次卡片就能转向。让至少一格正对营地，大家才接得到物资。营地还没摆好也没关系，咱们可以先放飞艇；记得避开低云和下方的篝火、电塔。" },
+    kite: { title: '气象风筝', text: "带上气象风筝，去山脊上试试风吧。它连着尾巴一共占三格，至少一格要在山地正上方。为了看清天气，整只风筝都得离低云远一点，斜角也算；篝火和电塔上方也要绕开。" },
     camp: { title: '营地', text: '这是营地，靠着水源安顿下来吧。至少一格要上下左右邻水，多格营地也只需一格；别重叠或盖住固定地形。' },
     fire: { title: '篝火', text: '这是篝火，让营地暖和起来。把它放在营地的上下左右，记得远离森林，斜角也要避开。' },
     tower: { title: '瞭望塔', text: '瞭望塔能让我们看得更远，把它安排在山地的上下左右。两座塔之间要留点距离，斜角也不能紧挨。' },
@@ -62,6 +65,9 @@ const en: Dictionary = {
     el: { title: 'The gap in an L shape', text: 'An L-shaped camp occupies three cells. Its corner gap stays empty and can hold another facility. Rotating changes the occupied positions, but the count stays three.' },
   },
   facilities: {
+    balloon: { title: 'Tethered balloon', text: "Look, our tethered balloon is ready! Tap Sky at the top right and find an anchor. The balloon’s ground projection needs to share an edge with it so we can tie the rope. Keep clear of clouds and the air above campfires or power towers. Remember, each layer counts its own cells." },
+    airship: { title: 'Supply airship', text: "Here comes our supply airship! It fills two cells; tap its card again to turn it. Keep at least one cell directly above camp so everyone can receive their supplies. We can place the airship before the camp. Just avoid low clouds, and campfires or power towers below." },
+    kite: { title: 'Weather kite', text: "Let’s take our weather kite up to the ridge! With its tail it fills three cells, and at least one must be above a mountain. Give the whole kite a clear view away from low clouds, even diagonally. Steer clear of campfires and power towers below, too." },
     camp: { title: 'Camp', text: 'Here’s our camp. Let’s settle beside the water: at least one cell must share an edge with it, even for a multi-cell camp. Keep clear of other facilities and fixed terrain.' },
     fire: { title: 'Campfire', text: 'This campfire will warm the campsite. Place it along an edge of a camp cell, and keep it away from forests—even diagonally.' },
     tower: { title: 'Lookout tower', text: 'A lookout tower gives us a better view. Place it along an edge of a mountain, with space between towers. They cannot touch diagonally either.' },

@@ -8,8 +8,10 @@ import {terrainRegistry} from '../../src/engine/terrainRegistry';
 import {placementDomains} from '../../src/engine/placementDomains';
 import {solveLevel} from '../../src/engine/solver';
 import {reasonLevel,reasonedDomains} from '../../src/engine/logicalSolver';
-import {tileFacilityBudget} from '../../src/engine/facilityConstruction';
-import {refineTerrain} from '../../src/engine/generationRefinement';
+import {tileFacilityBudget,refineFacilities,facilityMotifs} from '../../src/engine/facilityConstruction';
+import {facilityLibrary} from '../../src/engine/facilityRegistry';
+import {refineTerrain,refineLogicalLayout} from '../../src/engine/generationRefinement';
+import {withEditorPlacements} from '../../src/engine/mapBlueprint';
 import {evaluate} from '../../src/engine/placementRules';
 import type {Level} from '../../src/engine/types';
 
@@ -163,10 +165,106 @@ test('a returned candidate retains all final acceptance checks, independent uniq
   assert.equal(proof.count,1);
 });
 
-test('a single high-tier candidate can complete validation without waiting for two more maps',()=>{
+test('facility and logical refinement keep a local dining composition and its truck lane intact',()=>{
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,
+    pieces:[{id:'camp',kind:'camp',shape:'single'},{id:'table',kind:'picnic',shape:'domino'},{id:'truck',kind:'foodTruck',shape:'single'}],
+    terrain:[{r:0,c:0,kind:'water'},{r:5,c:5,kind:'water'}],rows:Array(8).fill(6),cols:Array(8).fill(6)};
+  const placements=[{id:'camp',r:1,c:0,rotation:0},{id:'table',r:2,c:0,rotation:0},{id:'truck',r:1,c:2,rotation:0}];
+  const groups=placementDomains(level),entries=placements.map(at=>({piece:level.pieces.find(p=>p.id===at.id)!,
+    p:groups.find(g=>g.piece.id===at.id)!.domain.find(p=>p.at.r===at.r && p.at.c===at.c && p.at.rotation===at.rotation)!,motif:'dining',motifGap:at.id==='truck'?1n<<9n:0n}));
+  const original=entries.map(e=>e.p.mask),draft=withEditorPlacements({level,placements},placements);
+  assert.ok(evaluate(draft.level,placements).won);
+  refineFacilities(entries,groups,seeded(17),Date.now()+1000);
+  assert.deepEqual(entries.map(e=>e.p.mask),original);
+  const refined=refineLogicalLayout(draft,entries,groups,seeded(18),Date.now()+1000);
+  assert.deepEqual(refined.placements,placements);
+  assert.deepEqual(entries.map(e=>e.p.mask),original);
+  const terrain=refineTerrain(refined.level,entries,seeded(19),Date.now()+1000);
+  assert.ok(evaluate(terrain,placements).won);
+  assert.ok(!terrain.terrain.some(t=>t.r===1 && t.c===1),'truck lane must remain empty grass');
+});
+
+test('a second camp cannot let refinement fill the original dining lane',()=>{
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,
+    pieces:[{id:'a',kind:'camp',shape:'single'},{id:'table',kind:'picnic',shape:'domino'},{id:'truck',kind:'foodTruck',shape:'single'},
+      {id:'b',kind:'camp',shape:'single'},{id:'tower',kind:'tower',shape:'single'}],
+    terrain:[{r:2,c:1,kind:'water'},{r:0,c:3,kind:'water'},{r:2,c:2,kind:'mountain'}],rows:Array(8).fill(6),cols:Array(8).fill(6)};
+  const placements=[{id:'a',r:3,c:1,rotation:0},{id:'table',r:4,c:1,rotation:0},{id:'truck',r:3,c:3,rotation:0},
+    {id:'b',r:1,c:3,rotation:0},{id:'tower',r:1,c:2,rotation:0}];
+  const blocked=placements.map(p=>p.id==='tower'?{...p,r:3,c:2}:p);
+  const validButBroken=withEditorPlacements({level,placements:blocked},blocked);
+  assert.ok(evaluate(validButBroken.level,blocked).won,'global rules alone allow the other camp to take over');
+  const gap=1n<<26n,groups=placementDomains(level),entries=placements.map((at,i)=>{
+    const piece=level.pieces[i];
+    return {piece,p:groups.find(g=>g.ids.includes(at.id))!.domain.find(p=>p.at.r===at.r && p.at.c===at.c && p.at.rotation===at.rotation)!,
+      motif:i<3?'dining':undefined,motifGap:at.id==='truck'?gap:0n};
+  });
+  refineFacilities(entries,groups,seeded(21),Date.now()+1000);
+  const nextPlacements=entries.map(e=>({...e.p.at,id:e.piece.id}));
+  const draft=withEditorPlacements({level,placements:nextPlacements},nextPlacements);
+  const refined=refineLogicalLayout(draft,entries,groups,seeded(22),Date.now()+1000);
+  assert.ok(entries.every(e=>!(e.p.mask&gap)));
+  const terrain=refineTerrain(refined.level,entries,seeded(23),Date.now()+1000);
+  assert.ok(evaluate(terrain,refined.placements).won);
+  assert.ok(!terrain.terrain.some(t=>t.r===3 && t.c===2));
+});
+
+test('local compositions use legal domains, offer distinct themes and respect disabled facilities',()=>{
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces:facilityLibrary,
+    terrain:[{r:2,c:2,kind:'water'},{r:5,c:5,kind:'water'}],rows:Array(8).fill(6),cols:Array(8).fill(6)};
+  const groups=placementDomains(level),motifs=facilityMotifs(groups);
+  assert.ok(new Set(motifs.map(m=>m.family)).size>=5);
+  const shapes=new Set<string>();
+  for(const motif of motifs) {
+    const pieces=motif.members.map(({g},i)=>({...groups[g].piece,id:`part-${i}`}));
+    const placements=motif.members.map(({p},i)=>({...p.at,id:pieces[i].id}));
+    const draft=withEditorPlacements({level:{...level,pieces},placements},placements);
+    assert.ok(evaluate(draft.level,placements).won,motif.family);
+    assert.ok(motif.members.length>=2 && motif.members.length<=3);
+    shapes.add(pieces.find(p=>p.kind==='camp')!.shape);
+  }
+  assert.ok(shapes.size>1,'compositions must support different camp footprints');
+  const disabled=placementDomains({...level,pieces:level.pieces.filter(p=>p.kind!=='foodTruck')});
+  assert.ok(facilityMotifs(disabled).every(m=>m.members.every(({g})=>disabled[g].piece.kind!=='foodTruck')));
+  assert.deepEqual(facilityMotifs(placementDomains({...level,rows:Array(8).fill(0)})),[]);
+});
+
+test('a motif search falls back within the same budget when the available facility has no recipe',()=>{
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces:[{id:'power',kind:'powerTower',shape:'single'}],
+    terrain:[],rows:[1,1,0,0,0,0,0,0],cols:Array(8).fill(6)};
+  const stats:Record<string,number>={},items=[{id:'powerTower_single',area:1,min:2,max:2}];
+  const entries=tileFacilityBudget(level,placementDomains(level),items,2,seeded(11),Infinity,stats,2,16,true);
+  assert.ok(entries && entries.length===2);
+  assert.ok(entries.every(e=>!e.motif));
+  assert.ok(stats.nodes<=241);
+});
+
+test('generated compositions survive validation without repeated themes or shared members',()=>{
+  let composed=0;
+  for(let seed=0;seed<8;seed++) {
+    const map=generateMap(3,seed,'local-compositions',[]),{motifs}=map.diagnostics;
+    if(motifs.length) composed++;
+    assert.ok(motifs.length<=2);
+    assert.equal(new Set(motifs.map(m=>m.family)).size,motifs.length);
+    const ids=motifs.flatMap(m=>m.facilities);
+    assert.equal(new Set(ids).size,ids.length);
+    for(const motif of motifs) {
+      assert.ok(motif.facilities.length>=2 && motif.facilities.length<=3);
+      const pieces=map.draft.level.pieces.filter(p=>motif.facilities.includes(p.id));
+      const placements=map.draft.placements.filter(p=>motif.facilities.includes(p.id));
+      const local=withEditorPlacements({level:{...map.draft.level,pieces},placements},placements);
+      assert.ok(evaluate(local.level,placements).won,'each group retains its own camp connections');
+    }
+    const proof=solveLevel(map.draft.level,2,{},placementDomains(map.draft.level));
+    assert.ok(!proof.aborted && proof.count===1,'motifs are construction preferences, never solver constraints');
+  }
+  assert.ok(composed>=2,'local compositions should appear across different seeds');
+});
+
+test('high-tier generation retains independent uniqueness after mixed construction strategies',()=>{
   const map=generateMap(10,20261020,'single-candidate',[]);
-  assert.equal(map.diagnostics.candidatesGenerated,1);
-  assert.equal(map.diagnostics.candidatesValidated,1);
+  assert.ok(map.diagnostics.candidatesGenerated>=map.diagnostics.candidatesValidated);
+  assert.ok(map.diagnostics.candidatesValidated>=1);
   assert.equal(map.diagnostics.proofs,1);
   assert.equal(map.diagnostics.unique,true);
   assert.equal(map.diagnostics.reasoning.solved,true);

@@ -12,6 +12,23 @@ const level = (pieces: Piece[], terrain: Level['terrain'] = [{ r: 2, c: 0, kind:
   ({ id: 0, name: '', chapter: '', tip: '', size: 6, rows: Array(6).fill(6), cols: Array(6).fill(6), terrain, pieces });
 const hints = (l: Level, placements: Placement[], selected: Piece, rotation = 0) => placementHints(l, placements, selected, rotation, evaluate(l, placements).issues);
 
+test('sky hints colour projected water, anchors and facilities instead of treating ground as occupied sky', () => {
+  const balloon=piece('b','balloon'), airship=piece('a','airship','domino'), kite=piece('k','kite','long'), camp=piece('c','camp'), fire=piece('f','fire');
+  const l:Level={...level([balloon,airship,kite,camp,fire],[{kind:'water',r:2,c:0},{kind:'mountain',r:4,c:2}]),
+    sky:{rows:Array(6).fill(6),cols:Array(6).fill(6),anchors:[{r:2,c:2}],clouds:[{r:0,c:5}]}};
+  const placements=[at('c',2,1),at('f',3,1)];
+  assert.equal(hints(l,placements,balloon)['2,0'],'INVALID','unanchored balloon above a lake is red');
+  assert.equal(hints(l,placements,balloon)['2,1'],'VALID','anchored balloon over camp is green');
+  assert.equal(hints(l,placements,balloon)['3,1'],'INVALID','fire projection retains a red hint');
+  assert.equal(hints(l,placements,airship)['2,0'],'VALID','airship over water and camp is green');
+  assert.equal(hints(l,[],airship)['2,0'],'INCOMPLETE','future camp support is yellow over water');
+  assert.equal(hints(l,placements,kite)['4,2'],'VALID','mountain projection retains a green kite hint');
+  assert.equal(hints(l,placements,kite)['3,1'],'INVALID');
+  assert.equal(hints(l,placements,balloon)['0,5'],undefined,'same-layer cloud stays a fixed obstacle');
+  const newCamp=piece('c2','camp');
+  assert.equal(hints({...l,pieces:[...l.pieces,newCamp]},[at('b',2,1)],newCamp)['2,1'],'VALID','sky occupancy does not hide ground hints');
+});
+
 test('hints distinguish valid, pending camp support, terrain rules and complete rotated footprints', () => {
   const camp = piece('c', 'camp', 'domino'), fire = piece('f', 'fire');
   const l = level([camp, fire]);

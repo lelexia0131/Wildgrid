@@ -6,10 +6,106 @@ import { templateId, MAX_GENERATED_LINE_OCCUPANCY } from './generationConfig';
 import { adjacent, offsets } from './boardGeometry';
 import type { BudgetItem } from './generationBudget';
 
-export type FacilityEntry = { piece: Piece; p: Candidate };
+export type FacilityEntry = { piece: Piece; p: Candidate; motif?: string; motifGap?: bigint };
 export const ACTIVITY_LIMITS = { spareCells: 2 } as const;
 
-export function activityDomains(level: Level, groups: PlacementGroup[], inventory: readonly BudgetItem[], area: number, random:()=>number, deadline:number, diagnostics:Record<string,number>={}, maxCount=Infinity, maxEmptyLines=16) {
+// Domains are immutable snapshots. Replacing a domain after a terrain move
+// gets a new index; repeated ambiguity checks share the unchanged snapshot.
+const domainIndexes=new WeakMap<Candidate[],Map<bigint,Candidate>>();
+function domainIndex(domain:Candidate[]) {
+  let index=domainIndexes.get(domain);
+  if(!index) {index=new Map(domain.map(p=>[p.mask,p]));domainIndexes.set(domain,index);}
+  return index;
+}
+
+type Motif = { family:string; members:{g:number;p:Candidate}[]; mask:bigint };
+type MotifGeometry = { family:string; members:{template:string;mask:bigint}[] };
+let motifGeometry:Map<string,MotifGeometry[]>|undefined;
+
+// Small activity groups, never whole-board templates. Cache only geometry;
+// terrain, disabled facilities and clues are matched against the current domains.
+export function facilityMotifs(groups:readonly PlacementGroup[]):Motif[] {
+  if(!motifGeometry) {
+    motifGeometry=new Map();
+    const seen=new Set<string>();
+    const part=(template:string,r:number,c:number,shape:Piece['shape']='single',rotation=0)=>({template,cells:offsets(shape,rotation).map(p=>({r:p.r+r,c:p.c+c}))});
+    for(const shape of ['single','domino','long','el'] as const) {
+      const camp=part(`camp_${shape}`,0,0,shape),bottom=Math.max(...camp.cells.map(p=>p.r)),width=Math.max(...camp.cells.map(p=>p.c))+1;
+      const topWidth=Math.max(...camp.cells.filter(p=>p.r===0).map(p=>p.c))+1;
+      const definitions:[string,ReturnType<typeof part>[]][]=[
+        ['fireside-meal',[camp,part('fire_single',0,-1),part('picnic_domino',bottom,width,'domino')]],
+        ['fireside-meal',[camp,part('fire_single',0,-1),part('picnic_domino',bottom,width,'domino',1)]],
+        ['food-court',[camp,part('picnic_domino',bottom+1,0,'domino'),part('foodTruck_single',0,topWidth+1)]],
+        ['food-court',[camp,part('picnic_domino',bottom+1,0,'domino',1),part('foodTruck_single',0,topWidth+1)]],
+        ['lakeside-meal',[camp,part('picnic_domino',bottom,width,'domino'),part('pool_single',-1,1)]],
+        ['lakeside-meal',[camp,part('picnic_domino',bottom,width,'domino',1),part('pool_single',-1,1)]],
+        ['campfire-swim',[camp,part('fire_single',bottom+1,0),part('pool_single',-1,1)]],
+        ['campfire-swim',[camp,part('fire_single',0,-1),part('pool_single',-1,1)]],
+        ['campfire-truck',[camp,part('fire_single',bottom+1,0),part('foodTruck_single',0,topWidth+1)]],
+        ['campfire-truck',[camp,part('fire_single',0,-1),part('foodTruck_single',0,topWidth+1)]],
+        ['campfire',[camp,part('fire_single',0,-1)]],
+      ];
+      for(const [family,parts] of definitions) for(let flip=0;flip<2;flip++) for(let rotation=0;rotation<4;rotation++) {
+        const transformed=parts.map(p=>({...p,cells:p.cells.map(cell=>{
+          let r=cell.r,c=flip?-cell.c:cell.c;
+          for(let turn=0;turn<rotation;turn++) [r,c]=[c,-r];
+          return {r,c};
+        })}));
+        const cells=transformed.flatMap(p=>p.cells),minR=Math.min(...cells.map(p=>p.r)),minC=Math.min(...cells.map(p=>p.c));
+        const height=Math.max(...cells.map(p=>p.r))-minR+1,width=Math.max(...cells.map(p=>p.c))-minC+1;
+        for(let r=0;r<=8-height;r++) for(let c=0;c<=8-width;c++) {
+          const members=transformed.map(p=>({template:p.template,mask:p.cells.reduce((m,q)=>m|(1n<<BigInt((q.r-minR+r)*8+q.c-minC+c)),0n)}));
+          const signature=`${family}/${members.map(p=>`${p.template}:${p.mask}`).join('/')}`;
+          if(seen.has(signature)) continue;seen.add(signature);
+          const key=`${members[0].template}/${members[0].mask}`,list=motifGeometry.get(key)??[];
+          list.push({family,members});motifGeometry.set(key,list);
+        }
+      }
+    }
+  }
+  const domains=new Map(groups.map((g,i)=>[templateId(g.piece),{g:i,positions:domainIndex(g.domain)}]));
+  const result:Motif[]=[];
+  for(const group of groups) if(providesConnections(group.piece.kind)) for(const camp of group.domain) {
+    for(const motif of motifGeometry.get(`${templateId(group.piece)}/${camp.mask}`)??[]) {
+      const members:Motif['members']=[];
+      for(const member of motif.members) {
+        const domain=domains.get(member.template),p=domain?.positions.get(member.mask);
+        if(!domain || !p) break;
+        members.push({g:domain.g,p});
+      }
+      if(members.length!==motif.members.length || members.some((a,i)=>members.slice(0,i).some(b=>!compatible(a.p,groups[b.g].piece.kind,b.p)))) continue;
+      const mask=members.reduce((m,e)=>m|e.p.mask,0n);
+      if(members.some(e=>CAMP_REQUIREMENTS[groups[e.g].piece.kind] && !e.p.connections.some(link=>(link.camp&camp.mask) && !(link.gap&mask)))) continue;
+      result.push({family:motif.family,members,mask});
+    }
+  }
+  return result;
+}
+
+// Reserve minima before the bounded knapsack. Store the fewest extra pieces
+// needed for each residual area; larger counts at the same area are dominated.
+export function facilityAreaReachable(items:readonly BudgetItem[],counts:readonly number[],remaining:number,available:number):boolean {
+  let minimum=0,maximum=0,required=0;
+  for(let g=0;g<items.length;g++) {
+    const item=items[g],need=Math.max(0,item.min-counts[g]);
+    minimum+=need*item.area;maximum+=(item.max-counts[g])*item.area;required+=need;
+  }
+  if(minimum>remaining || maximum<remaining || required>available) return false;
+  if(minimum===remaining) return true;
+  const extra=remaining-minimum,slots=available-required;
+  let reachable=Array<number>(extra+1).fill(Infinity);reachable[0]=0;
+  for(let g=0;g<items.length;g++) {
+    const item=items[g],limit=item.max-Math.max(counts[g],item.min),next=[...reachable];
+    for(let area=0;area<=extra;area++) if(reachable[area]<slots) {
+      for(let n=1;n<=limit && area+n*item.area<=extra && reachable[area]+n<=slots;n++)
+        next[area+n*item.area]=Math.min(next[area+n*item.area],reachable[area]+n);
+    }
+    reachable=next;
+  }
+  return Number.isFinite(reachable[extra]) && reachable[extra]<=slots;
+}
+
+export function activityDomains(level: Level, groups: PlacementGroup[], inventory: readonly BudgetItem[], area: number, random:()=>number, deadline:number, diagnostics:Record<string,number>={}, maxCount=Infinity, maxEmptyLines=16, useMotifs=true) {
   type Plan={groups:PlacementGroup[];rows:readonly number[];cols:readonly number[];score:number};
   let frontier:Plan[]=[{groups,rows:level.rows,cols:level.cols,score:Infinity}];
   const plans:Plan[]=[],seen=new Set<string>();
@@ -36,28 +132,29 @@ export function activityDomains(level: Level, groups: PlacementGroup[], inventor
   for(const plan of [...plans,{groups,rows:level.rows,cols:level.cols,score:Infinity}]) {
     if(Date.now()>=deadline) return;
     const next={...level,rows:plan.rows,cols:plan.cols};
-    const entries=tileFacilityBudget(next,plan.groups,inventory,area,random,deadline,diagnostics,maxCount,maxEmptyLines);
+    const entries=tileFacilityBudget(next,plan.groups,inventory,area,random,deadline,diagnostics,maxCount,maxEmptyLines,useMotifs);
+    useMotifs=false;
     if(entries) return {groups:plan.groups,level:next,entries};
   }
 
 }
 
 // A legal role exchange witnesses ambiguity without running either solver.
-export const hasRoleSwap = (entries: FacilityEntry[], groups: PlacementGroup[]) => roleSwapCount(entries,groups)>0;
-export function repartitionCount(entries: FacilityEntry[], groups: PlacementGroup[]):number {
+export const hasRoleSwap = (entries: FacilityEntry[], groups: PlacementGroup[]) => roleSwapCount(entries,groups,1)>0;
+export function repartitionCount(entries: FacilityEntry[], groups: PlacementGroup[], limit=Infinity):number {
   const domains=new Map(groups.map(g=>[templateId(g.piece),g.domain]));
-  const masks=new Map(groups.map(g=>[templateId(g.piece),new Set(g.domain.map(p=>p.mask))]));
+  const masks=new Map(groups.map(g=>[templateId(g.piece),domainIndex(g.domain)]));
   let count=0;
   for(let i=0;i<entries.length;i++) for(let j=i+1;j<entries.length;j++) {
     const a=entries[i],b=entries[j];
     if(a.piece.kind!==b.piece.kind || CAMP_REQUIREMENTS[a.piece.kind] || (a.p.cells.length===1 && b.p.cells.length===1)) continue;
     const union=a.p.mask|b.p.mask;
-    if(domains.get(templateId(a.piece))!.some(p=>p.mask!==a.p.mask && !(templateId(a.piece)===templateId(b.piece) && p.mask===b.p.mask) && (p.mask&union)===p.mask && masks.get(templateId(b.piece))!.has(union^p.mask))) count++;
+    if(domains.get(templateId(a.piece))!.some(p=>p.mask!==a.p.mask && !(templateId(a.piece)===templateId(b.piece) && p.mask===b.p.mask) && (p.mask&union)===p.mask && masks.get(templateId(b.piece))!.has(union^p.mask)) && ++count>=limit) return count;
   }
   return count;
 }
-export function roleSwapCount(entries: FacilityEntry[], groups: PlacementGroup[]): number {
-  const domains = new Map(groups.map(g => [templateId(g.piece), new Map(g.domain.map(p => [p.mask,p]))]));
+export function roleSwapCount(entries: FacilityEntry[], groups: PlacementGroup[], limit=Infinity): number {
+  const domains = new Map(groups.map(g => [templateId(g.piece), domainIndex(g.domain)]));
   const current = entries.map(e => ({ ...e, p: domains.get(templateId(e.piece))!.get(e.p.mask)! }));
   const used = current.reduce((m,e) => m | e.p.mask,0n);
   let swaps=0;
@@ -72,7 +169,7 @@ export function roleSwapCount(entries: FacilityEntry[], groups: PlacementGroup[]
       const p=k===i?pa:k===j?pb:e.p;
       return CAMP_REQUIREMENTS[e.piece.kind] && !p.connections.some(link=>(link.camp&providers) && !(link.gap&used));
     })) continue;
-    swaps++;
+    if(++swaps>=limit) return swaps;
   }
   return swaps;
 }
@@ -85,7 +182,7 @@ export function tileFacilities(level: Level, groups: PlacementGroup[], inventory
 
 // Choose counts and positions together under one exact area budget. Every step
 // reserves all outstanding minima and checks residual integer reachability.
-export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:readonly BudgetItem[],targetArea:number,random:()=>number,deadline=Infinity,diagnostics:Record<string,number>={},maxCount=Infinity,maxEmptyLines=16):FacilityEntry[]|undefined {
+export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:readonly BudgetItem[],targetArea:number,random:()=>number,deadline=Infinity,diagnostics:Record<string,number>={},maxCount=Infinity,maxEmptyLines=16,useMotifs=false):FacilityEntry[]|undefined {
   const count=(name:string)=>{diagnostics[name]=(diagnostics[name]??0)+1;};
   count('searches');
   const entries:FacilityEntry[]=[],counts=groups.map(()=>0),rows=Array<number>(8).fill(0),cols=Array<number>(8).fill(0);
@@ -102,28 +199,23 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
   const canFinish=(remaining:number)=>{
     const key=counts.join(',');
     const cached=reachability.get(key);if(cached!==undefined) return cached;
-    let reachable=new Map([[0,0]]);
-    const available=maxCount-counts.reduce((s,c)=>s+c,0);
-    for(let g=0;g<groups.length;g++) {
-      const next=new Map<number,number>(),item=limits[g];
-      for(let n=Math.max(0,item.min-counts[g]);n<=item.max-counts[g] && n*item.area<=remaining;n++) for(const [sum,count] of reachable)
-        if(sum+n*item.area<=remaining && count+n<=available) next.set(sum+n*item.area,Math.min(next.get(sum+n*item.area)??Infinity,count+n));
-      reachable=next;
-    }
-    const result=reachable.has(remaining);reachability.set(key,result);return result;
+    const result=facilityAreaReachable(limits,counts,remaining,maxCount-counts.reduce((s,c)=>s+c,0));
+    reachability.set(key,result);return result;
   };
-  const masks=groups.map(g=>new Set(g.domain.map(p=>p.mask)));
-  let nodes=0;
-  function search(used:bigint,providers:bigint,remaining:number,domains:Candidate[][]):boolean {
+  const masks=groups.map(g=>domainIndex(g.domain));
+  let nodes=0,nodeStop=nodeLimit;
+  type Prefix={g:number;p:Candidate;motif:string;motifGap:bigint};
+  function search(used:bigint,providers:bigint,remaining:number,domains:Candidate[][],prefix:readonly Prefix[]=[]):boolean {
     count('nodes');
-    if(++nodes>nodeLimit || (nodes%16===0 && Date.now()>=deadline)) {count('search cutoff');return false;}
+    if(++nodes>nodeStop || (nodes%16===0 && Date.now()>=deadline)) {count('search cutoff');return false;}
     if([...rows,...cols].filter(value=>value===0).length-remaining*2>maxEmptyLines) {count('empty lines');return false;}
     if(!remaining) {
       if(!limits.every((i,g)=>counts[g]>=i.min) || entries.some(e=>CAMP_REQUIREMENTS[e.piece.kind] && !e.p.connections.some(link=>(link.camp&providers) && !(link.gap&used)))) return false;
-      if(hasRoleSwap(entries,groups) || repartitionCount(entries,groups)) {count('completion ambiguity');return false;}
+      if(hasRoleSwap(entries,groups) || repartitionCount(entries,groups,1)) {count('completion ambiguity');return false;}
       return true;
     }
     if(!canFinish(remaining)) {count('quantity infeasible');return false;}
+    const reserved=[...entries,...prefix].reduce((m,e)=>m|(e.motifGap??0n),0n);
     const potential=domains.reduce((m,domain,g)=>counts[g]<limits[g].max && providesConnections(groups[g].piece.kind)?domain.reduce((mask,p)=>mask|p.mask,m):m,providers);
     if(entries.some(e=>CAMP_REQUIREMENTS[e.piece.kind] && !e.p.connections.some(link=>(link.camp&potential) && !(link.gap&used)))) {count('connection infeasible');return false;}
     if(domains.some((domain,g)=>domain.length<Math.max(0,limits[g].min-counts[g]))) {count('domain infeasible');return false;}
@@ -139,17 +231,18 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
     const moves:{g:number;valid:Candidate[];weight:number}[]=[];
     for(let g=0;g<groups.length;g++) {
       const item=limits[g],piece=groups[g].piece;
+      if(prefix.length && prefix[0].g!==g) continue;
       if(counts[g]>=item.max || item.area>remaining) continue;
       counts[g]++;const feasible=canFinish(remaining-item.area);counts[g]--;
       if(!feasible) continue;
-      const valid=domains[g].filter(p=>!CAMP_REQUIREMENTS[piece.kind] || p.connections.some(link=>(link.camp&potential) && !(link.gap&(used|p.mask))));
+      const valid=domains[g].filter(p=>!(p.mask&reserved) && (!prefix.length || prefix[0].p.mask===p.mask) && (!CAMP_REQUIREMENTS[piece.kind] || p.connections.some(link=>(link.camp&potential) && !(link.gap&(used|p.mask)))));
       if(!valid.length) continue;
       const need=counts[g]<item.min;
       moves.push({g,valid,weight:(need?100:1)*item.area*item.area*(1+Math.max(0,item.min-counts[g]))/(Math.sqrt(valid.length))*(1+random()*.3)});
     }
     const coverage=Array<number>(64).fill(0);
     for(const move of moves) for(const p of move.valid) for(const c of p.cells) coverage[c.r*8+c.c]++;
-    if(capacity===targetArea) {
+    if(capacity===targetArea && !prefix.length) {
       const required=space.filter(c=>!(used&c.bit));
       const pivot=required.sort((a,b)=>coverage[a.r*8+a.c]-coverage[b.r*8+b.c])[0];
       if(pivot) {
@@ -157,7 +250,7 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
         for(const move of moves) move.valid=move.valid.filter(p=>!!(p.mask&bit));
       }
     }
-    while(moves.length && nodes<=nodeLimit && Date.now()<deadline) {
+    while(moves.length && nodes<=nodeStop && Date.now()<deadline) {
       moves.sort((a,b)=>b.weight-a.weight);
       const move=moves.shift()!;
       const piece=groups[move.g].piece;
@@ -176,18 +269,47 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
           return groups[move.g].domain.some(q=>q.mask!==p.mask && !(templateId(piece)===templateId(e.piece) && q.mask===e.p.mask) && (q.mask&union)===q.mask && other.has(union^q.mask));
         });
         if(repartition) continue;
-        entries.push({piece:{...piece,id:`wild-${entries.length}`},p});counts[move.g]++;
+        entries.push({piece:{...piece,id:`wild-${entries.length}`},p,...(prefix.length?{motif:prefix[0].motif,motifGap:prefix[0].motifGap}:{})});counts[move.g]++;
         for(let j=0;j<8;j++){rows[j]+=p.rows[j];cols[j]+=p.cols[j];}
-        const next=domains.map((domain,g)=>counts[g]<limits[g].max?domain.filter(q=>compatible(q,piece.kind,p) && !q.rows.some((v,r)=>rows[r]+v>level.rows[r]) && !q.cols.some((v,c)=>cols[c]+v>level.cols[c])):[]);
-        if(search(used|p.mask,providesConnections(piece.kind)?providers|p.mask:providers,remaining-limits[move.g].area,next)) return true;
+        const next=domains.map((domain,g)=>counts[g]<limits[g].max?domain.filter(q=>!(q.mask&reserved) && compatible(q,piece.kind,p) && !q.rows.some((v,r)=>rows[r]+v>level.rows[r]) && !q.cols.some((v,c)=>cols[c]+v>level.cols[c])):[]);
+        if(search(used|p.mask,providesConnections(piece.kind)?providers|p.mask:providers,remaining-limits[move.g].area,next,prefix.slice(1))) return true;
         for(let j=0;j<8;j++){rows[j]-=p.rows[j];cols[j]-=p.cols[j];}
         counts[move.g]--;entries.pop();
-        if(nodes>nodeLimit || Date.now()>=deadline) return false;
+        if(nodes>nodeStop || Date.now()>=deadline) return false;
       }
     }
     return false;
   }
-  const found=search(0n,0n,targetArea,groups.map(g=>g.domain));
+  let found=false;
+  if(useMotifs) {
+    const maxMembers=Math.max(2,Math.floor(Math.min(maxCount,targetArea)/2));
+    const feasible=(members:Motif['members'])=>{
+      const quantities=groups.map((_,g)=>members.filter(m=>m.g===g).length),area=members.reduce((n,m)=>n+limits[m.g].area,0);
+      const used=members.reduce((m,e)=>m|e.p.mask,0n),providers=members.reduce((m,e)=>providesConnections(groups[e.g].piece.kind)?m|e.p.mask:m,0n);
+      if(members.length>maxMembers || quantities.some((n,g)=>n>limits[g].max)) return false;
+      const key=quantities.join(',');
+      let reachable=reachability.get(key);
+      if(reachable===undefined) {reachable=facilityAreaReachable(limits,quantities,targetArea-area,maxCount-members.length);reachability.set(key,reachable);}
+      return reachable
+        && members.every((a,i)=>members.slice(0,i).every(b=>compatible(a.p,groups[b.g].piece.kind,b.p)))
+        && members.every(e=>!CAMP_REQUIREMENTS[groups[e.g].piece.kind] || e.p.connections.some(link=>(link.camp&providers) && !(link.gap&used)))
+        && level.rows.every((v,r)=>members.reduce((n,e)=>n+e.p.rows[r],0)<=v) && level.cols.every((v,c)=>members.reduce((n,e)=>n+e.p.cols[c],0)<=v);
+    };
+    const gap=(m:Motif)=>m.members.reduce((mask,member)=>mask|member.p.connections.filter(link=>!!(link.camp&m.members[0].p.mask)).reduce((mask,link)=>mask|link.gap,0n),0n);
+    const options=facilityMotifs(groups).filter(m=>{const reserved=gap(m);return space.reduce((n,c)=>n+Number(!!(reserved&c.bit)),0)<=capacity-targetArea && feasible(m.members);})
+      .map(m=>({m,order:random()+(m.members.length===3?2:0)})).sort((a,b)=>b.order-a.order).map(({m})=>m);
+    for(const first of options.slice(0,1)) {
+      if(Date.now()>=deadline) break;
+      const second=random()<.35?options.find(m=>m.family!==first.family && !(m.mask&gap(first)) && !(first.mask&gap(m)) && feasible([...first.members,...m.members])):undefined;
+      const chosen=second?[first,second]:[first];
+      const prefix=chosen.flatMap(m=>m.members.map(member=>({...member,motif:m.family,
+        motifGap:member.p.connections.filter(link=>!!(link.camp&m.members[0].p.mask)).reduce((mask,link)=>mask|link.gap,0n)})));
+      nodeStop=60;count('motif attempts');
+      if(search(0n,0n,targetArea,groups.map(g=>g.domain),prefix)) {found=true;count('motif completed');break;}
+    }
+  }
+  nodeStop=nodeLimit;
+  if(!found && nodes<nodeLimit && Date.now()<deadline) found=search(0n,0n,targetArea,groups.map(g=>g.domain));
   count(found?'completed':nodes>nodeLimit?'node limit':Date.now()>=deadline?'deadline':'exhausted');
   return found?entries:undefined;
 }
@@ -196,6 +318,7 @@ export function tileFacilityBudget(level:Level,groups:PlacementGroup[],items:rea
 // Rank clue-domain entropy cheaply; only completed candidates reach the solvers.
 export function refineFacilities(entries: FacilityEntry[], groups: PlacementGroup[], random: () => number, deadline: number, maxEmptyLines=16) {
   const inventory = groups.map(g=>entries.filter(e=>templateId(e.piece)===templateId(g.piece)).length);
+  const reserved=entries.reduce((m,e)=>m|(e.motifGap??0n),0n);
   const lines = () => {
     const rows=Array<number>(8).fill(0),cols=Array<number>(8).fill(0);
     for(const e of entries) for(let i=0;i<8;i++) {rows[i]+=e.p.rows[i];cols[i]+=e.p.cols[i];}
@@ -218,9 +341,9 @@ export function refineFacilities(entries: FacilityEntry[], groups: PlacementGrou
   let current=cost();
   for(let step=0;step<6 && Date.now()<deadline;step++) {
     let best=current,move:{entry:FacilityEntry;p:Candidate}|undefined;
-    const candidates=entries.flatMap(entry=>{
+    const candidates=entries.filter(entry=>!entry.motif).flatMap(entry=>{
       const group=groups.find(g=>templateId(g.piece)===templateId(entry.piece))!;
-      return group.domain.filter(p=>p.mask!==entry.p.mask && !entries.some(e=>e!==entry && (!compatible(p,e.piece.kind,e.p) || (providesConnections(entry.piece.kind) && e.piece.kind===entry.piece.kind && p.cells.some(c=>e.p.cells.some(q=>adjacent(c,q))))))).map(p=>({entry,p,order:random()}));
+      return group.domain.filter(p=>!(p.mask&reserved) && p.mask!==entry.p.mask && !entries.some(e=>e!==entry && (!compatible(p,e.piece.kind,e.p) || (providesConnections(entry.piece.kind) && e.piece.kind===entry.piece.kind && p.cells.some(c=>e.p.cells.some(q=>adjacent(c,q))))))).map(p=>({entry,p,order:random()}));
     }).sort((a,b)=>a.order-b.order).slice(0,80);
     for(const candidate of candidates) {
       if(Date.now()>=deadline) break;

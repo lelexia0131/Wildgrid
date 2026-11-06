@@ -2,6 +2,7 @@ import { CAMP_REQUIREMENTS, evaluate } from './placementRules';
 import { boardCells, cellBit, compatible, placementDomains } from './placementDomains';
 import type { Candidate, PlacementGroup } from './placementDomains';
 import type { Level, Placement } from './types';
+import { solverBoard } from './boardGeometry';
 
 export type LogicStep = { rule: 'line' | 'overlap' | 'relationship' | 'capacity' | 'shape' | 'assumption'; group: string; removed: number; remaining: number; round: number; placements?: Placement[]; eliminated?: Placement[]; assumed?: Placement; included?: boolean; contradiction?: string; proof?: LogicStep[] };
 export type LogicResult = { solved: boolean; contradiction: boolean; aborted: boolean; steps: LogicStep[]; rounds: number; initialForced: number; deductions: number; assumptions: number; maxDepth: number; remaining: number; placements: Placement[]; initialPlacements: Placement[] };
@@ -23,10 +24,10 @@ export function reasonedDomains(groups: PlacementGroup[], logic: LogicResult): P
 // Group cardinality treats interchangeable IDs as one set of placements. All
 // eliminations are necessary conditions, never a preference for the blueprint.
 export function reasonLevel(level: Level, budget: { deadline?: number; maxAssumptions?: number; maxDepth?: number; maxUnresolved?: number } = {}, prepared?: PlacementGroup[]): LogicResult {
-  const groups = prepared ?? placementDomains(level), n = level.size, board = boardCells(n);
+  const groups = prepared ?? placementDomains(level), layout = solverBoard(level), n = layout.size, board = boardCells(n);
   const full = (1n << BigInt(n * n)) - 1n;
   const lines = Array.from({ length: n * 2 }, (_, i) => board.reduce((mask, p) => (i < n ? p.r === i : p.c === i - n) ? mask | cellBit(p, n) : mask, 0n));
-  const clues = [...level.rows, ...level.cols], counts = groups.map(g => g.ids.length);
+  const clues = [...layout.rows, ...layout.cols], counts = groups.map(g => g.ids.length);
   const steps: LogicStep[] = [];
   const singleBounds = [0, 1, 2, 3].map(value => ({ low: value, high: value }));
   const result: LogicResult = { solved: false, contradiction: false, aborted: false, steps, rounds: 0, initialForced: groups.reduce((s, g) => s + (g.domain.length === g.ids.length ? g.ids.length : 0), 0), deductions: 0, assumptions: 0, maxDepth: 0, remaining: 0, placements: [], initialPlacements: groups.flatMap(g => g.domain.length === g.ids.length ? g.domain.map((p, i) => ({ ...p.at, id: g.ids[i] })) : []) };
@@ -36,6 +37,7 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
   // depend only on this domain, owned/forbidden cells and pinned placements.
   // Cache only unpinned groups; clues and counts are fixed for this call.
   const combinationCache=new WeakMap<Candidate[],Map<bigint,{value:{mask:bigint;indices:number[];lines:number[]}[]|undefined}>>();
+  const lineCaches=groups.map(()=>new WeakMap<Candidate[],{min:number[];max:number[];bounds:{low:number;high:number}[][]}>());
   let branchTrace: LogicStep[] | undefined;
   const fail = (contradiction: string) => {
     branchTrace?.push({ rule: 'capacity', group: '*', removed: 0, remaining: 0, round: 0, contradiction });
@@ -115,22 +117,31 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
       const unions = state.domains.map(domain => domain.reduce((m, p) => m | p.mask, 0n));
       const exclusive = groups.map((_, g) => required & ~unions.reduce((m, u, h) => h === g ? m : m | u, 0n) & full);
       const ownSupport = combinations.map(c => c ? new Set(c.flatMap(v => v.indices)) : undefined);
-      const lineValues = state.domains.map((domain, g) => lines.map((_, line) => {
-        const values = domain.map(p => line < n ? p.rows[line] : p.cols[line - n]);
-        return counts[g] === 1 ? values : values.sort((a, b) => a - b);
-      }));
-      const min = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.min(...combinations[g]!.map(c => c.lines[line])) : counts[g] === 1 ? Math.min(...lineValues[g][line]) : lineValues[g][line].slice(0, counts[g]).reduce((a, b) => a + b, 0)));
-      const max = groups.map((_, g) => lines.map((_, line) => combinations[g] ? Math.max(...combinations[g]!.map(c => c.lines[line])) : counts[g] === 1 ? Math.max(...lineValues[g][line]) : lineValues[g][line].slice(-counts[g]).reduce((a, b) => a + b, 0)));
-      const bounds = groups.map((_, g) => lines.map((_, l) => {
-        if (counts[g] === 1) return singleBounds;
-        const values = lineValues[g][l], prefix = [0], copies = counts[g] - 1;
-        for (const value of values) prefix.push(prefix[prefix.length - 1] + value);
-        return [0, 1, 2, 3].map(value => {
-          const index = values.indexOf(value), inLow = index >= 0 && index < copies, inHigh = index >= values.length - copies;
-          return { low: value + prefix[copies + Number(inLow)] - (inLow ? value : 0),
-            high: value + prefix[values.length] - prefix[values.length - copies - Number(inHigh)] - (inHigh ? value : 0) };
+      // These bounds depend only on the immutable domain and fixed copy count,
+      // not on this branch's owned/forbidden cells or pinned assumptions.
+      const summaries=state.domains.map((domain,g)=>{
+        const cached=lineCaches[g].get(domain);if(cached) return cached;
+        const values=lines.map((_,line)=>{
+          const v=domain.map(p=>line<n?p.rows[line]:p.cols[line-n]);
+          return counts[g]===1?v:v.sort((a,b)=>a-b);
         });
-      }));
+        const min=values.map(v=>counts[g]===1?Math.min(...v):v.slice(0,counts[g]).reduce((a,b)=>a+b,0));
+        const max=values.map(v=>counts[g]===1?Math.max(...v):v.slice(-counts[g]).reduce((a,b)=>a+b,0));
+        const bounds=values.map(v=>{
+          if(counts[g]===1) return singleBounds;
+          const prefix=[0],copies=counts[g]-1;
+          for(const value of v) prefix.push(prefix[prefix.length-1]+value);
+          return [0,1,2,3].map(value=>{
+            const index=v.indexOf(value),inLow=index>=0 && index<copies,inHigh=index>=v.length-copies;
+            return {low:value+prefix[copies+Number(inLow)]-(inLow?value:0),
+              high:value+prefix[v.length]-prefix[v.length-copies-Number(inHigh)]-(inHigh?value:0)};
+          });
+        });
+        const summary={min,max,bounds};lineCaches[g].set(domain,summary);return summary;
+      });
+      const min=groups.map((_,g)=>lines.map((_,l)=>combinations[g]?Math.min(...combinations[g]!.map(c=>c.lines[l])):summaries[g].min[l]));
+      const max=groups.map((_,g)=>lines.map((_,l)=>combinations[g]?Math.max(...combinations[g]!.map(c=>c.lines[l])):summaries[g].max[l]));
+      const bounds=summaries.map(s=>s.bounds);
       const totalMin = lines.map((_, l) => min.reduce((s, m) => s + m[l], 0)), totalMax = lines.map((_, l) => max.reduce((s, m) => s + m[l], 0));
       if (clues.some((v, l) => v < totalMin[l] || v > totalMax[l])) return fail('设施组合占格上下界与行列提示冲突');
       for (let g = 0; g < groups.length; g++) {
@@ -178,7 +189,9 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
     }
     return true;
   }
-  const clone = (state: State): State => ({ ...state, domains: state.domains.map(d => [...d]), pinned: state.pinned.map(d => [...d]) });
+  // Propagation replaces domain arrays rather than mutating them. Sharing the
+  // unchanged arrays also preserves exact combination-cache keys in branches.
+  const clone = (state: State): State => ({ ...state, domains: [...state.domains], pinned: state.pinned.map(d => [...d]) });
   function viable(state: State, depth: number): boolean | undefined {
     if (!propagate(state, false)) return false;
     if (result.aborted) return undefined;

@@ -1,0 +1,5306 @@
+{
+  "deadlineMs": 10000,
+  "maxNodes": 1000000,
+  "records": [
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261019,
+      "disabled": [],
+      "ms": 27.1635,
+      "nodes": 120,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261020,
+      "disabled": [],
+      "ms": 2.8205999999999847,
+      "nodes": 152,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261021,
+      "disabled": [],
+      "ms": 4.199200000000019,
+      "nodes": 298,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261022,
+      "disabled": [],
+      "ms": 5.739300000000014,
+      "nodes": 419,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261023,
+      "disabled": [],
+      "ms": 2.805000000000007,
+      "nodes": 328,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261024,
+      "disabled": [],
+      "ms": 1.188999999999993,
+      "nodes": 68,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261025,
+      "disabled": [],
+      "ms": 1.7369999999999948,
+      "nodes": 107,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261026,
+      "disabled": [],
+      "ms": 3.3281000000000063,
+      "nodes": 350,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261027,
+      "disabled": [],
+      "ms": 6.059499999999986,
+      "nodes": 900,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261028,
+      "disabled": [],
+      "ms": 1.5349999999999966,
+      "nodes": 76,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261029,
+      "disabled": [],
+      "ms": 4.261099999999999,
+      "nodes": 347,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261030,
+      "disabled": [],
+      "ms": 3.977300000000014,
+      "nodes": 417,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261031,
+      "disabled": [],
+      "ms": 2.203700000000026,
+      "nodes": 253,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261032,
+      "disabled": [],
+      "ms": 3.620400000000018,
+      "nodes": 456,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261033,
+      "disabled": [],
+      "ms": 2.2257000000000176,
+      "nodes": 207,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261034,
+      "disabled": [],
+      "ms": 4.852800000000002,
+      "nodes": 351,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261035,
+      "disabled": [],
+      "ms": 3.3181999999999903,
+      "nodes": 311,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261036,
+      "disabled": [],
+      "ms": 1.0711000000000013,
+      "nodes": 128,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261037,
+      "disabled": [],
+      "ms": 0.9099000000000501,
+      "nodes": 72,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261038,
+      "disabled": [],
+      "ms": 1.5837999999999965,
+      "nodes": 212,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261039,
+      "disabled": [],
+      "ms": 1.3673000000000002,
+      "nodes": 204,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261040,
+      "disabled": [],
+      "ms": 2.296800000000019,
+      "nodes": 418,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261041,
+      "disabled": [],
+      "ms": 2.1614000000000146,
+      "nodes": 249,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261042,
+      "disabled": [],
+      "ms": 3.1084000000000174,
+      "nodes": 764,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261043,
+      "disabled": [],
+      "ms": 0.9150000000000205,
+      "nodes": 36,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261044,
+      "disabled": [],
+      "ms": 1.9459999999999695,
+      "nodes": 194,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261045,
+      "disabled": [],
+      "ms": 1.92289999999997,
+      "nodes": 267,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261046,
+      "disabled": [],
+      "ms": 1.2639999999999532,
+      "nodes": 191,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261047,
+      "disabled": [],
+      "ms": 4.134299999999996,
+      "nodes": 742,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261048,
+      "disabled": [],
+      "ms": 1.83299999999997,
+      "nodes": 286,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261049,
+      "disabled": [],
+      "ms": 0.8648999999999774,
+      "nodes": 98,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261050,
+      "disabled": [],
+      "ms": 2.9378999999999564,
+      "nodes": 643,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261051,
+      "disabled": [],
+      "ms": 9.63209999999998,
+      "nodes": 1365,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261052,
+      "disabled": [],
+      "ms": 0.9136000000000308,
+      "nodes": 85,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261053,
+      "disabled": [],
+      "ms": 0.7474000000000274,
+      "nodes": 70,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261054,
+      "disabled": [],
+      "ms": 3.711399999999969,
+      "nodes": 807,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261055,
+      "disabled": [],
+      "ms": 1.126199999999983,
+      "nodes": 64,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261056,
+      "disabled": [],
+      "ms": 2.2635999999999967,
+      "nodes": 307,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261057,
+      "disabled": [],
+      "ms": 3.3015000000000327,
+      "nodes": 881,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261058,
+      "disabled": [],
+      "ms": 1.0631999999999948,
+      "nodes": 146,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261059,
+      "disabled": [],
+      "ms": 0.7740000000000009,
+      "nodes": 81,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261060,
+      "disabled": [],
+      "ms": 6.521000000000015,
+      "nodes": 1685,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261061,
+      "disabled": [],
+      "ms": 0.9268999999999892,
+      "nodes": 131,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261062,
+      "disabled": [],
+      "ms": 1.2875999999999976,
+      "nodes": 119,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261063,
+      "disabled": [],
+      "ms": 0.7810999999999808,
+      "nodes": 82,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261064,
+      "disabled": [],
+      "ms": 2.502900000000011,
+      "nodes": 521,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261065,
+      "disabled": [],
+      "ms": 1.6123000000000047,
+      "nodes": 249,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261066,
+      "disabled": [],
+      "ms": 1.1275999999999726,
+      "nodes": 184,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261067,
+      "disabled": [],
+      "ms": 1.2373000000000047,
+      "nodes": 111,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261068,
+      "disabled": [],
+      "ms": 0.9313000000000216,
+      "nodes": 115,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261069,
+      "disabled": [],
+      "ms": 0.7533999999999992,
+      "nodes": 104,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261070,
+      "disabled": [],
+      "ms": 1.3011000000000195,
+      "nodes": 129,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261071,
+      "disabled": [],
+      "ms": 1.0357999999999947,
+      "nodes": 187,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261072,
+      "disabled": [],
+      "ms": 0.7663000000000011,
+      "nodes": 42,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261073,
+      "disabled": [],
+      "ms": 0.9930999999999699,
+      "nodes": 152,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261074,
+      "disabled": [],
+      "ms": 1.5477999999999952,
+      "nodes": 239,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261075,
+      "disabled": [],
+      "ms": 1.187400000000025,
+      "nodes": 131,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261076,
+      "disabled": [],
+      "ms": 1.3770000000000095,
+      "nodes": 157,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261077,
+      "disabled": [],
+      "ms": 1.5177000000000476,
+      "nodes": 224,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261078,
+      "disabled": [],
+      "ms": 1.2036999999999694,
+      "nodes": 190,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261079,
+      "disabled": [],
+      "ms": 0.7531999999999925,
+      "nodes": 87,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261080,
+      "disabled": [],
+      "ms": 1.0195999999999685,
+      "nodes": 190,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261081,
+      "disabled": [],
+      "ms": 1.5187999999999988,
+      "nodes": 174,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261082,
+      "disabled": [],
+      "ms": 0.7878000000000043,
+      "nodes": 88,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261083,
+      "disabled": [],
+      "ms": 4.852800000000002,
+      "nodes": 826,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261084,
+      "disabled": [],
+      "ms": 1.0978000000000065,
+      "nodes": 196,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261085,
+      "disabled": [],
+      "ms": 1.3092000000000326,
+      "nodes": 219,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261086,
+      "disabled": [],
+      "ms": 2.331700000000012,
+      "nodes": 526,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261087,
+      "disabled": [],
+      "ms": 2.241800000000012,
+      "nodes": 473,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261088,
+      "disabled": [],
+      "ms": 1.1685999999999694,
+      "nodes": 184,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261089,
+      "disabled": [],
+      "ms": 2.3179999999999836,
+      "nodes": 449,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261090,
+      "disabled": [],
+      "ms": 1.393199999999979,
+      "nodes": 209,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261091,
+      "disabled": [],
+      "ms": 1.4437000000000353,
+      "nodes": 192,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261092,
+      "disabled": [],
+      "ms": 1.066000000000031,
+      "nodes": 71,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261093,
+      "disabled": [],
+      "ms": 1.8267999999999915,
+      "nodes": 356,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261094,
+      "disabled": [],
+      "ms": 1.046100000000024,
+      "nodes": 128,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261095,
+      "disabled": [],
+      "ms": 26.78030000000001,
+      "nodes": 7983,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261096,
+      "disabled": [],
+      "ms": 1.219699999999989,
+      "nodes": 144,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261097,
+      "disabled": [],
+      "ms": 1.2269999999999754,
+      "nodes": 235,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261098,
+      "disabled": [],
+      "ms": 1.595199999999977,
+      "nodes": 199,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261099,
+      "disabled": [],
+      "ms": 1.0394000000000005,
+      "nodes": 156,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261100,
+      "disabled": [],
+      "ms": 0.7938000000000329,
+      "nodes": 61,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261101,
+      "disabled": [],
+      "ms": 1.574700000000007,
+      "nodes": 195,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261102,
+      "disabled": [],
+      "ms": 1.6539999999999964,
+      "nodes": 267,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261103,
+      "disabled": [],
+      "ms": 1.7562999999999533,
+      "nodes": 288,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261104,
+      "disabled": [],
+      "ms": 1.498200000000054,
+      "nodes": 219,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261105,
+      "disabled": [],
+      "ms": 1.2162999999999897,
+      "nodes": 145,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261106,
+      "disabled": [],
+      "ms": 1.9295000000000186,
+      "nodes": 281,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261107,
+      "disabled": [],
+      "ms": 2.268599999999992,
+      "nodes": 453,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261108,
+      "disabled": [],
+      "ms": 2.681099999999958,
+      "nodes": 370,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261109,
+      "disabled": [],
+      "ms": 2.314300000000003,
+      "nodes": 340,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261110,
+      "disabled": [],
+      "ms": 1.078200000000038,
+      "nodes": 154,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261111,
+      "disabled": [],
+      "ms": 1.4403999999999542,
+      "nodes": 109,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261112,
+      "disabled": [],
+      "ms": 2.793799999999976,
+      "nodes": 591,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261113,
+      "disabled": [],
+      "ms": 2.0242000000000075,
+      "nodes": 328,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261114,
+      "disabled": [],
+      "ms": 0.7404999999999973,
+      "nodes": 54,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261115,
+      "disabled": [],
+      "ms": 0.9581000000000017,
+      "nodes": 124,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261116,
+      "disabled": [],
+      "ms": 0.8980999999999995,
+      "nodes": 117,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261117,
+      "disabled": [],
+      "ms": 1.5538999999999987,
+      "nodes": 298,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 7,
+      "seed": 20261118,
+      "disabled": [],
+      "ms": 0.8921000000000276,
+      "nodes": 120,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261019,
+      "disabled": [],
+      "ms": 16.254999999999995,
+      "nodes": 1589,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261020,
+      "disabled": [],
+      "ms": 48.850200000000086,
+      "nodes": 4610,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261021,
+      "disabled": [],
+      "ms": 10.544000000000096,
+      "nodes": 1670,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261022,
+      "disabled": [],
+      "ms": 6.294499999999971,
+      "nodes": 1114,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261023,
+      "disabled": [],
+      "ms": 9.336299999999937,
+      "nodes": 1574,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261024,
+      "disabled": [],
+      "ms": 2.5317999999999756,
+      "nodes": 266,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261025,
+      "disabled": [],
+      "ms": 16.97619999999995,
+      "nodes": 1933,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261026,
+      "disabled": [],
+      "ms": 1.9378000000000384,
+      "nodes": 189,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261027,
+      "disabled": [],
+      "ms": 2.02800000000002,
+      "nodes": 252,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261028,
+      "disabled": [],
+      "ms": 8.297699999999963,
+      "nodes": 1268,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261029,
+      "disabled": [],
+      "ms": 9.778799999999933,
+      "nodes": 1210,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261030,
+      "disabled": [],
+      "ms": 4.3618000000000166,
+      "nodes": 527,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261031,
+      "disabled": [],
+      "ms": 2.9575999999999567,
+      "nodes": 316,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261032,
+      "disabled": [],
+      "ms": 24.878299999999967,
+      "nodes": 2996,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261033,
+      "disabled": [],
+      "ms": 3.0686999999999216,
+      "nodes": 393,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261034,
+      "disabled": [],
+      "ms": 4.699000000000069,
+      "nodes": 613,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261035,
+      "disabled": [],
+      "ms": 2.4470000000000027,
+      "nodes": 350,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261036,
+      "disabled": [],
+      "ms": 0.8319999999999936,
+      "nodes": 59,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261037,
+      "disabled": [],
+      "ms": 4.2993999999999915,
+      "nodes": 508,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261038,
+      "disabled": [],
+      "ms": 41.96990000000005,
+      "nodes": 6877,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261039,
+      "disabled": [],
+      "ms": 38.75700000000006,
+      "nodes": 5669,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261041,
+      "disabled": [],
+      "ms": 2.933599999999956,
+      "nodes": 288,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261042,
+      "disabled": [],
+      "ms": 3.2933000000000447,
+      "nodes": 475,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261044,
+      "disabled": [],
+      "ms": 4.210199999999986,
+      "nodes": 508,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261045,
+      "disabled": [],
+      "ms": 6.711900000000014,
+      "nodes": 663,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261046,
+      "disabled": [],
+      "ms": 0.8871000000000322,
+      "nodes": 82,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261047,
+      "disabled": [],
+      "ms": 2.423599999999965,
+      "nodes": 259,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261048,
+      "disabled": [],
+      "ms": 3.4881000000000313,
+      "nodes": 484,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261049,
+      "disabled": [],
+      "ms": 20.918999999999983,
+      "nodes": 2282,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261050,
+      "disabled": [],
+      "ms": 4.304899999999975,
+      "nodes": 461,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261051,
+      "disabled": [],
+      "ms": 2.033900000000017,
+      "nodes": 197,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261052,
+      "disabled": [],
+      "ms": 19.68399999999997,
+      "nodes": 3690,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261053,
+      "disabled": [],
+      "ms": 39.794899999999984,
+      "nodes": 4753,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261054,
+      "disabled": [],
+      "ms": 1.7658999999999878,
+      "nodes": 191,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261055,
+      "disabled": [],
+      "ms": 11.613699999999994,
+      "nodes": 1366,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261056,
+      "disabled": [],
+      "ms": 2.9067999999999756,
+      "nodes": 414,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261057,
+      "disabled": [],
+      "ms": 2.4875999999999294,
+      "nodes": 221,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261058,
+      "disabled": [],
+      "ms": 12.346400000000017,
+      "nodes": 1518,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261059,
+      "disabled": [],
+      "ms": 9.039800000000014,
+      "nodes": 1022,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261061,
+      "disabled": [],
+      "ms": 6.710500000000025,
+      "nodes": 716,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261062,
+      "disabled": [],
+      "ms": 1.1478000000000748,
+      "nodes": 77,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261063,
+      "disabled": [],
+      "ms": 9.536200000000008,
+      "nodes": 1061,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261064,
+      "disabled": [],
+      "ms": 8.797800000000052,
+      "nodes": 944,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261065,
+      "disabled": [],
+      "ms": 2.084100000000035,
+      "nodes": 177,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261066,
+      "disabled": [],
+      "ms": 40.84500000000014,
+      "nodes": 4937,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261067,
+      "disabled": [],
+      "ms": 8.91099999999983,
+      "nodes": 1265,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261068,
+      "disabled": [],
+      "ms": 3.231599999999844,
+      "nodes": 270,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261069,
+      "disabled": [],
+      "ms": 16.816100000000006,
+      "nodes": 2212,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261070,
+      "disabled": [],
+      "ms": 28.11500000000001,
+      "nodes": 3731,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261071,
+      "disabled": [],
+      "ms": 2.8217999999999392,
+      "nodes": 290,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261072,
+      "disabled": [],
+      "ms": 1.9080000000001291,
+      "nodes": 162,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261073,
+      "disabled": [],
+      "ms": 3.9778000000001157,
+      "nodes": 340,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261074,
+      "disabled": [],
+      "ms": 30.64630000000011,
+      "nodes": 2761,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261075,
+      "disabled": [],
+      "ms": 3.49980000000005,
+      "nodes": 458,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261076,
+      "disabled": [],
+      "ms": 1.5106000000000677,
+      "nodes": 90,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261077,
+      "disabled": [],
+      "ms": 1.812400000000025,
+      "nodes": 191,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261078,
+      "disabled": [],
+      "ms": 16.87630000000013,
+      "nodes": 1842,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261079,
+      "disabled": [],
+      "ms": 15.750500000000102,
+      "nodes": 1254,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261080,
+      "disabled": [],
+      "ms": 13.994799999999941,
+      "nodes": 1437,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261081,
+      "disabled": [],
+      "ms": 3.1463999999998578,
+      "nodes": 457,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261082,
+      "disabled": [],
+      "ms": 3.185000000000173,
+      "nodes": 379,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261083,
+      "disabled": [],
+      "ms": 2.2734999999997854,
+      "nodes": 231,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261084,
+      "disabled": [],
+      "ms": 6.508399999999938,
+      "nodes": 846,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261085,
+      "disabled": [],
+      "ms": 15.932200000000194,
+      "nodes": 2066,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261086,
+      "disabled": [],
+      "ms": 2.9142000000001644,
+      "nodes": 249,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261087,
+      "disabled": [],
+      "ms": 3.4242000000001553,
+      "nodes": 478,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261088,
+      "disabled": [],
+      "ms": 14.011299999999892,
+      "nodes": 2310,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261089,
+      "disabled": [],
+      "ms": 1.9038000000000466,
+      "nodes": 214,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261090,
+      "disabled": [],
+      "ms": 3.383100000000013,
+      "nodes": 427,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261091,
+      "disabled": [],
+      "ms": 3.3855000000000928,
+      "nodes": 441,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261092,
+      "disabled": [],
+      "ms": 6.989699999999857,
+      "nodes": 869,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261093,
+      "disabled": [],
+      "ms": 6.388999999999896,
+      "nodes": 938,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261094,
+      "disabled": [],
+      "ms": 2.740600000000086,
+      "nodes": 307,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261095,
+      "disabled": [],
+      "ms": 5.993799999999965,
+      "nodes": 935,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261096,
+      "disabled": [],
+      "ms": 7.123600000000124,
+      "nodes": 751,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261097,
+      "disabled": [],
+      "ms": 3.9396999999999025,
+      "nodes": 557,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261098,
+      "disabled": [],
+      "ms": 3.4618000000000393,
+      "nodes": 370,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261099,
+      "disabled": [],
+      "ms": 8.440899999999829,
+      "nodes": 1027,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261100,
+      "disabled": [],
+      "ms": 34.77149999999983,
+      "nodes": 4017,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261101,
+      "disabled": [],
+      "ms": 1.9750000000001364,
+      "nodes": 221,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261102,
+      "disabled": [],
+      "ms": 32.87560000000008,
+      "nodes": 4630,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261103,
+      "disabled": [],
+      "ms": 2.201999999999998,
+      "nodes": 283,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261104,
+      "disabled": [],
+      "ms": 3.60349999999994,
+      "nodes": 417,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261105,
+      "disabled": [],
+      "ms": 0.9713999999999032,
+      "nodes": 47,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261106,
+      "disabled": [],
+      "ms": 2.0597999999999956,
+      "nodes": 213,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261107,
+      "disabled": [],
+      "ms": 1.6728999999997995,
+      "nodes": 201,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261108,
+      "disabled": [],
+      "ms": 6.625999999999976,
+      "nodes": 824,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261109,
+      "disabled": [],
+      "ms": 3.9628000000000156,
+      "nodes": 400,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261110,
+      "disabled": [],
+      "ms": 5.285900000000083,
+      "nodes": 746,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261111,
+      "disabled": [],
+      "ms": 9.054200000000037,
+      "nodes": 1319,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261112,
+      "disabled": [],
+      "ms": 8.36609999999996,
+      "nodes": 1365,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261113,
+      "disabled": [],
+      "ms": 5.532600000000002,
+      "nodes": 771,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261114,
+      "disabled": [],
+      "ms": 2.2719999999999345,
+      "nodes": 296,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261115,
+      "disabled": [],
+      "ms": 1.4898000000000593,
+      "nodes": 134,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261116,
+      "disabled": [],
+      "ms": 1.5449000000000979,
+      "nodes": 183,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261117,
+      "disabled": [],
+      "ms": 22.25260000000003,
+      "nodes": 4163,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 8,
+      "seed": 20261118,
+      "disabled": [],
+      "ms": 4.795399999999972,
+      "nodes": 555,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261019,
+      "disabled": [],
+      "ms": 46.72039999999993,
+      "nodes": 8075,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261020,
+      "disabled": [],
+      "ms": 57.42020000000002,
+      "nodes": 9316,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261026,
+      "disabled": [],
+      "ms": 24.15930000000003,
+      "nodes": 4255,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261028,
+      "disabled": [],
+      "ms": 8.859300000000076,
+      "nodes": 1363,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261029,
+      "disabled": [],
+      "ms": 37.765699999999924,
+      "nodes": 5763,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261032,
+      "disabled": [],
+      "ms": 134.65740000000005,
+      "nodes": 23440,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261033,
+      "disabled": [],
+      "ms": 18.565500000000156,
+      "nodes": 3847,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261036,
+      "disabled": [],
+      "ms": 2.4983000000001994,
+      "nodes": 316,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261037,
+      "disabled": [],
+      "ms": 12.844100000000026,
+      "nodes": 1849,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261038,
+      "disabled": [],
+      "ms": 12.35349999999994,
+      "nodes": 1573,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261039,
+      "disabled": [],
+      "ms": 10.90910000000008,
+      "nodes": 1424,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261042,
+      "disabled": [],
+      "ms": 20.378400000000056,
+      "nodes": 3716,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261043,
+      "disabled": [],
+      "ms": 32.12389999999982,
+      "nodes": 4009,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261045,
+      "disabled": [],
+      "ms": 12.716799999999921,
+      "nodes": 1413,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261046,
+      "disabled": [],
+      "ms": 53.176299999999856,
+      "nodes": 6002,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261047,
+      "disabled": [],
+      "ms": 40.26319999999987,
+      "nodes": 6581,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261048,
+      "disabled": [],
+      "ms": 327.4766000000002,
+      "nodes": 53321,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261054,
+      "disabled": [],
+      "ms": 2.305500000000393,
+      "nodes": 359,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261057,
+      "disabled": [],
+      "ms": 80.82259999999997,
+      "nodes": 12477,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261059,
+      "disabled": [],
+      "ms": 14.818499999999858,
+      "nodes": 2111,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261064,
+      "disabled": [],
+      "ms": 5.582499999999982,
+      "nodes": 610,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261066,
+      "disabled": [],
+      "ms": 19.760299999999916,
+      "nodes": 3230,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261067,
+      "disabled": [],
+      "ms": 17.502899999999954,
+      "nodes": 2560,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261070,
+      "disabled": [],
+      "ms": 28.701500000000124,
+      "nodes": 4341,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261075,
+      "disabled": [],
+      "ms": 7.991199999999935,
+      "nodes": 1117,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261078,
+      "disabled": [],
+      "ms": 5.397199999999884,
+      "nodes": 755,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261079,
+      "disabled": [],
+      "ms": 10.566299999999956,
+      "nodes": 1293,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261081,
+      "disabled": [],
+      "ms": 35.13779999999997,
+      "nodes": 4162,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261085,
+      "disabled": [],
+      "ms": 6.161099999999806,
+      "nodes": 719,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261087,
+      "disabled": [],
+      "ms": 5.717599999999948,
+      "nodes": 674,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261090,
+      "disabled": [],
+      "ms": 9.252300000000105,
+      "nodes": 1105,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261092,
+      "disabled": [],
+      "ms": 7.331499999999778,
+      "nodes": 978,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261093,
+      "disabled": [],
+      "ms": 55.371399999999994,
+      "nodes": 7405,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261101,
+      "disabled": [],
+      "ms": 5.413800000000265,
+      "nodes": 738,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261103,
+      "disabled": [],
+      "ms": 47.5311999999999,
+      "nodes": 7069,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261104,
+      "disabled": [],
+      "ms": 18.114300000000185,
+      "nodes": 2993,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261105,
+      "disabled": [],
+      "ms": 11.172399999999925,
+      "nodes": 1636,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261106,
+      "disabled": [],
+      "ms": 3.6163000000001375,
+      "nodes": 541,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261107,
+      "disabled": [],
+      "ms": 52.0314000000003,
+      "nodes": 8496,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261110,
+      "disabled": [],
+      "ms": 4.0832000000000335,
+      "nodes": 465,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261113,
+      "disabled": [],
+      "ms": 6.1840000000001965,
+      "nodes": 1249,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261116,
+      "disabled": [],
+      "ms": 80.64480000000003,
+      "nodes": 16867,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 9,
+      "seed": 20261117,
+      "disabled": [],
+      "ms": 20.48339999999962,
+      "nodes": 3518,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [],
+      "ms": 16.299299999999675,
+      "nodes": 1821,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261020,
+      "disabled": [],
+      "ms": 55.57159999999976,
+      "nodes": 7232,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261037,
+      "disabled": [],
+      "ms": 37.1878999999999,
+      "nodes": 4346,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261048,
+      "disabled": [],
+      "ms": 106.49879999999985,
+      "nodes": 14564,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261067,
+      "disabled": [],
+      "ms": 7.945500000000266,
+      "nodes": 791,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261075,
+      "disabled": [],
+      "ms": 94.47580000000016,
+      "nodes": 11529,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261082,
+      "disabled": [],
+      "ms": 126.20119999999997,
+      "nodes": 14695,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261093,
+      "disabled": [],
+      "ms": 96.73490000000038,
+      "nodes": 17355,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261100,
+      "disabled": [],
+      "ms": 76.16740000000027,
+      "nodes": 11591,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261105,
+      "disabled": [],
+      "ms": 38.06389999999965,
+      "nodes": 5013,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261106,
+      "disabled": [],
+      "ms": 35.55250000000024,
+      "nodes": 4234,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261113,
+      "disabled": [],
+      "ms": 13.37960000000021,
+      "nodes": 2208,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-before-100.json",
+      "difficulty": 10,
+      "seed": 20261116,
+      "disabled": [],
+      "ms": 80.85710000000017,
+      "nodes": 10004,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261019,
+      "disabled": [],
+      "ms": 1.2593999999999141,
+      "nodes": 120,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261020,
+      "disabled": [],
+      "ms": 1.9034999999998945,
+      "nodes": 151,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261021,
+      "disabled": [],
+      "ms": 1.58849999999984,
+      "nodes": 247,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261022,
+      "disabled": [],
+      "ms": 2.9311000000002423,
+      "nodes": 419,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261023,
+      "disabled": [],
+      "ms": 1.802599999999984,
+      "nodes": 328,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261024,
+      "disabled": [],
+      "ms": 0.7492999999999483,
+      "nodes": 68,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261025,
+      "disabled": [],
+      "ms": 0.906800000000203,
+      "nodes": 107,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261026,
+      "disabled": [],
+      "ms": 2.8814000000002125,
+      "nodes": 350,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261028,
+      "disabled": [],
+      "ms": 0.865099999999984,
+      "nodes": 76,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261029,
+      "disabled": [],
+      "ms": 2.388600000000224,
+      "nodes": 347,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261030,
+      "disabled": [],
+      "ms": 2.303899999999885,
+      "nodes": 417,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261031,
+      "disabled": [],
+      "ms": 1.3488000000002103,
+      "nodes": 253,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261032,
+      "disabled": [],
+      "ms": 2.2520999999997002,
+      "nodes": 456,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261033,
+      "disabled": [],
+      "ms": 1.640100000000075,
+      "nodes": 207,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261034,
+      "disabled": [],
+      "ms": 2.684900000000198,
+      "nodes": 351,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261035,
+      "disabled": [],
+      "ms": 2.6687000000001717,
+      "nodes": 311,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261036,
+      "disabled": [],
+      "ms": 0.9520999999999731,
+      "nodes": 128,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261037,
+      "disabled": [],
+      "ms": 0.9609999999997854,
+      "nodes": 72,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261038,
+      "disabled": [],
+      "ms": 1.2844999999997526,
+      "nodes": 212,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261039,
+      "disabled": [],
+      "ms": 1.5050000000001091,
+      "nodes": 204,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261040,
+      "disabled": [],
+      "ms": 2.0099999999997635,
+      "nodes": 418,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261041,
+      "disabled": [],
+      "ms": 1.977100000000064,
+      "nodes": 249,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261042,
+      "disabled": [],
+      "ms": 2.224699999999757,
+      "nodes": 553,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261043,
+      "disabled": [],
+      "ms": 0.5923999999999978,
+      "nodes": 36,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261044,
+      "disabled": [],
+      "ms": 1.231999999999971,
+      "nodes": 194,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261045,
+      "disabled": [],
+      "ms": 1.7328999999999724,
+      "nodes": 267,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261046,
+      "disabled": [],
+      "ms": 1.5248999999998887,
+      "nodes": 191,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261047,
+      "disabled": [],
+      "ms": 4.070400000000063,
+      "nodes": 742,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261048,
+      "disabled": [],
+      "ms": 1.7060999999998785,
+      "nodes": 286,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261049,
+      "disabled": [],
+      "ms": 0.8117999999999483,
+      "nodes": 98,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261050,
+      "disabled": [],
+      "ms": 2.5317999999997483,
+      "nodes": 643,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261051,
+      "disabled": [],
+      "ms": 9.674499999999625,
+      "nodes": 1365,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261052,
+      "disabled": [],
+      "ms": 1.1828999999997905,
+      "nodes": 85,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261053,
+      "disabled": [],
+      "ms": 0.7759000000000924,
+      "nodes": 70,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261054,
+      "disabled": [],
+      "ms": 3.423400000000129,
+      "nodes": 807,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261055,
+      "disabled": [],
+      "ms": 0.7390999999997803,
+      "nodes": 64,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261056,
+      "disabled": [],
+      "ms": 2.3456999999998516,
+      "nodes": 307,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261057,
+      "disabled": [],
+      "ms": 4.031999999999698,
+      "nodes": 881,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261058,
+      "disabled": [],
+      "ms": 1.3920000000002801,
+      "nodes": 146,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261059,
+      "disabled": [],
+      "ms": 0.9341999999996915,
+      "nodes": 81,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261060,
+      "disabled": [],
+      "ms": 6.745100000000093,
+      "nodes": 1685,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261061,
+      "disabled": [],
+      "ms": 1.0833000000002357,
+      "nodes": 131,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261062,
+      "disabled": [],
+      "ms": 1.1808000000000902,
+      "nodes": 119,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261063,
+      "disabled": [],
+      "ms": 0.8505000000000109,
+      "nodes": 82,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261064,
+      "disabled": [],
+      "ms": 1.077600000000075,
+      "nodes": 128,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261065,
+      "disabled": [],
+      "ms": 1.6014000000000124,
+      "nodes": 249,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261066,
+      "disabled": [],
+      "ms": 1.152599999999893,
+      "nodes": 184,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261067,
+      "disabled": [],
+      "ms": 1.1042999999999665,
+      "nodes": 111,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261068,
+      "disabled": [],
+      "ms": 1.019300000000385,
+      "nodes": 115,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261069,
+      "disabled": [],
+      "ms": 0.8178000000002612,
+      "nodes": 104,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261070,
+      "disabled": [],
+      "ms": 1.638300000000072,
+      "nodes": 129,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261071,
+      "disabled": [],
+      "ms": 1.1104999999997744,
+      "nodes": 187,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261072,
+      "disabled": [],
+      "ms": 0.5978000000000065,
+      "nodes": 42,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261073,
+      "disabled": [],
+      "ms": 1.0640000000003056,
+      "nodes": 152,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261074,
+      "disabled": [],
+      "ms": 1.502599999999802,
+      "nodes": 239,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261075,
+      "disabled": [],
+      "ms": 0.9426999999996042,
+      "nodes": 131,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261076,
+      "disabled": [],
+      "ms": 1.3432999999999993,
+      "nodes": 194,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261077,
+      "disabled": [],
+      "ms": 1.3094999999998436,
+      "nodes": 224,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261078,
+      "disabled": [],
+      "ms": 1.1879999999996471,
+      "nodes": 190,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261079,
+      "disabled": [],
+      "ms": 0.9623000000001412,
+      "nodes": 88,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261080,
+      "disabled": [],
+      "ms": 1.0938999999998487,
+      "nodes": 190,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261081,
+      "disabled": [],
+      "ms": 1.080500000000029,
+      "nodes": 174,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261082,
+      "disabled": [],
+      "ms": 0.82549999999992,
+      "nodes": 88,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261083,
+      "disabled": [],
+      "ms": 4.789999999999964,
+      "nodes": 826,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261084,
+      "disabled": [],
+      "ms": 4.167099999999664,
+      "nodes": 624,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261085,
+      "disabled": [],
+      "ms": 1.3791000000001077,
+      "nodes": 219,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261086,
+      "disabled": [],
+      "ms": 2.4270000000001346,
+      "nodes": 526,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261087,
+      "disabled": [],
+      "ms": 2.1989000000003216,
+      "nodes": 473,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261088,
+      "disabled": [],
+      "ms": 1.1630999999997584,
+      "nodes": 184,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261089,
+      "disabled": [],
+      "ms": 2.581500000000233,
+      "nodes": 449,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261090,
+      "disabled": [],
+      "ms": 1.266099999999824,
+      "nodes": 209,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261091,
+      "disabled": [],
+      "ms": 1.1730999999999767,
+      "nodes": 192,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261092,
+      "disabled": [],
+      "ms": 0.8476000000000568,
+      "nodes": 71,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261093,
+      "disabled": [],
+      "ms": 1.856999999999971,
+      "nodes": 356,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261094,
+      "disabled": [],
+      "ms": 0.9422999999997046,
+      "nodes": 128,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261095,
+      "disabled": [],
+      "ms": 30.213000000000193,
+      "nodes": 7983,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261096,
+      "disabled": [],
+      "ms": 1.1685999999999694,
+      "nodes": 144,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261097,
+      "disabled": [],
+      "ms": 1.3140000000003056,
+      "nodes": 235,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261098,
+      "disabled": [],
+      "ms": 1.4093000000002576,
+      "nodes": 199,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261099,
+      "disabled": [],
+      "ms": 1.1264000000001033,
+      "nodes": 156,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261100,
+      "disabled": [],
+      "ms": 1.2294000000001688,
+      "nodes": 61,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261101,
+      "disabled": [],
+      "ms": 1.3427999999998974,
+      "nodes": 195,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261102,
+      "disabled": [],
+      "ms": 1.8414999999999964,
+      "nodes": 267,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261103,
+      "disabled": [],
+      "ms": 1.5773000000003776,
+      "nodes": 288,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261104,
+      "disabled": [],
+      "ms": 1.7013999999999214,
+      "nodes": 219,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261105,
+      "disabled": [],
+      "ms": 0.9666999999999462,
+      "nodes": 145,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261106,
+      "disabled": [],
+      "ms": 1.3086999999995896,
+      "nodes": 217,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261107,
+      "disabled": [],
+      "ms": 2.417699999999968,
+      "nodes": 453,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261108,
+      "disabled": [],
+      "ms": 2.650499999999738,
+      "nodes": 370,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261109,
+      "disabled": [],
+      "ms": 5.879799999999705,
+      "nodes": 1630,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261110,
+      "disabled": [],
+      "ms": 1.1480000000001382,
+      "nodes": 154,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261111,
+      "disabled": [],
+      "ms": 1.1691000000000713,
+      "nodes": 109,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261112,
+      "disabled": [],
+      "ms": 2.6936000000000604,
+      "nodes": 591,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261113,
+      "disabled": [],
+      "ms": 2.0095000000001164,
+      "nodes": 328,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261114,
+      "disabled": [],
+      "ms": 0.6828000000000429,
+      "nodes": 54,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261115,
+      "disabled": [],
+      "ms": 3.5422999999996136,
+      "nodes": 561,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261116,
+      "disabled": [],
+      "ms": 1.10550000000012,
+      "nodes": 117,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261117,
+      "disabled": [],
+      "ms": 1.4731999999999061,
+      "nodes": 298,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 7,
+      "seed": 20261118,
+      "disabled": [],
+      "ms": 0.9027999999998428,
+      "nodes": 120,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261019,
+      "disabled": [],
+      "ms": 12.795800000000327,
+      "nodes": 1589,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261020,
+      "disabled": [],
+      "ms": 50.06150000000025,
+      "nodes": 4610,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261021,
+      "disabled": [],
+      "ms": 10.084700000000339,
+      "nodes": 1670,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261022,
+      "disabled": [],
+      "ms": 6.129099999999198,
+      "nodes": 1114,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261023,
+      "disabled": [],
+      "ms": 9.19840000000022,
+      "nodes": 1612,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261024,
+      "disabled": [],
+      "ms": 1.9380999999993946,
+      "nodes": 266,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261025,
+      "disabled": [],
+      "ms": 15.092800000000352,
+      "nodes": 1933,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261026,
+      "disabled": [],
+      "ms": 1.5940999999993437,
+      "nodes": 189,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261027,
+      "disabled": [],
+      "ms": 1.9477000000006228,
+      "nodes": 252,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261028,
+      "disabled": [],
+      "ms": 7.45049999999992,
+      "nodes": 1268,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261029,
+      "disabled": [],
+      "ms": 9.205800000000636,
+      "nodes": 1210,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261030,
+      "disabled": [],
+      "ms": 4.940400000000409,
+      "nodes": 688,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261031,
+      "disabled": [],
+      "ms": 2.204299999999421,
+      "nodes": 316,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261032,
+      "disabled": [],
+      "ms": 21.145700000000033,
+      "nodes": 2996,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261033,
+      "disabled": [],
+      "ms": 2.879899999999907,
+      "nodes": 393,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261034,
+      "disabled": [],
+      "ms": 3.7998999999999796,
+      "nodes": 613,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261035,
+      "disabled": [],
+      "ms": 4.169600000000173,
+      "nodes": 761,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261036,
+      "disabled": [],
+      "ms": 0.7727999999997337,
+      "nodes": 59,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261037,
+      "disabled": [],
+      "ms": 4.10570000000007,
+      "nodes": 508,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261038,
+      "disabled": [],
+      "ms": 36.66899999999987,
+      "nodes": 6877,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261039,
+      "disabled": [],
+      "ms": 39.196899999999914,
+      "nodes": 5669,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261040,
+      "disabled": [],
+      "ms": 5.758500000000822,
+      "nodes": 1013,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261041,
+      "disabled": [],
+      "ms": 2.8312999999998283,
+      "nodes": 288,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261042,
+      "disabled": [],
+      "ms": 3.063199999999597,
+      "nodes": 475,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261043,
+      "disabled": [],
+      "ms": 5.692699999999604,
+      "nodes": 764,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261044,
+      "disabled": [],
+      "ms": 4.088399999999638,
+      "nodes": 508,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261045,
+      "disabled": [],
+      "ms": 6.373500000000604,
+      "nodes": 663,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261046,
+      "disabled": [],
+      "ms": 0.8613999999997759,
+      "nodes": 82,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261047,
+      "disabled": [],
+      "ms": 2.1576999999997497,
+      "nodes": 259,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261048,
+      "disabled": [],
+      "ms": 2.960900000000038,
+      "nodes": 484,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261049,
+      "disabled": [],
+      "ms": 306.66100000000006,
+      "nodes": 44279,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261050,
+      "disabled": [],
+      "ms": 4.221599999999853,
+      "nodes": 461,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261051,
+      "disabled": [],
+      "ms": 1.846599999999853,
+      "nodes": 197,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261052,
+      "disabled": [],
+      "ms": 4.6952000000001135,
+      "nodes": 765,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261053,
+      "disabled": [],
+      "ms": 37.60480000000007,
+      "nodes": 4753,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261054,
+      "disabled": [],
+      "ms": 1.756199999999808,
+      "nodes": 191,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261055,
+      "disabled": [],
+      "ms": 9.271600000000035,
+      "nodes": 1160,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261056,
+      "disabled": [],
+      "ms": 3.180000000000291,
+      "nodes": 391,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261057,
+      "disabled": [],
+      "ms": 2.5412999999998647,
+      "nodes": 221,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261058,
+      "disabled": [],
+      "ms": 14.679599999999482,
+      "nodes": 2318,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261059,
+      "disabled": [],
+      "ms": 7.781500000000051,
+      "nodes": 1022,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261060,
+      "disabled": [],
+      "ms": 3.761099999999715,
+      "nodes": 471,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261061,
+      "disabled": [],
+      "ms": 2.503600000000006,
+      "nodes": 292,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261062,
+      "disabled": [],
+      "ms": 1.2180000000007567,
+      "nodes": 109,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261063,
+      "disabled": [],
+      "ms": 8.846199999999953,
+      "nodes": 1061,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261064,
+      "disabled": [],
+      "ms": 8.622000000000298,
+      "nodes": 944,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261065,
+      "disabled": [],
+      "ms": 2.1338999999998123,
+      "nodes": 177,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261066,
+      "disabled": [],
+      "ms": 39.139499999999316,
+      "nodes": 4937,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261067,
+      "disabled": [],
+      "ms": 8.19549999999981,
+      "nodes": 1265,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261068,
+      "disabled": [],
+      "ms": 2.7714999999998327,
+      "nodes": 270,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261069,
+      "disabled": [],
+      "ms": 9.758900000000722,
+      "nodes": 1460,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261070,
+      "disabled": [],
+      "ms": 24.354699999999866,
+      "nodes": 3731,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261071,
+      "disabled": [],
+      "ms": 2.534700000000157,
+      "nodes": 290,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261072,
+      "disabled": [],
+      "ms": 1.5652000000000044,
+      "nodes": 162,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261073,
+      "disabled": [],
+      "ms": 3.206199999999626,
+      "nodes": 340,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261074,
+      "disabled": [],
+      "ms": 41.14150000000063,
+      "nodes": 4374,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261075,
+      "disabled": [],
+      "ms": 2.9615999999996347,
+      "nodes": 458,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261076,
+      "disabled": [],
+      "ms": 1.0261000000000422,
+      "nodes": 90,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261077,
+      "disabled": [],
+      "ms": 1.589600000000246,
+      "nodes": 191,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261078,
+      "disabled": [],
+      "ms": 14.134799999999814,
+      "nodes": 1842,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261079,
+      "disabled": [],
+      "ms": 12.347199999999248,
+      "nodes": 1254,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261080,
+      "disabled": [],
+      "ms": 11.131000000000313,
+      "nodes": 1437,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261081,
+      "disabled": [],
+      "ms": 2.485500000000684,
+      "nodes": 457,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261082,
+      "disabled": [],
+      "ms": 1.919499999999971,
+      "nodes": 156,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261083,
+      "disabled": [],
+      "ms": 2.0087000000003172,
+      "nodes": 231,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261084,
+      "disabled": [],
+      "ms": 5.348299999999654,
+      "nodes": 846,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261085,
+      "disabled": [],
+      "ms": 13.032199999999648,
+      "nodes": 2066,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261086,
+      "disabled": [],
+      "ms": 2.3945999999996275,
+      "nodes": 249,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261087,
+      "disabled": [],
+      "ms": 4.110400000000482,
+      "nodes": 680,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261088,
+      "disabled": [],
+      "ms": 12.998099999999795,
+      "nodes": 2310,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261089,
+      "disabled": [],
+      "ms": 1.6950000000006185,
+      "nodes": 214,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261090,
+      "disabled": [],
+      "ms": 4.2343999999993684,
+      "nodes": 518,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261091,
+      "disabled": [],
+      "ms": 3.585200000000441,
+      "nodes": 441,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261092,
+      "disabled": [],
+      "ms": 5.655899999999747,
+      "nodes": 869,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261093,
+      "disabled": [],
+      "ms": 6.584399999999732,
+      "nodes": 938,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261094,
+      "disabled": [],
+      "ms": 2.233400000000074,
+      "nodes": 307,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261095,
+      "disabled": [],
+      "ms": 6.013700000000426,
+      "nodes": 935,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261096,
+      "disabled": [],
+      "ms": 7.989999999999782,
+      "nodes": 751,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261097,
+      "disabled": [],
+      "ms": 3.6259000000000015,
+      "nodes": 557,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261098,
+      "disabled": [],
+      "ms": 5.626699999999801,
+      "nodes": 871,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261099,
+      "disabled": [],
+      "ms": 7.973300000000563,
+      "nodes": 924,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261100,
+      "disabled": [],
+      "ms": 33.018300000000636,
+      "nodes": 4017,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261101,
+      "disabled": [],
+      "ms": 2.9285999999992782,
+      "nodes": 340,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261102,
+      "disabled": [],
+      "ms": 32.789600000000064,
+      "nodes": 4630,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261103,
+      "disabled": [],
+      "ms": 2.7525000000005093,
+      "nodes": 283,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261104,
+      "disabled": [],
+      "ms": 3.55199999999968,
+      "nodes": 417,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261105,
+      "disabled": [],
+      "ms": 0.8109999999996944,
+      "nodes": 47,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261106,
+      "disabled": [],
+      "ms": 18.234999999999673,
+      "nodes": 3491,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261107,
+      "disabled": [],
+      "ms": 1.4966999999996915,
+      "nodes": 201,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261108,
+      "disabled": [],
+      "ms": 6.761499999999614,
+      "nodes": 824,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261109,
+      "disabled": [],
+      "ms": 3.440400000000409,
+      "nodes": 400,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261110,
+      "disabled": [],
+      "ms": 4.591000000000349,
+      "nodes": 746,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261111,
+      "disabled": [],
+      "ms": 9.093700000000354,
+      "nodes": 1319,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261112,
+      "disabled": [],
+      "ms": 8.248500000000604,
+      "nodes": 1365,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261113,
+      "disabled": [],
+      "ms": 4.874300000000403,
+      "nodes": 771,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261114,
+      "disabled": [],
+      "ms": 2.006800000000112,
+      "nodes": 296,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261115,
+      "disabled": [],
+      "ms": 1.2686000000003332,
+      "nodes": 134,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261116,
+      "disabled": [],
+      "ms": 3.5726999999997133,
+      "nodes": 533,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261117,
+      "disabled": [],
+      "ms": 7.1601999999993495,
+      "nodes": 989,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 8,
+      "seed": 20261118,
+      "disabled": [],
+      "ms": 4.492600000000493,
+      "nodes": 555,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261019,
+      "disabled": [],
+      "ms": 89.58709999999974,
+      "nodes": 15450,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261020,
+      "disabled": [],
+      "ms": 62.64780000000064,
+      "nodes": 9316,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261024,
+      "disabled": [],
+      "ms": 3.9871000000002823,
+      "nodes": 582,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261025,
+      "disabled": [],
+      "ms": 61.07470000000012,
+      "nodes": 10017,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261026,
+      "disabled": [],
+      "ms": 67.48370000000068,
+      "nodes": 16747,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261028,
+      "disabled": [],
+      "ms": 7.79779999999937,
+      "nodes": 1363,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261029,
+      "disabled": [],
+      "ms": 32.945300000000316,
+      "nodes": 5763,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261032,
+      "disabled": [],
+      "ms": 120.92010000000028,
+      "nodes": 23440,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261033,
+      "disabled": [],
+      "ms": 19.067799999999806,
+      "nodes": 3847,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261034,
+      "disabled": [],
+      "ms": 26.540799999999763,
+      "nodes": 4875,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261036,
+      "disabled": [],
+      "ms": 3.6370000000006257,
+      "nodes": 508,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261037,
+      "disabled": [],
+      "ms": 11.37119999999959,
+      "nodes": 1849,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261038,
+      "disabled": [],
+      "ms": 10.01890000000003,
+      "nodes": 1573,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261039,
+      "disabled": [],
+      "ms": 9.383700000000317,
+      "nodes": 1424,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261041,
+      "disabled": [],
+      "ms": 32.02430000000004,
+      "nodes": 4690,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261042,
+      "disabled": [],
+      "ms": 18.642100000000028,
+      "nodes": 3716,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261044,
+      "disabled": [],
+      "ms": 53.95929999999953,
+      "nodes": 7413,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261045,
+      "disabled": [],
+      "ms": 6.9495999999999185,
+      "nodes": 912,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261046,
+      "disabled": [],
+      "ms": 50.35159999999996,
+      "nodes": 6743,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261048,
+      "disabled": [],
+      "ms": 84.64360000000033,
+      "nodes": 14585,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261050,
+      "disabled": [],
+      "ms": 80.8104000000003,
+      "nodes": 15831,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261054,
+      "disabled": [],
+      "ms": 1.8179000000000087,
+      "nodes": 331,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261056,
+      "disabled": [],
+      "ms": 2.373099999999795,
+      "nodes": 218,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261057,
+      "disabled": [],
+      "ms": 148.19640000000072,
+      "nodes": 38111,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261059,
+      "disabled": [],
+      "ms": 14.338300000000345,
+      "nodes": 2111,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261062,
+      "disabled": [],
+      "ms": 43.99689999999919,
+      "nodes": 7163,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261063,
+      "disabled": [],
+      "ms": 13.837999999999738,
+      "nodes": 2316,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261064,
+      "disabled": [],
+      "ms": 5.697699999999713,
+      "nodes": 610,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261066,
+      "disabled": [],
+      "ms": 17.513699999999517,
+      "nodes": 3230,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261067,
+      "disabled": [],
+      "ms": 2.9653999999991356,
+      "nodes": 242,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261068,
+      "disabled": [],
+      "ms": 3.3774999999996,
+      "nodes": 418,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261070,
+      "disabled": [],
+      "ms": 26.040899999999965,
+      "nodes": 4341,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261072,
+      "disabled": [],
+      "ms": 10.46180000000004,
+      "nodes": 1733,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261075,
+      "disabled": [],
+      "ms": 4.470299999999952,
+      "nodes": 777,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261077,
+      "disabled": [],
+      "ms": 48.90730000000076,
+      "nodes": 9639,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261078,
+      "disabled": [],
+      "ms": 4.8794000000007145,
+      "nodes": 755,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261079,
+      "disabled": [],
+      "ms": 10.263200000000325,
+      "nodes": 1293,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261081,
+      "disabled": [],
+      "ms": 31.830399999999827,
+      "nodes": 4162,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261082,
+      "disabled": [],
+      "ms": 19.83100000000013,
+      "nodes": 3106,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261086,
+      "disabled": [],
+      "ms": 25.44630000000052,
+      "nodes": 4427,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261088,
+      "disabled": [],
+      "ms": 8.28480000000036,
+      "nodes": 1103,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261090,
+      "disabled": [],
+      "ms": 8.585500000000138,
+      "nodes": 1356,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261092,
+      "disabled": [],
+      "ms": 6.595499999999447,
+      "nodes": 978,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261093,
+      "disabled": [],
+      "ms": 49.023299999999836,
+      "nodes": 7405,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261097,
+      "disabled": [],
+      "ms": 110.95989999999983,
+      "nodes": 17557,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261102,
+      "disabled": [],
+      "ms": 4.618800000000192,
+      "nodes": 549,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261103,
+      "disabled": [],
+      "ms": 43.804299999999785,
+      "nodes": 7069,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261104,
+      "disabled": [],
+      "ms": 16.04069999999956,
+      "nodes": 2993,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261105,
+      "disabled": [],
+      "ms": 11.05619999999999,
+      "nodes": 1636,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261106,
+      "disabled": [],
+      "ms": 5.648699999999735,
+      "nodes": 1056,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261107,
+      "disabled": [],
+      "ms": 18.227200000000266,
+      "nodes": 3392,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261110,
+      "disabled": [],
+      "ms": 3.7682999999997264,
+      "nodes": 465,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261113,
+      "disabled": [],
+      "ms": 6.868499999999585,
+      "nodes": 1249,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261116,
+      "disabled": [],
+      "ms": 2.8814999999995052,
+      "nodes": 358,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261117,
+      "disabled": [],
+      "ms": 40.80760000000009,
+      "nodes": 5506,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 9,
+      "seed": 20261118,
+      "disabled": [],
+      "ms": 126.46479999999974,
+      "nodes": 21906,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261019,
+      "disabled": [],
+      "ms": 14.47230000000036,
+      "nodes": 1821,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261020,
+      "disabled": [],
+      "ms": 48.598799999999756,
+      "nodes": 7232,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261021,
+      "disabled": [],
+      "ms": 22.31540000000041,
+      "nodes": 3033,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261037,
+      "disabled": [],
+      "ms": 32.80699999999979,
+      "nodes": 4367,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261038,
+      "disabled": [],
+      "ms": 498.8869000000004,
+      "nodes": 80278,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261044,
+      "disabled": [],
+      "ms": 49.904199999999946,
+      "nodes": 7884,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261046,
+      "disabled": [],
+      "ms": 239.80489999999918,
+      "nodes": 40855,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261048,
+      "disabled": [],
+      "ms": 92.9327000000003,
+      "nodes": 14564,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261052,
+      "disabled": [],
+      "ms": 281.9392999999991,
+      "nodes": 47039,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261064,
+      "disabled": [],
+      "ms": 137.6280000000006,
+      "nodes": 23967,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261067,
+      "disabled": [],
+      "ms": 9.277500000000146,
+      "nodes": 1485,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261068,
+      "disabled": [],
+      "ms": 16.820800000001327,
+      "nodes": 2076,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261075,
+      "disabled": [],
+      "ms": 92.8109999999997,
+      "nodes": 12467,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261089,
+      "disabled": [],
+      "ms": 8.468899999999849,
+      "nodes": 1139,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261093,
+      "disabled": [],
+      "ms": 94.72239999999874,
+      "nodes": 16531,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261099,
+      "disabled": [],
+      "ms": 144.6278999999995,
+      "nodes": 27219,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261100,
+      "disabled": [],
+      "ms": 65.76420000000144,
+      "nodes": 11591,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261105,
+      "disabled": [],
+      "ms": 35.02969999999914,
+      "nodes": 5013,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261106,
+      "disabled": [],
+      "ms": 108.21640000000116,
+      "nodes": 13146,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261110,
+      "disabled": [],
+      "ms": 16.787899999999354,
+      "nodes": 2235,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261113,
+      "disabled": [],
+      "ms": 53.9359000000004,
+      "nodes": 8840,
+      "count": 1,
+      "aborted": false
+    },
+    {
+      "file": ".desktop-smoke/generator-rework/perf-after-100.json",
+      "difficulty": 10,
+      "seed": 20261116,
+      "disabled": [],
+      "ms": 72.5619999999999,
+      "nodes": 10004,
+      "count": 1,
+      "aborted": false
+    }
+  ]
+}

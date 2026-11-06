@@ -5283,5 +5283,2297 @@
       4,
       4
     ]
+  },
+  {
+    "id": 46,
+    "name": "第46关",
+    "chapter": "",
+    "tip": "抬头看看，气球准备好啦。点右上角「天空」，先找系留桩旁边的位置；两层的格数要分开看哦。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 2
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-2",
+        "kind": "balloon",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 3,
+          "c": 4
+        }
+      ],
+      "clouds": []
+    }
+  },
+  {
+    "id": 47,
+    "name": "第47关",
+    "chapter": "",
+    "tip": "这片营地上方也能停气球，不会挤掉帐篷。不过篝火的热气可不行，咱们给它留出上面的天空。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 4
+      },
+      {
+        "kind": "forest",
+        "r": 0,
+        "c": 6
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-4",
+        "kind": "balloon",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      0,
+      0,
+      2,
+      1,
+      0,
+      1,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      2,
+      2,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 2,
+          "c": 4
+        }
+      ],
+      "clouds": []
+    }
+  },
+  {
+    "id": 48,
+    "name": "第48关",
+    "chapter": "",
+    "tip": "云把路遮住了一小段，换个方向试试。低云只挡天空，桩只占地面，它们都不用数进格数里。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "forest",
+        "r": 0,
+        "c": 3
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 1
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-4",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-5",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-6",
+        "kind": "balloon",
+        "shape": "single"
+      }
+    ],
+    "rows": [
+      0,
+      0,
+      3,
+      1,
+      0,
+      1,
+      1,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      3,
+      1,
+      2,
+      0,
+      0,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 1,
+          "c": 3
+        },
+        {
+          "r": 5,
+          "c": 3
+        }
+      ],
+      "clouds": [
+        {
+          "r": 1,
+          "c": 4
+        },
+        {
+          "r": 4,
+          "c": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": 49,
+    "name": "第49关",
+    "chapter": "",
+    "tip": "补给到了！让飞艇至少一格停在营地正上方。地面还没摆好也没关系，咱们可以回头再安顿。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 3,
+        "c": 2
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-2",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-3",
+        "kind": "airship",
+        "shape": "domino"
+      }
+    ],
+    "rows": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 4,
+          "c": 4
+        }
+      ],
+      "clouds": []
+    }
+  },
+  {
+    "id": 50,
+    "name": "第50关",
+    "chapter": "",
+    "tip": "先别急着落位。把飞艇转一转，再看看云下的营地，哪个方向能把补给送到大家手里？",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "forest",
+        "r": 3,
+        "c": 6
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-4",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-5",
+        "kind": "airship",
+        "shape": "domino"
+      }
+    ],
+    "rows": [
+      0,
+      1,
+      1,
+      1,
+      0,
+      1,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      3,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        1,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 2,
+          "c": 4
+        }
+      ],
+      "clouds": [
+        {
+          "r": 0,
+          "c": 3
+        },
+        {
+          "r": 4,
+          "c": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": 51,
+    "name": "第51关",
+    "chapter": "",
+    "tip": "这座营地有好几格，每一格都能接补给。把两艘飞艇分开看看，也许另一岸正好留了位置。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 4
+      },
+      {
+        "kind": "forest",
+        "r": 4,
+        "c": 0
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 6
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-4",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-5",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-6",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "airship-7",
+        "kind": "airship",
+        "shape": "domino"
+      }
+    ],
+    "rows": [
+      0,
+      0,
+      2,
+      2,
+      0,
+      1,
+      2,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      2,
+      4,
+      0,
+      1,
+      0,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        0,
+        1,
+        2,
+        0,
+        1,
+        1,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        1,
+        3,
+        1,
+        0,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 2,
+          "c": 5
+        },
+        {
+          "r": 6,
+          "c": 2
+        }
+      ],
+      "clouds": [
+        {
+          "r": 0,
+          "c": 5
+        },
+        {
+          "r": 4,
+          "c": 6
+        }
+      ]
+    }
+  },
+  {
+    "id": 52,
+    "name": "第52关",
+    "chapter": "",
+    "tip": "前面有电塔，咱们从它上方绕开。餐车的通道留在地面就好，不用替它空出整片天空。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 5
+      },
+      {
+        "kind": "forest",
+        "r": 5,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 6
+      },
+      {
+        "r": 3,
+        "c": 2,
+        "kind": "mountain"
+      },
+      {
+        "r": 6,
+        "c": 5,
+        "kind": "water"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "foodTruck-4",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-5",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "pool-6",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-7",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-8",
+        "kind": "airship",
+        "shape": "domino"
+      }
+    ],
+    "rows": [
+      0,
+      3,
+      1,
+      1,
+      1,
+      2,
+      1,
+      0
+    ],
+    "cols": [
+      1,
+      0,
+      2,
+      3,
+      2,
+      1,
+      0,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        0,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 3,
+          "c": 4
+        }
+      ],
+      "clouds": [
+        {
+          "r": 0,
+          "c": 4
+        },
+        {
+          "r": 4,
+          "c": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": 53,
+    "name": "第53关",
+    "chapter": "",
+    "tip": "山脊上的风正合适！让风筝至少一格对着山地，再看看四周有没有低云，斜角也别漏掉。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 2,
+        "c": 4
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-2",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "kite-3",
+        "kind": "kite",
+        "shape": "long"
+      }
+    ],
+    "rows": [
+      0,
+      0,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      "anchors": [],
+      "clouds": [
+        {
+          "r": 5,
+          "c": 6
+        }
+      ]
+    }
+  },
+  {
+    "id": 54,
+    "name": "第54关",
+    "chapter": "",
+    "tip": "这条云边有点挤。飞艇可以贴着云停，风筝却得离远些；换个方向，看看谁更适合这里。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 5
+      },
+      {
+        "kind": "forest",
+        "r": 0,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 3,
+        "c": 4
+      },
+      {
+        "r": 1,
+        "c": 2,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-4",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-5",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "kite-6",
+        "kind": "kite",
+        "shape": "long"
+      }
+    ],
+    "rows": [
+      0,
+      0,
+      2,
+      1,
+      0,
+      0,
+      1,
+      0
+    ],
+    "cols": [
+      0,
+      0,
+      2,
+      1,
+      1,
+      0,
+      0,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        0,
+        1,
+        5,
+        0,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 1,
+          "c": 3
+        }
+      ],
+      "clouds": [
+        {
+          "r": 5,
+          "c": 2
+        },
+        {
+          "r": 0,
+          "c": 7
+        }
+      ]
+    }
+  },
+  {
+    "id": 55,
+    "name": "第55关",
+    "chapter": "",
+    "tip": "桩、营地、山脊都找到了，咱们把三种飞行器接上。卡住时换层看看，另一边也许正等着你。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 4
+      },
+      {
+        "kind": "forest",
+        "r": 5,
+        "c": 0
+      },
+      {
+        "kind": "mountain",
+        "r": 2,
+        "c": 5
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 6
+      },
+      {
+        "r": 5,
+        "c": 5,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "fire-3",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-4",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-5",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "balloon-6",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-7",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "kite-8",
+        "kind": "kite",
+        "shape": "long"
+      }
+    ],
+    "rows": [
+      0,
+      1,
+      2,
+      1,
+      0,
+      1,
+      3,
+      1
+    ],
+    "cols": [
+      0,
+      0,
+      2,
+      4,
+      1,
+      1,
+      1,
+      0
+    ],
+    "sky": {
+      "rows": [
+        0,
+        1,
+        2,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        0,
+        2,
+        1,
+        3,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 3,
+          "c": 4
+        }
+      ],
+      "clouds": [
+        {
+          "r": 0,
+          "c": 0
+        },
+        {
+          "r": 6,
+          "c": 2
+        }
+      ]
+    }
+  },
+  {
+    "id": 56,
+    "name": "第56关",
+    "chapter": "",
+    "tip": "先挑一个上下两层都看得准的位置吧。天空少一个选择，地面往往也会跟着明朗起来。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 5
+      },
+      {
+        "kind": "forest",
+        "r": 3,
+        "c": 3
+      },
+      {
+        "kind": "forest",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 4,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "r": 3,
+        "c": 7,
+        "kind": "mountain"
+      },
+      {
+        "r": 2,
+        "c": 7,
+        "kind": "mountain"
+      },
+      {
+        "r": 1,
+        "c": 7,
+        "kind": "mountain"
+      },
+      {
+        "r": 1,
+        "c": 6,
+        "kind": "mountain"
+      },
+      {
+        "r": 1,
+        "c": 5,
+        "kind": "mountain"
+      },
+      {
+        "r": 5,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-5",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-6",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-7",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-8",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-9",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "foodTruck-10",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "pool-11",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-12",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-13",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-14",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "kite-15",
+        "kind": "kite",
+        "shape": "long"
+      }
+    ],
+    "rows": [
+      0,
+      3,
+      2,
+      1,
+      2,
+      2,
+      5,
+      2
+    ],
+    "cols": [
+      1,
+      4,
+      3,
+      2,
+      0,
+      3,
+      3,
+      1
+    ],
+    "sky": {
+      "rows": [
+        0,
+        3,
+        0,
+        1,
+        1,
+        2,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        1,
+        0,
+        3
+      ],
+      "anchors": [
+        {
+          "r": 0,
+          "c": 4
+        },
+        {
+          "r": 5,
+          "c": 4
+        }
+      ],
+      "clouds": [
+        {
+          "r": 0,
+          "c": 7
+        },
+        {
+          "r": 7,
+          "c": 3
+        }
+      ]
+    }
+  },
+  {
+    "id": 57,
+    "name": "第57关",
+    "chapter": "",
+    "tip": "飞艇的方向还没定？看看它下面的营地，试着把两边剩下的格数对一对。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 7
+      },
+      {
+        "kind": "forest",
+        "r": 4,
+        "c": 4
+      },
+      {
+        "kind": "forest",
+        "r": 7,
+        "c": 0
+      },
+      {
+        "kind": "mountain",
+        "r": 2,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 0
+      },
+      {
+        "r": 1,
+        "c": 7,
+        "kind": "mountain"
+      },
+      {
+        "r": 2,
+        "c": 0,
+        "kind": "water"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "kind": "water"
+      },
+      {
+        "r": 1,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 2,
+        "kind": "water"
+      },
+      {
+        "r": 2,
+        "c": 6,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 7,
+        "kind": "water"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-5",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-6",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-7",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-8",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "picnic-9",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "foodTruck-10",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-11",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "pool-12",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-13",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-14",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-15",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "kite-16",
+        "kind": "kite",
+        "shape": "long"
+      }
+    ],
+    "rows": [
+      0,
+      4,
+      3,
+      2,
+      1,
+      4,
+      1,
+      3
+    ],
+    "cols": [
+      1,
+      3,
+      3,
+      1,
+      3,
+      2,
+      3,
+      2
+    ],
+    "sky": {
+      "rows": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        3,
+        1,
+        0
+      ],
+      "cols": [
+        3,
+        0,
+        0,
+        2,
+        1,
+        1,
+        0,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 0,
+          "c": 3
+        },
+        {
+          "r": 4,
+          "c": 6
+        }
+      ],
+      "clouds": [
+        {
+          "r": 0,
+          "c": 7
+        },
+        {
+          "r": 7,
+          "c": 4
+        }
+      ]
+    }
+  },
+  {
+    "id": 58,
+    "name": "第58关",
+    "chapter": "",
+    "tip": "这次留下的空地也在帮咱们指路。别急着填满，想想哪些地方不能留给篝火和电塔。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 5,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 4
+      },
+      {
+        "kind": "forest",
+        "r": 3,
+        "c": 3
+      },
+      {
+        "kind": "forest",
+        "r": 0,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 0,
+        "c": 4
+      },
+      {
+        "kind": "mountain",
+        "r": 6,
+        "c": 7
+      },
+      {
+        "r": 1,
+        "c": 6,
+        "kind": "water"
+      },
+      {
+        "r": 1,
+        "c": 0,
+        "kind": "mountain"
+      },
+      {
+        "r": 2,
+        "c": 0,
+        "kind": "water"
+      },
+      {
+        "r": 3,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 7,
+        "c": 5,
+        "kind": "water"
+      },
+      {
+        "r": 3,
+        "c": 5,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 0,
+        "kind": "water"
+      },
+      {
+        "r": 6,
+        "c": 0,
+        "kind": "water"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 3,
+        "c": 1,
+        "kind": "mountain"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "kind": "water"
+      },
+      {
+        "r": 5,
+        "c": 2,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "kind": "mountain"
+      },
+      {
+        "r": 1,
+        "c": 3,
+        "kind": "forest"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "fire-5",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-6",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-7",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-8",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "cabin-9",
+        "kind": "cabin",
+        "shape": "el"
+      },
+      {
+        "id": "picnic-10",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "foodTruck-11",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-12",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "pool-13",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-14",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-15",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-16",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "kite-17",
+        "kind": "kite",
+        "shape": "long"
+      }
+    ],
+    "rows": [
+      0,
+      4,
+      3,
+      2,
+      3,
+      2,
+      5,
+      3
+    ],
+    "cols": [
+      1,
+      4,
+      5,
+      2,
+      3,
+      4,
+      2,
+      1
+    ],
+    "sky": {
+      "rows": [
+        3,
+        0,
+        0,
+        1,
+        0,
+        2,
+        1,
+        0
+      ],
+      "cols": [
+        0,
+        1,
+        1,
+        2,
+        1,
+        1,
+        1,
+        0
+      ],
+      "anchors": [
+        {
+          "r": 3,
+          "c": 7
+        },
+        {
+          "r": 5,
+          "c": 3
+        }
+      ],
+      "clouds": [
+        {
+          "r": 3,
+          "c": 0
+        },
+        {
+          "r": 7,
+          "c": 6
+        }
+      ]
+    }
+  },
+  {
+    "id": 59,
+    "name": "第59关",
+    "chapter": "",
+    "tip": "同一座山，下面能靠瞭望塔，上面能借风放风筝。咱们沿着这条线索，再往另一层走一步。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 1
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 1,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 6,
+        "c": 6
+      },
+      {
+        "kind": "forest",
+        "r": 3,
+        "c": 4
+      },
+      {
+        "kind": "forest",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "kind": "mountain",
+        "r": 1,
+        "c": 4
+      },
+      {
+        "kind": "mountain",
+        "r": 5,
+        "c": 7
+      },
+      {
+        "r": 6,
+        "c": 2,
+        "kind": "mountain"
+      },
+      {
+        "r": 6,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "kind": "forest"
+      },
+      {
+        "r": 2,
+        "c": 6,
+        "kind": "water"
+      },
+      {
+        "r": 1,
+        "c": 0,
+        "kind": "water"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "long"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-5",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-6",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-7",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-8",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "cabin-9",
+        "kind": "cabin",
+        "shape": "el"
+      },
+      {
+        "id": "picnic-10",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "foodTruck-11",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "powerTower-12",
+        "kind": "powerTower",
+        "shape": "single"
+      },
+      {
+        "id": "pool-13",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-14",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-15",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-16",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "airship-17",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "kite-18",
+        "kind": "kite",
+        "shape": "long"
+      }
+    ],
+    "rows": [
+      0,
+      3,
+      2,
+      2,
+      5,
+      1,
+      4,
+      3
+    ],
+    "cols": [
+      1,
+      2,
+      5,
+      2,
+      1,
+      6,
+      2,
+      1
+    ],
+    "sky": {
+      "rows": [
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        0
+      ],
+      "cols": [
+        0,
+        0,
+        3,
+        0,
+        1,
+        2,
+        0,
+        3
+      ],
+      "anchors": [
+        {
+          "r": 0,
+          "c": 4
+        },
+        {
+          "r": 2,
+          "c": 3
+        }
+      ],
+      "clouds": [
+        {
+          "r": 0,
+          "c": 0
+        },
+        {
+          "r": 4,
+          "c": 1
+        }
+      ]
+    }
+  },
+  {
+    "id": 60,
+    "name": "第60关",
+    "chapter": "",
+    "tip": "最后一片云海了。把营地安顿好，再让补给和风筝各就各位——这幅上下相连的营地图，就交给你啦。",
+    "size": 8,
+    "terrain": [
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 2
+      },
+      {
+        "kind": "water",
+        "r": 4,
+        "c": 0
+      },
+      {
+        "kind": "water",
+        "r": 2,
+        "c": 6
+      },
+      {
+        "kind": "water",
+        "r": 7,
+        "c": 5
+      },
+      {
+        "kind": "water",
+        "r": 0,
+        "c": 5
+      },
+      {
+        "kind": "forest",
+        "r": 3,
+        "c": 3
+      },
+      {
+        "kind": "forest",
+        "r": 7,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 4,
+        "c": 7
+      },
+      {
+        "kind": "mountain",
+        "r": 7,
+        "c": 1
+      },
+      {
+        "r": 6,
+        "c": 1,
+        "kind": "mountain"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "kind": "water"
+      },
+      {
+        "r": 7,
+        "c": 2,
+        "kind": "mountain"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "kind": "forest"
+      },
+      {
+        "r": 6,
+        "c": 0,
+        "kind": "mountain"
+      }
+    ],
+    "pieces": [
+      {
+        "id": "camp-1",
+        "kind": "camp",
+        "shape": "domino"
+      },
+      {
+        "id": "camp-2",
+        "kind": "camp",
+        "shape": "el"
+      },
+      {
+        "id": "camp-3",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-4",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "camp-5",
+        "kind": "camp",
+        "shape": "single"
+      },
+      {
+        "id": "fire-6",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "fire-7",
+        "kind": "fire",
+        "shape": "single"
+      },
+      {
+        "id": "tower-8",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "tower-9",
+        "kind": "tower",
+        "shape": "single"
+      },
+      {
+        "id": "cabin-10",
+        "kind": "cabin",
+        "shape": "el"
+      },
+      {
+        "id": "picnic-11",
+        "kind": "picnic",
+        "shape": "domino"
+      },
+      {
+        "id": "foodTruck-12",
+        "kind": "foodTruck",
+        "shape": "single"
+      },
+      {
+        "id": "pool-13",
+        "kind": "pool",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-14",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "balloon-15",
+        "kind": "balloon",
+        "shape": "single"
+      },
+      {
+        "id": "airship-16",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "airship-17",
+        "kind": "airship",
+        "shape": "domino"
+      },
+      {
+        "id": "kite-18",
+        "kind": "kite",
+        "shape": "long"
+      }
+    ],
+    "rows": [
+      1,
+      2,
+      2,
+      1,
+      4,
+      2,
+      5,
+      2
+    ],
+    "cols": [
+      1,
+      4,
+      5,
+      2,
+      0,
+      2,
+      4,
+      1
+    ],
+    "sky": {
+      "rows": [
+        1,
+        2,
+        0,
+        1,
+        2,
+        3,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        1,
+        2,
+        3
+      ],
+      "anchors": [
+        {
+          "r": 0,
+          "c": 4
+        },
+        {
+          "r": 5,
+          "c": 4
+        }
+      ],
+      "clouds": [
+        {
+          "r": 0,
+          "c": 7
+        },
+        {
+          "r": 7,
+          "c": 3
+        }
+      ]
+    }
   }
 ]

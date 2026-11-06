@@ -1,9 +1,10 @@
 // Public Wildgrid Engine contract. Internal modules import each other directly.
-export type { TerrainKind, GameMode, FacilityKind, Shape, Status, Cell, Terrain, Piece, Placement, Level, Snapshot, Issue, Settings } from './types';
-export { facilities, facilityLibrary, facilityNames, facilityTips, shapeNames, terrainNames } from './facilityRegistry';
+export type { TerrainKind, GameMode, FacilityKind, BoardLayer, SkyBoard, Shape, Status, Cell, Terrain, Piece, Placement, Level, Snapshot, Issue, Settings } from './types';
+export { facilities, facilityLibrary, adventureFacilityLibrary, facilityNames, facilityTips, shapeNames, terrainNames } from './facilityRegistry';
 export type { FacilityDefinition } from './facilityRegistry';
 export { levels, solutions, getLevelById, getSolution } from './levels';
 export { key, adjacent, offsets, occupied, placementOrigin, rotateAround } from './boardGeometry';
+export { facilityLayer, layerClues, fixedCells } from './boardGeometry';
 export { placementBlock, evaluate } from './placementRules';
 export { validatePlacements } from './placementValidation';
 export type { PlacementValidationError, PlacementValidationResult } from './placementValidation';

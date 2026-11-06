@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {facilityLibrary} from '../../src/engine/facilityRegistry';
 import {placementDomains,placementGeometry,staticPositions} from '../../src/engine/placementDomains';
-import {repartitionCount,refineFacilities,tileFacilities} from '../../src/engine/facilityConstruction';
+import {facilityAreaReachable,repartitionCount,refineFacilities,tileFacilities} from '../../src/engine/facilityConstruction';
 import {evaluate} from '../../src/engine/placementRules';
 import {withEditorPlacements} from '../../src/engine/mapBlueprint';
 import {solveLevel} from '../../src/engine/solver';
@@ -11,6 +11,27 @@ import {terrainRegistry} from '../../src/engine/terrainRegistry';
 import {seeded} from '../../src/engine/mapGeneration';
 import {mapQuality} from '../../src/engine/mapQuality';
 import type {Level} from '../../src/engine/types';
+
+test('residual area pruning equals exhaustive integer inventory enumeration',()=>{
+  const random=seeded(871);
+  for(let sample=0;sample<300;sample++) {
+    const items=Array.from({length:4},(_,i)=>{
+      const min=Math.floor(random()*3);
+      return {id:String(i),area:1+Math.floor(random()*3),min,max:min+Math.floor(random()*3)};
+    });
+    const counts=items.map(i=>Math.floor(random()*(i.max+1)));
+    for(const available of [0,2,5,Infinity]) for(let area=0;area<=16;area++) {
+      const enumerate=(g:number,rest:number,slots:number):boolean=>{
+        if(g===items.length) return rest===0;
+        const item=items[g];
+        for(let n=Math.max(0,item.min-counts[g]);n<=item.max-counts[g] && n<=slots && n*item.area<=rest;n++)
+          if(enumerate(g+1,rest-n*item.area,slots-n)) return true;
+        return false;
+      };
+      assert.equal(facilityAreaReachable(items,counts,area,available),enumerate(0,area,available),`${sample}/${area}/${available}`);
+    }
+  }
+});
 
 test('generated map quality rejects seven or eight occupied cells in either line direction',()=>{
   for(const vertical of [false,true]) for(const count of [6,7,8]) {
@@ -66,4 +87,57 @@ test('multi-cell repartition rejection witnesses a second solution even after po
   assert.equal(repartitionCount(entries,groups),1);
   const proof=solveLevel(draft.level,2);
   assert.ok(!proof.aborted && proof.count===2);
+});
+
+test('quality distinguishes connected activity space from enclosed grass with equal area and clues',()=>{
+  const ring=Array.from({length:16},(_,i)=>({r:2+Math.floor(i/4),c:2+i%4})).filter(p=>p.r===2 || p.r===5 || p.c===2 || p.c===5);
+  const closed=[...ring,{r:0,c:1}],open=closed.map(p=>p.r===2 && p.c===3?{r:2,c:1}:p.r===0?{r:0,c:3}:p);
+  const qualities=[closed,open].map(cells=>{
+    const pieces=cells.map((_,i)=>({id:`p-${i}`,kind:'powerTower' as const,shape:'single' as const}));
+    const level:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces,terrain:[],rows:Array(8).fill(0),cols:Array(8).fill(0)};
+    const placements=cells.map((p,i)=>({...p,id:pieces[i].id,rotation:0}));
+    return mapQuality(withEditorPlacements({level,placements},placements));
+  });
+  const [separated,connected]=qualities;
+  assert.equal(separated.grass,connected.grass);
+  assert.equal(separated.effectiveGrass,separated.grass);
+  assert.equal(connected.effectiveGrass,connected.grass);
+  assert.equal(separated.clueEntropy,connected.clueEntropy);
+  assert.equal(separated.grassComponents,2);
+  assert.equal(connected.grassComponents,1);
+  assert.equal(separated.largestGrassPatch,separated.grass-4);
+  assert.equal(connected.largestGrassPatch,connected.grass);
+  assert.ok(connected.score>separated.score);
+});
+
+test('quality penalizes crowded unrelated contacts while preserving legal camp gatherings',()=>{
+  const pieces:Level['pieces']=[{id:'c',kind:'camp',shape:'single'},{id:'f',kind:'fire',shape:'single'},{id:'p',kind:'picnic',shape:'domino'},{id:'s',kind:'pool',shape:'single'}];
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces,terrain:[{r:2,c:3,kind:'water'},{r:4,c:4,kind:'water'}],rows:Array(8).fill(0),cols:Array(8).fill(0)};
+  const placements=[{id:'c',r:3,c:3,rotation:0},{id:'f',r:3,c:2,rotation:0},{id:'p',r:3,c:4,rotation:0},{id:'s',r:4,c:3,rotation:0}];
+  const gathering=withEditorPlacements({level,placements},placements),quality=mapQuality(gathering);
+  assert.ok(evaluate(gathering.level,placements).won);
+  assert.equal(quality.unrelatedContacts,0);
+  assert.equal(quality.crowdedFacilities,0);
+  const crowded=withEditorPlacements({level:{...level,terrain:[],pieces:pieces.map(p=>({...p,kind:'powerTower',shape:'single'}))},placements},placements);
+  assert.ok(evaluate(crowded.level,placements).won);
+  assert.equal(mapQuality(crowded).unrelatedContacts,3);
+  assert.equal(mapQuality(crowded).crowdedFacilities,1);
+});
+
+test('activity space and building order metrics are invariant under board rotation and reflection',()=>{
+  const cells=[{r:1,c:2},{r:2,c:2},{r:2,c:1},{r:2,c:3},{r:6,c:5}];
+  const metrics=[];
+  for(const reflected of [false,true]) for(let rotation=0;rotation<4;rotation++) {
+    const transformed=cells.map(p=>{
+      let r=p.r,c=reflected?7-p.c:p.c;
+      for(let step=0;step<rotation;step++) [r,c]=[c,7-r];
+      return {r,c};
+    });
+    const pieces=transformed.map((_,i)=>({id:`p-${i}`,kind:'powerTower' as const,shape:'single' as const}));
+    const level:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces,terrain:[],rows:Array(8).fill(0),cols:Array(8).fill(0)};
+    const placements=transformed.map((p,i)=>({...p,id:pieces[i].id,rotation:0}));
+    const quality=mapQuality(withEditorPlacements({level,placements},placements));
+    metrics.push([quality.grassComponents,quality.largestGrassPatch,quality.unrelatedContacts,quality.crowdedFacilities]);
+  }
+  for(const result of metrics) assert.deepEqual(result,metrics[0]);
 });

@@ -29,7 +29,7 @@ function verify(level: Level, placements: readonly Placement[]) {
     const piece = level.pieces.find(p => p.id === hint.placement.id)!;
     const mask = hint.cells.map(key).sort().join(';');
     const excluded = hintDomains(level, placements).map(g => g.ids.some(id => !placements.some(at => at.id === id)) && g.piece.kind === piece.kind && g.piece.shape === piece.shape
-      ? { ...g, domain: g.domain.filter(p => p.cells.map(key).sort().join(';') !== mask) } : g);
+      ? { ...g, domain: g.domain.filter(p => occupied(g.piece,p.at).map(key).sort().join(';') !== mask) } : g);
     assert.equal(solveLevel(level, 1, {}, excluded).count, 0);
   }
 }

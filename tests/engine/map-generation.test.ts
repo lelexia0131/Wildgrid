@@ -76,6 +76,11 @@ test('cheap role-swap rejection witnesses a real second solution', () => {
   const groups=placementDomains(level);
   const entries=groups.map((g,i)=>({piece:g.piece,p:g.domain.find(p=>p.at.r===0 && p.at.c===i+1)!}));
   assert.equal(hasRoleSwap(entries,groups),true);
+  const original=groups[0].domain;
+  groups[0].domain=original.filter(p=>p.mask!==entries[1].p.mask);
+  assert.equal(hasRoleSwap(entries,groups),false,'replaced domains invalidate cached role locations');
+  groups[0].domain=original;
+  assert.equal(hasRoleSwap(entries,groups),true,'restoring an immutable snapshot restores its alternatives');
   assert.equal(solveLevel(level,2).count,2);
   const logic=reasonLevel(level,{maxAssumptions:24,maxDepth:2});
   assert.equal(solveLevel(level,2,{},reasonedDomains(groups,logic)).count,2);

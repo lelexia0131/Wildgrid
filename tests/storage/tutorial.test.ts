@@ -100,7 +100,7 @@ test('tutorials appear only on scheduled Adventure days and keep their steps fix
       }
       assert.equal(resolveTutorial(state, context), null);
     }
-    assert.equal(state.facilitiesSeen.length, mode === 'adventure' ? 8 : 0);
+    assert.equal(state.facilitiesSeen.length, mode === 'adventure' ? 11 : 0);
     assert.equal(resolveTutorial({ ...state, facilitiesSeen: [], enabled: false }, { mode, level: levels[0], placements: [], selected: null, won: false }), null);
   }
   assert.deepEqual([...introduced].sort(), Object.keys(DICTIONARIES.zh.facilities).sort());

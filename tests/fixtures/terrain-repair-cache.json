@@ -1,0 +1,1201 @@
+{
+  "draft": {
+    "level": {
+      "id": 0,
+      "name": "荒野求生 · 7难",
+      "chapter": "荒野求生",
+      "tip": "结合行列占格数、地形与设施规则，完成这片营地。",
+      "size": 8,
+      "terrain": [
+        {
+          "r": 5,
+          "c": 1,
+          "kind": "mountain"
+        },
+        {
+          "r": 5,
+          "c": 5,
+          "kind": "mountain"
+        },
+        {
+          "r": 0,
+          "c": 5,
+          "kind": "water"
+        },
+        {
+          "r": 1,
+          "c": 6,
+          "kind": "water"
+        },
+        {
+          "r": 4,
+          "c": 6,
+          "kind": "water"
+        },
+        {
+          "r": 6,
+          "c": 1,
+          "kind": "forest"
+        },
+        {
+          "r": 6,
+          "c": 2,
+          "kind": "forest"
+        },
+        {
+          "r": 3,
+          "c": 5,
+          "kind": "forest"
+        },
+        {
+          "r": 7,
+          "c": 6,
+          "kind": "forest"
+        },
+        {
+          "r": 7,
+          "c": 7,
+          "kind": "forest"
+        },
+        {
+          "r": 2,
+          "c": 0,
+          "kind": "water"
+        },
+        {
+          "r": 1,
+          "c": 2,
+          "kind": "mountain"
+        }
+      ],
+      "pieces": [
+        {
+          "id": "wild-0",
+          "kind": "camp",
+          "shape": "single"
+        },
+        {
+          "id": "wild-1",
+          "kind": "camp",
+          "shape": "single"
+        },
+        {
+          "id": "wild-2",
+          "kind": "picnic",
+          "shape": "domino"
+        },
+        {
+          "id": "wild-3",
+          "kind": "camp",
+          "shape": "domino"
+        },
+        {
+          "id": "wild-4",
+          "kind": "camp",
+          "shape": "long"
+        },
+        {
+          "id": "wild-5",
+          "kind": "fire",
+          "shape": "single"
+        },
+        {
+          "id": "wild-6",
+          "kind": "fire",
+          "shape": "single"
+        },
+        {
+          "id": "wild-7",
+          "kind": "camp",
+          "shape": "single"
+        },
+        {
+          "id": "wild-8",
+          "kind": "foodTruck",
+          "shape": "single"
+        },
+        {
+          "id": "wild-9",
+          "kind": "tower",
+          "shape": "single"
+        },
+        {
+          "id": "wild-10",
+          "kind": "pool",
+          "shape": "single"
+        },
+        {
+          "id": "wild-11",
+          "kind": "tower",
+          "shape": "single"
+        },
+        {
+          "id": "wild-12",
+          "kind": "cabin",
+          "shape": "el"
+        },
+        {
+          "id": "wild-13",
+          "kind": "powerTower",
+          "shape": "single"
+        }
+      ],
+      "rows": [
+        5,
+        0,
+        6,
+        0,
+        5,
+        4,
+        0,
+        0
+      ],
+      "cols": [
+        0,
+        3,
+        4,
+        4,
+        4,
+        2,
+        3,
+        0
+      ]
+    },
+    "placements": [
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 4,
+        "c": 5,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 1,
+        "id": "wild-12"
+      },
+      {
+        "r": 5,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-13"
+      }
+    ]
+  },
+  "witnesses": [
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-13"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 3,
+        "id": "wild-12"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 5,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-13"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 1,
+        "id": "wild-12"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 2,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 4,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-12"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-13"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-8"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 4,
+        "c": 5,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 4,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-12"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-13"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-8"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 4,
+        "c": 5,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-12"
+      },
+      {
+        "r": 4,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-13"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 2,
+        "c": 5,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 4,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-12"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-13"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-11"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 2,
+        "c": 5,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 4,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-12"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-13"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 5,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 1,
+        "id": "wild-12"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-13"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-13"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 3,
+        "id": "wild-12"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-6"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 5,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 4,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-6"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-13"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-12"
+      }
+    ],
+    [
+      {
+        "r": 0,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-0"
+      },
+      {
+        "r": 5,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-10"
+      },
+      {
+        "r": 0,
+        "c": 6,
+        "rotation": 0,
+        "id": "wild-1"
+      },
+      {
+        "r": 0,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-9"
+      },
+      {
+        "r": 2,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-7"
+      },
+      {
+        "r": 4,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-3"
+      },
+      {
+        "r": 2,
+        "c": 4,
+        "rotation": 0,
+        "id": "wild-4"
+      },
+      {
+        "r": 4,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-8"
+      },
+      {
+        "r": 2,
+        "c": 2,
+        "rotation": 0,
+        "id": "wild-11"
+      },
+      {
+        "r": 5,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-2"
+      },
+      {
+        "r": 4,
+        "c": 2,
+        "rotation": 1,
+        "id": "wild-12"
+      },
+      {
+        "r": 0,
+        "c": 1,
+        "rotation": 0,
+        "id": "wild-13"
+      },
+      {
+        "r": 0,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-5"
+      },
+      {
+        "r": 2,
+        "c": 3,
+        "rotation": 0,
+        "id": "wild-6"
+      }
+    ]
+  ],
+  "randomSeed": 123,
+  "minimumSurvivors": 3
+}

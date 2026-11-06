@@ -1,13 +1,14 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { dispatch as previewCommand, getAvailableActions, getState, key, occupied, placementOrigin } from '../../engine';
+import { dispatch as previewCommand, getAvailableActions, getState, key, occupied, placementOrigin, facilityLayer } from '../../engine';
 import type { SandboxDraft } from '../../engine';
-import type { Cell, FacilityKind, GameSession, Piece, Placement, Shape, TerrainKind } from '../../engine';
+import type { BoardLayer, Cell, FacilityKind, GameSession, Piece, Placement, Shape, TerrainKind } from '../../engine';
 import type { audio } from '../../platform/audio/WildernessAudio';
 import { terrainNames } from '../../engine';
 import type { TutorialEvent } from '../tutorial/tutorialLessons';
 
 type Options = {
   session: GameSession; continuousPlacement: boolean;
+  layer?: BoardLayer;
   terrainBrush: TerrainKind | null; clearTerrainBrush: () => void;
   dispatch: (command: Parameters<typeof previewCommand>[1]) => ReturnType<typeof previewCommand>;
   setNotice: (notice: string) => void;
@@ -15,7 +16,7 @@ type Options = {
   onAction?: (event: TutorialEvent) => void;
   onReject: (cells: Cell[]) => void;
 };
-export function useGamePlacement({ session, continuousPlacement, terrainBrush, clearTerrainBrush, dispatch, setNotice, sound, onAction, onReject }: Options) {
+export function useGamePlacement({ session, continuousPlacement, layer = 'ground', terrainBrush, clearTerrainBrush, dispatch, setNotice, sound, onAction, onReject }: Options) {
   const { mode } = session;
   const { level, placements, result } = useMemo(() => getState(session), [session]);
   const [selected, setSelected] = useState<Piece | null>(null);
@@ -51,7 +52,7 @@ export function useGamePlacement({ session, continuousPlacement, terrainBrush, c
       if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
       setNotice(''); sound('place'); return;
     }
-    const placed = placements.find(at => occupied(level.pieces.find(p => p.id === at.id)!, at).some(p => key(p) === key(cell)));
+    const placed = placements.find(at => facilityLayer(level.pieces.find(p => p.id === at.id)!.kind) === layer && occupied(level.pieces.find(p => p.id === at.id)!, at).some(p => key(p) === key(cell)));
     if (placed) {
       const piece = level.pieces.find(p => p.id === placed.id)!;
       const outcome = dispatch({ type: 'remove', id: placed.id });
@@ -60,7 +61,9 @@ export function useGamePlacement({ session, continuousPlacement, terrainBrush, c
       setNotice('');
       sound('pickup'); onAction?.({ type: 'pickup', kind: piece.kind, pieceId: piece.id }); return;
     }
-    const terrain = level.terrain.find(t => key(t) === key(cell));
+    const terrain = layer === 'ground' ? level.terrain.find(t => key(t) === key(cell)) : undefined;
+    const fixed = (layer === 'sky' ? level.sky?.clouds : level.sky?.anchors)?.some(t => key(t) === key(cell));
+    if (!selected && fixed) { setNotice(layer === 'sky' ? '低云只阻挡天空，不计占格；气象风筝还需避开周围八格。' : '系留桩不可移动，不计占格；气球的地面投影需上下左右邻桩。'); sound('click'); return; }
     if (mode === 'sandbox-editor' && terrain && !selected) {
       const outcome = dispatch({ type: 'terrain', cell });
       if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }

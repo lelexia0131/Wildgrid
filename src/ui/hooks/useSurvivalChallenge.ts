@@ -7,6 +7,7 @@ import { completeSurvival, readSurvival, readSurvivalForWrite, writeSurvival } f
 import { abandonSurvivalChallenge, replaceSurvivalChallenge, restartSurvivalChallenge, survivalContinuation, updateSurvivalProgress } from '../../game-modes/survival/survivalChallenge';
 import { survivalCollectionTarget } from '../../game-modes/sandbox/localMapCollection';
 import { createSurvivalGenerationTask } from '../../workers/workerTasks';
+import type { SurvivalGenerationProgress } from '../../workers/workerTasks';
 import type { GameSession, Piece, Shape } from '../../engine';
 import type { SurvivalChallenge, SurvivalProgress, SurvivalReward, SurvivalSave } from '../../game-modes/survival/survivalChallenge';
 
@@ -33,6 +34,7 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
   const [survivalReward, setSurvivalReward] = useState<SurvivalReward | null>(null);
   const [survivalError, setSurvivalError] = useState('');
   const [generating, setGenerating] = useState<number | null>(null);
+  const [generationProgress, setGenerationProgress] = useState<SurvivalGenerationProgress | null>(null);
   const [replaceChallenge, setReplaceChallenge] = useState<number | null>(null);
   const [abandonOpen, setAbandonOpen] = useState(false);
   const [generator] = useState(createSurvivalGenerationTask);
@@ -90,7 +92,7 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
     return true;
   }
   function cancelGeneration() {
-    generator.cancel(); setGenerating(null);
+    generator.cancel(); setGenerating(null);setGenerationProgress(null);
   }
   function requestSurvival(difficulty: number) {
     if (!menuOpen || generator.isRunning()) return;
@@ -110,6 +112,7 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
       const fail = (message: string) => { cancelGeneration(); setSurvivalError(message); sound('error'); };
       const latest = readSurvival();
       generator.start({ difficulty, seed, id, recent: latest.recent, disabled: readDisabledFacilities(), history: latest.recentMaps || [] }, {
+        onProgress: setGenerationProgress,
         onError: (reason, message) => fail(message || (reason === 'timeout' ? '地图生成超时，请重试或调整禁用设施。' : '地图生成失败，旧挑战仍然保留，请重试。')),
         onResult: result => {
           const current = { ...result, startedAt: Date.now() };
@@ -167,7 +170,7 @@ export function useSurvivalChallenge({ active, menuOpen, history, rotations, sel
   function closeSurvivalDialogs() { setReplaceChallenge(null); setAbandonOpen(false); }
 
   return {
-    survival, challenge, survivalReward, survivalError, generating, replaceChallenge, abandonOpen,
+    survival, challenge, survivalReward, survivalError, generating, generationProgress, replaceChallenge, abandonOpen,
     openSurvivalMenu, continueSurvival, continueAdventure, cancelGeneration, requestSurvival, abandonSurvival, collectSurvival, settleSurvival, prepareRestart,
     confirmReplacement, closeSurvivalDialogs, cancelReplacement: () => setReplaceChallenge(null),
     openAbandon: () => { sound(); setAbandonOpen(true); }, closeAbandon: () => setAbandonOpen(false), resetReward: () => setSurvivalReward(null),

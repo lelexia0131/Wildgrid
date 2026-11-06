@@ -3,7 +3,7 @@ import { adventureStartSnapshot, completeAdventureLevel, recordAdventureHint, re
 import type { AdventureSave } from '../../game-modes/adventure/adventureProgress';
 import type { AdventureHintAction } from '../../game-modes/adventure/adventureBadges';
 import { readSave, writeSave } from '../../save-system/adventureStorage';
-import type { Placement, Settings } from '../../engine';
+import type { BoardLayer, Placement, Settings } from '../../engine';
 import { audio } from '../../platform/audio/WildernessAudio';
 
 export function useAdventureProgress() {
@@ -33,6 +33,7 @@ export function useAdventureProgress() {
     return adventureStartSnapshot(current.current, id, reset);
   }
   return { save, saved, recordProgress, completeLevel, updateSettings, getStartSnapshot,
+    recordLayer: (id: number, layer: BoardLayer) => { commit(s => s.layers?.[id] === layer ? s : { ...s, layers: { ...s.layers, [id]: layer } }); },
     recordHint: (id: number, placements: readonly Placement[], action: AdventureHintAction) => { commit(s => recordAdventureHint(s, id, placements, action)); },
     restartLevel: (id: number) => { commit(s => restartAdventureLevel(s, id)); },
     retrySave: () => { const result = writeSave(current.current); setSaved(result); audio.feedback(result ? 'success' : 'error'); } };

@@ -68,8 +68,8 @@ export function resolveTutorial(state: TutorialState, context: Context): Tutoria
     step('feedback', ui('feedback')),
   ], ['rotation']);
   if (level.id === 13) return lesson([step('el', { type: 'facility', kind: 'camp', shape: 'el' }), step('multi', { type: 'clues' })]);
-  const introduction: Partial<Record<number, FacilityKind>> = { 5: 'fire', 8: 'tower', 19: 'picnic', 24: 'cabin', 31: 'foodTruck', 34: 'powerTower', 38: 'pool' };
+  const introduction: Partial<Record<number, FacilityKind>> = { 5: 'fire', 8: 'tower', 19: 'picnic', 24: 'cabin', 31: 'foodTruck', 34: 'powerTower', 38: 'pool', 46: 'balloon', 49: 'airship', 53: 'kite' };
   const kind = introduction[level.id];
-  if (kind && !state.facilitiesSeen.includes(kind)) return lesson([facility(kind)], undefined, kind);
+  if (kind && !state.facilitiesSeen.includes(kind)) return lesson([level.sky ? { ...facility(kind), target: ui('board') } : facility(kind)], undefined, kind);
   return null;
 }

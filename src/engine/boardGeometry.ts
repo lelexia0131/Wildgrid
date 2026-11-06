@@ -1,4 +1,13 @@
-import type { Cell, Piece, Placement, Shape } from './types';
+import type { BoardLayer, Cell, FacilityKind, Level, Piece, Placement, Shape } from './types';
+
+export const facilityLayer = (kind: FacilityKind): BoardLayer => ['balloon', 'airship', 'kite'].includes(kind) ? 'sky' : 'ground';
+export const layerClues = (level: Level, layer: BoardLayer) => layer === 'sky' && level.sky ? level.sky : level;
+export const fixedCells = (level: Level, layer: BoardLayer): readonly Cell[] => layer === 'sky' ? level.sky?.clouds ?? [] : [...level.terrain, ...level.sky?.anchors ?? []];
+// Disjoint quadrants give each layer its own solver masks and line totals.
+// Saved placements and displayed coordinates remain on the original 8×8 grid.
+export const solverBoard = (level: Level) => level.sky
+  ? { size: level.size * 2, rows: [...level.rows, ...level.sky.rows], cols: [...level.cols, ...level.sky.cols] } : level;
+export const solverCell = (cell: Cell, kind: FacilityKind, size: number, layered: boolean): Cell => layered && facilityLayer(kind) === 'sky' ? { r: cell.r + size, c: cell.c + size } : cell;
 
 const SHAPE_CELLS: Record<Shape, Cell[]> = {
   single: [{ r: 0, c: 0 }], domino: [{ r: 0, c: 0 }, { r: 0, c: 1 }],

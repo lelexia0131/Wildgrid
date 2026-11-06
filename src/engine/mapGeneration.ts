@@ -96,18 +96,22 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
   const construction:Record<string,number>={};
   const measure=budget.measure.bind(budget);
   const reject = (reason: string) => { failures[reason] = (failures[reason] ?? 0) + 1; };
-  let attempts = 0, proofs = 0, logicChecks = 0, stream=0, tryPlanned=false;
+  let attempts = 0, proofs = 0, logicChecks = 0;
+  const paths=[{stream:0,tryPlanned:false},{stream:0,tryPlanned:false}];
   let candidatesGenerated=0,candidatesValidated=0,proofExhaustions=0,timeDependent=false;
   const seenCandidates=new Set<string>(),provedCandidates=new Set<string>();
   const diagnostics=()=>({elapsed:Date.now()-started,attempts,proofs,logicChecks,failures,phases,construction,candidatesGenerated,candidatesValidated,proofExhaustions,cutoffs:budget.cutoffs,timeDependent:timeDependent || Object.keys(budget.cutoffs).length>0});
   const construct=()=>{
     attempts++;
+    const useMotifs=maxEmptyLines<=1?attempts%4===0:attempts%2===(difficulty<=6?1:0),path=paths[Number(useMotifs)];
     // Construction attempts have independent deterministic streams. The number
     // of random moves spent repairing one rejected layout must not steer every
     // later terrain and inventory sample into the same local search trajectory.
-    const random=seeded((seed+Math.imul(stream,0x9e3779b9))>>>0);
+    // Separate sequences preserve the original exploration order while local
+    // compositions explore another layout family under the same total budget.
+    const random=seeded((seed+(useMotifs?0x85ebca6b:0)+Math.imul(path.stream,0x9e3779b9))>>>0);
     const allocation={counts:{} as Record<string,number>,area:budgets.facilities.chooseArea(()=>random()**2),target:budgets.facilities.target,min:budgets.facilities.min,max:budgets.facilities.max},terrainAllocation=budgets.terrain.sample(random);
-    if (allocation.area + terrainAllocation.area + 8 > 64) { stream++;tryPlanned=false;reject('board capacity'); return; }
+    if (allocation.area + terrainAllocation.area + 8 > 64) { path.stream++;path.tryPlanned=false;reject('board capacity'); return; }
     const lineCapacity=MAX_GENERATED_LINE_OCCUPANCY;
     const rows=Array<number>(8).fill(lineCapacity),cols=Array<number>(8).fill(lineCapacity);
     let terrainActivity:{cells:Set<number>;terrainArea:number}|undefined;
@@ -119,15 +123,15 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
       // Otherwise diversify open layouts by alternating strategies across
       // inventory streams. All streams still use the original quantity rules.
       const choice=random();
-      const plan=covered.length?covered[Math.floor(choice*covered.length)]:(compactCoverageReachable?tryPlanned:stream%2===1)?options[Math.floor(choice**2*options.length)]:undefined;
-      if(!compactCoverageReachable || covered.length || !options.length || tryPlanned) {stream++;tryPlanned=false;} else tryPlanned=true;
+      const plan=covered.length?covered[Math.floor(choice*covered.length)]:(compactCoverageReachable?path.tryPlanned:path.stream%2===1)?options[Math.floor(choice**2*options.length)]:undefined;
+      if(!compactCoverageReachable || covered.length || !options.length || path.tryPlanned) {path.stream++;path.tryPlanned=false;} else path.tryPlanned=true;
       if(plan) {
         const shuffled=()=>Array.from({length:8},(_,i)=>({i,order:random()})).sort((a,b)=>a.order-b.order).map(p=>p.i);
         for(const r of shuffled().slice(plan.r)) rows[r]=0;
         for(const c of shuffled().slice(plan.c)) cols[c]=0;
         terrainActivity={cells:new Set(Array.from({length:64},(_,i)=>i).filter(i=>rows[Math.floor(i/8)] && cols[i%8])),terrainArea:plan.terrainArea};
       }
-    } else stream++;
+    } else path.stream++;
     let terrain = measure('terrain',()=>layoutTerrain(random,terrainAllocation.counts,terrainRegistry,terrainAllocation.area,terrainActivity));
     let planned=!!terrainActivity;
     if(terrainActivity) construction['activity planned']=(construction['activity planned']??0)+1;
@@ -143,24 +147,27 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
     // Zero lines and terrain capacity are planned together. The packing search
     // still chooses every facility count, position and rotation from domains.
     const baseLevel: Level = { id: 0, name: `荒野求生 · ${difficulty}难`, chapter: '荒野求生', tip: '结合行列占格数、地形与设施规则，完成这片营地。', size: 8, terrain, pieces: piecesToPlace, rows, cols };
-    const activity=measure('construction',until=>activityDomains(baseLevel,placementDomains(baseLevel),budgets.facilities.items,allocation.area,random,until,construction,MAX_GENERATED_FACILITIES[difficulty-1],maxEmptyLines));
+    const activity=measure('construction',until=>activityDomains(baseLevel,placementDomains(baseLevel),budgets.facilities.items,allocation.area,random,until,construction,MAX_GENERATED_FACILITIES[difficulty-1],maxEmptyLines,useMotifs));
     if (!activity) { reject('combination layout'); return; }
     // Spend the next slot on a new inventory once this stream has already
     // produced a layout. The planned counterpart is a construction fallback,
     // rather than a second expensive repair of the same inventory.
-    if(tryPlanned) {stream++;tryPlanned=false;}
+    if(path.tryPlanned) {path.stream++;path.tryPlanned=false;}
     if(planned) construction['activity completed']=(construction['activity completed']??0)+1;
     const {level,groups,entries}=activity;
+    const motifs=[...new Set(entries.flatMap(e=>e.motif?[e.motif]:[]))].map(family=>({family,facilities:entries.filter(e=>e.motif===family).map(e=>e.piece.id)}));
+    const motifGrass=entries.reduce((mask,e)=>mask|(e.motifGap??0n),0n);
     for(const item of budgets.facilities.items) allocation.counts[item.id]=entries.filter(e=>templateId(e.piece)===item.id).length;
     measure('facility refinement',until=>refineFacilities(entries,groups,random,until,maxEmptyLines));
     const pieces = entries.map(e => e.piece), placements = entries.map(e => ({ ...e.p.at, id: e.piece.id }));
     const initial = withEditorPlacements({ level: { ...level, pieces }, placements }, placements);
-    if(repartitionCount(entries,groups)) {reject('partition ambiguity');return;}
+    if(repartitionCount(entries,groups,1)) {reject('partition ambiguity');return;}
     let draft={...initial,level:measure('terrain refinement',until=>refineTerrain(initial.level,entries,random,until))};
     if(difficulty>=7) {
       const active=placementDomains({...draft.level,rows:level.rows,cols:level.cols});
       for(const e of entries) e.p=active.find(g=>templateId(g.piece)===templateId(e.piece))!.domain.find(p=>p.mask===e.p.mask)!;
-      draft=measure('logical refinement',until=>refineLogicalLayout(draft,entries,active,random,until,maxEmptyLines));
+      draft=measure('logical refinement',until=>refineLogicalLayout(draft,entries,active,random,until,maxEmptyLines,
+        (candidate,logic)=>!generationDifficulty(candidate,{occupied:0,candidates:0,nodes:0,branches:0},logic,difficulty).rejection));
     }
     // Construction capacities are preferences. Formal validation must restore
     // every legal domain under the final clues, including after refinement.
@@ -168,40 +175,72 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
     const quality = mapQuality(draft);
     if (!quality.accepted || quality.distribution.violations.length || inventoryViolations(draft.level,difficulty,disabled).length || !evaluate(draft.level, draft.placements).won) { reject('layout quality'); return; }
     if (hasRoleSwap(entries, prepared)) { reject('role ambiguity'); return; }
-    if (repartitionCount(entries, prepared)) { reject('partition ambiguity'); return; }
+    if (repartitionCount(entries, prepared,1)) { reject('partition ambiguity'); return; }
     const fingerprint=mapFingerprint(draft);
     if(seenCandidates.has(fingerprint)) {reject('duplicate candidate');return;}
     seenCandidates.add(fingerprint);candidatesGenerated++;
-    return {draft,quality,prepared,allocation,terrainAllocation,random};
+    return {draft,quality,prepared,allocation,terrainAllocation,random,motifs,motifGrass};
   };
   const canConstruct=()=>attempts<1200 && budget.canConstruct();
   const urgent=()=>{const value=budget.urgent();if(value) timeDependent=true;return value;};
   for(const candidates of generationCandidateBatches(construct,canConstruct,urgent)) {
-    const batch=candidates.sort((a,b)=>b.quality.score-a.quality.score);
+    const motifPreference=difficulty<=6?1.25:0;
+    const batch=candidates.sort((a,b)=>(b.quality.score+Number(b.motifs.length>0)*motifPreference)-(a.quality.score+Number(a.motifs.length>0)*motifPreference));
     for (const candidate of batch) {
       let {draft, quality, prepared} = candidate;
-      const {allocation,terrainAllocation,random}=candidate;
+      const {allocation,terrainAllocation,random,motifs,motifGrass}=candidate;
       candidatesValidated++;
       logicChecks++;
-      const logicBudget = { deadline:budget.phaseDeadline('logic'), ...generationReasoningBudget(difficulty) };
-      let logic = measure('logic',()=>reasonLevel(draft.level, logicBudget, prepared));
-      const excluded: (typeof draft.placements)[]=[];
-      for(let refinement=0;!logic.solved && !logic.aborted && refinement<8 && Date.now()<deadline;refinement++) {
-        const probe=measure('witness search',until=>solveLevel(draft.level,2,{deadline:until,maxNodes:2400},reasonedDomains(prepared,logic)));
+      const policy=generationReasoningBudget(difficulty);
+      // First use inexpensive deductions. A known alternative solution makes
+      // a full assumption trace wasted work until the terrain is repaired.
+      let logic = measure('logic',until=>reasonLevel(draft.level, {deadline:until,maxAssumptions:0}, prepared));
+      const signature=(placements:typeof draft.placements)=>placements.map(at=>{
+        const piece=draft.level.pieces.find(p=>p.id===at.id)!;
+        return templateId(piece)+':'+occupied(piece,at).map(p=>p.r*8+p.c).sort((a,b)=>a-b).join(',');
+      }).sort().join(';');
+      const answer=signature(draft.placements),excluded=new Map<string,typeof draft.placements>();
+      const terrains=new Set([draft.level.terrain.map(t=>`${t.kind}:${t.r*8+t.c}`).sort().join(';')]);
+      const activeArea=draft.level.rows.filter(Boolean).length*draft.level.cols.filter(Boolean).length;
+      const occupiedArea=draft.level.rows.reduce((sum,n)=>sum+n,0);
+      let assumptionsTried=false,bestRemaining=logic.remaining;
+      // Spend additional repair work only inside the original reasoning
+      // policy's reach, still under the same phase and overall deadlines.
+      // Failed moves and repeated terrain states terminate the repair below.
+      for(let refinement=0;!logic.solved && !logic.aborted && !logic.contradiction && refinement<(bestRemaining<=policy.maxUnresolved?16:8) && Date.now()<deadline;refinement++) {
+        // When every active grass cell is occupied, alternatives differ only
+        // in facility assignment. A small batch diagnoses that ambiguity
+        // without enumerating many related permutations before each repair.
+        const covered=activeArea-draft.level.terrain.filter(t=>draft.level.rows[t.r] && draft.level.cols[t.c]).length===occupiedArea;
+        const probe=measure('witness search',until=>solveLevel(draft.level,covered?2:6,{deadline:until,maxNodes:2400},reasonedDomains(prepared,logic)));
         if(probe.aborted) reject('witness budget');else if(probe.count>1) reject('witness multiple');
-        if(probe.aborted || !probe.count) break;
-        const signature=(placements:typeof draft.placements)=>placements.map(at=>{
-          const piece=draft.level.pieces.find(p=>p.id===at.id)!;
-          return templateId(piece)+':'+occupied(piece,at).map(p=>p.r*8+p.c).sort((a,b)=>a-b).join(',');
-        }).sort().join(';');
-        const answer=signature(draft.placements),witnesses=probe.solutions.filter(p=>signature(p)!==answer);
-        if(!witnesses.length) break;
-        excluded.push(...witnesses);
+        const witnesses=probe.solutions.filter(p=>signature(p)!==answer);
+        if(!witnesses.length) {
+          if(assumptionsTried || !policy.maxAssumptions || logic.remaining>policy.maxUnresolved) break;
+          const remaining=logic.remaining;
+          assumptionsTried=true;logicChecks++;
+          logic=measure('logic',until=>reasonLevel(draft.level,{deadline:until,...policy},prepared));
+          if(logic.remaining>=remaining) break;
+          continue;
+        }
+        // An interrupted enumeration is not a proof. Its already evaluated
+        // solutions are nevertheless valid counterexamples for repair.
+        for(const witness of witnesses) excluded.set(signature(witness),witness);
         const entries=draft.placements.map(at=>{const piece=draft.level.pieces.find(p=>p.id===at.id)!;return {piece,p:prepared.find(g=>templateId(g.piece)===templateId(piece))!.domain.find(p=>p.mask===occupied(piece,at).reduce((m,c)=>m|(1n<<BigInt(c.r*8+c.c)),0n))!};});
-        const next=measure('witness refinement',until=>refineTerrain(draft.level,entries,random,until,excluded));
+        const next=measure('witness refinement',until=>refineTerrain(draft.level,entries,random,until,[...excluded.values()],motifGrass));
         if(next===draft.level) break;
+        const terrainKey=next.terrain.map(t=>`${t.kind}:${t.r*8+t.c}`).sort().join(';');
+        if(terrains.has(terrainKey)) {reject('repair cycle');break;}
+        terrains.add(terrainKey);
         draft={...draft,level:next};prepared=placementDomains(next);quality=mapQuality(draft);
-        logicChecks++;logic=measure('logic',()=>reasonLevel(next,logicBudget,prepared));
+        assumptionsTried=false;
+        logicChecks++;logic=measure('logic',until=>reasonLevel(next,{deadline:until,maxAssumptions:0},prepared));
+        bestRemaining=Math.min(bestRemaining,logic.remaining);
+      }
+      // Repair may exhaust its move budget immediately before a unique map
+      // becomes solvable by the original bounded assumption policy.
+      if(!logic.solved && !logic.aborted && !logic.contradiction && !assumptionsTried && policy.maxAssumptions && logic.remaining<=policy.maxUnresolved) {
+        logicChecks++;logic=measure('logic',until=>reasonLevel(draft.level,{deadline:until,...policy},prepared));
       }
       // Incomplete logic is never a constraint failure or an acceptance.
       if (logic.aborted) { reject('logic incomplete'); continue; }
@@ -217,7 +256,7 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
       if (solved.aborted || solved.count !== 1) { if(solved.aborted) proofExhaustions++;reject(solved.aborted ? 'proof budget' : 'not unique'); continue; }
       if (Date.now() >= deadline) break;
       return { id, difficulty, seed, draft, fingerprint, metrics: generationDifficulty(draft, solved, logic, difficulty),
-        diagnostics: { ...diagnostics(), unique: true, quality, inventory: {facilities:allocation, terrain:terrainAllocation}, reasoning: logic } };
+        diagnostics: { ...diagnostics(), unique: true, quality, motifs, inventory: {facilities:allocation, terrain:terrainAllocation}, reasoning: logic } };
     }
   }
   if(attempts>=1200) reject('attempt budget');

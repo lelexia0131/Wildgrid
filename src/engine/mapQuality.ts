@@ -18,6 +18,33 @@ export function mapQuality(draft: SandboxDraft, constraints?: QualityConstraints
   const mask = blocked.reduce((m, p) => m | cellBit(p), 0n);
   const grass = board.filter(p => !(mask & cellBit(p)));
   const effectiveGrass = grass.filter(p => grass.some(q => adjacent(p, q))).length;
+  const remainingGrass = new Set(grass.map(p => p.r * 8 + p.c)), grassPatches: number[] = [];
+  for (const start of remainingGrass) {
+    const pending = [start]; remainingGrass.delete(start);
+    let size = 0;
+    while (pending.length) {
+      const cell = pending.pop()!, r = Math.floor(cell / 8), c = cell % 8;
+      size++;
+      for (const [dr, dc] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) {
+        const nr = r + dr, nc = c + dc, next = nr * 8 + nc;
+        if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8 && remainingGrass.delete(next)) pending.push(next);
+      }
+    }
+    grassPatches.push(size);
+  }
+  const grassComponents = grassPatches.length, largestGrassPatch = Math.max(0, ...grassPatches);
+  const unrelatedNeighbors = entries.map(() => 0);
+  const linkedKind = (kind: string) => kind === 'fire' || kind === 'picnic' || kind === 'pool';
+  let unrelatedContacts = 0;
+  for (let i = 0; i < entries.length; i++) for (let j = i + 1; j < entries.length; j++) {
+    const a = entries[i], b = entries[j];
+    if (!a.cells.some(p => b.cells.some(q => adjacent(p, q)))) continue;
+    // Orthogonal contact already supplies the camp relationship for these
+    // facilities. A truck instead needs an empty cell between it and a camp.
+    if (a.piece.kind === 'camp' && linkedKind(b.piece.kind) || b.piece.kind === 'camp' && linkedKind(a.piece.kind)) continue;
+    unrelatedContacts++; unrelatedNeighbors[i]++; unrelatedNeighbors[j]++;
+  }
+  const crowdedFacilities = unrelatedNeighbors.filter(count => count > 2).length;
   const dependencies = entries.filter(e => CAMP_REQUIREMENTS[e.piece.kind]);
   const linked = dependencies.filter(e => campConnections(e.piece.kind, e.cells, board, blocked).some(link => entries.some(c => c.piece.kind === 'camp' && c.cells.some(p => p.r === link.camp.r && p.c === link.camp.c)))).length;
   const quadrants = [0, 0, 0, 0], grassQuadrants = [0, 0, 0, 0];
@@ -47,10 +74,13 @@ export function mapQuality(draft: SandboxDraft, constraints?: QualityConstraints
   // uniqueness are verified separately; they cannot be compensated by a score.
   const score = naturalness + clueEntropy * .2 + kinds.size * .7 + shapes.size * .3 + campShapes * .65 + clueVariety * .2 + terrainLinks / Math.max(1, entries.length)
     + grassQuadrants.filter(v => v > 0).length * .3 + effectiveGrass / Math.max(1, grass.length)
+    + largestGrassPatch / Math.max(1, grass.length) * .6 - Math.max(0, grassComponents - 1) * .1
+    - crowdedFacilities / Math.max(1, entries.length) * .8
     - concentration * 2 - maxSameKind / Math.max(1, entries.length) * 3
     - distribution.imbalance - distribution.halfImbalance - Math.max(0,distribution.max3-3)*.2
     - Math.max(0,regions.reduce((s,r)=>s+r.singletons,0)/Math.max(1,terrainCount)-.75);
   return { regions, distribution, terrainCount, grass: grass.length, effectiveGrass,
+    grassComponents, largestGrassPatch, unrelatedContacts, crowdedFacilities,
     fragmentation: regions.reduce((s, r) => s + Math.max(0, r.components - 1), 0),
     concentration, maxSameKind, kinds: kinds.size, shapes: shapes.size, campShapes, terrainLinks, clueVariety,
     maxLine: Math.max(...clues), quadrants, grassQuadrants, linked, dependencies: dependencies.length,

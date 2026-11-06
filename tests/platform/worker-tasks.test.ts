@@ -2,7 +2,8 @@ import { generateMap } from '../../src/engine/mapGeneration';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createSandbox, getLevelById, getSolution, MAP_GENERATION_TIMEOUT, generationBudget, withEditorPlacements } from '../../src/engine';
-import { createAdventureHintTask, createSandboxCheckTask, createSurvivalGenerationTask } from '../../src/workers/workerTasks';
+import { createAdventureHintTask, createSandboxCheckTask, createSurvivalGenerationTask, SURVIVAL_GENERATION_ACTIVE_TIMEOUT } from '../../src/workers/workerTasks';
+import type { SurvivalGenerationProgress } from '../../src/workers/workerTasks';
 
 class FakeWorker {
   static instances: FakeWorker[] = [];
@@ -65,8 +66,8 @@ test('worker tasks cancel, ignore stale/duplicate replies, release errors and cl
   assert.equal(task.isRunning(), false); assert.equal(FakeWorker.instances.at(-1)!.terminated, true);
 });
 
-test('survival replaces timed-out rounds indefinitely and accepts a result only once', t => {
-  t.mock.timers.enable({ apis: ['setTimeout'] });
+test('survival replaces timed-out rounds within the session budget and accepts a result only once', t => {
+  t.mock.timers.enable({ apis: ['setTimeout','Date'], now:0 });
   const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'Worker');
   Object.defineProperty(globalThis, 'Worker', { configurable: true, value: FakeWorker });
   t.after(() => { if (descriptor) Object.defineProperty(globalThis, 'Worker', descriptor); else Reflect.deleteProperty(globalThis, 'Worker'); });
@@ -76,8 +77,8 @@ test('survival replaces timed-out rounds indefinitely and accepts a result only 
   start(); const first = FakeWorker.instances.at(-1)!;
   t.mock.timers.tick(generationBudget(1) + 399); assert.equal(first.terminated, false);
   t.mock.timers.tick(1); assert.equal(first.terminated, true); assert.equal(task.isRunning(), true);
-  for (let i = 0; i < 10; i++) t.mock.timers.tick(generationBudget(1) + 400);
-  assert.equal(FakeWorker.instances.length, before + 12); assert.deepEqual(errors, []);
+  for (let i = 0; i < 2; i++) t.mock.timers.tick(generationBudget(1) + 400);
+  assert.equal(FakeWorker.instances.length, before + 4); assert.deepEqual(errors, []);
   first.reply({status:'success',challenge:{}}); assert.deepEqual(results, []);
   start(); const final = FakeWorker.instances.at(-1)!, request = final.request as { id: string; seed: number; difficulty: number };
   assert.notEqual(request.seed, 2);
@@ -111,8 +112,8 @@ test('survival pause preserves the seed and remaining active budget; cancellatio
   assert.equal(task.isRunning(), false);
 });
 
-test('exhausted searches keep constructing with fresh seeds until cancelled', t => {
-  t.mock.timers.enable({ apis: ['setTimeout'] });
+test('exhausted searches preserve inputs across fresh seeds within the active budget', t => {
+  t.mock.timers.enable({ apis: ['setTimeout','Date'],now:0 });
   const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'Worker');
   Object.defineProperty(globalThis, 'Worker', { configurable: true, value: FakeWorker });
   t.after(() => { if (descriptor) Object.defineProperty(globalThis, 'Worker', descriptor); else Reflect.deleteProperty(globalThis, 'Worker'); });
@@ -130,6 +131,7 @@ test('exhausted searches keep constructing with fresh seeds until cancelled', t 
     assert.deepEqual(sent.history, request.history);
     assert.ok(sent.seed >= 0 && sent.seed <= 0xffffffff);
     seeds.add(sent.seed);
+    t.mock.timers.tick(1000);
     worker.reply({ status: 'search-failed', error: '缺少可解释路径' });
     assert.equal(task.isRunning(), true); assert.equal(worker.terminated, true);
     assert.equal(FakeWorker.instances.length, before + round + 2);
@@ -147,6 +149,42 @@ test('exhausted searches keep constructing with fresh seeds until cancelled', t 
   assert.equal(task.isRunning(), false);
   assert.equal(FakeWorker.instances.at(-1), last);
   assert.deepEqual(errors, []);
+});
+
+test('total active waiting survives retries and pauses, reports real progress, and stops without publishing stale results',t=>{
+  t.mock.timers.enable({apis:['setTimeout','setInterval','Date'],now:0});
+  const descriptor=Object.getOwnPropertyDescriptor(globalThis,'Worker');
+  Object.defineProperty(globalThis,'Worker',{configurable:true,value:FakeWorker});
+  t.after(()=>{if(descriptor) Object.defineProperty(globalThis,'Worker',descriptor);else Reflect.deleteProperty(globalThis,'Worker');});
+  const task=createSurvivalGenerationTask(),errors:string[]=[],updates:SurvivalGenerationProgress[]=[];
+  task.start({difficulty:10,seed:1,id:'total-budget',recent:[]},{onResult:()=>assert.fail('late map'),onError:reason=>errors.push(reason),onProgress:p=>updates.push(p)});
+  for(let round=0;round<3;round++) {
+    t.mock.timers.tick(7000);
+    FakeWorker.instances.at(-1)!.reply({status:'search-failed',error:'exhausted'});
+  }
+  assert.equal(updates.at(-1)!.elapsedMs,21000);
+  assert.equal(updates.at(-1)!.round,4);
+  task.setPaused(true);
+  const pausedCount=updates.length;
+  t.mock.timers.tick(60000);
+  assert.equal(updates.length,pausedCount);
+  task.setPaused(false);
+  assert.equal(updates.at(-1)!.elapsedMs,21000);
+  t.mock.timers.tick(7999);
+  assert.equal(task.isRunning(),true);
+  t.mock.timers.tick(1);
+  const last=FakeWorker.instances.at(-1)!;
+  assert.equal((last.request as {budgetMs:number}).budgetMs,800);
+  t.mock.timers.tick(SURVIVAL_GENERATION_ACTIVE_TIMEOUT-29000);
+  assert.equal(task.isRunning(),false);
+  assert.equal(last.terminated,true);
+  assert.deepEqual(errors,['timeout']);
+  const finishedCount=updates.length,workerCount=FakeWorker.instances.length;
+  last.reply({status:'search-failed',error:'stale'});
+  t.mock.timers.tick(60000);
+  assert.equal(FakeWorker.instances.length,workerCount);
+  assert.equal(updates.length,finishedCount);
+  assert.deepEqual(errors,['timeout']);
 });
 
 test('survival creation, posting, runtime and protocol errors stop without retrying', t => {

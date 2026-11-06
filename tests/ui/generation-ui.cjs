@@ -46,6 +46,7 @@ app.whenReady().then(async () => {
       if(text && text!==window.__generationMessages.at(-1)?.text)window.__generationMessages.push({text,time:performance.now()});
     });window.__messageObserver.observe(document.body,{subtree:true,childList:true,characterData:true});void 0`);
     await click('.survival-difficulty');
+    assert.match(await js(`document.querySelector('.generation-progress').getAttribute('aria-valuetext')`), /第 1 次尝试 · 已等待 \d+ 秒 · 最多 30 秒/);
     const seen = new Set(), kinds = new Set();
     for (let i = 0; i < 8; i++) {
       const cells = await frame(); checkLayout(cells); seen.add(JSON.stringify(cells));
@@ -70,6 +71,7 @@ app.whenReady().then(async () => {
       assert.equal(await js(`window.__workers.length`), beforeRetries + round + 1);
       assert.equal(await js(`!!document.querySelector('.survival-notice')`), false);
     }
+    assert.match(await js(`document.querySelector('.generation-progress').getAttribute('aria-valuetext')`), new RegExp(`第 ${beforeRetries + 4} 次尝试 · 已等待 \\d+ 秒 · 最多 30 秒`));
     const { draft, fingerprint } = generateMap(1, 2, 'fixture', []);
     await js(`window.__workers.at(-1).reply({status:'success',challenge:Object.assign({},window.__workers.at(-1).request,${JSON.stringify({draft,fingerprint})})})`);
     await wait(150);

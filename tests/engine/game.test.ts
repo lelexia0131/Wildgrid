@@ -7,6 +7,74 @@ import { validatePlacements } from '../../src/engine';
 import type { Level, Placement } from '../../src/engine';
 import { readSave, writeSave } from '../../src/save-system/adventureStorage';
 import { progressForPlay } from '../../src/game-modes/adventure/adventureProgress';
+import { facilityLayer, solveLevel, analyzeAdventureHint, createSession, dispatch } from '../../src/engine';
+import { levelUnlocked } from '../../src/game-modes/adventure/adventureProgress';
+import { parseAdventureSave } from '../../src/save-system/adventureSaveCodec';
+
+test('sky rules distinguish tethering, deliveries and updrafts, and count layers independently', () => {
+  const pieces: Level['pieces'] = [
+    {id:'c',kind:'camp',shape:'domino'}, {id:'f',kind:'fire',shape:'single'},
+    {id:'b',kind:'balloon',shape:'single'}, {id:'a',kind:'airship',shape:'domino'}, {id:'k',kind:'kite',shape:'long'},
+  ];
+  const at = (id: string,r: number,c: number,rotation=0) => ({id,r,c,rotation});
+  const answer = [at('c',2,2),at('f',3,2),at('b',2,3),at('a',1,2,1),at('k',5,3)];
+  const level: Level = {id:0,name:'',chapter:'',tip:'',size:8,pieces,terrain:[{kind:'water',r:2,c:1},{kind:'mountain',r:5,c:4}],rows:[0,0,2,1,0,0,0,0],cols:[0,0,2,1,0,0,0,0],sky:{anchors:[{r:3,c:3}],clouds:[{r:0,c:6}],rows:[0,1,2,0,0,3,0,0],cols:[0,0,2,2,1,1,0,0]}};
+  const result = evaluate(level, answer);
+  assert.equal(result.won,true,JSON.stringify(result.issues));
+  assert.deepEqual(result.rows,level.rows); assert.deepEqual(result.skyRows,level.sky!.rows);
+  assert.equal(placementBlock(level,answer,answer[2]),null,'balloon overlaps camp across layers');
+  assert.equal(placementBlock(level,answer,at('a',2,1)),null,'ground water does not block sky');
+  assert.equal(placementBlock(level,answer,at('b',2,2)),'设施不能重叠','sky overlap still blocks');
+  assert.equal(placementBlock(level,[],at('b',0,6)),'固定地形上不能放置设施');
+  assert.equal(placementBlock(level,[],at('c',3,3)),'固定地形上不能放置设施');
+  assert.equal(placementBlock(level,[],at('a',3,3)),null,'anchors only occupy ground');
+  assert.equal(evaluate(level,[answer[3]]).issues.a.status,'INCOMPLETE','airship can precede its camp');
+  const swapped = answer.map(p => p.id==='f'?at('f',1,2):p);
+  assert.ok(evaluate(level,swapped).issues.a.reasons.includes('空中设施正下方不能有篝火或电塔'));
+  assert.ok(evaluate(level,swapped).issues.f.reasons.includes('空中设施正下方不能有篝火或电塔'));
+  assert.ok(evaluate({...level,sky:{...level.sky!,clouds:[{r:4,c:2}]}},answer).issues.k.reasons.includes('气象风筝不能邻近低云，包括斜角'));
+  assert.ok(evaluate({...level,terrain:level.terrain.filter(t=>t.kind!=='mountain')},answer).issues.k.reasons.includes('气象风筝至少一格正下方需要山地'));
+  assert.ok(evaluate({...level,sky:{...level.sky!,anchors:[{r:3,c:4}]}},answer).issues.b.reasons.includes('系留气球的地面投影需要上下左右挨着系留桩'));
+  assert.equal(evaluate(level,answer.filter(p=>p.id!=='b')).won,false);
+  const session = createSession({mode:'adventure',present:{level,placements:answer}});
+  const removed = dispatch(session,{type:'remove',id:'b'}).session;
+  assert.ok(removed.present.placements.some(p=>p.id==='c'));
+  assert.deepEqual(dispatch(removed,{type:'undo'}).session.present.placements,answer);
+  const restored=parseAdventureSave(JSON.stringify({version:1,current:60,completed:[45],layers:{60:'sky'},progress:{60:solutions[60].slice(0,-1)}}));
+  assert.equal(restored.layers?.[60],'sky'); assert.equal(restored.progress[60].length,solutions[60].length-1);
+  assert.equal(levelUnlocked(46,[15]),false); assert.equal(levelUnlocked(46,[15,45]),true); assert.equal(levelUnlocked(47,[45]),false);
+});
+
+test('Days 46–60 have unique solutions, staged introductions and meaningful cross-layer constraints', () => {
+  const pack=levels.filter(l=>l.id>=46);
+  assert.equal(pack.length,15);
+  assert.equal(pack.find(l=>l.pieces.some(p=>p.kind==='balloon'))!.id,46);
+  assert.equal(pack.find(l=>l.pieces.some(p=>p.kind==='airship'))!.id,49);
+  assert.equal(pack.find(l=>l.pieces.some(p=>p.kind==='kite'))!.id,53);
+  let coupled=0;
+  for(const level of pack) {
+    assert.equal(level.size,8); assert.equal(level.name,`第${level.id}关`); assert.equal(level.chapter,'');
+    const result=solveLevel(level,2,{maxNodes:350000});
+    assert.equal(result.aborted,false,`Day ${level.id}: budget`); assert.equal(result.count,1,`Day ${level.id}: uniqueness`);
+    assert.equal(evaluate(level,result.solutions[0]).won,true);
+    const skyCells=level.sky!.rows.reduce((a,b)=>a+b,0);
+    assert.equal(skyCells,level.sky!.cols.reduce((a,b)=>a+b,0));
+    assert.ok(skyCells<=10);
+    if(level.id>=56) {
+      const benchmark=levels[level.id-16];
+      assert.ok(Math.abs(result.occupied-benchmark.rows.reduce((a,b)=>a+b,0))<=4);
+      assert.equal(level.pieces.length,benchmark.pieces.length);
+      const ground={...level,pieces:level.pieces.filter(p=>facilityLayer(p.kind)==='ground'),sky:{...level.sky!,rows:Array(8).fill(0),cols:Array(8).fill(0)}};
+      const independent=solveLevel(ground,2,{maxNodes:350000});
+      if(independent.count>1) coupled++;
+    }
+    const missing=level.pieces.find(p=>facilityLayer(p.kind)==='sky')!;
+    const hint=analyzeAdventureHint({level,placements:solutions[level.id].filter(p=>p.id!==missing.id)},3000);
+    assert.equal(hint.status,'ready',`Day ${level.id}: sky hint`);
+    if(hint.status==='ready') {assert.equal(hint.layer,'sky');assert.equal(hint.forced,true);assert.ok(hint.cells.every(p=>p.r<8 && p.c<8));}
+  }
+  assert.ok(coupled>=3,`${coupled} finales use sky to disambiguate ground`);
+});
 
 test('reopening a solved level starts fresh while unfinished play resumes', () => {
   const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true } };
@@ -73,14 +141,14 @@ test('facility names default off for new and legacy saves and persist independen
     else Reflect.deleteProperty(globalThis, 'localStorage');
   }
 });
-test('all 45 authored levels have valid complete solutions and exact cell clues', () => {
-  assert.equal(levels.length, 45);
+test('all 60 authored levels have valid complete solutions and exact cell clues', () => {
+  assert.equal(levels.length, 60);
   for (const level of levels) {
     const answer = solutions[level.id];
     const result = evaluate(level, answer);
     assert.equal(result.won, true, `Level ${level.id}: ${JSON.stringify(result.issues)}`);
     assert.equal(new Set(level.terrain.map(p => `${p.r},${p.c}`)).size, level.terrain.length);
-    assert.equal(level.rows.reduce((a, b) => a + b, 0), level.pieces.reduce((sum, p) => sum + offsets(p.shape, 0).length, 0));
+    assert.equal([...level.rows, ...level.sky?.rows ?? []].reduce((a, b) => a + b, 0), level.pieces.reduce((sum, p) => sum + offsets(p.shape, 0).length, 0));
     for (const at of answer) assert.equal(placementBlock(level, answer, at), null);
     assert.equal(evaluate(level, []).status, 'INCOMPLETE');
     for (const at of answer) {

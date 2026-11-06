@@ -4,6 +4,9 @@ import type { SurvivalChallenge } from '../game-modes/survival/survivalChallenge
 import type { SurvivalGenerationRequest, SurvivalGenerationResult } from './survivalProtocol';
 import type { AdventureHint, HintRequest } from '../engine';
 export type { SurvivalGenerationRequest, SurvivalGenerationResult } from './survivalProtocol';
+export const SURVIVAL_GENERATION_ACTIVE_TIMEOUT = 30000;
+export type SurvivalGenerationProgress = { round: number; elapsedMs: number; limitMs: number; paused: boolean };
+type SurvivalCallbacks = TaskCallbacks<SurvivalChallenge> & { onProgress?: (progress: SurvivalGenerationProgress) => void };
 
 type TaskCallbacks<Result> = { onResult: (result: Result) => void; onError: (reason: 'error' | 'timeout', message?: string) => void };
 
@@ -50,19 +53,27 @@ export function createSurvivalGenerationTask() {
   const attempt = createWorkerTask<SurvivalGenerationRequest, unknown>(
     () => new Worker(new URL('./survival.worker.ts', import.meta.url), { type: 'module' }),
   );
-  let session: { request: SurvivalGenerationRequest; callbacks: TaskCallbacks<SurvivalChallenge>; elapsed: number; started: number | null } | null = null;
+  let session: { request: SurvivalGenerationRequest; callbacks: SurvivalCallbacks; elapsed: number; total: number; round: number; started: number | null } | null = null;
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let progressTimer: ReturnType<typeof setInterval> | undefined;
   let paused = false;
+  function progress() {
+    if(session) session.callbacks.onProgress?.({round:session.round,elapsedMs:session.total+(session.started===null?0:Date.now()-session.started),limitMs:SURVIVAL_GENERATION_ACTIVE_TIMEOUT,paused});
+  }
   function account() {
-    if (session?.started !== null && session?.started !== undefined) { session.elapsed += Date.now() - session.started; session.started = null; }
+    if (session?.started !== null && session?.started !== undefined) {
+      const elapsed=Date.now()-session.started;
+      session.elapsed+=elapsed;session.total+=elapsed;session.started=null;
+    }
     clearTimeout(timer); timer = undefined;
+    clearInterval(progressTimer); progressTimer = undefined;
   }
   function cancel() { account(); session = null; attempt.cancel(); }
   function retry() {
     if (!session) return;
     account(); attempt.cancel();
     session.request = { ...session.request, seed: nextGenerationSeed(session.request.seed) };
-    session.elapsed = 0;
+    session.elapsed = 0;session.round++;
     run();
   }
   function run() {
@@ -72,19 +83,24 @@ export function createSurvivalGenerationTask() {
       if (session !== current) return;
       cancel(); current.callbacks.onError(reason, message);
     };
-    // Each search round is bounded; the session continues until success or cancellation.
-    // Pausing terminates CPU work and preserves this round's seed and active budget.
-    const remaining = Math.min(MAP_GENERATION_TIMEOUT, generationBudget(current.request.difficulty) + 400) - current.elapsed;
+    // Both one search round and total foreground waiting are bounded. Pausing
+    // preserves the current seed and both budgets without charging hidden time.
+    if(current.total>=SURVIVAL_GENERATION_ACTIVE_TIMEOUT) { fail('timeout');return; }
+    const remaining = Math.min(Math.min(MAP_GENERATION_TIMEOUT, generationBudget(current.request.difficulty) + 400) - current.elapsed,SURVIVAL_GENERATION_ACTIVE_TIMEOUT-current.total);
     if (remaining <= 0) { retry(); return; }
     try {
       current.started = Date.now();
-      timer = setTimeout(retry, remaining);
+      timer = setTimeout(()=>{if(session===current) retry();}, remaining);
+      progress();
+      if(session!==current || paused) return;
+      if(current.callbacks.onProgress) progressTimer=setInterval(progress,1000);
       const request = { ...current.request, budgetMs: Math.max(1, remaining - 200) };
       attempt.start(request, {
         onError: reason => fail(reason),
         onResult: data => {
           if (session !== current) return;
           account();
+          if(current.total>=SURVIVAL_GENERATION_ACTIVE_TIMEOUT) {fail('timeout');return;}
           if (!data || typeof data !== 'object' || !('status' in data)) { fail('error'); return; }
           const result = data as SurvivalGenerationResult;
           if (result.status === 'search-failed' && typeof result.error === 'string') { retry(); return; }
@@ -101,14 +117,14 @@ export function createSurvivalGenerationTask() {
     } catch { fail('error'); }
   }
   return {
-    start(request: SurvivalGenerationRequest, callbacks: TaskCallbacks<SurvivalChallenge>) {
+    start(request: SurvivalGenerationRequest, callbacks: SurvivalCallbacks) {
       if (session) return;
-      session = { request, callbacks, elapsed: 0, started: null }; run();
+      session = { request, callbacks, elapsed: 0, total: 0, round: 1, started: null }; progress();run();
     },
     cancel, isRunning: () => session !== null,
     setPaused(value: boolean) {
       paused = value;
-      if (paused) { account(); attempt.cancel(); }
+      if (paused) { account(); attempt.cancel();progress(); }
       else run();
     },
   };

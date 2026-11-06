@@ -12,6 +12,7 @@ export function parseAdventureSave(stored: string | null, levels: readonly Level
   const save = createAdventureSave();
   save.completed = Array.isArray(raw.completed) ? [...new Set<number>(raw.completed.filter((id: number) => levels.some(l => l.id === id)))] : [];
   save.current = levels.some(l => l.id === raw.current) ? raw.current : 1;
+  save.layers = Object.fromEntries(levels.filter(l => l.sky && ['ground', 'sky'].includes(raw.layers?.[l.id])).map(l => [l.id, raw.layers[l.id]]));
   save.badges = migrateAdventureBadges(save.completed, raw.badges);
   for (const level of levels) {
     if (save.completed.includes(level.id)) continue;
