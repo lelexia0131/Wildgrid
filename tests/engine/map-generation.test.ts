@@ -29,6 +29,27 @@ test('shared placement domains agree with the real static gameplay evaluator, in
 });
 
 const make = (pieces: Level['pieces'], terrain: Level['terrain'], rows: number[], cols: number[]): Level => ({ id:0,name:'',chapter:'',tip:'',size:3,pieces,terrain,rows,cols });
+test('logical line masks cover edge cells on small, full-size and layered boards',()=>{
+  for(const size of [3,4,6,8]) {
+    const clues=Array.from({length:size},(_,i)=>Number(i===size-1));
+    const level:Level={...make([{id:'p',kind:'powerTower',shape:'single'}],[],clues,clues),size};
+    const groups=placementDomains({...level,rows:Array(size).fill(size),cols:Array(size).fill(size)});
+    const original=structuredClone(groups),logic=reasonLevel(level,{},groups);
+    assert.ok(logic.solved && !logic.contradiction && !logic.aborted);
+    assert.deepEqual(logic.placements,[{r:size-1,c:size-1,rotation:0,id:'p'}]);
+    assert.deepEqual(groups,original,'line deductions must not mutate supplied domains');
+  }
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,terrain:[],
+    pieces:[{id:'ground',kind:'powerTower',shape:'single'},{id:'air',kind:'balloon',shape:'single'}],
+    rows:[1,0,0,0,0,0,0,0],cols:[1,0,0,0,0,0,0,0],
+    sky:{rows:[0,0,0,0,0,0,0,1],cols:[0,0,0,0,0,0,0,1],anchors:[{r:7,c:6}],clouds:[]}};
+  const groups=placementDomains({...level,rows:Array(8).fill(8),cols:Array(8).fill(8),
+    sky:{...level.sky!,rows:Array(8).fill(8),cols:Array(8).fill(8)}});
+  const logic=reasonLevel(level,{},groups);
+  assert.ok(logic.solved && evaluate(level,logic.placements).won);
+  assert.deepEqual(logic.placements.find(p=>p.id==='air'),{r:7,c:7,rotation:0,id:'air'});
+});
+
 test('logical cardinality handles interchangeable IDs; ambiguity and interrupted searches never prove uniqueness', () => {
   const identical = make([{id:'a',kind:'camp',shape:'single'},{id:'b',kind:'camp',shape:'single'}],[{r:0,c:0,kind:'water'}],[1,1,0],[1,1,0]);
   assert.equal(reasonLevel({...identical,terrain:Array.from({length:9},(_,i)=>({r:Math.floor(i/3),c:i%3,kind:'water' as const}))}).contradiction,true);

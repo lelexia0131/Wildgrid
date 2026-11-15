@@ -1,8 +1,8 @@
 import { evaluate, placementBlock } from './placementRules';
-import { key, occupied, rotateAround } from './boardGeometry';
+import { facilityLayer, key, occupied, rotateAround } from './boardGeometry';
 import { withEditorPlacements } from './mapBlueprint';
-import { facilityLibrary } from './facilityRegistry';
-import type { Cell, FacilityKind, GameMode, Piece, Snapshot, TerrainKind } from './types';
+import { adventureFacilityLibrary, facilityLibrary } from './facilityRegistry';
+import type { BoardLayer, Cell, EditorTerrainKind, FacilityKind, GameMode, Piece, Snapshot } from './types';
 
 export const MAX_HISTORY_STEPS = 80;
 
@@ -11,7 +11,7 @@ export type GameCommand =
   | { type: 'place'; piece: Piece; cell: Cell; rotation: number }
   | { type: 'remove'; id: string }
   | { type: 'rotate'; id: string; pivot: Cell }
-  | { type: 'terrain'; cell: Cell; kind?: TerrainKind }
+  | { type: 'terrain'; cell: Cell; kind?: EditorTerrainKind; layer?: BoardLayer }
   | { type: 'clear' }
   | { type: 'undo' }
   | { type: 'redo' };
@@ -55,16 +55,30 @@ export function dispatch(session: GameSession, command: GameCommand): CommandRes
     if (!editor) return reject('mode', '只能在创造地图时修改地形');
     const cell = command.cell;
     if (![cell.r, cell.c].every(n => Number.isInteger(n) && n >= 0 && n < level.size)) return reject('coordinates', '地形坐标超出棋盘范围', [cell]);
-    if (placements.some(at => occupied(level.pieces.find(piece => piece.id === at.id)!, at).some(p => key(p) === key(cell)))) return reject('blocked', '先拿起这里的设施，再修改地形', [cell]);
-    const current = level.terrain.find(t => key(t) === key(cell));
+    const layer = command.kind === 'cloud' ? 'sky' : command.kind ? 'ground' : command.layer ?? 'ground';
+    if (!level.sky && (layer === 'sky' || command.kind === 'anchor')) return reject('mode', '请在天空主题中放置系留桩或低云');
+    if (placements.some(at => {
+      const piece = level.pieces.find(piece => piece.id === at.id)!;
+      return facilityLayer(piece.kind) === layer && occupied(piece, at).some(p => key(p) === key(cell));
+    })) return reject('blocked', '先拿起这里的设施，再修改地形', [cell]);
+    if (layer === 'sky') {
+      const clouds = level.sky!.clouds.filter(t => key(t) !== key(cell));
+      if (command.kind === 'cloud' && clouds.length === level.sky!.clouds.length) clouds.push(cell);
+      return accept({ level: { ...level, sky: { ...level.sky!, clouds } }, placements }, { type: 'terrain', ...cell });
+    }
+    const current = level.sky?.anchors.some(t => key(t) === key(cell)) ? 'anchor' : level.terrain.find(t => key(t) === key(cell))?.kind;
     const terrain = level.terrain.filter(t => key(t) !== key(cell));
-    if (command.kind && current?.kind !== command.kind) terrain.push({ ...cell, kind: command.kind });
-    return accept({ level: { ...level, terrain }, placements }, { type: 'terrain', ...cell });
+    const anchors = level.sky?.anchors.filter(t => key(t) !== key(cell));
+    if (command.kind && current !== command.kind) {
+      if (command.kind === 'anchor') anchors!.push(cell);
+      else if (command.kind !== 'cloud') terrain.push({ ...cell, kind: command.kind });
+    }
+    return accept({ level: { ...level, terrain, ...(level.sky ? { sky: { ...level.sky, anchors: anchors! } } : {}) }, placements }, { type: 'terrain', ...cell });
   }
   if (command.type === 'place') {
     const existing = level.pieces.find(piece => piece.id === command.piece.id), piece = existing || (editor ? command.piece : undefined);
     if (!piece) return reject('unknown', '未知设施');
-    if (!existing && !facilityLibrary.some(template => template.kind === piece.kind && template.shape === piece.shape)) return reject('unknown', '未知设施');
+    if (!existing && !(level.sky ? adventureFacilityLibrary : facilityLibrary).some(template => template.kind === piece.kind && template.shape === piece.shape)) return reject('unknown', '未知设施');
     if (placements.some(at => at.id === piece.id)) return reject('duplicate', '同一设施不能重复放置');
     if (![command.cell.r, command.cell.c].every(Number.isInteger)) return reject('coordinates', '设施坐标无效', [command.cell]);
     if (!Number.isInteger(command.rotation) || command.rotation < 0 || command.rotation > 3) return reject('rotation', '设施旋转方向无效');

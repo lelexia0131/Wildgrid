@@ -1,11 +1,12 @@
 import { evaluate } from './placementRules';
-import { occupied, offsets } from './boardGeometry';
-import { facilityLibrary, facilityNames as names } from './facilityRegistry';
+import { facilityLayer, layerClues, occupied, offsets } from './boardGeometry';
+import { adventureFacilityLibrary, facilityLibrary, facilityNames as names } from './facilityRegistry';
 import { validatePlacements } from './placementValidation';
 import { solveLevel } from './solver';
-import type { MutableData, Placement, Snapshot, TerrainKind } from './types';
+import type { MutableData, Placement, SkyBoard, Snapshot, TerrainKind } from './types';
 
 export type SandboxDraft = Snapshot;
+export type SandboxTheme = 'grass' | 'sky';
 export type SandboxCheck = { status: 'unique' | 'multiple' | 'none' | 'invalid'; message: string };
 
 const TERRAIN_KINDS: TerrainKind[] = ['water', 'forest', 'mountain'];
@@ -14,20 +15,33 @@ const object = (value: unknown): value is Record<string, unknown> => typeof valu
 const integer = (value: unknown, min: number, max: number): value is number => typeof value === 'number' && Number.isInteger(value) && value >= min && value <= max;
 const instanceId = (value: unknown): value is string => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/.test(value) && !['constructor', 'prototype'].includes(value);
 
-export function createSandbox(size: 6 | 8): SandboxDraft {
+export function createSandbox(size: 6 | 8, theme: SandboxTheme = 'grass'): SandboxDraft {
   if (size !== 6 && size !== 8) throw new Error('地图尺寸只能选择 6×6 或 8×8');
-  return { level: { id: 0, name: '自定义地图', chapter: '沙盒模式', tip: '让每一处设施找到合适的位置，完成营地规划。', size, terrain: [], pieces: [], rows: Array<number>(size).fill(0), cols: Array<number>(size).fill(0) }, placements: [] };
+  if (theme === 'sky' && size !== 8) throw new Error('天空主题仅支持 8×8 地图');
+  return { level: { id: 0, name: '自定义地图', chapter: '沙盒模式', tip: '让每一处设施找到合适的位置，完成营地规划。', size, terrain: [], pieces: [], rows: Array<number>(size).fill(0), cols: Array<number>(size).fill(0), ...(theme === 'sky' ? { sky: { rows: Array<number>(size).fill(0), cols: Array<number>(size).fill(0), anchors: [], clouds: [] } } : {}) }, placements: [] };
 }
 
 export function withEditorPlacements(draft: SandboxDraft, placements: readonly Placement[]): SandboxDraft {
   const rows = Array<number>(draft.level.size).fill(0), cols = Array<number>(draft.level.size).fill(0);
+  const sky = draft.level.sky ? { ...draft.level.sky, rows: Array<number>(draft.level.size).fill(0), cols: Array<number>(draft.level.size).fill(0) } : undefined;
   const pieces = draft.level.pieces.filter(piece => placements.some(at => at.id === piece.id));
   for (const at of placements) {
     const piece = pieces.find(p => p.id === at.id);
     if (!piece) continue;
-    for (const cell of occupied(piece, at)) if (cell.r >= 0 && cell.c >= 0 && cell.r < draft.level.size && cell.c < draft.level.size) { rows[cell.r]++; cols[cell.c]++; }
+    const clues = sky && facilityLayer(piece.kind) === 'sky' ? sky : { rows, cols };
+    for (const cell of occupied(piece, at)) if (cell.r >= 0 && cell.c >= 0 && cell.r < draft.level.size && cell.c < draft.level.size) { clues.rows[cell.r]++; clues.cols[cell.c]++; }
   }
-  return { level: { ...draft.level, pieces, rows, cols }, placements };
+  return { level: { ...draft.level, pieces, rows, cols, ...(sky ? { sky } : {}) }, placements };
+}
+
+function validSky(value: unknown, size: number): value is SkyBoard {
+  if (size !== 8 || !object(value) || Object.keys(value).some(k => !['rows', 'cols', 'anchors', 'clouds'].includes(k))) return false;
+  if (!Array.isArray(value.rows) || !Array.isArray(value.cols) || value.rows.length !== size || value.cols.length !== size || [...value.rows, ...value.cols].some(v => !integer(v, 0, size))) return false;
+  for (const cells of [value.anchors, value.clouds]) {
+    if (!Array.isArray(cells) || cells.length > size * size || cells.some(cell => !object(cell) || Object.keys(cell).some(k => !['r', 'c'].includes(k)) || !integer(cell.r, 0, size - 1) || !integer(cell.c, 0, size - 1))) return false;
+    if (new Set(cells.map(cell => `${cell.r},${cell.c}`)).size !== cells.length) return false;
+  }
+  return true;
 }
 
 function draftError(value: unknown): string | null {
@@ -35,9 +49,12 @@ function draftError(value: unknown): string | null {
   const level = value.level, placements = value.placements;
   if (level.size !== 6 && level.size !== 8) return '地图尺寸只能选择 6×6 或 8×8';
   const n = level.size;
+  if (level.sky !== undefined && !validSky(level.sky, n)) return '天空地图数据不完整或不合法';
+  const sky = level.sky as SkyBoard | undefined;
   if (!integer(level.id, 0, Number.MAX_SAFE_INTEGER) || typeof level.name !== 'string' || typeof level.chapter !== 'string' || typeof level.tip !== 'string') return '地图信息不完整';
   if (!Array.isArray(level.terrain) || !Array.isArray(level.pieces) || !Array.isArray(level.rows) || !Array.isArray(level.cols)) return '地图地形、设施或行列提示数据不完整';
-  if (level.terrain.length > n * n || level.pieces.length > n * n || placements.length > n * n) return '地图元素数量超过棋盘可容纳范围';
+  const capacity = n * n * (sky ? 2 : 1);
+  if (level.terrain.length > n * n || level.pieces.length > capacity || placements.length > capacity) return '地图元素数量超过棋盘可容纳范围';
   if (!level.pieces.length) return '请至少放置一处设施，再进行营地自检';
   if (level.rows.length !== n || level.cols.length !== n || [...level.rows, ...level.cols].some(v => !integer(v, 0, n))) return '行列占格提示不合法';
   const terrainCells = new Set<string>();
@@ -48,10 +65,14 @@ function draftError(value: unknown): string | null {
     if (terrainCells.has(cell)) return '同一格不能设置多个地形';
     terrainCells.add(cell);
   }
+  for (const anchor of sky?.anchors ?? []) {
+    if (terrainCells.has(`${anchor.r},${anchor.c}`)) return '同一格不能设置多个地形';
+  }
+  const library = sky ? adventureFacilityLibrary : facilityLibrary;
   const ids = new Set<string>();
   for (const piece of level.pieces) {
     if (!object(piece) || !instanceId(piece.id)) return '设施编号无效';
-    if (!facilityLibrary.some(item => item.kind === piece.kind && item.shape === piece.shape)) return '地图包含无法识别的设施或形状';
+    if (!library.some(item => item.kind === piece.kind && item.shape === piece.shape)) return '地图包含无法识别的设施或形状';
     if (ids.has(piece.id)) return '地图中存在重复的设施编号';
     ids.add(piece.id);
   }
@@ -70,11 +91,14 @@ function draftError(value: unknown): string | null {
     return `${names[other.kind]}与${names[piece.kind]}发生重叠`;
   }
   if (validated.placements.length !== ids.size) return '请将设施库中已选的设施放入地图，或取消选择';
-  const area = draft.level.pieces.reduce((sum, piece) => sum + offsets(piece.shape, 0).length, 0);
-  if (draft.level.rows.reduce((a, b) => a + b, 0) !== area || draft.level.cols.reduce((a, b) => a + b, 0) !== area) return '行列占格提示与设施总占格数不一致';
+  for (const layer of sky ? ['ground', 'sky'] as const : ['ground'] as const) {
+    const clues = layerClues(draft.level, layer);
+    const area = draft.level.pieces.filter(piece => facilityLayer(piece.kind) === layer).reduce((sum, piece) => sum + offsets(piece.shape, 0).length, 0);
+    if (clues.rows.reduce((a, b) => a + b, 0) !== area || clues.cols.reduce((a, b) => a + b, 0) !== area) return '行列占格提示与设施总占格数不一致';
+  }
   // Blueprint legality uses the actual gameplay rules; clue feasibility is
   // tested separately by the solver, rather than forcing the blueprint answer.
-  const result = evaluate({ ...draft.level, rows: Array<number>(n).fill(n), cols: Array<number>(n).fill(n) }, draft.placements);
+  const result = evaluate({ ...draft.level, rows: Array<number>(n).fill(n), cols: Array<number>(n).fill(n), ...(sky ? { sky: { ...sky, rows: Array<number>(n).fill(n), cols: Array<number>(n).fill(n) } } : {}) }, draft.placements);
   for (const piece of draft.level.pieces) {
     const issue = result.issues[piece.id];
     if (issue.status !== 'VALID') return `${names[piece.kind]}：${issue.reasons[0]}`;
@@ -106,6 +130,7 @@ export function encodeMap(draft: SandboxDraft): string {
       return [`${piece.kind}_${piece.shape}`, piece.id, at.r, at.c, at.rotation];
     }),
     r: draft.level.rows, c: draft.level.cols,
+    ...(draft.level.sky ? { sky: draft.level.sky } : {}),
   };
   return `WG1:${base64url(new TextEncoder().encode(JSON.stringify(payload)))}`;
 }
@@ -128,17 +153,20 @@ export function decodeMap(input: string): SandboxDraft {
   } catch { throw invalid(); }
   if (!object(payload)) throw invalid();
   if (typeof payload.v === 'number' && payload.v !== 1) throw new Error('该地图来自不支持的 Wildgrid 地图版本');
-  if (payload.v !== 1 || Object.keys(payload).some(k => !['v', 's', 't', 'f', 'r', 'c'].includes(k)) || (payload.s !== 6 && payload.s !== 8)) throw invalid();
-  if (!Array.isArray(payload.t) || !Array.isArray(payload.f) || payload.t.length > payload.s * payload.s || payload.f.length > payload.s * payload.s) throw invalid();
+  if (payload.v !== 1 || Object.keys(payload).some(k => !['v', 's', 't', 'f', 'r', 'c', 'sky'].includes(k)) || (payload.s !== 6 && payload.s !== 8)) throw invalid();
+  if (payload.sky !== undefined && !validSky(payload.sky, payload.s)) throw invalid();
+  if (!Array.isArray(payload.t) || !Array.isArray(payload.f) || payload.t.length > payload.s * payload.s || payload.f.length > payload.s * payload.s * (payload.sky ? 2 : 1)) throw invalid();
   // This fresh, unpublished blueprint is owned by the decoder until return.
   const draft = createSandbox(payload.s) as MutableData<SandboxDraft>;
+  if (payload.sky) draft.level.sky = payload.sky as MutableData<SkyBoard>;
+  const library = draft.level.sky ? adventureFacilityLibrary : facilityLibrary;
   for (const t of payload.t) {
     if (!Array.isArray(t) || t.length !== 3 || !TERRAIN_KINDS.includes(t[0]) || !integer(t[1], 0, payload.s - 1) || !integer(t[2], 0, payload.s - 1)) throw invalid();
     draft.level.terrain.push({ kind: t[0], r: t[1], c: t[2] });
   }
   for (const f of payload.f) {
     if (!Array.isArray(f) || f.length !== 5 || !instanceId(f[1]) || !integer(f[2], 0, payload.s - 1) || !integer(f[3], 0, payload.s - 1) || !integer(f[4], 0, 3)) throw invalid();
-    const template = facilityLibrary.find(piece => piece.id === f[0]);
+    const template = library.find(piece => piece.id === f[0]);
     if (!template) throw new Error('地图包含无法识别的设施');
     draft.level.pieces.push({ ...template, id: f[1] });
     draft.placements.push({ id: f[1], r: f[2], c: f[3], rotation: f[4] });

@@ -9,19 +9,15 @@ import { CAMP_REQUIREMENTS, providesConnections } from './placementRules';
 import { incrementalTerrainDomains, terrainMasks, terrainSolutionCheck } from './terrainRefinementState';
 import { terrainRegistry } from './terrainRegistry';
 import { terrainPlacementScores, terrainDistribution } from './terrainLayout';
-import { roleSwapCount } from './facilityConstruction';
+import { draftFromEntries, roleSwapCount } from './facilityConstruction';
 import type { FacilityEntry } from './facilityConstruction';
 import type { Level, Terrain, Placement } from './types';
 
 // Refine the clue information itself. Domain entropy alone misses layouts in
 // which many candidates survive every deduction, despite small static domains.
+// Mutates entries and returns the matching draft after accepted moves.
 export function refineLogicalLayout(draft:SandboxDraft, entries:FacilityEntry[], groups:PlacementGroup[], random:()=>number, deadline:number,maxEmptyLines=16,accepts?:(draft:SandboxDraft,logic:LogicResult)=>boolean):SandboxDraft {
   const motifGrass=entries.reduce((mask,e)=>mask|(e.motifGap??0n),0n);
-  const makeDraft=():SandboxDraft=>{
-    const rows=Array<number>(8).fill(0),cols=Array<number>(8).fill(0);
-    for(const e of entries) for(let i=0;i<8;i++){rows[i]+=e.p.rows[i];cols[i]+=e.p.cols[i];}
-    return {...draft,level:{...draft.level,rows,cols},placements:entries.map(e=>({...e.p.at,id:e.piece.id}))};
-  };
   const clueScores=new Map<string,{value:number;prepared:PlacementGroup[]}>();
   const score=(candidate:SandboxDraft)=>{
     if([...candidate.level.rows,...candidate.level.cols].some(value=>value>MAX_GENERATED_LINE_OCCUPANCY)) return Infinity;
@@ -67,7 +63,7 @@ export function refineLogicalLayout(draft:SandboxDraft, entries:FacilityEntry[],
       for(const c of candidate.changes) c.entry.p=c.p;
       const used=entries.reduce((m,e)=>m|e.p.mask,0n),providers=entries.reduce((m,e)=>providesConnections(e.piece.kind)?m|e.p.mask:m,0n);
       if(!entries.some(e=>CAMP_REQUIREMENTS[e.piece.kind] && !e.p.connections.some(link=>(link.camp&providers) && !(link.gap&used)))) {
-        const next=makeDraft(),cost=score(next);
+        const next=draftFromEntries(draft.level,entries),cost=score(next);
         if(cost<best) {best=cost;move={changes:candidate.changes,draft:next};}
       }
       candidate.changes.forEach((c,i)=>{c.entry.p=old[i];});

@@ -13,24 +13,24 @@ export function coordinateGenerationBudget(started:number, duration:number) {
   const proofReserve=()=>Math.max(Math.min(200,duration*.04),(phases.proof?.ms??0)/Math.max(1,phases.proof?.calls??0)*2);
   const validationReserve=()=>proofReserve()+Math.max(duration*.02,phases.logic?phases.logic.ms/phases.logic.calls*2:duration*.12);
   const remaining=()=>Math.max(0,deadline-Date.now());
-  return {deadline,phases,cutoffs,remaining,
+  function phaseDeadline(phase:GenerationPhase) {
+    if(phase==='proof') return deadline;
+    const reserve=phase==='logic'?proofReserve():validationReserve();
+    if(phase==='logic') return deadline-reserve;
+    const available=Math.max(0,remaining()-reserve);
+    const credit=Math.max(0,duration*shares[phase]-(phases[phase]?.ms??0));
+    // Construction can borrow broadly. Depleted optional improvement and
+    // witness phases borrow in small slices, so repeated repairs cannot each
+    // claim a quarter of the remaining round and starve exploration.
+    const optional=phase.includes('refinement') || phase==='witness search';
+    const loan=Math.min(available*.25,optional?duration*.002:Infinity);
+    return Math.min(deadline-reserve,Date.now()+Math.max(credit,loan));
+  }
+  return {deadline,phases,cutoffs,remaining,phaseDeadline,
     urgent:()=>remaining()<=validationReserve()*2,
     canConstruct:()=>remaining()>validationReserve(),
-    phaseDeadline(phase:GenerationPhase) {
-      if(phase==='proof') return deadline;
-      const reserve=phase==='logic'?proofReserve():validationReserve();
-      if(phase==='logic') return deadline-reserve;
-      const available=Math.max(0,remaining()-reserve);
-      const credit=Math.max(0,duration*shares[phase]-(phases[phase]?.ms??0));
-      // Construction can borrow broadly. Depleted optional improvement and
-      // witness phases borrow in small slices, so repeated repairs cannot each
-      // claim a quarter of the remaining round and starve exploration.
-      const optional=phase.includes('refinement') || phase==='witness search';
-      const loan=Math.min(available*.25,optional?duration*.002:Infinity);
-      return Math.min(deadline-reserve,Date.now()+Math.max(credit,loan));
-    },
     measure<T>(phase:GenerationPhase, work:(until:number)=>T):T {
-      const until=this.phaseDeadline(phase),start=performance.now();
+      const until=phaseDeadline(phase),start=performance.now();
       try {return work(until);}
       finally {
         const stats=phases[phase]??={calls:0,ms:0};stats.calls++;stats.ms+=performance.now()-start;

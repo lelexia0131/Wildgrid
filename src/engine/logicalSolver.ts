@@ -26,7 +26,10 @@ export function reasonedDomains(groups: PlacementGroup[], logic: LogicResult): P
 export function reasonLevel(level: Level, budget: { deadline?: number; maxAssumptions?: number; maxDepth?: number; maxUnresolved?: number } = {}, prepared?: PlacementGroup[]): LogicResult {
   const groups = prepared ?? placementDomains(level), layout = solverBoard(level), n = layout.size, board = boardCells(n);
   const full = (1n << BigInt(n * n)) - 1n;
-  const lines = Array.from({ length: n * 2 }, (_, i) => board.reduce((mask, p) => (i < n ? p.r === i : p.c === i - n) ? mask | cellBit(p, n) : mask, 0n));
+  const rowMask=(1n<<BigInt(n))-1n;
+  let columnMask=0n;
+  for(let r=0;r<n;r++) columnMask|=1n<<BigInt(r*n);
+  const lines=Array.from({length:n*2},(_,i)=>i<n?rowMask<<BigInt(i*n):columnMask<<BigInt(i-n));
   const clues = [...layout.rows, ...layout.cols], counts = groups.map(g => g.ids.length);
   const steps: LogicStep[] = [];
   const singleBounds = [0, 1, 2, 3].map(value => ({ low: value, high: value }));
@@ -53,7 +56,10 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
       if (state.domains.some((d, g) => d.length < counts[g])) return fail('合法候选少于同类设施数量');
       const roundDomains = state.domains.map(d => d);
       const roundUnions = state.domains.map(d => d.reduce((m, p) => m | p.mask, 0n));
-      const owned = groups.map((_, g) => state.required & ~roundUnions.reduce((m, u, h) => g === h ? m : m | u, 0n) & full);
+      // Domains stay unchanged until the elimination loop below. Reuse these
+      // unions when mandatory cells and line deductions update required cells.
+      const otherUnions=groups.map((_,g)=>roundUnions.reduce((m,u,h)=>g===h?m:m|u,0n));
+      const owned = otherUnions.map(union => state.required & ~union & full);
       const combinations = state.domains.map((domain, g) => {
         if (counts[g] === 1 || domain.length > 24) return undefined;
         const key=owned[g] | (state.forbidden<<BigInt(n*n));
@@ -102,7 +108,7 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
         if (state.domains[g].length < counts[g]) return fail('合法候选少于同类设施数量');
         for (let h = 0; h < g; h++) if (mandatory[g] & mandatory[h]) return fail('两组设施要求占用同一格');
         required |= mandatory[g];
-        for (const p of state.domains[g]) possible |= p.mask;
+        possible |= roundUnions[g];
       }
       if (required & state.forbidden || required & ~possible) return fail('必占格被排除或没有设施能够覆盖');
       let forbidden = state.forbidden;
@@ -114,8 +120,7 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
       }
       if (required !== state.required || forbidden !== state.forbidden) changed = true;
       state.required = required; state.forbidden = forbidden;
-      const unions = state.domains.map(domain => domain.reduce((m, p) => m | p.mask, 0n));
-      const exclusive = groups.map((_, g) => required & ~unions.reduce((m, u, h) => h === g ? m : m | u, 0n) & full);
+      const exclusive = otherUnions.map(union => required & ~union & full);
       const ownSupport = combinations.map(c => c ? new Set(c.flatMap(v => v.indices)) : undefined);
       // These bounds depend only on the immutable domain and fixed copy count,
       // not on this branch's owned/forbidden cells or pinned assumptions.
@@ -163,8 +168,8 @@ export function reasonLevel(level: Level, budget: { deadline?: number; maxAssump
             if (supported < counts[h]) { reason = 'relationship'; break; }
           }
           if (!reason && CAMP_REQUIREMENTS[groups[g].piece.kind]) {
-            const camps = groups.flatMap((group, h) => group.piece.kind === 'camp' ? state.domains[h].filter(q => compatible(p, 'camp', q)) : []);
-            if (!p.connections.some(link => camps.some(q => (q.mask & link.camp) && !(q.mask & link.gap)) && !(link.gap & required))) reason = 'relationship';
+            if (!p.connections.some(link => !(link.gap & required) && groups.some((group,h) => group.piece.kind === 'camp'
+              && state.domains[h].some(q => (q.mask & link.camp) && !(q.mask & link.gap) && compatible(p, 'camp', q))))) reason = 'relationship';
           }
           if (!reason) for (let l = 0; l < lines.length; l++) {
             const value = l < n ? p.rows[l] : p.cols[l - n];

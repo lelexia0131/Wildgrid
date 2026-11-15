@@ -7,10 +7,11 @@ import type { FacilityEntry } from './facilityConstruction';
 import type { FacilityKind, Level, Terrain } from './types';
 
 type TerrainMasks = Record<Terrain['kind'],bigint>;
+const board=boardCells(8),bits=board.map(p=>cellBit(p));
 const emptyMasks=():TerrainMasks=>({water:0n,forest:0n,mountain:0n});
 export function terrainMasks(terrain:readonly Terrain[]):TerrainMasks {
   const masks=emptyMasks();
-  for(const t of terrain) masks[t.kind]|=cellBit(t);
+  for(const t of terrain) masks[t.kind]|=bits[t.r*8+t.c];
   return masks;
 }
 const allTerrain=(masks:TerrainMasks)=>masks.water|masks.forest|masks.mountain;
@@ -19,7 +20,7 @@ const allTerrain=(masks:TerrainMasks)=>masks.water|masks.forest|masks.mountain;
 // includes positions that a terrain removal may make legal again.
 const geometryCache=new WeakMap<Position[],ReturnType<typeof prepareGeometry>>();
 function prepareGeometry(positions:Position[],kind:FacilityKind) {
-  const board=boardCells(8),bits=board.map(p=>cellBit(p)),need=TERRAIN_REQUIREMENTS[kind];
+  const need=TERRAIN_REQUIREMENTS[kind];
   const influences=positions.map(p=>{
     const forbidden=emptyMasks();
     let required=0n,gaps=0n;
@@ -55,10 +56,16 @@ export function incrementalTerrainDomains(level:Level) {
     const allowed=data.positions.map(p=>!p.rows.some((v,i)=>v>level.rows[i]) && !p.cols.some((v,i)=>v>level.cols[i]));
     const slots:(Candidate|undefined)[]=data.positions.map(()=>undefined);
     const update=(i:number,blocked:bigint)=>{
-      if(!allowed[i]) return;
+      if(!allowed[i]) return false;
       const p=data.positions[i],m=data.influences[i];
       const valid=(!data.need || !!(m.required&masks[data.need])) && !terrainRegistry.some(d=>!!(m.forbidden[d.id]&masks[d.id]));
-      slots[i]=valid?{...p,at:{...p.at,id:group.piece.id},connections:p.connections.filter(link=>!(link.gap&blocked))}:undefined;
+      const previous=slots[i];
+      if(!valid) {slots[i]=undefined;return !!previous;}
+      if(previous && !m.gaps) return false;
+      const connections=p.connections.filter(link=>!(link.gap&blocked));
+      if(previous && connections.length===previous.connections.length && connections.every((link,j)=>link===previous.connections[j])) return false;
+      slots[i]={...p,at:{...p.at,id:group.piece.id},connections};
+      return true;
     };
     for(let i=0;i<slots.length;i++) update(i,allTerrain(masks));
     group.domain=slots.filter((p):p is Candidate=>!!p);
@@ -66,17 +73,19 @@ export function incrementalTerrainDomains(level:Level) {
   });
   let current=groups,version=0;
   return {get groups(){return current;},update(terrain:readonly Terrain[]) {
-    const next=terrainMasks(terrain),changes=terrainRegistry.map(d=>({kind:d.id,mask:masks[d.id]^next[d.id]}));
+    const next=terrainMasks(terrain),changes=terrainRegistry.map(d=>{
+      const changed=masks[d.id]^next[d.id];
+      return bits.flatMap((bit,c)=>changed&bit?[c]:[]);
+    });
     masks=next;version++;
     const blocked=allTerrain(masks);
     current=current.map((group,g)=>{
       const state=states[g];let touched=false;
       for(let k=0;k<changes.length;k++) {
-        const change=changes[k];
-        if(!change.mask) continue;
-        for(let c=0;c<64;c++) if(change.mask&(1n<<BigInt(c))) for(const i of state.data.affected[k].cells[c]) {
+        for(const c of changes[k]) for(const i of state.data.affected[k].cells[c]) {
           if(state.seen[i]===version) continue;
-          state.seen[i]=version;state.update(i,blocked);touched=true;
+          state.seen[i]=version;
+          if(state.update(i,blocked)) touched=true;
         }
       }
       return touched?{...group,domain:state.slots.filter((p):p is Candidate=>!!p)}:group;

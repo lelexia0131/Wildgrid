@@ -8,6 +8,7 @@ import { readClipboard } from '../../platform/clipboard';
 import { audio } from '../../platform/audio/WildernessAudio';
 import { key } from '../../engine';
 import { facilityNames, shapeNames } from '../../engine';
+import type { SandboxTheme } from '../../engine';
 import type { LocalMap } from '../../game-modes/sandbox/localMapCollection';
 import { deleteLocalMap, renameLocalMap, setLocalMapIcon } from '../../save-system/localMapStorage';
 import { MAP_ICON_CHOICES } from '../../game-modes/sandbox/mapIcons';
@@ -17,14 +18,14 @@ function ModeLettering({ children }: { children: string }) {
   return <strong className="mode-lettering" aria-label={children}>{[...children].map((letter, i) => <span key={i} aria-hidden="true">{letter}</span>)}</strong>;
 }
 
-type SandboxScreen = 'adventure' | 'sandbox' | 'sandbox-size' | 'sandbox-import' | 'local-maps';
+type SandboxScreen = 'adventure' | 'sandbox' | 'sandbox-size' | 'sandbox-theme' | 'sandbox-import' | 'local-maps';
 type Props = {
   screen: SandboxScreen;
   onBack: () => void;
   onContinue: () => void;
   onSurvival: () => void;
-  onNavigate: (screen: 'sandbox' | 'sandbox-size' | 'sandbox-import' | 'local-maps') => void;
-  onCreate: (size: 6 | 8) => void;
+  onNavigate: (screen: 'sandbox' | 'sandbox-size' | 'sandbox-theme' | 'sandbox-import' | 'local-maps') => void;
+  onCreate: (size: 6 | 8, theme?: SandboxTheme) => void;
   onImport: (code: string) => void;
   localMaps: LocalMap[];
   onOpenLocalMap: (map: LocalMap) => void;
@@ -38,7 +39,7 @@ function LocalMapPreview({ map }: { map: LocalMap }) {
   return <div className="board local-map-preview" role="img" aria-label={localize(t("{0}的固定地形预览，{1}×{2}", map.name, level.size, level.size))} style={{ '--size': level.size } as React.CSSProperties}>
     {Array.from({ length: level.size * level.size }, (_, index) => {
       const cell = { r: Math.floor(index / level.size), c: index % level.size };
-      const terrain = level.terrain.find(item => key(item) === key(cell));
+      const terrain = level.sky?.anchors.some(item => key(item) === key(cell)) ? { ...cell, kind: 'anchor' as const } : level.terrain.find(item => key(item) === key(cell));
       return <div key={index} className={`tile ${terrain ? `terrain-${terrain.kind}` : ''}`}>
         {terrain ? <Art kind={terrain.kind}/> : <span className={`grass grass-${index % 5}`}><i/><i/></span>}
       </div>;
@@ -68,7 +69,7 @@ export function SandboxMenu({ screen, onBack, onContinue, onSurvival, onNavigate
     else cancelRef.current?.focus();
   }, [mapAction]);
 
-  const title = screen === 'sandbox' ? '沙盒模式' : screen === 'sandbox-size' ? '选择地图尺寸' : screen === 'sandbox-import' ? '导入地图' : screen === 'local-maps' ? '本地地图' : '模式选择';
+  const title = screen === 'sandbox' ? '沙盒模式' : screen === 'sandbox-size' ? '选择地图尺寸' : screen === 'sandbox-theme' ? '选择地图主题' : screen === 'sandbox-import' ? '导入地图' : screen === 'local-maps' ? '本地地图' : '模式选择';
   const selectedMap = localMaps.find(map => map.id === selectedMapId) ?? localMaps[0];
   const items = selectedMap?.draft.level.pieces.filter((piece, index, all) => all.findIndex(item => item.kind === piece.kind && item.shape === piece.shape) === index) ?? [];
 
@@ -120,9 +121,15 @@ export function SandboxMenu({ screen, onBack, onContinue, onSurvival, onNavigate
           <button className="sandbox-choice" onClick={() => onNavigate('sandbox-import')}><span className="sandbox-choice-icon"><Map size={25}/></span><span className="sandbox-choice-copy"><strong>{t("导入地图")}</strong></span><ArrowRight size={18}/></button>
         </div>}
         {screen === 'sandbox-size' && <div className="sandbox-size-choices">
-          {([6, 8] as const).map(size => <button key={size} className="sandbox-size-card" data-sound="handled" onClick={() => onCreate(size)}>
+          {([6, 8] as const).map(size => <button key={size} className="sandbox-size-card" data-sound={size === 6 ? 'handled' : 'confirm'} onClick={() => size === 6 ? onCreate(size) : onNavigate('sandbox-theme')}>
             <span className="sandbox-size-preview" style={{ gridTemplateColumns: `repeat(${size}, 1fr)` }} aria-hidden="true">{Array.from({ length: size * size }, (_, i) => <i key={i}/>)}</span>
             <strong>{size}×{size}</strong>
+          </button>)}
+        </div>}
+        {screen === 'sandbox-theme' && <div className="sandbox-size-choices">
+          {(['grass', 'sky'] as const).map(theme => <button key={theme} className={`sandbox-size-card sandbox-theme-card theme-${theme}`} data-theme={theme} data-sound="handled" onClick={() => onCreate(8, theme)}>
+            <span className="sandbox-theme-preview" aria-hidden="true"><Art kind={theme === 'grass' ? 'camp' : 'balloon'}/></span>
+            <strong>{t(theme === 'grass' ? '草地' : '天空')}</strong>
           </button>)}
         </div>}
         {screen === 'sandbox-import' && <section className="sandbox-import-card">

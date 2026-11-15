@@ -36,6 +36,8 @@ test('Engine stays independent; every layer uses public APIs without reverse dep
       const resolved = [target, target + '.ts', target + '.tsx', path.join(target, 'index.ts')].find(candidate => existsSync(candidate) && statSync(candidate).isFile());
       assert.ok(resolved, `${file}: missing import ${specifier}`);
       const targetLayer = layerOf(target);
+      // The platform audio player may load bundled recordings; these are assets, not code dependencies.
+      if (layer === 'platform' && resolved.startsWith(path.join(root, 'assets', 'audio') + path.sep) && path.extname(resolved) === '.mp3') return;
       if (allowed[layer]) assert.ok(allowed[layer].includes(targetLayer), `${file}: reverse dependency ${specifier}`);
       if (!internal && targetLayer === 'engine') assert.ok(target === engine || target === path.join(engine, 'index'), `${file}: private Engine import ${specifier}`);
       if (internal) assert.notEqual(target, path.join(engine, 'index'), `${file}: Engine imports its public barrel`);

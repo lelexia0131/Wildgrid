@@ -74,6 +74,22 @@ test('one, two and many candidates flush without a successful-candidate threshol
   }
 });
 
+test('candidate batches retain every constructed value except undefined',()=>{
+  const values=[0,false,'',undefined,1];
+  let next=0;
+  const batches=[...generationCandidateBatches(()=>values[next++],()=>next<values.length,()=>false)];
+  assert.deepEqual(batches.flat(),[0,false,'',1]);
+});
+
+test('phase measurement can be passed as a callback without rebinding its receiver',t=>{
+  let now=1000;
+  t.mock.method(Date,'now',()=>now);
+  const budget=coordinateGenerationBudget(now,1000),{measure}=budget;
+  assert.equal(measure('terrain',until=>{now=until;return 'measured';}),'measured');
+  assert.equal(budget.phases.terrain.calls,1);
+  assert.equal(budget.cutoffs.terrain,1);
+});
+
 test('urgent validation precedes another construction and failed candidates are consumed once',()=>{
   let attempts=0,urgent=false;
   const batches=generationCandidateBatches(()=>{attempts++;urgent=true;return attempts;},()=>attempts<3,()=>urgent);

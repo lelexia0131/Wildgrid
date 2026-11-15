@@ -68,10 +68,38 @@ test('virtual multi-cell terrain uses the same budget, layout, connectivity and 
     assert.equal(terrain.filter(t=>t.kind==='virtual').length,a.counts.virtual*2);
     assert.deepEqual(terrainDistribution(terrain,terrainRegions(terrain,definitions),definitions).violations,[]);
     layouts.add(JSON.stringify(terrain));
+    const base=terrain.filter(t=>t.kind!=='virtual'),expected:string[]=[];
+    for(let r=0;r<8;r++) for(let c=0;c<7;c++) {
+      const cells=[{r,c,kind:'virtual'},{r,c:c+1,kind:'virtual'}];
+      if(cells.some(p=>base.some(t=>t.r===p.r && t.c===p.c))) continue;
+      const next=[...base,...cells];
+      if(!terrainDistribution(next,terrainRegions(next,definitions),definitions).violations.length) expected.push(`${r},${c}`);
+    }
+    assert.deepEqual(terrainPlacementScores(base,'virtual',base.length+2,definitions).map(p=>`${p.cell.r},${p.cell.c}`),expected,
+      'shared windows must count both cells of a terrain unit before accepting it');
   }
   assert.ok(layouts.size>12);
   const ridge=[{r:3,c:1,kind:'virtual'},{r:3,c:2,kind:'virtual'},{r:3,c:4,kind:'virtual'}];
   assert.ok(!terrainPlacementScores(ridge,'virtual',10,definitions).some(p=>p.cell.r===3 && p.cell.c===3));
+});
+
+test('terrain distribution uses the supplied registry when regions are omitted',()=>{
+  const definitions=[{...terrainRegistry[0],id:'virtual'}];
+  const terrain=[2,3,4,5].map(c=>({r:3,c,kind:'virtual'}));
+  assert.deepEqual(terrainDistribution(terrain,undefined,definitions).violations,['terrain component or kind count']);
+});
+
+test('sparse terrain placement uses the same distribution threshold as final validation',()=>{
+  const base=[{r:0,c:0,kind:'water'},{r:0,c:1,kind:'water'}];
+  const expected:string[]=[];
+  for(let r=0;r<8;r++) for(let c=0;c<8;c++) {
+    if(base.some(t=>t.r===r && t.c===c)) continue;
+    if(!terrainDistribution([...base,{r,c,kind:'water'}]).violations.length) expected.push(`${r},${c}`);
+  }
+  assert.deepEqual(terrainPlacementScores(base,'water',3).map(p=>`${p.cell.r},${p.cell.c}`),expected);
+  const terrain=layoutTerrain(seeded(1),{water:3},terrainRegistry,3,{cells:new Set([0,1,2]),terrainArea:3});
+  assert.ok(terrain);
+  assert.deepEqual(terrain.map(p=>p.r*8+p.c).sort((a,b)=>a-b),[0,1,2]);
 });
 
 test('generation adopts edited quantities without changing the allocation or layout code',()=>{

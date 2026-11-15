@@ -56,27 +56,32 @@ export function generationBudgets(difficulty: number, disabled: readonly string[
   }
   const facilities = items(facilityLibrary.map(p => ({id:p.id,area:offsets(p.shape,0).length})),config.facilities);
   for (const id of disabled) if (!facilityLibrary.some(p => p.id === id)) throw new Error(`Unknown disabled facility: ${id}`);
-  return { facilities: prepareBudget(facilities.filter(p => !disabled.includes(p.id)),MAX_GENERATED_FACILITIES[difficulty-1]),
+  const maxCount=MAX_GENERATED_FACILITIES[difficulty-1],maxEmptyLines=MAX_GENERATED_EMPTY_LINES[difficulty-1];
+  const budgets = { facilities: prepareBudget(facilities.filter(p => !disabled.includes(p.id)),maxCount),
     terrain: prepareBudget(items(terrainRegistry.map(t => ({id:t.id,area:t.cells.length})),config.terrain)) };
+  // A generation run samples and checks against the same compiled quantities.
+  return {...budgets,violations(level:Level) {
+    const violations: string[] = [];
+    if (level.pieces.length > maxCount) violations.push('facility count');
+    if ([...level.rows,...level.cols].filter(value=>value===0).length > maxEmptyLines) violations.push('empty lines');
+    for (const [name, budget, ids] of [
+      ['facility', budgets.facilities, level.pieces.map(templateId)],
+      ['terrain', budgets.terrain, level.terrain.map(t => t.kind)],
+    ] as const) {
+      if (ids.some(id => !budget.items.some(i => i.id === id))) violations.push(`${name} unknown or disabled`);
+      let area = 0;
+      for (const item of budget.items) {
+        // Terrain is stored as occupied cells, including future multi-cell units.
+        const count = ids.filter(id => id === item.id).length / (name === 'terrain' ? item.area : 1);
+        if (!Number.isInteger(count) || count < item.min || count > item.max) violations.push(`${name} range: ${item.id}`);
+        area += count * item.area;
+      }
+      if (area < budget.min || area > budget.max) violations.push(`${name} budget`);
+    }
+    return violations;
+  }};
 }
 
 export function inventoryViolations(level: Level, difficulty: number, disabled: readonly string[] = []) {
-  const budgets = generationBudgets(difficulty, disabled), violations: string[] = [];
-  if (level.pieces.length > MAX_GENERATED_FACILITIES[difficulty-1]) violations.push('facility count');
-  if ([...level.rows,...level.cols].filter(value=>value===0).length > MAX_GENERATED_EMPTY_LINES[difficulty-1]) violations.push('empty lines');
-  for (const [name, budget, ids] of [
-    ['facility', budgets.facilities, level.pieces.map(templateId)],
-    ['terrain', budgets.terrain, level.terrain.map(t => t.kind)],
-  ] as const) {
-    if (ids.some(id => !budget.items.some(i => i.id === id))) violations.push(`${name} unknown or disabled`);
-    let area = 0;
-    for (const item of budget.items) {
-      // Terrain is stored as occupied cells, including future multi-cell units.
-      const count = ids.filter(id => id === item.id).length / (name === 'terrain' ? item.area : 1);
-      if (!Number.isInteger(count) || count < item.min || count > item.max) violations.push(`${name} range: ${item.id}`);
-      area += count * item.area;
-    }
-    if (area < budget.min || area > budget.max) violations.push(`${name} budget`);
-  }
-  return violations;
+  return generationBudgets(difficulty,disabled).violations(level);
 }

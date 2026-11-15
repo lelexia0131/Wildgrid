@@ -58,7 +58,7 @@ app.whenReady().then(async () => {
     for(const name of ['餐车','电塔','泳池']) assert.equal(await js(`Array.from(document.querySelectorAll('.manual-cards h4')).some(el=>el.textContent===${JSON.stringify(name)})`),true);
     await js(`document.querySelector('.manual-content').scrollTop=document.querySelector('.manual-content').scrollHeight*0.65`);await settle();
     writeFileSync(path.join(output,'manual.png'),(await contents.capturePage()).toPNG());await click('.modal-close');
-    await click('.menu-buttons .primary');await click('.sandbox-choice:nth-child(3)');await click('.sandbox-choice:first-child');await click('.sandbox-size-card:nth-child(2)');
+    await click('.menu-buttons .primary');await click('.sandbox-choice:nth-child(3)');await click('.sandbox-choice:first-child');await click('.sandbox-size-card:nth-child(2)');await click('[data-theme="grass"]');
     for(const name of ['餐车','电塔','泳池']) assert.ok(await js(`Array.from(document.querySelectorAll('.facility-card')).find(el=>el.textContent.includes(${JSON.stringify(name)}))?.querySelectorAll('svg path').length>=4`));
     await js(`Array.from(document.querySelectorAll('.facility-card')).find(el=>el.textContent.includes('电塔')).click()`);await settle();
     await click(tile(0,0));await click(tile(0,2));

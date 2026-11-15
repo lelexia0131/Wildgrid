@@ -76,6 +76,56 @@ test('Days 46–60 have unique solutions, staged introductions and meaningful cr
   assert.ok(coupled>=3,`${coupled} finales use sky to disambiguate ground`);
 });
 
+test('finale sky layouts need ground deductions: two options on Days 56–59, three on Day 60', () => {
+  for (const level of levels.filter(l => l.id >= 56)) {
+    const expected = level.id === 60 ? 3 : 2;
+    const kindShape = (piece: Level['pieces'][number]) => `${piece.kind}/${piece.shape}`;
+    const pieces = level.pieces.filter(p => facilityLayer(p.kind) === 'sky').sort((a, b) => kindShape(a).localeCompare(kindShape(b)));
+    const sky = { ...level, pieces, rows: Array(8).fill(0), cols: Array(8).fill(0) };
+    // Keep fixed terrain and sky clues; omit movable ground and its support rules.
+    const candidates = pieces.map(piece => {
+      const seen = new Set<string>(), positions: Placement[] = [];
+      for (let rotation = 0; rotation < 4; rotation++) for (let r = 0; r < level.size; r++) for (let c = 0; c < level.size; c++) {
+        const at = { id: piece.id, r, c, rotation };
+        const key = occupied(piece, at).map(p => `${p.r},${p.c}`).sort().join(';');
+        if (seen.has(key)) continue;
+        seen.add(key);
+        if (evaluate(sky, [at], { staticOnly: true }).status !== 'INVALID') positions.push(at);
+      }
+      return positions;
+    });
+    const layouts: Placement[][] = [];
+    function search(placed: Placement[], start: number) {
+      if (layouts.length > expected) return;
+      const index = placed.length;
+      for (let i = start; i < candidates[index].length; i++) {
+        const next = [...placed, candidates[index][i]], result = evaluate(sky, next, { staticOnly: true });
+        if (result.status === 'INVALID') continue;
+        if (next.length === pieces.length) { if (result.won) layouts.push(next); }
+        else search(next, kindShape(pieces[index]) === kindShape(pieces[index + 1]) ? i + 1 : 0);
+        if (layouts.length > expected) return;
+      }
+    }
+    search([], 0);
+    assert.equal(layouts.length, expected, `Day ${level.id}: distinct sky layouts without movable ground`);
+    const campCells = new Set<string>();
+    for (const piece of level.pieces.filter(p => p.kind === 'camp')) {
+      for (let rotation = 0; rotation < 4; rotation++) for (let r = 0; r < level.size; r++) for (let c = 0; c < level.size; c++) {
+        const at = { id: piece.id, r, c, rotation };
+        if (evaluate(level, [at], { staticOnly: true }).status !== 'INVALID') occupied(piece, at).forEach(p => campCells.add(`${p.r},${p.c}`));
+      }
+    }
+    for (const layout of layouts) for (const at of layout) {
+      const piece = pieces.find(p => p.id === at.id)!;
+      if (piece.kind === 'airship') assert.ok(occupied(piece, at).some(p => campCells.has(`${p.r},${p.c}`)), `Day ${level.id}: an alternate airship must have a plausible camp below`);
+    }
+    const ground = { ...level, pieces: level.pieces.filter(p => facilityLayer(p.kind) === 'ground'), sky: { ...level.sky!, rows: Array(8).fill(0), cols: Array(8).fill(0) } };
+    const independent = solveLevel(ground, 2, { maxNodes: 350000 });
+    assert.equal(independent.aborted, false, `Day ${level.id}: ground search completed`);
+    assert.equal(independent.count, 2, `Day ${level.id}: ground also needs the sky`);
+  }
+});
+
 test('reopening a solved level starts fresh while unfinished play resumes', () => {
   const save = { version: 1 as const, completed: [1, 2], current: 2, progress: { 1: solutions[1], 2: solutions[2].slice(0, 1) }, settings: { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true } };
   assert.deepEqual(progressForPlay(save, getLevelById(1)!), []);

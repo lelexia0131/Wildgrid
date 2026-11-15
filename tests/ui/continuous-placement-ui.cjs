@@ -85,7 +85,7 @@ app.whenReady().then(async () => {
       assert.equal(await js(`document.querySelectorAll('.facility-card[aria-pressed="true"]').length`), 0);
       assert.equal(await js(`document.querySelector('[aria-label^="选择三格营地"]').disabled`), false, 'exhaustion must not select another shape');
 
-      await click('.operations .wide-operation', '重新游玩'); await toggle();
+      await click('.operations .tool-restart', '重新游玩'); await toggle();
       assert.equal((await saved()).settings.continuousPlacement, false);
       await load(); await click('.header [aria-label="设置"]');
       assert.equal(await js(`Array.from(document.querySelectorAll('[role="switch"]')).find(el=>el.textContent.includes('连续放置')).getAttribute('aria-checked')`), 'false');
@@ -100,7 +100,7 @@ app.whenReady().then(async () => {
       await tile(3, 3); assert.equal(await active(), true);
       await tile(3, 4); assert.equal(await active(), false);
       assert.deepEqual(await art(), [{kind:'camp',rotation:1},{kind:'camp',rotation:1}]);
-      await click('.operations .wide-operation', '重新游玩'); await toggle();
+      await click('.operations .tool-restart', '重新游玩'); await toggle();
       await click(camp); await tile(3, 3); assert.equal(await active(), false);
       await tile(3, 5); assert.equal((await art()).length, 1);
 

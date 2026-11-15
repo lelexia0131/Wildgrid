@@ -113,7 +113,7 @@ app.whenReady().then(async () => {
       }
       console.log(`PASS board day ${day} ${width}x${height}: 12 pickup/undo cycles`);
     }
-    await viewport(390,844,true); await prepare(1); await click('.mode-sandbox'); await click('.sandbox-choice'); await click('.sandbox-size-card:nth-child(2)');
+    await viewport(390,844,true); await prepare(1); await click('.mode-sandbox'); await click('.sandbox-choice'); await click('.sandbox-size-card:nth-child(2)'); await click('[data-theme="grass"]');
     for(const [kind,shape] of [['camp','long'],['camp','domino'],['camp','el'],['picnic','domino'],['cabin','el']]) {
       const card=`[data-facility="${kind}"][data-shape="${shape}"]`;
       await click(card);

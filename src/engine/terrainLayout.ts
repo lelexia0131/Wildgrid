@@ -11,6 +11,13 @@ const windows = [3,4].map(size => Array.from({length:(9-size)**2},(_,i) => {
 }));
 const memberships = board.map((_,i)=>windows.map(group=>group.flatMap((cells,j)=>cells.includes(i)?[j]:[])));
 const quadrant = (p: Cell) => (p.r>=4?2:0)+(p.c>=4?1:0);
+function windowCounts(cells: Iterable<number>) {
+  const counts=windows.map(group=>Array<number>(group.length).fill(0));
+  for(const c of cells) for(let w=0;w<windows.length;w++) for(const i of memberships[c][w]) counts[w][i]++;
+  return counts;
+}
+const distributionExceeded=(quadrants:number[],halves:number[],total:number)=>total>=4
+  && (Math.max(...quadrants)>Math.max(2,Math.floor(total*terrainLayout.quadrantShare)) || Math.max(...halves)>Math.ceil(total*terrainLayout.halfShare));
 
 // Active lines describe facility coverage, not a rectangle that must be tiled.
 // Keep eight grass cells on the whole board. Terrain
@@ -52,15 +59,16 @@ export function terrainRegions(terrain: readonly FixedTerrain[], definitions: re
   });
 }
 
-export function terrainDistribution(terrain: readonly FixedTerrain[], regions=terrainRegions(terrain), definitions: readonly TerrainDefinition<string>[] = terrainRegistry) {
+export function terrainDistribution(terrain: readonly FixedTerrain[], regions?:ReturnType<typeof terrainRegions>, definitions: readonly TerrainDefinition<string>[] = terrainRegistry) {
+  regions ??= terrainRegions(terrain,definitions);
   const used=new Set(terrain.map(t=>t.r*8+t.c)),quadrants=[0,0,0,0],halves=[0,0,0,0];
   for(const t of terrain) {quadrants[quadrant(t)]++;halves[t.r<4?0:1]++;halves[t.c<4?2:3]++;}
-  const counts=windows.map(group=>group.map(cells=>cells.reduce((n,c)=>n+Number(used.has(c)),0)));
+  const counts=windowCounts(used);
   const violations:string[]=[];
   if(terrain.some(t=>!definitions.some(d=>d.id===t.kind))) violations.push('unknown terrain');
   if(regions.some(r=>r.largest>(definitions.find(d=>d.id===r.kind)?.componentMax??0))) violations.push('terrain component or kind count');
   if(Math.max(...counts[0])>terrainLayout.window3 || Math.max(...counts[1])>terrainLayout.window4) violations.push('terrain local density');
-  if(terrain.length>=4 && (Math.max(...quadrants)>Math.max(2,Math.floor(terrain.length*terrainLayout.quadrantShare)) || Math.max(...halves)>Math.ceil(terrain.length*terrainLayout.halfShare))) violations.push('terrain distribution');
+  if(distributionExceeded(quadrants,halves,terrain.length)) violations.push('terrain distribution');
   return {quadrants,halves,max3:Math.max(...counts[0]),max4:Math.max(...counts[1]),
     imbalance:(Math.max(...quadrants)-Math.min(...quadrants))/Math.max(1,terrain.length),
     halfImbalance:(Math.abs(halves[0]-halves[1])+Math.abs(halves[2]-halves[3]))/Math.max(1,terrain.length*2),violations};
@@ -75,7 +83,8 @@ export function terrainPlacementScores(terrain: readonly FixedTerrain[], kind: s
   const grid=new Map(terrain.map(t=>[t.r*8+t.c,t.kind]));
   const quadrants=[0,0,0,0],halves=[0,0,0,0];
   for(const t of terrain) {quadrants[quadrant(t)]++;halves[t.r<4?0:1]++;halves[t.c<4?2:3]++;}
-  const counts=windows.map(group=>group.map(cells=>cells.reduce((n,c)=>n+Number(grid.has(c)),0)));
+  const counts=windowCounts(grid.keys());
+  const updates=windows.map(group=>Array<number>(group.length).fill(0));
   const labels=new Map<number,number>(),sizes:number[]=[];
   for(const t of terrain.filter(t=>t.kind===kind)) {
     const index=t.r*8+t.c;if(labels.has(index)) continue;
@@ -88,17 +97,21 @@ export function terrainPlacementScores(terrain: readonly FixedTerrain[], kind: s
   return board.flatMap(cell=>{
     const cells=def.cells.map(p=>({r:cell.r+p.r,c:cell.c+p.c}));
     if(cells.some(p=>p.r<0 || p.c<0 || p.r>=8 || p.c>=8 || grid.has(p.r*8+p.c))) return [];
-    const q=[...quadrants],h=[...halves],updates=[new Map<number,number>(),new Map<number,number>()];
+    const q=[...quadrants],h=[...halves];
+    for(const group of updates) group.fill(0);
+    let dense=false,density=0;
     const joined=new Set<number>();
     for(const p of cells) {
       q[quadrant(p)]++;h[p.r<4?0:1]++;h[p.c<4?2:3]++;
-      memberships[p.r*8+p.c].forEach((indices,w)=>indices.forEach(i=>updates[w].set(i,(updates[w].get(i)??0)+1)));
+      for(let w=0;w<windows.length;w++) for(const i of memberships[p.r*8+p.c][w]) {
+        if(counts[w][i]+(++updates[w][i])>(w===0?terrainLayout.window3:terrainLayout.window4)) dense=true;
+        if(w===0) density=Math.max(density,counts[w][i]);
+      }
       for(const [index,label] of labels) if(adjacent(p,board[index],def.diagonal)) joined.add(label);
     }
     const component=cells.length+[...joined].reduce((n,i)=>n+sizes[i],0);
-    if(component>def.componentMax || Math.max(...q)>Math.max(2,Math.floor(budget*terrainLayout.quadrantShare)) || Math.max(...h)>Math.ceil(budget*terrainLayout.halfShare)) return [];
-    if(updates.some((group,w)=>[...group].some(([i,n])=>counts[w][i]+n>(w===0?terrainLayout.window3:terrainLayout.window4)))) return [];
-    const density=Math.max(0,...[...updates[0].keys()].map(i=>counts[0][i]));
+    if(component>def.componentMax || distributionExceeded(q,h,budget)) return [];
+    if(dense) return [];
     const score=-density*.3-q[quadrant(cell)]*.2-(h[cell.r<4?0:1]+h[cell.c<4?2:3])*.03-Math.max(0,component-2)*.5;
     return [{cell,cells,component,score}];
   });

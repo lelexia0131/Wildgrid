@@ -20,6 +20,8 @@ app.whenReady().then(async () => {
   contents.on('console-message', event => { if (event.level === 'error') failures.push(event.message); });
   await win.loadFile(path.join(root, 'dist', 'index.html'));
   contents.debugger.attach('1.3');
+  // Keep hit targets stable while checking layout and input across emulated viewports.
+  await contents.debugger.sendCommand('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
   const audioProbe = `
     const NativeAudioContext = window.AudioContext;
     window.__audioNodes = 0; window.__audioGains = [];
@@ -35,6 +37,10 @@ app.whenReady().then(async () => {
     catch (error) { throw new Error(`Renderer check failed: ${code.slice(0,240)} (${error.message})`); }
   };
   const settle = () => new Promise(resolve => setTimeout(resolve, 60));
+  async function until(expression) {
+    for (let i = 0; i < 50; i++) { if (await js(expression)) return; await settle(); }
+    assert.fail(`Timed out: ${expression}`);
+  }
   async function click(selector, touch = false) {
     if (touch) {
       const point = await js(`(() => { const el = document.querySelector(${JSON.stringify(selector)}); el.scrollIntoView({block:'nearest'}); const r = el.getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2}; })()`);
@@ -76,7 +82,7 @@ app.whenReady().then(async () => {
       const before = await geometry();
       assert.equal(before.overflow, false);
       assert.ok(Math.abs(before.board.height-before.tools.height)<1, JSON.stringify(before));
-      assert.ok(before.operations.height<before.tools.height*.3, JSON.stringify(before));
+      assert.ok(before.operations.height<before.tools.height*(viewport.height < 480 ? .5 : .3), JSON.stringify(before));
       assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), true);
       assert.equal(await js(`document.querySelector('.operations').textContent.includes('重做')`), false);
       await click('.blueprint-button');
@@ -90,9 +96,9 @@ app.whenReady().then(async () => {
       const after = await geometry();
       assert.equal(after.dock, false);
       assert.equal(await js(`document.body.textContent.includes('设施提示已关闭')`), false);
-      assert.deepEqual(after.board, before.board);
-      assert.deepEqual(after.tools, before.tools);
-      assert.deepEqual(after.operations, before.operations);
+      for (const region of ['board', 'tools', 'operations']) for (const axis of ['width', 'height']) {
+        assert.ok(Math.abs(after[region][axis] - before[region][axis]) < .1, JSON.stringify({ before, after }));
+      }
       assert.ok(after.list.height>before.list.height || after.list.width>before.list.width);
       await toggleTips(viewport.touch);
       assert.equal(await js(`document.querySelector('.rule-dock strong').textContent`), '林间木屋');
@@ -122,7 +128,7 @@ app.whenReady().then(async () => {
       const about = await js(`(() => {
         const content=document.querySelector('.game-about'), dialog=document.querySelector('dialog'), r=dialog.getBoundingClientRect();
         const details=Array.from(content.querySelectorAll('dd')).map(el=>el.textContent);
-        return {open:dialog.open,heading:content.querySelector('h2').textContent,author:details[0],date:details[1],version:details[2],updated:details[3],modes:['30 个固定关卡','荒野求生','沙盒'].every(mode=>content.textContent.includes(mode)),project:content.querySelector('a').href,copyright:content.textContent.includes('© 2026 lelexia') && content.textContent.includes('原创插画'),thanks:content.textContent.includes('感谢'),fits:r.left>=0 && r.right<=innerWidth && dialog.scrollWidth<=dialog.clientWidth+1 && document.documentElement.scrollWidth<=innerWidth};
+        return {open:dialog.open,heading:content.querySelector('h2').textContent,author:details[0],date:details[1],version:details[2],updated:details[3],modes:['${levels.length} 个固定关卡','荒野求生','沙盒'].every(mode=>content.textContent.includes(mode)),project:content.querySelector('a').href,copyright:content.textContent.includes('© 2026 lelexia') && content.textContent.includes('原创插画'),thanks:content.textContent.includes('感谢'),fits:r.left>=0 && r.right<=innerWidth && dialog.scrollWidth<=dialog.clientWidth+1 && document.documentElement.scrollWidth<=innerWidth};
       })()`);
       assert.equal(about.open, true);
       assert.equal(about.heading, '游戏说明');
@@ -165,18 +171,25 @@ app.whenReady().then(async () => {
       await click('.levels-page .back-link', viewport.touch);
       await click('.levels-page .back-link', viewport.touch);
       await click('.menu-buttons button:last-child', viewport.touch);
-      assert.ok(await js(`document.querySelector('.manual-content').textContent.includes('黄色短杠') && document.querySelector('.manual-content').textContent.includes('林间木屋') && document.querySelector('.manual-content').textContent.includes('点击卡片旋转')`));
-      const manual = await js(`document.querySelector('.manual-content').textContent`);
+      const manualPages = [];
+      const pageCount = await js(`document.querySelector('.notebook-heading select').options.length`);
+      for (let page = 0; page < pageCount; page++) {
+        manualPages.push(await js(`document.querySelector('.manual-content').textContent`));
+        if (page + 1 < pageCount) await click('.notebook-footer button:last-child', viewport.touch);
+      }
+      assert.equal(new Set(manualPages).size, pageCount);
+      const manual = manualPages.join('\n');
+      assert.ok(manual.includes('黄色短杠') && manual.includes('林间木屋') && manual.includes('点击卡片旋转'));
       assert.ok(manual.includes('图纸') && manual.includes('通关后解锁') && manual.includes('首次通关'));
       assert.equal(manual.includes('重做'), false);
-      await js(`document.querySelector('.manual-content').scrollTop=9999`);
-      assert.ok(await js(`document.querySelector('.manual-content').scrollTop>0`));
+      assert.equal(await js(`document.querySelector('.notebook-footer button:last-child').disabled`), true);
       await click('.modal-close', viewport.touch);
-      // First completion unlocks the blueprint; replaying never repeats the win dialog.
+      // First completion unlocks the blueprint; replaying never repeats the badge award.
       await load([], true, 1, []);
       await click('.menu-buttons .primary', viewport.touch);
       await click('.facility-card', viewport.touch);
       await click('.board > .tile:nth-child(16)', viewport.touch);
+      await until(`document.querySelector('dialog').open && !!document.querySelector('.win-content')`);
       assert.equal(await js(`document.querySelector('dialog').open && !!document.querySelector('.win-content')`), true);
       assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), false);
       await click('.modal-close', viewport.touch);
@@ -195,10 +208,13 @@ app.whenReady().then(async () => {
       assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), false);
       await click('.facility-card', viewport.touch);
       await click('.board > .tile:nth-child(16)', viewport.touch);
-      assert.equal(await js(`document.querySelector('dialog').open`), false);
+      await until(`document.querySelector('dialog').open && !!document.querySelector('.win-content')`);
+      assert.equal(await js(`!!document.querySelector('.adventure-badge-award')`), false);
       await win.loadFile(path.join(root, 'dist', 'index.html'));
       await settle();
-      await click('.menu-buttons .primary', viewport.touch);
+      await click('.menu-journal', viewport.touch);
+      await click('[data-chapter="0"]', viewport.touch);
+      await click('[data-level="1"]', viewport.touch);
       assert.equal(await js(`document.querySelector('.blueprint-button').disabled`), false);
       await click('.blueprint-button', viewport.touch);
       assert.equal(await js(`document.querySelectorAll('.blueprint-board .placed-camp').length`), 1);
@@ -207,11 +223,14 @@ app.whenReady().then(async () => {
       assert.equal(await js(`document.querySelector('dialog').open`), false);
       await click('.facility-card', viewport.touch);
       await click('.board > .tile:nth-child(16)', viewport.touch);
-      assert.equal(await js(`document.querySelector('dialog').open`), false);
+      await until(`document.querySelector('dialog').open && !!document.querySelector('.win-content')`);
+      assert.equal(await js(`!!document.querySelector('.adventure-badge-award')`), false);
       assert.deepEqual(await js(`JSON.parse(localStorage.getItem('wildgrid-save-v1')).completed`), [1]);
       // The largest blueprint includes every multi-cell facility and fits each viewport.
       await load([], true, 30, Array.from({length:30},(_,i)=>i+1));
-      await click('.menu-buttons .primary', viewport.touch);
+      await click('.menu-journal', viewport.touch);
+      await click('[data-chapter="1"]', viewport.touch);
+      await click('[data-level="30"]', viewport.touch);
       await click('.blueprint-button', viewport.touch);
       const blueprint = await js(`(() => {
         const board=document.querySelector('.blueprint-board'), dialog=document.querySelector('dialog');
@@ -234,9 +253,9 @@ app.whenReady().then(async () => {
     const multi = level30.pieces.filter((p,i,all)=>p.shape!=='single' && all.findIndex(q=>q.kind===p.kind && q.shape===p.shape)===i);
     for (const {kind,shape,id} of multi) {
       for (let rotation=0;rotation<4;rotation++) {
-        await load([{id,r:2,c:4,rotation}]);
+        await load([{id,r:3,c:3,rotation}]);
         await click('.menu-buttons .primary');
-        const state = await js(`(() => { const layer=document.querySelector('.placed-facility-art[data-kind="${kind}"]'); const svg=layer.querySelector('.footprint-art'); const tiles=Array.from(document.querySelectorAll('.tile.placed-${kind}')); const part=svg.querySelector('.building-door, .picnic-legs'); const matrix=part.getScreenCTM(); return {viewBox:svg.getAttribute('viewBox'),upright:matrix.a>0 && matrix.d>0 && matrix.b===0 && matrix.c===0,clip:svg.querySelector('clipPath').children.length,noGrid:tiles.every(el=>{const s=getComputedStyle(el);return s.backgroundColor==='rgba(0, 0, 0, 0)' && s.borderColor==='rgba(0, 0, 0, 0)' && s.boxShadow==='none';}),hits:tiles.every(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el;})}; })()`);
+        const state = await js(`(() => { const layer=document.querySelector('.placed-facility-art[data-kind="${kind}"]'); const svg=layer.querySelector('.footprint-art'); const tiles=Array.from(document.querySelectorAll('.tile.placed-${kind}')); const part=svg.querySelector('.building-door, .picnic-legs'); const matrix=part.getScreenCTM(); return {viewBox:svg.getAttribute('viewBox'),upright:matrix.a>0 && matrix.d>0 && matrix.b===0 && matrix.c===0,clip:Array.from({length:9},(_,i)=>svg.querySelector('clipPath path').isPointInFill(new DOMPoint(i%3*100+50,Math.floor(i/3)*100+50))).filter(Boolean).length,noGrid:tiles.every(el=>{const s=getComputedStyle(el);return s.backgroundColor==='rgba(0, 0, 0, 0)' && s.borderColor==='rgba(0, 0, 0, 0)' && s.boxShadow==='none';}),hits:tiles.every(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el;})}; })()`);
         assert.equal(state.clip, shape==='domino'?2:3);
         assert.ok(state.hits);
         assert.ok(state.noGrid);

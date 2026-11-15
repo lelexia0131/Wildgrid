@@ -1,13 +1,19 @@
 import { CAMP_REQUIREMENTS, providesConnections } from './placementRules';
 import { boardCells, compatible } from './placementDomains';
 import type { Candidate, PlacementGroup } from './placementDomains';
-import type { Level, Piece } from './types';
+import type { Level, Piece, Snapshot } from './types';
 import { templateId, MAX_GENERATED_LINE_OCCUPANCY } from './generationConfig';
 import { adjacent, offsets } from './boardGeometry';
 import type { BudgetItem } from './generationBudget';
 
 export type FacilityEntry = { piece: Piece; p: Candidate; motif?: string; motifGap?: bigint };
 export const ACTIVITY_LIMITS = { spareCells: 2 } as const;
+
+export function draftFromEntries(level:Level,entries:readonly FacilityEntry[]):Snapshot {
+  const rows=Array<number>(level.size).fill(0),cols=Array<number>(level.size).fill(0);
+  for(const e of entries) for(let i=0;i<level.size;i++) {rows[i]+=e.p.rows[i];cols[i]+=e.p.cols[i];}
+  return {level:{...level,pieces:entries.map(e=>e.piece),rows,cols},placements:entries.map(e=>({...e.p.at,id:e.piece.id}))};
+}
 
 // Domains are immutable snapshots. Replacing a domain after a terrain move
 // gets a new index; repeated ambiguity checks share the unchanged snapshot.

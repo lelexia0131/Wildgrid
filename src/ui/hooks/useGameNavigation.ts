@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { GameMode } from '../../engine';
 
-export type Screen = 'menu' | 'adventure' | 'sandbox' | 'sandbox-size' | 'sandbox-import' | 'local-maps' | 'survival' | 'levels' | 'game';
+export type Screen = 'menu' | 'adventure' | 'sandbox' | 'sandbox-size' | 'sandbox-theme' | 'sandbox-import' | 'local-maps' | 'survival' | 'levels' | 'game';
 
 export function useGameNavigation(initialLevelId: number) {
   const [screen, setScreen] = useState<Screen>('menu');

@@ -1,0 +1,23 @@
+Wildgrid BGM: Camp Evening / 营地晚风 · 多主题版
+Approved arrangement: 2026-11-08
+Original Wildgrid theme with newly composed B, C and D sections.
+
+Instrument samples: Versilian Studios / Sam Gossner and contributors.
+Both sample collections are released under CC0-1.0.
+Samples were trimmed, levelled, tuned and mixed into this original arrangement.
+
+VSCO 2 Community Edition
+https://versilian-studios.com/vsco-community/
+https://github.com/sgossner/VSCO-2-CE
+Source revision: 440300901dfe9275fd84e0b7763af1f8443ae62e
+Used instruments: cello section, violin section, concert harp, pizzicato contrabass.
+License copy: VSCO-2-CE-LICENSE.txt
+
+Versilian Community Sample Library (VCSL)
+https://versilian-studios.com/vcsl/
+https://github.com/sgossner/VCSL
+Source revision: c1ea7bcc3c7309650ab0da9d15c9cd1fbc4a4c7e
+Used instrument: Steinway B grand piano.
+License copy: VCSL-LICENSE.txt
+
+This is a locally bundled recording. Playing it requires no external music service.

@@ -4,8 +4,8 @@ import { writeClipboard } from '../../platform/clipboard';
 import { readLocalMaps, saveLocalMap } from '../../save-system/localMapStorage';
 import type { LocalMap } from '../../game-modes/sandbox/localMapCollection';
 import { createSandbox, decodeMap, encodeMap } from '../../engine';
-import type { SandboxCheck, SandboxDraft } from '../../engine';
-import type { GameMode, Placement, TerrainKind } from '../../engine';
+import type { SandboxCheck, SandboxDraft, SandboxTheme } from '../../engine';
+import type { EditorTerrainKind, GameMode, Placement } from '../../engine';
 import { createSandboxCheckTask } from '../../workers/workerTasks';
 
 type Options = {
@@ -26,7 +26,7 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
   const [check, setCheck] = useState<SandboxCheck | null>(null);
   const [checking, setChecking] = useState(false);
   const [editorDirty, setEditorDirty] = useState(false);
-  const [terrainBrush, setTerrainBrush] = useState<TerrainKind | null>(null);
+  const [terrainBrush, setTerrainBrush] = useState<EditorTerrainKind | null>(null);
   const [checker] = useState(createSandboxCheckTask);
   const revisionRef = useRef(0);
 
@@ -42,9 +42,9 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
   const markEditorDirty = useCallback(() => setEditorDirty(true), []);
   useLayoutEffect(() => () => { checker.cancel(); revisionRef.current++; }, []);
 
-  function openSandbox(size: 6 | 8) {
+  function openSandbox(size: 6 | 8, theme: SandboxTheme = 'grass') {
     sound('confirm'); invalidateCheck(); resetSandboxContext();
-    enterGame('sandbox-editor', createSandbox(size));
+    enterGame('sandbox-editor', createSandbox(size, theme));
     setCheck(null); setChecking(false); setEditorDirty(false);
   }
   function openSandboxPlay(draft: SandboxDraft, progress: readonly Placement[] = [], id?: number, playSound = true) {
@@ -56,7 +56,7 @@ export function useSandboxEditor({ mode, present, placements, enterGame, resetPi
   function openLocalMap(map: LocalMap) { openSandboxPlay(map.draft, map.progress, map.id); }
   function editLocalMap(map: LocalMap) {
     if (map.survival && !map.survival.blueprintUnlocked) { setNotice('通关或放弃挑战后才能编辑这张地图'); sound('error'); return; }
-    openSandbox(map.draft.level.size as 6 | 8);
+    openSandbox(map.draft.level.size as 6 | 8, map.draft.level.sky ? 'sky' : 'grass');
     setLocalMapId(map.id); enterGame('sandbox-editor', structuredClone(map.draft));
     resetPieceIds(map.draft);
   }

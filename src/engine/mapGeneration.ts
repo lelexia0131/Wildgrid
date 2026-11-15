@@ -1,13 +1,13 @@
-import { hasRoleSwap, repartitionCount, refineFacilities, activityDomains, ACTIVITY_LIMITS } from './facilityConstruction';
+import { hasRoleSwap, repartitionCount, refineFacilities, activityDomains, draftFromEntries, ACTIVITY_LIMITS } from './facilityConstruction';
 import { facilityLibrary } from './facilityRegistry';
 import { CAMP_REQUIREMENTS, evaluate } from './placementRules';
-import { withEditorPlacements, mapFingerprint } from './mapBlueprint';
+import { mapFingerprint } from './mapBlueprint';
 import type { SandboxDraft } from './mapBlueprint';
 import { solveLevel } from './solver';
 import type { SolverResult } from './solver';
 import { reasonLevel, reasonedDomains } from './logicalSolver';
 import { mapQuality } from './mapQuality';
-import { facilityRestrictionError, generationBudgets, inventoryViolations, templateId, MAX_GENERATED_LINE_OCCUPANCY, MAX_GENERATED_FACILITIES, MAX_GENERATED_EMPTY_LINES } from './generationConfig';
+import { facilityRestrictionError, generationBudgets, templateId, MAX_GENERATED_LINE_OCCUPANCY, MAX_GENERATED_FACILITIES, MAX_GENERATED_EMPTY_LINES } from './generationConfig';
 import { terrainRegistry } from './terrainRegistry';
 import { activityRectangles, layoutTerrain } from './terrainLayout';
 import { coordinateGenerationBudget } from './generationBudget';
@@ -75,18 +75,18 @@ export function* generationCandidateBatches<T>(construct:()=>T|undefined, canCon
     }
     if(pending.length) lookahead++;
     const candidate=construct();
-    if(candidate) pending.push(candidate);
+    if(candidate!==undefined) pending.push(candidate);
   }
 }
 
 export function generateMap(difficulty: number, seed: number, id: string, recent: string[], disabled: readonly string[] = [], history: readonly MapFeatures[] = [], budgetMs = generationBudget(difficulty)) {
   const restriction = facilityRestrictionError(difficulty, disabled);
   if (restriction) throw new MapGenerationConstraintError(restriction);
-  const allowed = facilityLibrary.filter(p => !disabled.includes(`${p.kind}_${p.shape}`));
   let budgets: ReturnType<typeof generationBudgets>;
   try { budgets = generationBudgets(difficulty, disabled); }
   catch (error) { throw new MapGenerationConstraintError(String(error)); }
   if (budgets.facilities.min + budgets.terrain.min + 8 > 64) throw new MapGenerationConstraintError('设施与地形最低预算超过可用棋盘空间。');
+  const piecesToPlace = facilityLibrary.filter(p=>budgets.facilities.items.some(item=>item.id===p.id && item.max>0));
   const started = Date.now(), budget = coordinateGenerationBudget(started, Math.max(0,Math.min(generationBudget(difficulty), budgetMs)));
   const {deadline,phases}=budget;
   const maxEmptyLines=MAX_GENERATED_EMPTY_LINES[difficulty-1];
@@ -94,7 +94,7 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
   const previous = history.filter(m => m.difficulty === difficulty).slice(-40);
   const failures: Record<string, number> = {};
   const construction:Record<string,number>={};
-  const measure=budget.measure.bind(budget);
+  const {measure}=budget;
   const reject = (reason: string) => { failures[reason] = (failures[reason] ?? 0) + 1; };
   let attempts = 0, proofs = 0, logicChecks = 0;
   const paths=[{stream:0,tryPlanned:false},{stream:0,tryPlanned:false}];
@@ -142,7 +142,6 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
       terrain=measure('terrain',()=>layoutTerrain(random,terrainAllocation.counts,terrainRegistry,terrainAllocation.area));
     }
     if (!terrain) { reject('terrain planning'); return; }
-    const piecesToPlace = allowed.filter(p=>(budgets.facilities.items.find(i=>i.id===p.id)?.max??0)>0);
     // Sparse terrain needs informative clue capacities, not more obstacles.
     // Zero lines and terrain capacity are planned together. The packing search
     // still chooses every facility count, position and rotation from domains.
@@ -159,8 +158,7 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
     const motifGrass=entries.reduce((mask,e)=>mask|(e.motifGap??0n),0n);
     for(const item of budgets.facilities.items) allocation.counts[item.id]=entries.filter(e=>templateId(e.piece)===item.id).length;
     measure('facility refinement',until=>refineFacilities(entries,groups,random,until,maxEmptyLines));
-    const pieces = entries.map(e => e.piece), placements = entries.map(e => ({ ...e.p.at, id: e.piece.id }));
-    const initial = withEditorPlacements({ level: { ...level, pieces }, placements }, placements);
+    const initial = draftFromEntries(level,entries);
     if(repartitionCount(entries,groups,1)) {reject('partition ambiguity');return;}
     let draft={...initial,level:measure('terrain refinement',until=>refineTerrain(initial.level,entries,random,until))};
     if(difficulty>=7) {
@@ -173,7 +171,7 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
     // every legal domain under the final clues, including after refinement.
     const prepared=placementDomains(draft.level);
     const quality = mapQuality(draft);
-    if (!quality.accepted || quality.distribution.violations.length || inventoryViolations(draft.level,difficulty,disabled).length || !evaluate(draft.level, draft.placements).won) { reject('layout quality'); return; }
+    if (!quality.accepted || budgets.violations(draft.level).length || !evaluate(draft.level, draft.placements).won) { reject('layout quality'); return; }
     if (hasRoleSwap(entries, prepared)) { reject('role ambiguity'); return; }
     if (repartitionCount(entries, prepared,1)) { reject('partition ambiguity'); return; }
     const fingerprint=mapFingerprint(draft);
@@ -244,7 +242,7 @@ export function generateMap(difficulty: number, seed: number, id: string, recent
       }
       // Incomplete logic is never a constraint failure or an acceptance.
       if (logic.aborted) { reject('logic incomplete'); continue; }
-      if (!quality.accepted || quality.distribution.violations.length || inventoryViolations(draft.level,difficulty,disabled).length || !evaluate(draft.level,draft.placements).won) { reject('layout quality'); continue; }
+      if (!quality.accepted || budgets.violations(draft.level).length || !evaluate(draft.level,draft.placements).won) { reject('layout quality'); continue; }
       const preliminary = generationDifficulty(draft, { occupied: 0, candidates: 0, nodes: 0, branches: 0 }, logic, difficulty);
       if (preliminary.rejection) { reject(preliminary.rejection); continue; }
       const fingerprint = mapFingerprint(draft), features = mapFeatures(draft, difficulty);

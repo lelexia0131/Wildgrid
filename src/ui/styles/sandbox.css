@@ -25,6 +25,9 @@
 .sandbox-size-preview i { background: #d6dfb6; border-radius: 2px; }
 .sandbox-size-preview i:nth-child(5n) { background: #c4d3a6; }
 .sandbox-size-card strong { font-size: 22px; letter-spacing: 1px; }
+.sandbox-theme-preview { display: block; width: 88px; height: 88px; margin-bottom: 15px; }
+.sandbox-theme-card.theme-sky { background: #eef6f4; border-color: #bed4d8; box-shadow: 0 4px 0 #d6e4e4; }
+.sandbox-theme-card.theme-sky:hover { background: #e0eff1; border-color: #91b7c1; }
 .sandbox-import-card { padding: 19px; background: #fafbf0; border: 1px solid #dce3cf; border-radius: 17px; box-shadow: 0 4px 0 #e3e8d8; }
 .sandbox-import-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
 .sandbox-import-heading label { font-size: 12px; font-weight: 600; letter-spacing: 1px; }

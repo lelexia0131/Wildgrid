@@ -1,5 +1,5 @@
 // Public Wildgrid Engine contract. Internal modules import each other directly.
-export type { TerrainKind, GameMode, FacilityKind, BoardLayer, SkyBoard, Shape, Status, Cell, Terrain, Piece, Placement, Level, Snapshot, Issue, Settings } from './types';
+export type { TerrainKind, EditorTerrainKind, GameMode, FacilityKind, BoardLayer, SkyBoard, Shape, Status, Cell, Terrain, Piece, Placement, Level, Snapshot, Issue, Settings } from './types';
 export { facilities, facilityLibrary, adventureFacilityLibrary, facilityNames, facilityTips, shapeNames, terrainNames } from './facilityRegistry';
 export type { FacilityDefinition } from './facilityRegistry';
 export { levels, solutions, getLevelById, getSolution } from './levels';
@@ -14,7 +14,7 @@ export type { AdventureHint, HintRequest } from './adventureHints';
 export { solveLevel, countSolutions } from './solver';
 export type { SolverResult } from './solver';
 export { createSandbox, withEditorPlacements, checkSandbox, encodeMap, decodeMap } from './mapBlueprint';
-export type { SandboxDraft, SandboxCheck } from './mapBlueprint';
+export type { SandboxDraft, SandboxCheck, SandboxTheme } from './mapBlueprint';
 export { generateMap, MAP_GENERATION_TIMEOUT, generationBudget, nextGenerationSeed, MapGenerationSearchError } from './mapGeneration';
 export { MIN_ALLOWED_FACILITIES, MAX_GENERATED_FACILITIES, facilityRestrictionError, inventoryViolations } from './generationConfig';
 export { mapFeatures, parseRecentMaps } from './mapNovelty';

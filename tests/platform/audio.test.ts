@@ -4,16 +4,17 @@ import { WildernessAudio } from '../../src/platform/audio/WildernessAudio';
 import type { Settings } from '../../src/engine';
 import { readSave, writeSave } from '../../src/save-system/adventureStorage';
 
-type Voice = { midi: number; start: number; end: number; type: string; bus: number; release: number; gain: number };
+type Voice = { midi: number; start: number; end: number; type: string; bus: number; release: number; gain: number; offset?: number; finish?: () => void };
 type GainEvent = { bus: number; method: string; value: number; time: number };
-type Probe = { events: GainEvent[]; timers: Set<number>; contexts: () => number; buffers: () => number; defer: (operation: 'resume' | 'suspend') => () => void };
+type Probe = { events: GainEvent[]; requests: string[]; contexts: () => number; buffers: () => number; clock: () => number; failLoad: () => void; defer: (operation: 'load' | 'resume' | 'suspend') => () => void };
 const settings: Settings = { music: .35, effects: .65, muted: false, facilityTips: true, continuousPlacement: true, facilityNames: false, ruleDisplay: true };
+const trackDuration = 194.98;
+const settle = () => new Promise<void>(resolve => setImmediate(resolve));
 
-async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advance: (time: number) => void, visibility: (hidden: boolean) => Promise<void>, audio: WildernessAudio, probe: Probe) => void | Promise<void>, initialSettings = settings) {
-  const voices: Voice[] = [];
-  const events: GainEvent[] = [], timers = new Set<number>();
-  let tick = () => {}, visibilityChange = () => {}, bus = 0, timerId = 0, contexts = 0, buffers = 0;
-  let resumeGate: Promise<void> | undefined, suspendGate: Promise<void> | undefined;
+async function withAudio(check: (voices: Voice[], advance: (time: number) => void, visibility: (hidden: boolean) => Promise<void>, audio: WildernessAudio, probe: Probe) => void | Promise<void>, initialSettings = settings) {
+  const voices: Voice[] = [], events: GainEvent[] = [], requests: string[] = [];
+  let visibilityChange = () => {}, bus = 0, contexts = 0, buffers = 0, failLoad = false;
+  let resumeGate: Promise<void> | undefined, suspendGate: Promise<void> | undefined, loadGate: Promise<void> | undefined;
   const documentStub = { hidden: false, addEventListener: (_name: string, callback: () => void) => { visibilityChange = callback; }, removeEventListener: () => {} };
   class Context {
     currentTime = 0;
@@ -47,8 +48,9 @@ async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advanc
     createBuffer(_channels: number, length: number) {
       buffers++;
       const data = new Float32Array(length);
-      return { getChannelData: () => data };
+      return { duration: length / this.sampleRate, getChannelData: () => data };
     }
+    async decodeAudioData(_bytes: ArrayBuffer) { return { duration: trackDuration }; }
     createBiquadFilter() {
       const filter = { type: '', Q: { value: 0 }, frequency: { setValueAtTime: () => {}, exponentialRampToValueAtTime: () => {} }, target: undefined as ReturnType<Context['createGain']> | undefined,
         connect: (node: ReturnType<Context['createGain']>) => { filter.target = node; }, disconnect: () => {},
@@ -56,19 +58,34 @@ async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advanc
       return filter;
     }
     createBufferSource() {
-      let filter: ReturnType<Context['createBiquadFilter']>;
-      const voice: Voice = { midi: 0, start: 0, end: 0, type: 'paper', bus: -1, release: 0, gain: 0 };
-      return { buffer: undefined, onended: () => {}, connect: (node: typeof filter) => { filter = node; }, disconnect: () => {},
-        start: (time: number) => { Object.assign(voice, { start: time, bus: filter.target!.target, release: filter.target!.release, gain: filter.target!.peak }); voices.push(voice); },
-        stop: (time: number) => { voice.end = time; },
+      let target: ReturnType<Context['createGain']> | ReturnType<Context['createBiquadFilter']>;
+      const voice: Voice = { midi: 0, start: 0, end: Infinity, type: '', bus: -1, release: 0, gain: 0 };
+      const source = { buffer: undefined as { duration: number } | undefined, onended: null as (() => void) | null,
+        connect: (node: typeof target) => { target = node; }, disconnect: () => {},
+        start: (time = 0, offset = 0) => {
+          const gain = 'gain' in target ? target : target.target!;
+          const type = 'gain' in target ? 'music' : 'paper';
+          Object.assign(voice, { start: time, offset, end: time + source.buffer!.duration - offset, type, bus: type === 'music' ? gain.bus : gain.target, release: gain.release, gain: gain.peak, finish: () => source.onended?.() });
+          voices.push(voice);
+        }, stop: (time: number) => { voice.end = time; },
       };
+      return source;
     }
     async resume() { if (resumeGate) await resumeGate; this.state = 'running'; }
     async suspend() { if (suspendGate) await suspendGate; this.state = 'suspended'; }
     async close() { this.state = 'closed'; }
   }
-  const context = new Context();
-  const replacements = { AudioContext: function () { contexts++; return context; }, window: { setInterval: (callback: () => void) => { tick = callback; timers.add(++timerId); return timerId; } }, document: documentStub, clearInterval: (id: number) => timers.delete(id) };
+  let context: Context;
+  const replacements = {
+    AudioContext: function () { contexts++; bus = 0; context = new Context(); return context; },
+    fetch: async (url: string) => {
+      requests.push(url);
+      if (failLoad) { failLoad = false; throw new Error('Unavailable audio'); }
+      const gate = loadGate;
+      return { ok: true, arrayBuffer: async () => { if (gate) await gate; return new ArrayBuffer(8); } };
+    },
+    document: documentStub,
+  };
   const originals = Object.entries(replacements).map(([key, value]) => {
     const descriptor = Object.getOwnPropertyDescriptor(globalThis, key);
     Object.defineProperty(globalThis, key, { configurable: true, value });
@@ -76,16 +93,15 @@ async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advanc
   });
   const audio = new WildernessAudio();
   try {
-    audio.setScene(scene);
     audio.setSettings(initialSettings);
-    await audio.start();
-    await check(voices, time => { context.currentTime = time; tick(); }, async hidden => {
-      documentStub.hidden = hidden; visibilityChange(); await new Promise<void>(resolve => setImmediate(resolve));
-    }, audio, { events, timers, contexts: () => contexts, buffers: () => buffers, defer: operation => {
+    await audio.start(); await settle();
+    await check(voices, time => { if (context.state === 'running') context.currentTime = time; }, async hidden => {
+      documentStub.hidden = hidden; visibilityChange(); await settle();
+    }, audio, { events, requests, contexts: () => contexts, buffers: () => buffers, clock: () => context.currentTime, failLoad: () => { failLoad = true; }, defer: operation => {
       if (operation === 'resume') context.state = 'suspended';
       let release!: () => void;
       const gate = new Promise<void>(resolve => { release = resolve; });
-      if (operation === 'resume') resumeGate = gate; else suspendGate = gate;
+      if (operation === 'resume') resumeGate = gate; else if (operation === 'suspend') suspendGate = gate; else loadGate = gate;
       return release;
     } });
   } finally {
@@ -97,66 +113,136 @@ async function withAudio(scene: 'menu' | 'game', check: (voices: Voice[], advanc
   }
 }
 
-for (const scene of ['menu', 'game'] as const) {
-  const beat = scene === 'menu' ? .38 : .34;
-  const opening = .08, cycle = 384 * beat;
-  test(`${scene} BGM preserves the original opening melody, accompaniment and legato`, async () => {
-    const original = [
-      72,0,76,79,0,76,74,0, 72,0,67,0,69,72,0,0,
-      69,0,72,76,0,74,72,0, 67,0,64,0,67,69,0,0,
-      72,0,76,79,81,0,79,76, 74,0,72,0,69,67,0,0,
-      69,72,0,74,76,0,72,0, 67,0,69,0,72,0,0,0,
-    ];
-    await withAudio(scene, (voices, advance) => {
-      for (let time = .1; time < beat * 64; time += .1) advance(time);
-      const intro = voices.filter(voice => voice.start < opening + beat * 64 - 1e-6);
-      const melody = intro.filter(voice => voice.type === 'sine' && voice.midi >= 64);
-      assert.deepEqual(melody.map(voice => [Math.round((voice.start - opening) / beat), voice.midi]), original.flatMap((midi, step) => midi ? [[step, midi]] : []));
-      const arpeggios = intro.filter(voice => voice.type === 'triangle');
-      assert.deepEqual(arpeggios.map(voice => voice.midi), [60,67,72,67,57,64,69,64,53,60,65,60,55,62,67,62]);
-      const bass = intro.filter(voice => voice.type === 'sine' && voice.midi < 60);
-      assert.deepEqual(bass.map(voice => voice.midi), [48,55,45,52,41,48,43,50]);
-      for (const voice of intro) {
-        const duration = voice.type === 'triangle' ? 1.83 : voice.midi >= 64 ? 1.43 : voice.gain === .2 ? 4.03 : 3.83;
-        assert.ok(Math.abs(voice.end - voice.start - duration) < 1e-6, 'Keep the original note tails');
-        assert.equal(voice.gain, voice.type === 'triangle' ? .13 : voice.midi >= 64 ? .25 : voice.gain === .2 ? .2 : .08);
-        assert.equal(voice.release, .001);
-      }
-    });
+test('approved BGM loads once and waits three audio-clock seconds between complete plays', async () => {
+  await withAudio(async (voices, advance, _visibility, audio, probe) => {
+    assert.equal(probe.requests.length, 1);
+    assert.match(probe.requests[0], /camp-evening\.mp3$/);
+    assert.equal(voices.length, 1);
+    assert.equal(voices[0].type, 'music');
+    assert.equal(voices[0].offset, 0);
+    await Promise.all([audio.start(), audio.start(), audio.start()]);
+    audio.setSettings({ ...settings, music: .5 });
+    assert.equal(voices.length, 1, 'Volume changes and repeated gestures must not restart or layer BGM');
+    advance(trackDuration); voices[0].finish!();
+    assert.equal(voices.length, 2);
+    assert.equal(voices[1].start, trackDuration + 3);
+    assert.equal(voices[1].offset, 0);
+    advance(trackDuration * 2 + 3); voices[1].finish!();
+    assert.equal(voices[2].start, trackDuration * 2 + 6);
+    assert.equal(probe.requests.length, 1);
+    assert.equal(probe.contexts(), 1);
   });
-  test(`${scene} BGM keeps the bridge and repeated theme on the continuous audio clock`, async () => {
-    await withAudio(scene, (voices, advance) => {
-      for (let time = .1; time < cycle * 2 + .3; time += .1) advance(time);
-      const melody = voices.filter(voice => voice.bus === 0 && voice.type === 'sine' && voice.midi >= 64);
-      const roots = voices.filter(voice => voice.bus === 0 && voice.type === 'sine' && voice.midi < 60 && Math.abs((voice.start - opening) / beat - Math.round((voice.start - opening) / beat)) < 1e-6);
-      assert.deepEqual(roots.slice(0, 48).map(voice => voice.midi), Array.from({ length: 48 }, (_, i) => [48, 45, 41, 43][i % 4]));
-      const repeated = melody.findIndex(voice => Math.abs(voice.start - opening - cycle) < 1e-6);
-      assert.ok(repeated > 0, 'The opening must return on the next cycle without a timing reset');
-      assert.equal(melody[repeated - 1].midi, 67, 'Keep the final G in the original pentatonic palette');
-      assert.ok(Math.abs(melody[repeated].start - melody[repeated - 1].start - 4 * beat) < 1e-6, 'Keep the legato pickup timing at the seam');
-      assert.deepEqual(melody.slice(repeated, repeated * 2).map(voice => voice.midi), melody.slice(0, repeated).map(voice => voice.midi));
-      const carry = voices.find(voice => voice.type === 'triangle' && Math.abs(voice.start - opening - cycle + 4 * beat) < 1e-6);
-      assert.equal(carry?.midi, 55, 'The final accompaniment must carry G into C instead of leaving D ringing');
-      assert.ok(carry!.end > opening + cycle, 'Preserve a sounding accompaniment across the seam');
-    });
-  });
-}
+});
 
-test('backgrounding and returning preserve the already scheduled BGM clock', async () => {
-  const collect = async (paused: boolean) => {
-    let captured: Voice[] = [];
-    await withAudio('menu', async (voices, advance, visibility) => {
-      if (paused) { await visibility(true); await visibility(false); }
-      for (let time = .1; time < 3; time += .1) advance(time);
-      captured = voices.map(voice => ({ ...voice }));
-    });
-    return captured;
-  };
-  assert.deepEqual(await collect(true), await collect(false));
+test('backgrounding freezes music progress and the scheduled loop gap', async () => {
+  await withAudio(async (voices, advance, visibility, _audio, probe) => {
+    advance(20); await visibility(true); advance(100);
+    assert.equal(probe.clock(), 20);
+    await visibility(false);
+    assert.equal(voices.length, 1);
+    advance(trackDuration); voices[0].finish!();
+    advance(trackDuration + 1); await visibility(true); advance(500);
+    assert.equal(probe.clock(), trackDuration + 1);
+    await visibility(false);
+    assert.equal(voices.length, 2);
+    assert.equal(voices[1].start, trackDuration + 3);
+  });
+});
+
+test('zero music pauses at its current position while sound effects remain independent', async () => {
+  await withAudio(async (voices, advance, visibility, audio, probe) => {
+    advance(20);
+    audio.setSettings({ ...settings, music: 0 });
+    assert.equal(voices[0].end, 20.015);
+    audio.play('place'); assert.equal(voices.filter(v => v.bus === 1).length, 2);
+    advance(30); await visibility(true); await visibility(false); await audio.start();
+    assert.equal(voices.filter(v => v.type === 'music').length, 1);
+    audio.setSettings({ ...settings, music: .4 });
+    const resumed = voices.filter(v => v.type === 'music')[1];
+    assert.equal(resumed.start, 30);
+    assert.equal(resumed.offset, 20);
+    assert.equal(probe.requests.length, 1);
+  });
+});
+
+test('muting during the loop gap preserves its remaining silence when music is restored', async () => {
+  await withAudio(async (voices, advance, _visibility, audio) => {
+    advance(trackDuration); voices[0].finish!();
+    advance(trackDuration + 1); audio.setSettings({ ...settings, muted: true });
+    const stopped = voices[1].end;
+    advance(300); audio.setSettings(settings);
+    assert.equal(voices[1].end, stopped);
+    assert.equal(voices[2].start, 302);
+    assert.equal(voices[2].offset, 0);
+    voices[1].finish!();
+    assert.equal(voices.length, 3, 'A cancelled play must not enqueue another loop');
+  });
+});
+
+test('saved zero music stays unloaded until enabled and concurrent starts share the load', async () => {
+  await withAudio(async (voices, _advance, _visibility, audio, probe) => {
+    assert.equal(voices.length, 0);
+    assert.equal(probe.requests.length, 0);
+    const release = probe.defer('load');
+    audio.setSettings(settings);
+    await Promise.all([audio.start(), audio.start(), audio.start()]);
+    assert.equal(probe.requests.length, 1);
+    assert.equal(voices.length, 0);
+    release(); await settle();
+    assert.equal(voices.length, 1);
+  }, { ...settings, music: 0 });
+});
+
+test('loading music does not delay effects or bypass mute and visibility', async () => {
+  await withAudio(async (voices, _advance, visibility, audio, probe) => {
+    const release = probe.defer('load');
+    audio.setSettings(settings);
+    audio.feedback('place');
+    assert.equal(voices.filter(v => v.bus === 1).length, 2);
+    audio.setSettings({ ...settings, muted: true });
+    release(); await settle();
+    assert.equal(voices.filter(v => v.type === 'music').length, 0);
+    await visibility(true); audio.setSettings(settings); await settle();
+    assert.equal(voices.filter(v => v.type === 'music').length, 0);
+    await visibility(false);
+    assert.equal(voices.filter(v => v.type === 'music').length, 1);
+  }, { ...settings, music: 0 });
+});
+
+test('failed music loading can retry without breaking effects', async () => {
+  await withAudio(async (voices, _advance, _visibility, audio, probe) => {
+    probe.failLoad(); audio.setSettings(settings); await settle();
+    audio.play('click');
+    assert.equal(voices.filter(v => v.bus === 1).length, 1);
+    assert.equal(voices.filter(v => v.type === 'music').length, 0);
+    await audio.start(); await settle();
+    assert.equal(probe.requests.length, 2);
+    assert.equal(voices.filter(v => v.type === 'music').length, 1);
+  }, { ...settings, music: 0 });
+});
+
+test('disposing rejects stale audio loads and cancels a scheduled replay', async () => {
+  await withAudio(async (voices, advance, _visibility, audio, probe) => {
+    const releaseOld = probe.defer('load');
+    audio.setSettings(settings); await audio.start();
+    audio.dispose();
+    const releaseNew = probe.defer('load');
+    await audio.start();
+    releaseOld(); await settle(); await audio.start();
+    assert.equal(probe.requests.length, 2);
+    assert.equal(voices.length, 0);
+    releaseNew(); await settle();
+    assert.equal(voices.length, 1);
+    advance(trackDuration); voices[0].finish!();
+    assert.equal(voices.length, 2);
+    audio.dispose(); voices[1].finish!();
+    assert.equal(voices.length, 2);
+    assert.equal(probe.contexts(), 2);
+  }, { ...settings, music: 0 });
 });
 
 test('rapid effects remain distinct with restrained gain; mute and hidden pages stay silent', async () => {
-  await withAudio('game', async (voices, _advance, visibility, audio) => {
+  await withAudio(async (voices, _advance, visibility, audio) => {
     audio.play('place'); audio.play('place'); audio.play('rotate');
     const effects = voices.filter(voice => voice.bus === 1);
     assert.equal(effects.length, 6);
@@ -171,7 +257,7 @@ test('rapid effects remain distinct with restrained gain; mute and hidden pages 
 });
 
 test('close, confirmation, success and paper feedback are distinct and respect the effects bus', async () => {
-  await withAudio('menu', (voices, advance, _visibility, audio, probe) => {
+  await withAudio((voices, advance, _visibility, audio, probe) => {
     audio.feedback('close'); advance(.2); audio.feedback('confirm'); advance(.4); audio.feedback('success');
     const tones = voices.filter(voice => voice.bus === 1);
     assert.deepEqual(tones.map(voice => voice.midi), [74,67,76,84,79,84,88]);
@@ -189,7 +275,7 @@ test('close, confirmation, success and paper feedback are distinct and respect t
 });
 
 test('audio unlock coalesces rapid feedback without queuing stale clicks', async () => {
-  await withAudio('game', async (voices, _advance, _visibility, audio, probe) => {
+  await withAudio(async (voices, _advance, _visibility, audio, probe) => {
     const release = probe.defer('resume');
     audio.feedback('click'); audio.feedback('select'); audio.feedback('close');
     assert.equal(voices.filter(voice => voice.bus === 1).length, 0);
@@ -198,76 +284,22 @@ test('audio unlock coalesces rapid feedback without queuing stale clicks', async
   });
 });
 
-test('zero music stops tails, pending notes and scheduling across scenes and visibility; effects stay independent', async () => {
-  await withAudio('game', async (voices, advance, visibility, audio, probe) => {
-    for (let time = .1; time <= .6; time += .1) advance(time);
-    const music = voices.filter(voice => voice.bus === 0);
-    assert.ok(music.some(voice => voice.start > .6), 'Include notes scheduled ahead of the audio clock');
-    audio.setSettings({ ...settings, music: 0, effects: .6 });
-    assert.equal(probe.timers.size, 0);
-    assert.ok(music.every(voice => voice.end <= .615 + 1e-9));
-    assert.deepEqual(probe.events.filter(event => event.bus === 0).slice(-2).map(event => [event.method, event.value]), [['hold', .105], ['ramp', 0]]);
-    audio.play('place'); audio.play('win');
-    assert.equal(voices.filter(voice => voice.bus === 1).length, 7);
-    for (const scene of ['menu', 'game'] as const) {
-      audio.setScene(scene); await Promise.all([audio.start(), audio.start()]);
-      advance(3); await visibility(true); await visibility(false); await audio.start(); advance(6);
-    }
-    assert.equal(voices.filter(voice => voice.bus === 0).length, music.length);
-    assert.equal(probe.timers.size, 0);
-    assert.equal(probe.contexts(), 1);
-    assert.equal(probe.events.filter(event => event.bus === 0).at(-1)?.value, 0);
-  });
-});
-
-test('saved zero music creates no BGM; restoring it starts one scheduler without reviving stopped tails', async () => {
-  await withAudio('menu', async (voices, advance, _visibility, audio, probe) => {
-    assert.equal(voices.length, 0);
-    assert.equal(probe.timers.size, 0);
-    audio.setSettings({ ...settings, music: .4, effects: 0 });
-    await Promise.all([audio.start(), audio.start(), audio.start()]);
-    const opening = voices.length;
-    assert.equal(opening, 4);
-    assert.equal(probe.timers.size, 1);
-    audio.play('click'); audio.play('win');
-    assert.equal(voices.length, opening);
-    audio.setSettings({ ...settings, music: 0 });
-    const stopped = voices.map(voice => voice.end);
-    audio.setSettings({ ...settings, music: .4, effects: 0 });
-    await Promise.all([audio.start(), audio.start()]);
-    assert.equal(probe.timers.size, 1);
-    assert.deepEqual(voices.slice(0, opening).map(voice => voice.end), stopped);
-    assert.ok(voices.slice(opening).every(voice => voice.start >= .08));
-    advance(1);
-    assert.ok(probe.events.filter(event => event.bus === 0 && event.method === 'ramp').every(event => event.value <= .12));
-    assert.equal(probe.contexts(), 1);
-  }, { ...settings, music: 0, effects: .6 });
-});
-
-test('mute stops both buses and async background/resume uses the latest zero setting', async () => {
-  await withAudio('game', async (voices, advance, visibility, audio, probe) => {
-    audio.play('win'); advance(.2);
-    audio.setSettings({ ...settings, muted: true });
-    assert.ok(voices.every(voice => voice.end <= .215 + 1e-9));
+test('mute stops both buses and asynchronous background changes respect the latest setting', async () => {
+  await withAudio(async (voices, advance, visibility, audio, probe) => {
+    audio.play('win'); advance(.2); audio.setSettings({ ...settings, muted: true });
+    assert.ok(voices.every(v => v.end <= .215 + 1e-9));
     const before = voices.length;
-    audio.play('win'); advance(2);
-    assert.equal(voices.length, before);
-    assert.equal(probe.timers.size, 0);
     const releaseSuspend = probe.defer('suspend');
     await visibility(true); await visibility(false);
-    audio.setSettings({ ...settings, music: 0, effects: .6 });
+    audio.setSettings({ ...settings, music: 0 });
     releaseSuspend(); await audio.start();
-    assert.equal(probe.timers.size, 0);
     const releaseResume = probe.defer('resume');
     const starting = Promise.all([audio.start(), audio.start()]);
     await visibility(true);
-    audio.setSettings({ ...settings, music: 0, effects: .6 });
     releaseResume(); await starting;
     advance(4); assert.equal(voices.length, before);
-    await visibility(false); await audio.start();
-    audio.play('click');
+    await visibility(false); await audio.start(); audio.play('click');
     assert.equal(voices.length, before + 1);
-    assert.equal(probe.timers.size, 0);
     assert.equal(probe.contexts(), 1);
   });
 });

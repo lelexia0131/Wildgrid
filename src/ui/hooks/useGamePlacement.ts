@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { dispatch as previewCommand, getAvailableActions, getState, key, occupied, placementOrigin, facilityLayer } from '../../engine';
 import type { SandboxDraft } from '../../engine';
-import type { BoardLayer, Cell, FacilityKind, GameSession, Piece, Placement, Shape, TerrainKind } from '../../engine';
+import type { BoardLayer, Cell, EditorTerrainKind, FacilityKind, GameSession, Piece, Placement, Shape } from '../../engine';
 import type { audio } from '../../platform/audio/WildernessAudio';
 import { terrainNames } from '../../engine';
 import type { TutorialEvent } from '../tutorial/tutorialLessons';
@@ -9,7 +9,7 @@ import type { TutorialEvent } from '../tutorial/tutorialLessons';
 type Options = {
   session: GameSession; continuousPlacement: boolean;
   layer?: BoardLayer;
-  terrainBrush: TerrainKind | null; clearTerrainBrush: () => void;
+  terrainBrush: EditorTerrainKind | null; clearTerrainBrush: () => void;
   dispatch: (command: Parameters<typeof previewCommand>[1]) => ReturnType<typeof previewCommand>;
   setNotice: (notice: string) => void;
   sound: (name?: Parameters<typeof audio.play>[0]) => void;
@@ -63,12 +63,12 @@ export function useGamePlacement({ session, continuousPlacement, layer = 'ground
     }
     const terrain = layer === 'ground' ? level.terrain.find(t => key(t) === key(cell)) : undefined;
     const fixed = (layer === 'sky' ? level.sky?.clouds : level.sky?.anchors)?.some(t => key(t) === key(cell));
-    if (!selected && fixed) { setNotice(layer === 'sky' ? '低云只阻挡天空，不计占格；气象风筝还需避开周围八格。' : '系留桩不可移动，不计占格；气球的地面投影需上下左右邻桩。'); sound('click'); return; }
-    if (mode === 'sandbox-editor' && terrain && !selected) {
-      const outcome = dispatch({ type: 'terrain', cell });
+    if (mode === 'sandbox-editor' && (terrain || fixed) && !selected) {
+      const outcome = dispatch({ type: 'terrain', cell, layer });
       if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
       setNotice(''); sound('pickup'); return;
     }
+    if (!selected && fixed) { setNotice(layer === 'sky' ? '低云只阻挡天空，不计占格；气象风筝还需避开周围八格。' : '系留桩不可移动，不计占格；气球的地面投影需上下左右邻桩。'); sound('click'); return; }
     if (!selected) { setNotice(terrain ? terrainNames[terrain.kind] : '先从右侧选择一个设施'); sound(terrain ? 'click' : 'error'); return; }
     const origin = placementOrigin(selected.shape, rotation, cell);
     const outcome = dispatch({ type: 'place', piece: selected, cell: origin, rotation });

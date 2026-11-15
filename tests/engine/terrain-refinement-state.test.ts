@@ -70,6 +70,30 @@ test('incremental terrain domains exactly match full domains after additions, re
   }
 });
 
+test('terrain updates retain unchanged domains and refresh equal-length truck connections',()=>{
+  const level:Level={id:0,name:'',chapter:'',tip:'',size:8,
+    pieces:[{id:'camp',kind:'camp',shape:'single'}],
+    terrain:[{r:0,c:1,kind:'water'},{r:1,c:0,kind:'water'}],rows:[1,0,0,0,0,0,0,0],cols:[1,0,0,0,0,0,0,0]};
+  const incremental=incrementalTerrainDomains(level),initial=incremental.groups;
+  const terrain=[level.terrain[1],{r:7,c:7,kind:'forest' as const}];
+  const unchanged=incremental.update(terrain);
+  assert.deepEqual(unchanged,placementDomains({...level,terrain}));
+  assert.equal(unchanged[0],initial[0],'an unaffected legal domain should keep its cached index');
+  assert.equal(unchanged[0].domain[0],initial[0].domain[0]);
+
+  const truckLevel:Level={...level,pieces:[{id:'truck',kind:'foodTruck',shape:'single'}],
+    rows:Array(8).fill(6),cols:Array(8).fill(6),terrain:[{r:1,c:1,kind:'water'}]};
+  const trucks=incrementalTerrainDomains(truckLevel);
+  const before=trucks.groups[0].domain.find(p=>p.at.r===1 && p.at.c===2)!;
+  const copy=structuredClone(before),moved=[{r:1,c:3,kind:'water' as const}];
+  const next=trucks.update(moved);
+  const after=next[0].domain.find(p=>p.at.r===1 && p.at.c===2)!;
+  assert.equal(after.connections.length,before.connections.length);
+  assert.notDeepEqual(after.connections,before.connections,'opening one lane while closing another changes the domain');
+  assert.deepEqual(next,placementDomains({...truckLevel,terrain:moved}));
+  assert.deepEqual(before,copy,'published candidates remain immutable');
+});
+
 test('one terrain repair eliminates several counterexamples while preserving the answer and terrain quantities',()=>{
   const level:Level={id:0,name:'',chapter:'',tip:'',size:8,
     pieces:[{id:'a',kind:'camp',shape:'single'},{id:'b',kind:'fire',shape:'single'},{id:'c',kind:'camp',shape:'single'},{id:'d',kind:'fire',shape:'single'}],
