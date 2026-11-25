@@ -1,5 +1,7 @@
 # 野格 v1.1.0
 
+三平台开发以本仓库为唯一源码。Steam 的可复用流程见 [Steam 构建与上传](scripts/steam/README.md)：`npm run steam:build` 完成普通 Windows、Android debug APK 和 Steam Windows x64 构建及自动回归；`npm run steam:preview` 执行官方 Preview。Steam 物理裁剪原设备 ID，并独立提供无边框全屏、显示模式和退出设置。普通 Windows / Android 保留原设备 ID 与平台操作。正式上传须另外明确授权。
+
 原创露营主题逻辑益智游戏。React + TypeScript + Vite，无账户、无外部媒体请求；Windows 和 Android 使用独立的匿名玩家 ID 服务。冒险模式有 60 个固定关卡，1–15 关为 6×6，16–60 关为 8×8（46–60 关增加同坐标的天空层）；荒野求生提供 10 档难度的随机挑战，沙盒模式支持创造、导入与保存本地地图。支持电脑鼠标和手机点击。当前版本 v1.1.0，更新日期 2026-10-21。
 
 ## 运行

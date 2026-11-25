@@ -21,7 +21,11 @@
     "android:apk": "npm run android:sync && node scripts/build-android.mjs",
     "deploy:downloads": "node scripts/deploy-downloads.mjs",
     "desktop": "node node_modules/electron/install.js && npm run build && electron .",
-    "package:win": "node node_modules/electron/install.js && npm run icons && npm run build && electron-builder --win nsis --x64 --publish never"
+    "package:win": "node node_modules/electron/install.js && npm run icons && npm run build && electron-builder --win nsis --x64 --publish never",
+    "steam:build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/steam/build-steam.ps1",
+    "steam:preflight": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/steam/upload-steam.ps1 -Mode Preflight",
+    "steam:preview": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/steam/upload-steam.ps1 -Mode Preview",
+    "steam:upload": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/steam/upload-steam.ps1 -Mode Upload"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",

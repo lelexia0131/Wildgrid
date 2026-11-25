@@ -1,0 +1,4 @@
+.steam-display-settings { margin-top: 20px; }
+.steam-display-settings > p { margin: 8px 0; font-size: 11px; color: #738569; }
+html[data-steam-windowed] .header { -webkit-app-region: drag; }
+html[data-steam-windowed] .header button { -webkit-app-region: no-drag; }

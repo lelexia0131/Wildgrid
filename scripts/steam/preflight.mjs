@@ -1,0 +1,14 @@
+import { execFileSync } from 'node:child_process';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { steam, scripts, insideSteam } from './paths.mjs';
+import { json } from './source-record.mjs';
+const ready = json(path.join(steam, 'logs/ready-to-upload.json'));
+const attempt = json(path.join(steam, 'logs/current-attempt.json'));
+assert.equal(attempt.id, ready.id, 'Latest build attempt is not the ready artifact. Rebuild; do not upload an older result.');
+assert.equal(attempt.status, 'passed');
+assert.equal(ready.testsPassed, true);
+const run = insideSteam(ready.run);
+assert.equal(json(path.join(run, 'logs/build-record.json')).status, 'passed');
+execFileSync(process.execPath, [path.join(scripts, 'verify-content.mjs')], { cwd: scripts, env: { ...process.env, WILDGRID_STEAM_RUN: run, WILDGRID_STEAM_CONTENT: path.join(steam, 'content') }, stdio: 'inherit', windowsHide: true });
+console.log(`Preflight passed: ${ready.id}; ${ready.commit}${ready.dirty ? ' + dirty working tree' : ''}; ${ready.manifestSha256}`);

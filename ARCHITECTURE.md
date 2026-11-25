@@ -1,5 +1,7 @@
 # Wildgrid（野格）实际架构
 
+三平台构建补充（2026-11-15）：`scripts/steam/` 是受 Git 管理的 Steam 变换、窗口适配、构建及发布门禁。它从根目录实际 Git 工作区生成一次性快照；核心引擎、关卡、存档、Worker 和 UI 均来自根目录。仅在候选快照删除设备 ID 并注入 Steam 窗口模块和显示设置，普通 Windows/Android 入口不变。`steam/` 继续全目录忽略，保存 SDK、缓存、临时源码、发行包和证据；不得作为开发分支。流程和边界详见 [三平台构建](scripts/steam/README.md)。
+
 更新日期：2026-10-21（Asia/Shanghai）。本文描述当前实际代码。原始历史基线及经提交记录确认的三项关卡修正保存在 `tests/fixtures/`。
 
 ## 目录与入口
