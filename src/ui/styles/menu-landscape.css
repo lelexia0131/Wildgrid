@@ -16,3 +16,6 @@
   .menu-landscape-background[data-scene='diary'] > img { object-position: 65% center; }
   .menu-landscape-background[data-scene='survival'] > img { object-position: 35% center; }
 }
+
+.menu-landscape-background.journal-wash { background:linear-gradient(145deg,#e4f0db,#fff3d7 62%,#e4eddb); }
+.menu-landscape-background.journal-wash > img { position:absolute; right:-1.5%; bottom:0; width:min(620px,66%); height:auto; max-height:64%; object-fit:contain; opacity:.38; }

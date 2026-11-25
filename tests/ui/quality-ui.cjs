@@ -117,7 +117,14 @@ app.whenReady().then(async () => {
     assert.deepEqual((await saved()).completed, [1]);
     await load(1, [], 'en', { 'wildgrid-tutorial-v1': JSON.stringify({version:1,enabled:true,language:'en'}) });
     await enter();
-    for (let i=0;i<6;i++) await click('.tutorial-next');
+    for(const step of ['welcome','board','viewsDemo','viewsTry','cameraHelp','clues','camp','wrong','right']){
+      assert.equal(await js("document.querySelector('.tutorial-overlay').dataset.step"),step);
+      if(step==='viewsDemo'){
+        const start=Date.now();while(await js("document.querySelector('.tutorial-next').disabled") && Date.now()-start<7000)await wait(80);
+        assert.equal(await js("document.querySelector('.tutorial-next').disabled"),false);
+      }
+      await click(step==='viewsTry'?'[data-tutorial="board-view"]':'.tutorial-next');
+    }
     assert.equal(await js(`document.querySelector('.tutorial-overlay').dataset.step`), 'select');
     await click('.facility-card');
     assert.equal(await js(`document.querySelector('.tutorial-overlay').dataset.step`), 'place');

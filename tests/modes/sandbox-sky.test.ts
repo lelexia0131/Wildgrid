@@ -61,7 +61,7 @@ test('sky editor terrain and facilities respect their own layer and restore thro
   apply({ type: 'redo' });
   assert.deepEqual(session.present, placed);
   apply({ type: 'remove', id: 'camp' });
-  apply({ type: 'terrain', kind: 'mountain', cell: { r: 1, c: 1 } });
+  apply({ type: 'terrain', kind: 'rock', cell: { r: 1, c: 1 } });
   apply({ type: 'terrain', kind: 'water', cell: { r: 1, c: 0 } });
   assert.deepEqual(session.present.level.sky!.anchors, []);
   apply({ type: 'terrain', kind: 'anchor', cell: { r: 1, c: 0 } });

@@ -52,7 +52,7 @@ const summarize=(values:number[])=>{
   return {min:sorted[0],max:sorted.at(-1),mean:values.reduce((s,v)=>s+v,0)/values.length,p50:sorted[Math.floor(sorted.length*.5)],p95:sorted[Math.min(sorted.length-1,Math.floor(sorted.length*.95))]};
 };
 const stats={successes:maps.length,total:records.length,terrain:summarize(maps.map(m=>m.draft.level.terrain.length)),
-  kinds:Object.fromEntries(['water','forest','mountain'].map(kind=>[kind,summarize(maps.map(m=>m.draft.level.terrain.filter(t=>t.kind===kind).length))])),
+  kinds:Object.fromEntries(['water','forest','rock'].map(kind=>[kind,summarize(maps.map(m=>m.draft.level.terrain.filter(t=>t.kind===kind).length))])),
   maxComponent:Math.max(0,...maps.flatMap(m=>m.diagnostics.quality.regions.map(r=>r.largest))),
   max3:Math.max(0,...maps.map(m=>terrainDistribution(m.draft.level.terrain).max3)),max4:Math.max(0,...maps.map(m=>terrainDistribution(m.draft.level.terrain).max4)),
   ms:summarize(records.map(r=>Number(r.ms)))};

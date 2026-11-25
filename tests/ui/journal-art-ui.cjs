@@ -63,10 +63,10 @@ app.whenReady().then(async () => {
     for (let turn = 0; turn < last.rotation; turn++) await click(selector);
     await click(`[data-cell="${last.r},${last.c}"]`);
     await new Promise(resolve => setTimeout(resolve, 1200));
-    assert.equal(await js(`!!document.querySelector('.win-modal[open] .level-cover-art')`), true);
+    assert.equal(await js(`!!document.querySelector('.win-modal[open] .completion-stamp') && !document.querySelector('.win-modal .level-cover-art') && document.querySelectorAll('.board .tile[data-piece-id]').length>0`), true);
     await snapshot('completion-390');
     assert.deepEqual(errors, []);
-    console.log('Journal artwork UI passed: 3 chapters, 45 covers, desktop/portrait/landscape, Chinese/English, unchanged saves, locked/current/completed states and shared completion artwork.');
+    console.log('Journal artwork UI passed: 3 chapters, 45 covers, desktop/portrait/landscape, Chinese/English, unchanged saves, locked/current/completed states and the actual completed board.');
     clearTimeout(timeout); app.exit(0);
   } catch (error) { console.error(error); clearTimeout(timeout); app.exit(1); }
 });

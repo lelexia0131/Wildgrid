@@ -28,14 +28,17 @@ export function useTutorial({ screen, mode, level, placements, selected, undoAva
     if (active || paused) return;
     const lesson = resolveTutorial(state, { mode, level, placements, selected, won });
     if (lesson) {
-      let index = state.activeStep?.day === level.id ? Math.min(state.activeStep.index, lesson.steps.length - 1) : 0;
+      const stored=state.activeStep?.day===level.id?state.activeStep:undefined;
+      const named=stored?.stepId?lesson.steps.findIndex(item=>item.id===stored.stepId):-1;
+      // Older Day 1 saves counted the clue step at index two, before the view demonstration existed.
+      let index=named>=0?named:Math.min((stored?.index??0)+(stored && !stored.stepId && level.id===1 && stored.index>=2?3:0),lesson.steps.length-1);
       const action = lesson.steps[index].actionCondition;
       if (action?.type === 'place' && placements.some(at => matchesAction(action, { type: 'place', pieceId: at.id, r: at.r, c: at.c, rotation: at.rotation }))) index++;
       else if (((action?.type === 'place' || action?.type === 'rotate') && !selected) || (action?.type === 'undo' && !undoAvailable)) {
         while (index > 0 && lesson.steps[index].actionCondition?.type !== 'select') index--;
       }
       setActive({ lesson, index, level, mode });
-      setState(s => ({ ...s, activeStep: { day: level.id, index } }));
+      setState(s => ({ ...s, activeStep: { day: level.id, index, stepId:lesson.steps[index]?.id } }));
     }
   }, [screen, mode, level, placements, selected, undoAvailable, won, paused, state, active]);
   const next = useCallback(() => {
@@ -43,7 +46,7 @@ export function useTutorial({ screen, mode, level, placements, selected, undoAva
     if (!current) return;
     if (current.index + 1 < current.lesson.steps.length) {
       setActive({ ...current, index: current.index + 1 });
-      setState(s => ({ ...s, activeStep: { day: current.level.id, index: current.index + 1 } }));
+      setState(s => ({ ...s, activeStep: { day: current.level.id, index: current.index + 1, stepId:current.lesson.steps[current.index+1].id } }));
     }
     else { setState(s => finishLesson(s, current.lesson)); setActive(null); }
   }, []);
@@ -67,5 +70,5 @@ export function useTutorial({ screen, mode, level, placements, selected, undoAva
   function reset() { setState(s => freshTutorial(false, s.language)); setActive(null); setMessage('resetReady'); }
   const step = active?.lesson.steps[active.index];
   return { state, saved, message, copy: DICTIONARIES[state.language], active: visible && active && step ? { lesson: active.lesson, step, index: active.index } : null,
-    next, back: () => { if (active) { const index = Math.max(0, active.index - 1); setActive({ ...active, index }); setState(s => ({ ...s, activeStep: { day: active.level.id, index } })); } }, skip, onAction, update, reset };
+    next, back: () => { if (active) { const index = Math.max(0, active.index - 1); setActive({ ...active, index }); setState(s => ({ ...s, activeStep: { day: active.level.id, index,stepId:active.lesson.steps[index].id } })); } }, skip, onAction, update, reset };
 }

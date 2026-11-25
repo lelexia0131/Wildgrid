@@ -4,12 +4,12 @@ import { BASIC_LESSONS } from '../../save-system/tutorialStorage';
 import type { BasicLesson, TutorialState } from '../../save-system/tutorialStorage';
 
 export type TutorialEvent = {
-  type: 'pageOpened' | 'modeEntered' | 'select' | 'place' | 'rotate' | 'undo' | 'redo' | 'pickup' | 'closeHint' | 'complete';
+  type: 'pageOpened' | 'modeEntered' | 'switchView' | 'select' | 'place' | 'rotate' | 'undo' | 'redo' | 'pickup' | 'closeHint' | 'complete';
   kind?: FacilityKind; pieceId?: string; value?: string;
   r?: number; c?: number; rotation?: number;
 };
 export type TutorialTarget =
-  | { type: 'ui'; id: 'board' | 'facilities' | 'undo' | 'feedback' | 'goal' | 'win' }
+  | { type: 'ui'; id: 'board' | 'boardView' | 'facilities' | 'undo' | 'feedback' | 'goal' | 'win' }
   | { type: 'clues' }
   | { type: 'facility'; kind: FacilityKind; shape?: Shape }
   | { type: 'cell'; cell: Cell }
@@ -48,7 +48,11 @@ export function resolveTutorial(state: TutorialState, context: Context): Tutoria
   const lesson = (steps: TutorialStep[], basics?: BasicLesson[], kind?: FacilityKind): TutorialLesson => ({ id: `day:${level.id}`, levelId: level.id, steps, basics, facility: kind });
   if (level.id === 1) return lesson([
     step('welcome', ui('board')),
-    step('board', ui('board')), step('clues', { type: 'clues' }), facility('camp'),
+    step('board', ui('board')),
+    { ...step('viewsDemo',ui('board')), advance:'next' },
+    step('viewsTry',ui('boardView'),{type:'switchView'}),
+    { ...step('cameraHelp',ui('board')), advance:'next', blockInteraction:false },
+    step('clues', { type: 'clues' }), facility('camp'),
     { ...step('wrong', ui('board')), example: 'wrong' }, { ...step('right', ui('board')), example: 'right' },
     step('select', camp, { type: 'select', pieceId: 'camp-1' }),
     step('place', { type: 'cell', cell: { r: 2, c: 3 } }, { type: 'place', pieceId: 'camp-1', r: 2, c: 3, rotation: 0 }),

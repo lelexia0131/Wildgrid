@@ -47,6 +47,9 @@ app.whenReady().then(async () => {
       await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
       await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     } else await js(`document.querySelector(${JSON.stringify(selector)}).click()`, true);
+    if (selector === '.sandbox-choice:first-child' || selector.startsWith('[data-level=')) {
+      await js(`document.querySelector('[data-renderer="3d"] .board-mode')?.click()`, true);
+    }
     await settle();
     if (selector === '.menu-buttons .primary') await click('.sandbox-choice:first-child', touch);
   }
@@ -56,7 +59,7 @@ app.whenReady().then(async () => {
   })()`);
   async function load(progress = [], tips = true, current = 30, completed = Array.from({length:29},(_,i)=>i+1)) {
     await win.loadFile(path.join(root, 'dist', 'index.html'));
-    await js(`localStorage.setItem('wildgrid-tutorial-v1', '{"version":1,"enabled":false}'); localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({ version: 1, completed, current, progress:{[current]:progress}, settings:{music:.35,effects:.65,muted:false,facilityTips:tips} }))})`);
+    await js(`localStorage.setItem('wildgrid-display-v1','{"mode":"2d","quality":"medium"}'); localStorage.setItem('wildgrid-tutorial-v1', '{"version":1,"enabled":false}'); localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({ version: 1, completed, current, progress:{[current]:progress}, settings:{music:.35,effects:.65,muted:false,facilityTips:tips} }))})`);
     await win.loadFile(path.join(root, 'dist', 'index.html'));
     await settle();
     await js(audioProbe);
@@ -89,9 +92,10 @@ app.whenReady().then(async () => {
       assert.equal(await js(`document.querySelector('dialog').open`), false);
       assert.ok(await js(`document.querySelectorAll('.board > .tile').length === 64`));
       await click('[aria-label^="选择L 形林间木屋"]', viewport.touch);
-      const beforeRotation = await js(`document.querySelector('[aria-label^="选择L 形林间木屋"] .roof-plane').getAttribute('d')`);
+      const beforeRotation = await js(`document.querySelector('[aria-label^="选择L 形林间木屋"] .model-icon').getAttribute('src')`);
       await click('[aria-label^="选择L 形林间木屋"]', viewport.touch);
-      assert.notEqual(await js(`document.querySelector('[aria-label^="选择L 形林间木屋"] .roof-plane').getAttribute('d')`), beforeRotation);
+      assert.match(beforeRotation,/cabin_el-0/);
+      assert.notEqual(await js(`document.querySelector('[aria-label^="选择L 形林间木屋"] .model-icon').getAttribute('src')`), beforeRotation);
       await toggleTips(viewport.touch);
       const after = await geometry();
       assert.equal(after.dock, false);

@@ -21,6 +21,11 @@ export function useBoardFeedback(board: RefObject<HTMLElement | null>, level: Le
   function reject(cells: Cell[]) {
     cells.forEach(cell => {
       const tile = board.current?.querySelector(`[data-cell="${cell.r},${cell.c}"]`);
+      if(board.current?.dataset.renderer==='3d'){
+        const mark=tile?.querySelector('.model-preview-mark, .error-mark');
+        if(mark)animate(mark,[{opacity:.45},{opacity:1}],180);
+        return;
+      }
       if (tile) animate(tile, [{ backgroundColor: '#e3ab91' }, { backgroundColor: getComputedStyle(tile).backgroundColor }], 260);
     });
   }

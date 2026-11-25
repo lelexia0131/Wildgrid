@@ -19,8 +19,17 @@ for (const file of images) {
     const ids = new Set([...source.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]));
     for (const ref of source.matchAll(/(?:url\(#|href="#)([^)"\s]+)/g)) assert.ok(ids.has(ref[1]), `Missing #${ref[1]} in ${name}`);
   }
-  assets.push({ file: name, status: reused.test(name) ? 'reused' : /branding\//.test(name) ? 'redesigned' : 'external-art', bytes: statSync(file).size, width: metadata.width, height: metadata.height, sha256: createHash('sha256').update(bytes).digest('hex') });
+  const status = /\/3d\/(icons|scenes)\//.test(name) ? 'model-render' : name.includes('/3d/') ? '3d-material-or-backdrop'
+    : reused.test(name) ? 'reused' : /branding\//.test(name) ? 'redesigned' : 'external-art';
+  assets.push({ file: name, status, bytes: statSync(file).size, width: metadata.width, height: metadata.height, sha256: createHash('sha256').update(bytes).digest('hex') });
 }
+const modelLibraries = walk('src/assets/3d').filter(file => file.endsWith('.glb')).map(file => {
+  const bytes = readFileSync(file);
+  assert.equal(bytes.toString('ascii', 0, 4), 'glTF', file);
+  assert.equal(bytes.readUInt32LE(8), bytes.length, file);
+  const content = JSON.parse(bytes.toString('utf8', 20, 20 + bytes.readUInt32LE(12)));
+  return { file: file.replaceAll('\\', '/'), models: content.nodes.map(node => node.name), bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
+});
 const retainedSvg = {
   'src/ui/components/Art.tsx': 'State-dependent facility footprints and roof construction',
   'src/ui/components/Blueprint.tsx': 'Current level, clues and placements',
@@ -38,5 +47,5 @@ const sources = walk('src').filter(file => /\.(tsx|css)$/.test(file)).map(file =
   return { file: name, inlineSvg: (source.match(/<svg\b/g) || []).length, retainedReason: retainedSvg[name], gradients: [...source.matchAll(/([^{}]+)\{([^{}]*gradient[^{}]*)\}/g)].map(m => m[1].replace(/\/\*[\s\S]*?\*\//g, '').trim()) };
 });
 mkdirSync('.desktop-smoke', { recursive: true });
-writeFileSync('.desktop-smoke/art-inventory.json', JSON.stringify({ assets, packagingAssets, sources }, null, 2) + '\n');
-console.log(`PASS: decoded ${assets.length} game images; inspected ${packagingAssets.length} platform icons; SVG references local and resolved. Inventory: .desktop-smoke/art-inventory.json`);
+writeFileSync('.desktop-smoke/art-inventory.json', JSON.stringify({ assets, modelLibraries, packagingAssets, sources }, null, 2) + '\n');
+console.log(`PASS: decoded ${assets.length} game images, inspected ${modelLibraries.length} GLB libraries and ${packagingAssets.length} platform icons. SVG references resolved. Inventory: .desktop-smoke/art-inventory.json`);

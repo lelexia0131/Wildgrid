@@ -23,18 +23,22 @@ app.whenReady().then(async () => {
       await js(`localStorage.clear(); localStorage.setItem('wildgrid-tutorial-v1', ${JSON.stringify(JSON.stringify({ version: 1, enabled: true, language }))})`);
       await win.loadFile(path.join(root, 'dist/index.html')); await wait();
       await click('.menu-adventure'); await click('.sandbox-choice:first-child');
-      for (const step of ['welcome', 'board', 'clues', 'camp', 'wrong', 'right']) {
+      for (const step of ['welcome','board','viewsDemo','viewsTry','cameraHelp','clues','camp','wrong','right']) {
         assert.equal(await js(`document.querySelector('.tutorial-overlay').dataset.step`), step);
         if (step === 'wrong' || step === 'right') {
-          assert.deepEqual(await js(`(() => { const svg = document.querySelector('.tutorial-example'); return { images: svg.querySelectorAll('image').length, htmlImages: svg.querySelectorAll('img').length, hrefs: [...svg.querySelectorAll('image')].every(img => img.getAttribute('href').endsWith('.svg')) }; })()`), { images: 2, htmlImages: 0, hrefs: true });
+          assert.deepEqual(await js(`(() => { const svg = document.querySelector('.tutorial-example'); return { images: svg.querySelectorAll('image').length, htmlImages: svg.querySelectorAll('img').length, hrefs: [...svg.querySelectorAll('image')].every((img,i) => img.getAttribute('href').includes(i===0?'water-0':'camp_single-0') && img.getAttribute('href').endsWith('.webp')) }; })()`), { images: 2, htmlImages: 0, hrefs: true });
           writeFileSync(path.join(output, `${step}-${language}.png`), (await wc.capturePage()).toPNG());
         }
-        await click('.tutorial-next');
+        if(step==='viewsDemo'){
+          const start=Date.now();while(await js("document.querySelector('.tutorial-next').disabled") && Date.now()-start<7000)await wait();
+          assert.equal(await js("document.querySelector('.tutorial-next').disabled"),false);
+        }
+        await click(step==='viewsTry'?'[data-tutorial="board-view"]':'.tutorial-next');
       }
       assert.equal(await js(`document.querySelector('.tutorial-overlay').dataset.step`), 'select');
     }
     assert.deepEqual(errors, []);
-    console.log('PASS: bilingual tutorial wrong/right examples use SVG images and advance to selection.');
+    console.log('PASS: bilingual tutorial wrong/right examples use the model thumbnails inside the teaching grid and advance to selection.');
     clearTimeout(deadline); app.exit(0);
   } catch (error) { console.error(error); clearTimeout(deadline); app.exit(1); }
 });

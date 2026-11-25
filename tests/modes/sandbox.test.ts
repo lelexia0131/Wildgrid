@@ -16,7 +16,7 @@ test('sandbox library covers ground definitions and map codes restore both sizes
   assert.deepEqual(new Set(facilityLibrary.map(p => `${p.kind}_${p.shape}`)), new Set(levels.flatMap(l => l.pieces.filter(p=>facilityLayer(p.kind)==='ground').map(p => `${p.kind}_${p.shape}`))));
   assert.deepEqual(new Set(adventureFacilityLibrary.map(p=>`${p.kind}_${p.shape}`)),new Set(levels.flatMap(l=>l.pieces.map(p=>`${p.kind}_${p.shape}`))));
   const initial = createSandbox(8), eight = { ...initial, level: { ...initial.level } };
-  eight.level.terrain = [{ kind: 'water', r: 3, c: 1 }, { kind: 'forest', r: 7, c: 7 }, { kind: 'mountain', r: 0, c: 6 }];
+  eight.level.terrain = [{ kind: 'water', r: 3, c: 1 }, { kind: 'forest', r: 7, c: 7 }, { kind: 'rock', r: 0, c: 6 }];
   eight.level.pieces = [{ id: 'rotated-camp', kind: 'camp', shape: 'domino' }];
   const rotated = withEditorPlacements(eight, [{ id: 'rotated-camp', r: 3, c: 2, rotation: 1 }]);
   for (const draft of [camps(), rotated]) {

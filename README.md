@@ -14,6 +14,8 @@
 
 ## 本地开发
 
+首页循环播放三维营地封面。每次进入关卡默认打开**实景营地**，可在棋盘上切换到**平面规划**，在设置里调整画质。第一关示范视图切换和镜头操作。美术管线、参考资料和实际游戏截图见[三维营地](docs/3d/README.md)。Android 同步已暂停，日常构建目标为 Web 和普通 Windows。
+
 需要 Node.js 22+。从仓库根目录执行：
 
 ```powershell
@@ -27,10 +29,9 @@ npm run dev
 npm test
 npm run build
 npm run package:win
-npm run android:apk
 ```
 
-普通 Windows 产物输出到 `release/`；Android 需要 JDK 21、Android SDK 36 和对应环境配置，当前输出为 debug 签名 APK。运行入口、UI/关卡检查和平台限制见[开发指南](docs/DEVELOPMENT.md)与[测试说明](tests/README.md)。
+普通 Windows 从 `release/camp-world/win-unpacked/野格.exe` 启动，后续打包更新同一目录。Windows 安装包和现有 Android APK 集中在 `release/installers/`，升版才新增安装包。Android 当前暂停同步。运行入口和平台限制见[开发指南](docs/DEVELOPMENT.md)与[测试说明](tests/README.md)。
 
 ## 目录
 

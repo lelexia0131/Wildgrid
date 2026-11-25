@@ -1,6 +1,7 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync } from 'node:fs';
+import { constants, copyFileSync, existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { installerPath, needsInstaller } from './release-installers.mjs';
 
 const env = { ...process.env };
 // Prefer an explicit JDK; otherwise use Android Studio's bundled JDK on Windows.
@@ -22,7 +23,10 @@ if (result.status !== 0) process.exit(result.status || 1);
 const apk = resolve('android/app/build/outputs/apk/debug/app-debug.apk');
 if (!existsSync(apk) || !statSync(apk).size) throw new Error('Gradle finished without a debug APK.');
 const { version } = JSON.parse(readFileSync(resolve('package.json'), 'utf8'));
-const output = resolve(`release/野格-v${version}.apk`);
-mkdirSync(dirname(output), { recursive: true });
-copyFileSync(apk, output);
-console.log(`APK: ${output} (${statSync(output).size} bytes)`);
+if (needsInstaller('android', version)) {
+  const output = installerPath('android', version);
+  copyFileSync(apk, output, constants.COPYFILE_EXCL);
+  console.log(`APK: ${output} (${statSync(output).size} bytes)`);
+} else {
+  console.log(`Version ${version}: existing APK archive preserved.`);
+}

@@ -335,7 +335,7 @@
     "id": 7,
     "name": "第7关",
     "chapter": "",
-    "tip": "山地也不能覆盖。沿着山脚，继续寻找邻水的营地。",
+    "tip": "岩石也不能覆盖。沿着岩石边缘，继续寻找邻水的营地。",
     "size": 6,
     "terrain": [
       {
@@ -349,12 +349,12 @@
         "c": 3
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 2,
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 3,
         "c": 4
       },
@@ -402,16 +402,16 @@
     "id": 8,
     "name": "第8关",
     "chapter": "",
-    "tip": "瞭望塔必须上下左右挨着山地；这次只需安放两座塔。",
+    "tip": "瞭望塔必须上下左右挨着岩石；这次只需安放两座塔。",
     "size": 6,
     "terrain": [
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 4,
         "c": 4
       },
@@ -463,12 +463,12 @@
     "size": 6,
     "terrain": [
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 2,
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 3,
         "c": 3
       },
@@ -535,7 +535,7 @@
         "c": 4
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 4,
         "c": 4
       }
@@ -649,7 +649,7 @@
         "c": 3
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 5
       }
@@ -711,7 +711,7 @@
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 4,
         "c": 4
       }
@@ -768,12 +768,12 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 4
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 5,
         "c": 1
       },
@@ -850,12 +850,12 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 5,
         "c": 1
       },
@@ -952,12 +952,12 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 7
       },
@@ -1083,12 +1083,12 @@
         "c": 0
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 3
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 0
       },
@@ -1110,7 +1110,7 @@
       {
         "r": 7,
         "c": 7,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 2,
@@ -1190,7 +1190,7 @@
     "id": 18,
     "name": "第18关",
     "chapter": "",
-    "tip": "森林限制篝火，山地限制塔；把两侧线索连接起来。",
+    "tip": "森林限制篝火，岩石限制塔；把两侧线索连接起来。",
     "size": 8,
     "terrain": [
       {
@@ -1219,12 +1219,12 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 3,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 7
       },
@@ -1360,12 +1360,12 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 4
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 7
       },
@@ -1387,7 +1387,7 @@
       {
         "r": 1,
         "c": 0,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 3,
@@ -1506,12 +1506,12 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 4,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 7
       },
@@ -1533,7 +1533,7 @@
       {
         "r": 3,
         "c": 0,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 0,
@@ -1662,12 +1662,12 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 1
       },
@@ -1684,7 +1684,7 @@
       {
         "r": 7,
         "c": 4,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 7,
@@ -1789,7 +1789,7 @@
     "id": 22,
     "name": "第22关",
     "chapter": "",
-    "tip": "水源与山地分散，局部正确还需要全局占格数支持。",
+    "tip": "水源与岩石分散，局部正确还需要全局占格数支持。",
     "size": 8,
     "terrain": [
       {
@@ -1823,12 +1823,12 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 3,
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 0
       },
@@ -1984,12 +1984,12 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 0
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 6
       },
@@ -2016,7 +2016,7 @@
       {
         "r": 7,
         "c": 3,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 7,
@@ -2155,12 +2155,12 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 4,
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 0
       },
@@ -2192,7 +2192,7 @@
       {
         "r": 3,
         "c": 7,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 0,
@@ -2326,12 +2326,12 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 3
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 0
       },
@@ -2353,7 +2353,7 @@
       {
         "r": 0,
         "c": 4,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 4,
@@ -2507,17 +2507,17 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 3,
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 0
       },
@@ -2549,7 +2549,7 @@
       {
         "r": 4,
         "c": 7,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 1,
@@ -2698,17 +2698,17 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 0
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 4
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 7
       },
@@ -2740,7 +2740,7 @@
       {
         "r": 0,
         "c": 3,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 0,
@@ -2899,22 +2899,22 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 4,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 7
       },
@@ -2926,7 +2926,7 @@
       {
         "r": 3,
         "c": 1,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 2,
@@ -2956,7 +2956,7 @@
       {
         "r": 3,
         "c": 0,
-        "kind": "mountain"
+        "kind": "rock"
       }
     ],
     "pieces": [
@@ -3105,22 +3105,22 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 3
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 0
       },
@@ -3147,7 +3147,7 @@
       {
         "r": 0,
         "c": 4,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 3,
@@ -3321,22 +3321,22 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 3,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 7
       },
@@ -3553,7 +3553,7 @@
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 5
       }
@@ -3614,7 +3614,7 @@
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 5
       },
@@ -3808,7 +3808,7 @@
     "id": 36,
     "name": "第36关",
     "chapter": "",
-    "tip": "电塔与瞭望塔不同：瞭望塔邻山，电塔远离篝火与营地。",
+    "tip": "电塔与瞭望塔不同：瞭望塔邻岩石，电塔远离篝火与营地。",
     "size": 8,
     "terrain": [
       {
@@ -3822,14 +3822,14 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 6
       },
       {
         "r": 2,
         "c": 5,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 4,
@@ -3903,14 +3903,14 @@
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 5
       },
       {
         "r": 0,
         "c": 6,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 1,
@@ -4091,7 +4091,7 @@
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 5
       }
@@ -4187,17 +4187,17 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 3,
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 0
       },
@@ -4229,7 +4229,7 @@
       {
         "r": 4,
         "c": 7,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 1,
@@ -4264,7 +4264,7 @@
       {
         "r": 6,
         "c": 2,
-        "kind": "mountain"
+        "kind": "rock"
       }
     ],
     "pieces": [
@@ -4403,17 +4403,17 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 0
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 4
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 7
       },
@@ -4445,7 +4445,7 @@
       {
         "r": 0,
         "c": 3,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 0,
@@ -4614,22 +4614,22 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 4,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 7
       },
@@ -4641,7 +4641,7 @@
       {
         "r": 3,
         "c": 1,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 2,
@@ -4671,7 +4671,7 @@
       {
         "r": 3,
         "c": 0,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 1,
@@ -4691,7 +4691,7 @@
       {
         "r": 0,
         "c": 5,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 6,
@@ -4850,22 +4850,22 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 3
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 0
       },
@@ -4892,7 +4892,7 @@
       {
         "r": 0,
         "c": 4,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 3,
@@ -5076,22 +5076,22 @@
         "c": 2
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 6
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 3,
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 7
       },
@@ -5477,7 +5477,7 @@
         "c": 3
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 1
       }
@@ -5789,7 +5789,7 @@
         "c": 0
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 6
       }
@@ -5917,14 +5917,14 @@
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 6
       },
       {
         "r": 3,
         "c": 2,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 6,
@@ -6037,7 +6037,7 @@
     "id": 53,
     "name": "第53关",
     "chapter": "",
-    "tip": "山脊上的风正合适！让风筝至少一格对着山地，再看看四周有没有低云，斜角也别漏掉。",
+    "tip": "山脊上的风正合适！让风筝至少一格对着岩石，再看看四周有没有低云，斜角也别漏掉。",
     "size": 8,
     "terrain": [
       {
@@ -6046,7 +6046,7 @@
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 2,
         "c": 4
       }
@@ -6141,7 +6141,7 @@
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 3,
         "c": 4
       },
@@ -6265,12 +6265,12 @@
         "c": 0
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 2,
         "c": 5
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 6
       },
@@ -6419,39 +6419,39 @@
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 4,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 1
       },
       {
         "r": 3,
         "c": 7,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 2,
         "c": 7,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 1,
         "c": 7,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 1,
         "c": 6,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 1,
         "c": 5,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 5,
@@ -6647,19 +6647,19 @@
         "c": 0
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 2,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 0
       },
       {
         "r": 1,
         "c": 7,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 2,
@@ -6870,12 +6870,12 @@
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 0,
         "c": 4
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 6,
         "c": 7
       },
@@ -6887,7 +6887,7 @@
       {
         "r": 1,
         "c": 0,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 2,
@@ -6927,7 +6927,7 @@
       {
         "r": 3,
         "c": 1,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 2,
@@ -6947,7 +6947,7 @@
       {
         "r": 2,
         "c": 2,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 1,
@@ -7119,7 +7119,7 @@
     "id": 59,
     "name": "第59关",
     "chapter": "",
-    "tip": "同一座山，下面能靠瞭望塔，上面能借风放风筝。咱们沿着这条线索，再往另一层走一步。",
+    "tip": "同一片岩石，下面能靠瞭望塔，上面能借风放风筝。咱们沿着这条线索，再往另一层走一步。",
     "size": 8,
     "terrain": [
       {
@@ -7158,19 +7158,19 @@
         "c": 1
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 1,
         "c": 4
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 5,
         "c": 7
       },
       {
         "r": 6,
         "c": 2,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 6,
@@ -7391,19 +7391,19 @@
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 4,
         "c": 7
       },
       {
-        "kind": "mountain",
+        "kind": "rock",
         "r": 7,
         "c": 1
       },
       {
         "r": 6,
         "c": 1,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 0,
@@ -7413,7 +7413,7 @@
       {
         "r": 7,
         "c": 2,
-        "kind": "mountain"
+        "kind": "rock"
       },
       {
         "r": 2,
@@ -7423,7 +7423,7 @@
       {
         "r": 6,
         "c": 0,
-        "kind": "mountain"
+        "kind": "rock"
       }
     ],
     "pieces": [

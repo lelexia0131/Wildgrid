@@ -1,3 +1,4 @@
+import {MenuLandscapeBackground} from '../components/MenuLandscapeBackground';
 import { SurvivalFacilityDialog } from '../components/SurvivalFacilityDialog';
 import { SurvivalNotice } from '../components/SurvivalNotice';
 import { useI18n } from '../../localization/LanguageContext';
@@ -7,8 +8,6 @@ import { ArrowLeft, ArrowRight, Ban, Flag, X } from 'lucide-react';
 import { SurvivalBadge } from '../components/SurvivalBadge';
 import { GenerationMap } from '../components/GenerationMap';
 import { GenerationMessage } from '../components/GenerationMessage';
-import { JournalChapterBackground } from '../components/JournalChapterBackground';
-import { MenuLandscapeBackground } from '../components/MenuLandscapeBackground';
 import { rankProgress, SURVIVAL_DIFFICULTIES, SURVIVAL_RANKS } from '../../game-modes/survival/survivalDifficulty';
 import { survivalTotals } from '../../game-modes/survival/survivalChallenge';
 import type { SurvivalRecord, SurvivalSave } from '../../game-modes/survival/survivalChallenge';
@@ -26,7 +25,7 @@ export function SurvivalMenu({ save, generating, generationScene, error, onStart
   const recordsRef = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (records) recordsRef.current?.showModal(); }, [records]);
   if (generating !== null) return <main className="survival-generation-page" data-scene={generationScene} aria-busy="true">
-    <div className="generation-background" aria-hidden="true"><JournalChapterBackground chapter={generationScene}/></div>
+    <div className="generation-background" aria-hidden="true"><MenuLandscapeBackground scene="survival" chapter={generationScene}/></div>
     <GenerationMap/>
     <GenerationMessage/><p>{t("难度 {0}", generating)}</p>
     <div className="generation-progress" role="progressbar" aria-label={t("地图生成进度")}><i/></div>
@@ -34,7 +33,7 @@ export function SurvivalMenu({ save, generating, generationScene, error, onStart
   </main>;
   const { counts, xp } = survivalTotals(save), { rank, next, fill: progress } = rankProgress(xp);
   const history = save.records.filter(record => record.id !== save.challenge?.id || record.finishedAt !== undefined).sort((a, b) => (b.startedAt ?? b.finishedAt ?? 0) - (a.startedAt ?? a.finishedAt ?? 0));
-  return <><MenuLandscapeBackground scene="survival"/><main className="survival-page">
+  return <><MenuLandscapeBackground scene="survival" chapter={2}/><main className="survival-page">
     <div className="survival-heading"><button className="back-link" data-sound="close" onClick={onBack} disabled={generating !== null}><ArrowLeft size={20}/>{t("返回")}</button><h1>{t("荒野求生")}</h1></div>
     <section className="survival-identity" aria-label={t("玩家身份")}>
       <SurvivalBadge rank={rank}/><div><div className="survival-identity-title"><h2>{localize(SURVIVAL_RANKS[rank].name)}</h2><p>{t("累计经验")} {xp}</p></div><div className="survival-xp-track" role="progressbar" aria-label={t("身份经验进度")} aria-valuemin={SURVIVAL_RANKS[rank].xp} aria-valuemax={next?.xp ?? xp} aria-valuenow={xp}><i style={{ width: `${progress * 100}%` }}/></div><p>{localize(next ? t("距离{0}还需 {1} 经验", next.name, next.xp - xp) : t("荒野传奇 · 继续积累经验"))}</p></div>

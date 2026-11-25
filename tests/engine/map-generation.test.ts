@@ -17,7 +17,7 @@ import type { Level } from '../../src/engine/types';
 
 test('shared placement domains agree with the real static gameplay evaluator, including all rotations', () => {
   for (const size of [6, 8]) for (const piece of facilityLibrary) {
-    const level: Level = { id: 0, name: '', chapter: '', tip: '', size, pieces: [piece], terrain: [{r:1,c:1,kind:'water'},{r:3,c:2,kind:'forest'},{r:4,c:4,kind:'mountain'}], rows: Array(size).fill(3), cols: Array(size).fill(2) };
+    const level: Level = { id: 0, name: '', chapter: '', tip: '', size, pieces: [piece], terrain: [{r:1,c:1,kind:'water'},{r:3,c:2,kind:'forest'},{r:4,c:4,kind:'rock'}], rows: Array(size).fill(3), cols: Array(size).fill(2) };
     const token = (at: {r:number;c:number;rotation:number}) => occupied(piece, {...at,id:piece.id}).map(p=>`${p.r},${p.c}`).sort().join(';');
     const actual = new Set<string>();
     for (let rotation=0;rotation<4;rotation++) for (let r=0;r<size;r++) for (let c=0;c<size;c++) {
@@ -83,7 +83,7 @@ test('a disabled single-cell camp is replaced by a legal multigrid camp even in 
 });
 
 test('cached connection geometry and rebound clue domains equal fresh terrain-specific domains', () => {
-  const level: Level = { id:0,name:'',chapter:'',tip:'',size:8,pieces:facilityLibrary,terrain:[{r:1,c:1,kind:'water'},{r:3,c:2,kind:'forest'},{r:4,c:4,kind:'mountain'}],rows:Array(8).fill(8),cols:Array(8).fill(8) };
+  const level: Level = { id:0,name:'',chapter:'',tip:'',size:8,pieces:facilityLibrary,terrain:[{r:1,c:1,kind:'water'},{r:3,c:2,kind:'forest'},{r:4,c:4,kind:'rock'}],rows:Array(8).fill(8),cols:Array(8).fill(8) };
   const base = placementDomains(level);
   for (const g of base) for (const p of g.domain) {
     assert.deepEqual(p.connections,campConnections(g.piece.kind,p.cells,boardCells(8),level.terrain).map(link=>({camp:cellBit(link.camp),gap:link.gap?cellBit(link.gap):0n})));
@@ -218,18 +218,18 @@ test('required single camp survives every construction tier, unrelated bans, and
 });
 
 test('terrain frontiers reject merged oversized components and mixed high-density windows at edges too', () => {
-  const ridge=[{r:3,c:1,kind:'mountain' as const},{r:3,c:2,kind:'mountain' as const},{r:3,c:4,kind:'mountain' as const}];
-  const frontier=terrainPlacementScores(ridge,'mountain',12);
+  const ridge=[{r:3,c:1,kind:'rock' as const},{r:3,c:2,kind:'rock' as const},{r:3,c:4,kind:'rock' as const}];
+  const frontier=terrainPlacementScores(ridge,'rock',12);
   assert.ok(!frontier.some(p=>p.cell.r===3 && p.cell.c===3));
   assert.ok(frontier.some(p=>p.cell.r===3 && p.cell.c===0));
-  const corners=[{r:0,c:0,kind:'water' as const},{r:0,c:2,kind:'forest' as const},{r:2,c:0,kind:'mountain' as const},{r:2,c:2,kind:'forest' as const}];
+  const corners=[{r:0,c:0,kind:'water' as const},{r:0,c:2,kind:'forest' as const},{r:2,c:0,kind:'rock' as const},{r:2,c:2,kind:'forest' as const}];
   assert.ok(!terrainPlacementScores(corners,'water',12).some(p=>p.cell.r===1 && p.cell.c===1));
   assert.ok(terrainDistribution([...corners,{r:1,c:1,kind:'water'}]).violations.includes('terrain local density'));
-  const square=[{r:0,c:0,kind:'water' as const},{r:0,c:3,kind:'forest' as const},{r:3,c:0,kind:'mountain' as const},{r:3,c:3,kind:'water' as const},{r:0,c:1,kind:'forest' as const},{r:1,c:3,kind:'mountain' as const},{r:3,c:2,kind:'forest' as const},{r:2,c:0,kind:'water' as const}];
-  const dense=terrainDistribution([...square,{r:1,c:1,kind:'mountain'}]);
+  const square=[{r:0,c:0,kind:'water' as const},{r:0,c:3,kind:'forest' as const},{r:3,c:0,kind:'rock' as const},{r:3,c:3,kind:'water' as const},{r:0,c:1,kind:'forest' as const},{r:1,c:3,kind:'rock' as const},{r:3,c:2,kind:'forest' as const},{r:2,c:0,kind:'water' as const}];
+  const dense=terrainDistribution([...square,{r:1,c:1,kind:'rock'}]);
   assert.equal(dense.max3,4); assert.equal(dense.max4,9);
-  assert.ok(!terrainPlacementScores(square,'mountain',15).some(p=>p.cell.r===1 && p.cell.c===1));
-  const upper=[{r:0,c:0,kind:'water' as const},{r:0,c:3,kind:'forest' as const},{r:1,c:1,kind:'mountain' as const},{r:3,c:2,kind:'forest' as const},{r:0,c:5,kind:'water' as const},{r:1,c:7,kind:'mountain' as const},{r:3,c:6,kind:'forest' as const}];
+  assert.ok(!terrainPlacementScores(square,'rock',15).some(p=>p.cell.r===1 && p.cell.c===1));
+  const upper=[{r:0,c:0,kind:'water' as const},{r:0,c:3,kind:'forest' as const},{r:1,c:1,kind:'rock' as const},{r:3,c:2,kind:'forest' as const},{r:0,c:5,kind:'water' as const},{r:1,c:7,kind:'rock' as const},{r:3,c:6,kind:'forest' as const}];
   assert.ok(terrainDistribution(upper).violations.includes('terrain distribution'));
   assert.ok(terrainDistribution(Array.from({length:16},(_,i)=>({r:Math.floor(i/8),c:i%8,kind:'water' as const}))).violations.includes('terrain local density'));
   assert.ok(terrainDistribution(Array.from({length:7},(_,c)=>({r:0,c,kind:'water' as const}))).violations.includes('terrain component or kind count'));

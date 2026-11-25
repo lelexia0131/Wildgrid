@@ -1,70 +1,42 @@
 const { app, BrowserWindow } = require('electron');
 const assert = require('node:assert/strict');
-const { mkdirSync, readFileSync, writeFileSync } = require('node:fs');
+const { mkdirSync } = require('node:fs');
+const { fileURLToPath } = require('node:url');
 const path = require('node:path');
+const sharp = require('sharp');
 
 const root = path.resolve(__dirname, '../..');
-const output = path.join(root, '.desktop-smoke', 'hero-current');
-mkdirSync(output, { recursive: true });
+const profile = path.join(root, '.desktop-smoke', 'hero-current', 'profile-' + process.pid);
+mkdirSync(profile, { recursive: true });
+app.setPath('userData', profile);
 app.disableHardwareAcceleration();
-app.setPath('userData', path.join(output, `profile-${process.pid}`));
-const deadline = setTimeout(() => { console.error('River current check timed out.'); app.exit(1); }, 30000);
-const svgData = file => `data:image/svg+xml;base64,${readFileSync(path.join(root, file)).toString('base64')}`;
-
+const deadline = setTimeout(() => app.exit(1), 30000);
 app.whenReady().then(async () => {
-  const win = new BrowserWindow({ width: 1280, height: 900, show: false, webPreferences: { contextIsolation: true, backgroundThrottling: false, offscreen: true } });
-  const contents = win.webContents;
+  const win = new BrowserWindow({show:false, webPreferences:{offscreen:true,backgroundThrottling:false}});
+  const contents=win.webContents;
   try {
-    await win.loadFile(path.join(root, 'dist', 'index.html'));
-    const result = await contents.executeJavaScript(`(async () => {
-      const hero = document.querySelector('.hero-art');
-      const current = hero.querySelector('.hero-current');
-      const stage = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      stage.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-      stage.setAttribute('fill', 'none');
-      stage.setAttribute('width', '800'); stage.setAttribute('height', '620');
-      stage.append(...[...hero.children].filter(child => child.tagName === 'defs').map(child => child.cloneNode(true)));
-      const line = current.cloneNode(true); stage.append(line);
-      stage.querySelectorAll('image').forEach(image => image.setAttribute('href', ${JSON.stringify(svgData('src/assets/objects/camp.svg'))}));
-      const canvas = document.createElement('canvas'); canvas.width = 800; canvas.height = 620;
-      const ctx = canvas.getContext('2d');
-      const base = new Image(); base.src = ${JSON.stringify(svgData('src/assets/illustrations/hero-island.svg'))}; await base.decode();
-      ctx.drawImage(base, 0, 0);
-      const background = ctx.getImageData(0, 0, 800, 620).data;
-      let checked = 0, outside = 0;
-      const examples = [], frames = [];
-      // Sample a complete dash cycle, checking rendered pixels against the visible water.
-      for (let frame = 0; frame < 24; frame++) {
-        line.setAttribute('stroke-dashoffset', String(-47 * frame / 24));
-        const image = new Image();
-        image.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(stage));
-        await image.decode(); ctx.clearRect(0, 0, 800, 620); ctx.drawImage(image, 0, 0);
-        const pixels = ctx.getImageData(0, 0, 800, 620).data;
-        for (let i = 0; i < pixels.length; i += 4) {
-          if (pixels[i + 3] < 250) continue;
-          checked++;
-          const [r, g, b] = background.slice(i, i + 3);
-          if (!(g > r + 15 && b > r + 10 && g - b < 26)) {
-            outside++;
-            if (examples.length < 5) examples.push({frame, x: i / 4 % 800, y: Math.floor(i / 4 / 800), color: [r, g, b]});
-          }
-        }
-        if (frame % 6 === 0) {
-          ctx.clearRect(0, 0, 800, 620); ctx.drawImage(base, 0, 0); ctx.drawImage(image, 0, 0);
-          frames.push(canvas.toDataURL());
-        }
-      }
-      const animation = current.getAnimations()[0];
-      const animated = animation?.effect.getKeyframes().map(frame => frame.strokeDashoffset);
-      return {checked, outside, examples, frames, animated};
-    })()`);
-    result.frames.forEach((png, index) => writeFileSync(path.join(output, `river-${index}.png`), Buffer.from(png.split(',')[1], 'base64')));
-    assert.ok(result.checked > 3000, 'the current must remain visibly present throughout the cycle');
-    assert.equal(result.outside, 0, `current pixels must stay on visible water: ${JSON.stringify(result.examples)}`);
-    assert.ok(result.animated?.length >= 2 && new Set(result.animated).size > 1, 'the current must keep flowing');
-    console.log(`River current PASS: ${result.checked} rendered pixels across 24 animation phases stay on visible water, clear of tents and land.`);
-    clearTimeout(deadline); app.exit(0);
-  } catch (error) {
-    console.error(error); clearTimeout(deadline); app.exit(1);
-  }
+    await win.loadFile(path.join(root,'dist/index.html'));
+    contents.debugger.attach('1.3');
+    await contents.debugger.sendCommand('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
+    const url=await contents.executeJavaScript(`new Promise(resolve=>{
+      function ready(){const hero=document.querySelector('img.hero-art');
+        if(hero?.complete && hero.currentSrc.includes('home-motion-'))resolve(hero.currentSrc);
+        else requestAnimationFrame(ready);
+      }ready();
+    })`);
+    const file=fileURLToPath(url),meta=await sharp(file,{animated:true}).metadata();
+    assert.equal(meta.pages,48);assert.equal(meta.loop,0);assert.ok(meta.delay.every(ms=>ms>0));
+    const samples=[];
+    for(let page=0;page<meta.pages;page++){
+      samples.push(await sharp(file,{page,pages:1}).resize(180).flatten({background:'#f8f3df'}).raw().toBuffer());
+    }
+    const difference=(a,b)=>a.reduce((sum,v,i)=>sum+Math.abs(v-b[i]),0)/a.length;
+    const steps=samples.map((pixels,i)=>difference(pixels,samples[(i+1)%samples.length]));
+    assert.ok(steps.every(delta=>delta>0),'the cover changes between every two frames');
+    const maxStep=Math.max(...steps.slice(0,-1));
+    assert.ok(steps.at(-1)<maxStep*1.2,'the last frame joins the first without a jump');
+    assert.ok(difference(samples[12],samples[36])>maxStep*2,'the orbit has visible depth');
+    console.log('PASS: all 48 packaged cover frames animate and the orbit loops continuously.');
+    clearTimeout(deadline);app.exit(0);
+  } catch(error){console.error(error);clearTimeout(deadline);app.exit(1);}
 });

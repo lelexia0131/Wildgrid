@@ -6,7 +6,8 @@ const path = require('node:path');
 // Load the packaged main process and resources without showing a window or
 // modifying the player's real save. This is a one-shot desktop startup check.
 const root = path.resolve(__dirname, '../..');
-const packaged = path.join(root, 'release/win-unpacked/resources/app.asar');
+const output = process.env.WILDGRID_WINDOWS_OUTPUT || path.join(root, 'release', 'camp-world');
+const packaged = path.join(output, 'win-unpacked/resources/app.asar');
 const userData = path.join(root, '.desktop-smoke', `startup-${process.pid}`);
 mkdirSync(userData, { recursive: true });
 app.setPath('userData', userData);
@@ -23,7 +24,8 @@ app.on('web-contents-created', (_event, contents) => {
   contents.once('did-finish-load', async () => {
     try {
       assert.equal(existsSync(path.join(packaged, 'node_modules')), false, 'Desktop package must not include bundled web dependencies or Android build files');
-      assert.equal(JSON.parse(readFileSync(path.join(packaged, 'package.json'), 'utf8')).version, '1.1.0');
+      assert.equal(JSON.parse(readFileSync(path.join(packaged, 'package.json'), 'utf8')).version,
+        JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).version);
       const state = await contents.executeJavaScript(`new Promise(resolve => requestAnimationFrame(() => {
         const art = document.querySelector('.menu-art')?.getBoundingClientRect();
         const buttons = document.querySelector('.menu-buttons')?.getBoundingClientRect();
@@ -47,7 +49,42 @@ app.on('web-contents-created', (_event, contents) => {
       assert.equal(await contents.executeJavaScript(`document.querySelector('dialog').open`), false);
       assert.equal(failures.length, 0, JSON.stringify(failures));
       const screenshot = await contents.capturePage();
-      writeFileSync(path.join(root, 'release/menu-preview.png'), screenshot.toPNG());
+      writeFileSync(path.join(output, 'menu-preview.png'), screenshot.toPNG());
+      assert.equal(await contents.executeJavaScript("document.querySelector('.header-actions .board-mode')"), null);
+      assert.ok(await contents.executeJavaScript("document.querySelector('img.hero-art').decode().then(()=>document.querySelector('.hero-art').naturalWidth>0)"));
+      await click('.menu-adventure');await click('.mode-sandbox');await click('.sandbox-choice');await click('.sandbox-size-card');
+      const modelState=await contents.executeJavaScript(`new Promise((resolve,reject)=>{
+        const start=performance.now();function poll(){
+          const canvas=document.querySelector('.camp-canvas[data-ready="true"]');
+          if(canvas)return resolve({draws:Number(canvas.dataset.draws),triangles:Number(canvas.dataset.triangles),tiles:document.querySelectorAll('.board .tile').length});
+          if(document.querySelector('.render-status')||performance.now()-start>9000)return reject(new Error('Packaged WebGL board failed to render'));
+          requestAnimationFrame(poll);
+        }poll();
+      })`);
+      assert.ok(modelState.draws>0&&modelState.triangles>0&&modelState.tiles>0);
+      BrowserWindow.fromWebContents(contents).setContentSize(960,540);
+      contents.debugger.attach('1.3');
+      const at=await contents.executeJavaScript(`new Promise(resolve=>requestAnimationFrame(()=>{
+        const r=document.querySelector('.facility-card').getBoundingClientRect();resolve({x:r.x+r.width/2,y:r.y+r.height/2});
+      }))`);
+      await contents.debugger.sendCommand('Input.dispatchMouseEvent',{type:'mouseMoved',...at});
+      await contents.debugger.sendCommand('Input.dispatchMouseEvent',{type:'mousePressed',button:'left',clickCount:1,...at});
+      await new Promise(resolve=>setTimeout(resolve,850));
+      const tray=await contents.executeJavaScript(`(()=>{const list=document.querySelector('.facility-list');return {
+        active:!!list.querySelector('button:active'),overflows:list.scrollHeight>list.clientHeight,
+        bar:getComputedStyle(list).scrollbarWidth,track:getComputedStyle(list,'::-webkit-scrollbar').display
+      }})()`);
+      await contents.debugger.sendCommand('Input.dispatchMouseEvent',{type:'mouseReleased',button:'left',clickCount:1,...at});
+      assert.deepEqual(tray,{active:true,overflows:true,bar:'none',track:'none'});
+      await contents.debugger.sendCommand('Input.dispatchMouseEvent',{type:'mouseWheel',deltaX:0,deltaY:180,...at});
+      await contents.executeJavaScript(`new Promise((resolve,reject)=>{const start=performance.now();function check(){
+        if(document.querySelector('.facility-list').scrollTop>0)return resolve(true);
+        if(performance.now()-start>1500)return reject(new Error('Packaged tray did not scroll'));requestAnimationFrame(check);
+      }check()})`);
+      contents.debugger.detach();
+      assert.deepEqual(failures,[]);
+      console.log('Packaged long press and wheel:',tray);
+      console.log('Packaged 3D board:',modelState);
       console.log('Packaged desktop startup passed:', JSON.stringify(state));
       clearTimeout(deadline); app.exit(0);
     } catch (error) { console.error(error); clearTimeout(deadline); app.exit(1); }

@@ -66,7 +66,8 @@ try {
   for (const test of ['ui-smoke', 'continuous-placement-ui', 'sandbox-sky-ui']) await stage('steam-' + test, [tool('electron', 'cli.js'), `tests/ui/${test}.cjs`]);
   await stage('package-steam', [script('package-game.mjs')]);
   await stage('verify-candidate', [script('verify-content.mjs'), '--candidate']);
-  const desktopResources = path.join(source, 'release/win-unpacked/resources');
+  env.WILDGRID_WINDOWS_OUTPUT = path.join(source, 'release');
+  const desktopResources = path.join(env.WILDGRID_WINDOWS_OUTPUT, 'win-unpacked/resources');
   mkdirSync(desktopResources, { recursive: true });
   copyFileSync(path.join(candidate, 'resources/app.asar'), path.join(desktopResources, 'app.asar'));
   await stage('steam-desktop-smoke', [tool('electron', 'cli.js'), 'tests/ui/desktop-smoke.cjs']);

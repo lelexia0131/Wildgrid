@@ -24,6 +24,8 @@ app.whenReady().then(async () => {
       await wc.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
       await wc.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     } else await js(`document.querySelector(${JSON.stringify(selector)}).click()`);
+    if (['.sandbox-size-card:first-child','[data-theme="grass"]','[data-theme="sky"]','.local-map-enter','.local-map-edit','.sandbox-import-start','.mode-adventure'].includes(selector))
+      await js(`document.querySelector('[data-renderer="3d"] .board-mode')?.click()`);
     await wait(90);
   }
   async function until(expression) {
@@ -56,7 +58,7 @@ app.whenReady().then(async () => {
       win.setContentSize(viewport.width, viewport.height);
       await wc.debugger.sendCommand('Emulation.setDeviceMetricsOverride', { ...viewport, deviceScaleFactor: 1, mobile: touch });
       await wc.debugger.sendCommand('Emulation.setTouchEmulationEnabled', { enabled: touch });
-      await js(`localStorage.clear(); localStorage.setItem('wildgrid-tutorial-v1','{"version":1,"enabled":false}'); localStorage.setItem('wildgrid-save-v1','{"version":1,"settings":{"muted":true}}')`);
+      await js(`localStorage.clear(); localStorage.setItem('wildgrid-display-v1','{"mode":"2d","quality":"medium"}'); localStorage.setItem('wildgrid-tutorial-v1','{"version":1,"enabled":false}'); localStorage.setItem('wildgrid-save-v1','{"version":1,"settings":{"muted":true}}')`);
       await win.loadFile(path.join(root, 'dist/index.html')); await wait(150);
       await js(`Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async value=>{window.__exported=value}}});void 0`);
       await start();

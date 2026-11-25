@@ -1,4 +1,4 @@
-export type TerrainKind = 'water' | 'forest' | 'mountain';
+export type TerrainKind = 'water' | 'forest' | 'rock';
 export type EditorTerrainKind = TerrainKind | 'anchor' | 'cloud';
 export type GameMode = 'adventure' | 'sandbox-editor' | 'sandbox-play' | 'survival';
 export type FacilityKind = 'camp' | 'fire' | 'tower' | 'picnic' | 'cabin' | 'foodTruck' | 'powerTower' | 'pool' | 'balloon' | 'airship' | 'kite';

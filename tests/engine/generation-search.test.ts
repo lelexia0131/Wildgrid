@@ -53,7 +53,7 @@ test('joint packing honors an eight-cell clue instead of imposing a hidden seven
 });
 
 test('cached terrain influence remains equal to gameplay after terrain type swaps and relocations',()=>{
-  const original:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces:facilityLibrary,rows:Array(8).fill(5),cols:Array(8).fill(5),terrain:[{r:1,c:1,kind:'water'},{r:3,c:2,kind:'forest'},{r:4,c:4,kind:'mountain'}]};
+  const original:Level={id:0,name:'',chapter:'',tip:'',size:8,pieces:facilityLibrary,rows:Array(8).fill(5),cols:Array(8).fill(5),terrain:[{r:1,c:1,kind:'water'},{r:3,c:2,kind:'forest'},{r:4,c:4,kind:'rock'}]};
   const variants=[original,{...original,terrain:original.terrain.map(t=>({...t,kind:t.kind==='water'?'forest' as const:t.kind==='forest'?'water' as const:t.kind}))},
     {...original,terrain:original.terrain.map(t=>t.kind==='water'?{...t,r:6,c:6}:t)}];
   for(const level of variants) for(const piece of level.pieces) {

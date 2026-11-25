@@ -41,9 +41,10 @@ test('Day 1 has one fixed sequence with a welcome, wrong/right examples and a ve
   let state = freshTutorial();
   const lesson = resolveTutorial(state, context)!;
   assert.equal(lesson.id, 'day:1');
-  assert.deepEqual(lesson.steps.map(s => s.id), ['welcome', 'board', 'clues', 'camp', 'wrong', 'right', 'select', 'place', 'complete']);
-  assert.equal(lesson.steps[4].example, 'wrong'); assert.equal(lesson.steps[5].example, 'right');
-  const place = lesson.steps[7];
+  assert.deepEqual(lesson.steps.map(s => s.id), ['welcome', 'board', 'viewsDemo', 'viewsTry', 'cameraHelp', 'clues', 'camp', 'wrong', 'right', 'select', 'place', 'complete']);
+  assert.deepEqual(lesson.steps[3].actionCondition,{type:'switchView'});
+  assert.equal(lesson.steps[7].example, 'wrong'); assert.equal(lesson.steps[8].example, 'right');
+  const place = lesson.steps[10];
   assert.deepEqual(place.target, { type: 'cell', cell: { r: 2, c: 3 } });
   assert.equal(matchesAction(place.actionCondition!, { type: 'place', pieceId: 'camp-1', r: 0, c: 0, rotation: 0 }), false);
   assert.equal(matchesAction(place.actionCondition!, { type: 'place', pieceId: 'camp-1', r: 2, c: 3, rotation: 0 }), true);
@@ -122,7 +123,7 @@ test('English covers every facility rule and level hint; early guidance introduc
     for (const text of [facility.name, ...facility.tips, facility.require, facility.forbid, facility.why, ...facility.extra?.map(e => e.why) || []]) assert.equal(/\p{Script=Han}/u.test(localize(text)), false, text);
     assert.ok(DICTIONARIES.zh.facilities[facility.kind].text.includes(facility.name));
   }
-  assert.equal(/森林|山地/.test(DICTIONARIES.zh.basics.board.text), false);
+  assert.equal(/森林|岩石/.test(DICTIONARIES.zh.basics.board.text), false);
   assert.equal(/餐车|电塔/.test(DICTIONARIES.zh.facilities.camp.text), false);
   assert.equal(/电塔/.test(DICTIONARIES.zh.facilities.fire.text), false);
   assert.equal(/Ctrl|Cmd/.test(DICTIONARIES.zh.basics.undo.text), false);

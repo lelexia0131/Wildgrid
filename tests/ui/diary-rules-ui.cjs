@@ -66,7 +66,7 @@ app.whenReady().then(async () => {
       const select = `.facility-card[data-facility="${selected.kind}"][data-shape="${selected.shape}"]`;
       await click(select);
       assert.ok(await js(`document.querySelectorAll('[data-rule-hint]').length > 0`));
-      assert.equal(await js(`document.querySelectorAll('.terrain-water[data-rule-hint], .terrain-forest[data-rule-hint], .terrain-mountain[data-rule-hint], .placed[data-rule-hint]').length`), 0);
+      assert.equal(await js(`document.querySelectorAll('.terrain-water[data-rule-hint], .terrain-forest[data-rule-hint], .terrain-rock[data-rule-hint], .placed[data-rule-hint]').length`), 0);
       await snapshot(`rules-${viewport.width}`);
       await click('.rules-toggle');
       assert.equal(await js(`document.querySelectorAll('[data-rule-hint], .rule-tint').length`), 0);

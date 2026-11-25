@@ -10,6 +10,10 @@
 
 ## 三平台边界
 
+- 普通 Windows 的唯一运行目录是 `release/camp-world/win-unpacked/`，使用 `npm run package:win` 原地更新。占用时关闭游戏后重试。独立安装包统一归档到 `release/installers/`，按平台和版本保留，同版只更新运行目录，升版才新增安装包。Steam 发布证据、回滚包和安装恢复备份按原规则保留。
+
+- Android 自 2026-11-25 起暂停同步，直到用户明确恢复。后续日常更新验证 Web 和普通 Windows。保留现有 `android/` 工程及 APK，跳过原生目录写入、Capacitor copy/sync、Gradle 打包、APK 替换和包含这些步骤的组合命令。
+
 - `D:\Wildgrid` 根 Git 仓库是唯一可信源码；日常修改正式 `src/`、原生适配与受版本管理的脚本。
 - Windows、Android、Steam 共用核心游戏逻辑、关卡、生成器、沙盒、荒野求生、存档和语言。保留 Android 触摸/安全区和普通 Windows 窗口行为。
 - 不直接编辑 `steam/work/`、`steam/runs/` 内的构建副本，不建立长期 Steam 源码分支。
@@ -27,6 +31,7 @@
 
 ## 文件与 Git
 
+- 三维运行资源统一放在 `src/assets/3d/`，建模工具放在 `scripts/art-3d/`，参考资料与实拍验收放在 `docs/3d/`。沿用这些目录，保持项目根目录简洁。
 - 先检查 Git 工作区和暂存区，不覆盖、取消暂存或清除用户已有改动。没有明确授权，不 commit、不 push。
 - 清理前列出精确候选、用途、替代项和引用，先保存必要历史，再删除确认冗余的文件。禁止无范围限制的 `git clean -fdx`、reset/checkout 丢改动或递归删除。
 - 保留 `.git`、正式源码/资源/测试/配置、SDK/SteamCMD、当前与稳定回滚产物及必要日志/来源记录；不确定用途时保留并列入待确认清单。

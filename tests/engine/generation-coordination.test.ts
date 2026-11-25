@@ -204,7 +204,7 @@ test('a second camp cannot let refinement fill the original dining lane',()=>{
   const level:Level={id:0,name:'',chapter:'',tip:'',size:8,
     pieces:[{id:'a',kind:'camp',shape:'single'},{id:'table',kind:'picnic',shape:'domino'},{id:'truck',kind:'foodTruck',shape:'single'},
       {id:'b',kind:'camp',shape:'single'},{id:'tower',kind:'tower',shape:'single'}],
-    terrain:[{r:2,c:1,kind:'water'},{r:0,c:3,kind:'water'},{r:2,c:2,kind:'mountain'}],rows:Array(8).fill(6),cols:Array(8).fill(6)};
+    terrain:[{r:2,c:1,kind:'water'},{r:0,c:3,kind:'water'},{r:2,c:2,kind:'rock'}],rows:Array(8).fill(6),cols:Array(8).fill(6)};
   const placements=[{id:'a',r:3,c:1,rotation:0},{id:'table',r:4,c:1,rotation:0},{id:'truck',r:3,c:3,rotation:0},
     {id:'b',r:1,c:3,rotation:0},{id:'tower',r:1,c:2,rotation:0}];
   const blocked=placements.map(p=>p.id==='tower'?{...p,r:3,c:2}:p);

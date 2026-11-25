@@ -7,7 +7,7 @@ import { terrainNames } from '../../engine';
 import type { TutorialEvent } from '../tutorial/tutorialLessons';
 
 type Options = {
-  session: GameSession; continuousPlacement: boolean;
+  session: GameSession; continuousPlacement: boolean; showFacilityNames:boolean;
   layer?: BoardLayer;
   terrainBrush: EditorTerrainKind | null; clearTerrainBrush: () => void;
   dispatch: (command: Parameters<typeof previewCommand>[1]) => ReturnType<typeof previewCommand>;
@@ -16,7 +16,7 @@ type Options = {
   onAction?: (event: TutorialEvent) => void;
   onReject: (cells: Cell[]) => void;
 };
-export function useGamePlacement({ session, continuousPlacement, layer = 'ground', terrainBrush, clearTerrainBrush, dispatch, setNotice, sound, onAction, onReject }: Options) {
+export function useGamePlacement({ session, continuousPlacement, showFacilityNames, layer = 'ground', terrainBrush, clearTerrainBrush, dispatch, setNotice, sound, onAction, onReject }: Options) {
   const { mode } = session;
   const { level, placements, result } = useMemo(() => getState(session), [session]);
   const [selected, setSelected] = useState<Piece | null>(null);
@@ -68,8 +68,8 @@ export function useGamePlacement({ session, continuousPlacement, layer = 'ground
       if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
       setNotice(''); sound('pickup'); return;
     }
-    if (!selected && fixed) { setNotice(layer === 'sky' ? '低云只阻挡天空，不计占格；气象风筝还需避开周围八格。' : '系留桩不可移动，不计占格；气球的地面投影需上下左右邻桩。'); sound('click'); return; }
-    if (!selected) { setNotice(terrain ? terrainNames[terrain.kind] : '先从右侧选择一个设施'); sound(terrain ? 'click' : 'error'); return; }
+    if (!selected && fixed) { setNotice(!showFacilityNames ? '' : layer === 'sky' ? '低云只阻挡天空，不计占格；气象风筝还需避开周围八格。' : '系留桩不可移动，不计占格；气球的地面投影需上下左右邻桩。'); sound('click'); return; }
+    if (!selected) { setNotice(terrain ? (showFacilityNames ? terrainNames[terrain.kind] : '') : '先从右侧选择一个设施'); sound(terrain ? 'click' : 'error'); return; }
     const origin = placementOrigin(selected.shape, rotation, cell);
     const outcome = dispatch({ type: 'place', piece: selected, cell: origin, rotation });
     if (outcome.error) { onReject(outcome.cells); setNotice(outcome.error.message); sound('error'); return; }
@@ -84,6 +84,8 @@ export function useGamePlacement({ session, continuousPlacement, layer = 'ground
   }
   const ghostOrigin = selected && hover ? placementOrigin(selected.shape, rotation, hover) : null;
   const ghost = selected && ghostOrigin ? occupied(selected, { ...ghostOrigin, id: selected.id, rotation }) : [];
-  const ghostBlocked = selected && ghostOrigin ? Boolean(previewCommand(session, { type: 'place', piece: selected, cell: ghostOrigin, rotation }).error) : false;
-  return { selected, setSelected, rotations, setRotations, hover, setHover, rotation, result, choose, rotatePlaced, clickCell, ghost, ghostBlocked, resetPieceIds };
+  const preview = selected && ghostOrigin ? previewCommand(session, { type: 'place', piece: selected, cell: ghostOrigin, rotation }) : null;
+  const ghostBlocked = Boolean(preview?.error);
+  const ghostStatus = selected && preview && !ghostBlocked ? getState(preview.session).result.issues[selected.id]?.status : undefined;
+  return { selected, setSelected, rotations, setRotations, hover, setHover, rotation, result, choose, rotatePlaced, clickCell, ghost, ghostBlocked, ghostStatus, resetPieceIds };
 }

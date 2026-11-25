@@ -2,17 +2,20 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import { Check, CloudSun, Compass, Layers2, Leaf, MousePointer2, Sprout } from 'lucide-react';
 import { evaluate, facilityNames, terrainNames, key, occupied, facilityLayer, layerClues } from '../../engine';
-import type { BoardLayer, Cell, GameMode, Level, Placement, Status } from '../../engine';
+import type { BoardLayer, Cell, GameMode, Level, Piece, Placement, Status } from '../../engine';
+import { BoardCanvas } from '../board3d/BoardCanvas';
+import { useDisplay } from '../board3d/display';
 import { useI18n } from '../../localization/LanguageContext';
-import { Art, FacilityArt, FootprintSurface } from './Art';
+import { Art, FacilityArt, FootprintSurface, PlanArtwork } from './Art';
 import { HintBoardOverlay } from './HintBoardOverlay';
 
 const names = { ...facilityNames, ...terrainNames, anchor: '系留桩', cloud: '低云' };
 type Props = {
   boardRef: RefObject<HTMLElement | null>; mode: GameMode; level: Level;
   placements: readonly Placement[]; result: ReturnType<typeof evaluate>;
-  celebration: 'board' | 'dialog' | null; showFacilityNames: boolean;
+  onViewSwitch?: (mode:'2d'|'3d')=>void; finished?: boolean; celebration: 'board' | 'dialog' | null; showFacilityNames: boolean;
   hover: Cell | null; ghost: readonly Cell[]; ghostBlocked: boolean;
+  selected?: Piece | null; rotation?: number; ghostStatus?: Status;
   layer?: BoardLayer; onLayer?: (layer: BoardLayer) => void;
   ruleHints?: Record<string, Status>; setHover: (cell: Cell | null) => void;
   hintRegion?: readonly Cell[]; hintPlacement?: Placement;
@@ -31,26 +34,36 @@ function ClueCounter({ target, used, column = false }: { target: number; used: n
     previous.current = used;
     return () => clueRef.current?.getAnimations().forEach(animation => animation.cancel());
   }, [target, used]);
-  return <div ref={clueRef} className={`clue ${column ? 'column-clue' : ''} ${over ? 'over' : ''} ${used === target ? 'complete' : ''}`} aria-label={localize(t("需占 {0} 格，已占 {1} 格{2}", target, used, over ? '，超出提示' : ''))} title={localize(t("需要 {0} 格 · 已占 {1} 格", target, used))}>
+  return <div ref={clueRef} data-remaining={over ? '+' + (used - target) : left || '✓'} className={`clue ${column ? 'column-clue' : ''} ${over ? 'over' : ''} ${used === target ? 'complete' : ''}`} aria-label={localize(t("需占 {0} 格，已占 {1} 格{2}", target, used, over ? '，超出提示' : ''))} title={localize(t("需要 {0} 格 · 已占 {1} 格", target, used))}>
     {over ? <span className="overflow-count">+{used - target}</span> : left === 0 ? <Check size={13} strokeWidth={2.5} /> : Array.from({ length: left }, (_, i) => <i key={i} />)}
   </div>;
 }
 
-export function GameBoard({ boardRef, mode, level, placements, result, celebration, showFacilityNames, hover, ghost, ghostBlocked, ruleHints, hintRegion = [], hintPlacement, layer = 'ground', onLayer, setHover, clickCell, rotatePlaced }: Props) {
+export function GameBoard({ boardRef, mode, level, placements, result, celebration, finished, onViewSwitch, showFacilityNames, hover, ghost, ghostBlocked, ghostStatus, selected, rotation, ruleHints, hintRegion = [], hintPlacement, layer = 'ground', onLayer, setHover, clickCell, rotatePlaced }: Props) {
   const { t, localize } = useI18n();
+  const display = useDisplay(), is3d = display.mode === '3d';
+  const invalidPreview = ghostBlocked || (is3d && ghostStatus === 'INVALID');
   const [showProjection, setShowProjection] = useState(true);
+  const [showClues, setShowClues] = useState(true);
   const clues = layerClues(level, layer), usedRows = layer === 'sky' ? result.skyRows! : result.rows, usedCols = layer === 'sky' ? result.skyCols! : result.cols;
   const visible = placements.filter(at => facilityLayer(level.pieces.find(p => p.id === at.id)!.kind) === layer);
   const other = placements.filter(at => facilityLayer(level.pieces.find(p => p.id === at.id)!.kind) !== layer);
-  return <section ref={boardRef} data-layer={layer} className={`board-section ${celebration ? 'celebrating' : ''} ${mode === 'survival' ? 'reward-board' : ''} ${level.sky ? 'layered-board' : ''}`} aria-label={t("营地棋盘")}><div className="board-topline"><span><Compass size={16}/>  {t("营地规划图")}</span>{level.sky && <div className="board-view-controls"><div className="board-layer-switch" role="group" aria-label={t('切换棋盘')}>
+  const inspect = is3d && showFacilityNames && hover ? hover : null;
+  const inspectedAt = inspect && visible.find(at=>occupied(level.pieces.find(p=>p.id===at.id)!,at).some(p=>key(p)===key(inspect)));
+  const inspectedFixed=inspect && (layer==='sky'?level.sky?.clouds:level.sky?.anchors)?.some(p=>key(p)===key(inspect));
+  const inspectedKind=inspectedAt?level.pieces.find(p=>p.id===inspectedAt.id)!.kind:inspectedFixed?(layer==='sky'?'cloud':'anchor'):
+    inspect && layer==='ground'?level.terrain.find(p=>key(p)===key(inspect))?.kind:undefined;
+  return <PlanArtwork.Provider value={!is3d}><section ref={boardRef} data-layer={layer} data-renderer={display.mode} className={`board-section ${celebration ? 'celebrating' : ''} ${mode === 'survival' ? 'reward-board' : ''} ${level.sky ? 'layered-board' : ''}`} aria-label={t("营地棋盘")}><div className="board-topline"><span><Compass size={16}/>  {t("营地规划图")}</span><button type="button" className="board-mode" data-tutorial="board-view" title={t(is3d ? '平面规划' : '实景营地')} aria-label={t(is3d ? '平面规划' : '实景营地')} onClick={()=>{const next=is3d?'2d':'3d';setHover(null);display.change({mode:next});onViewSwitch?.(next);}}>{t(is3d?'平面规划':'实景营地')}</button>{level.sky && <div className="board-view-controls"><div className="board-layer-switch" role="group" aria-label={t('切换棋盘')}>
     {(['ground', 'sky'] as const).map(view => {
       const pieces = level.pieces.filter(p => facilityLayer(p.kind) === view);
       const invalid = pieces.some(p => result.issues[p.id]?.status === 'INVALID');
       return <button key={view} type="button" data-layer-button={view} aria-label={t(view === 'ground' ? '地面' : '天空')} aria-pressed={layer === view} className={layer === view ? 'active' : ''} onClick={() => onLayer?.(view)}>{view === 'ground' ? <Sprout size={13}/> : <CloudSun size={13}/>}<span>{t(view === 'ground' ? '地面' : '天空')}</span>{invalid && <i className="layer-warning" aria-hidden="true">!</i>}</button>;
     })}</div><button type="button" className="projection-toggle" aria-label={t('投影')} title={t('投影')} aria-pressed={showProjection} onClick={() => setShowProjection(v => !v)}><Layers2 size={16}/></button></div>}</div>
         <div className="board-with-clues" key={`${mode}-${level.id}`} style={{ '--size': level.size } as React.CSSProperties}>
-          <div className="clue-corner"><Leaf size={17}/></div><div className="column-clues">{clues.cols.map((target, i) => <ClueCounter key={i} target={target} used={usedCols[i]} column/>)}</div>
-          <div className="row-clues">{clues.rows.map((target, i) => <ClueCounter key={i} target={target} used={usedRows[i]}/>)}</div>
+          {is3d && <BoardCanvas key={display.quality} showClues={showClues} onToggleClues={()=>setShowClues(value=>!value)} view={{level,layer,placements,finished,selected,rotation,hover,blocked:invalidPreview,obstructed:ghostBlocked,ruleHints,issues:result.issues,hintRegion,hint:hintPlacement}}/>}
+          {inspect && inspectedKind && <span className="world-cell-label" role="tooltip"><Art kind={inspectedKind}/>{localize(names[inspectedKind])}</span>}
+          <div className="clue-corner"><Leaf size={17}/></div><div className="column-clues" hidden={is3d && !showClues}>{clues.cols.map((target, i) => <ClueCounter key={i} target={target} used={usedCols[i]} column/>)}</div>
+          <div className="row-clues" hidden={is3d && !showClues}>{clues.rows.map((target, i) => <ClueCounter key={i} target={target} used={usedRows[i]}/>)}</div>
           <div className="board" data-layer={layer} role="group" aria-label={t("{0} 行 {1} 列棋盘", level.size, level.size)} onPointerLeave={() => setHover(null)}>{Array.from({ length: level.size * level.size }, (_, index) => {
             const cell = { r: Math.floor(index / level.size), c: index % level.size };
             const fixed = (layer === 'sky' ? level.sky?.clouds : level.sky?.anchors)?.find(t => key(t) === key(cell));
@@ -68,12 +81,13 @@ export function GameBoard({ boardRef, mode, level, placements, result, celebrati
             const isGhost = ghost.some(p => key(p) === key(cell));
             const hasNeighbor = (dr: number, dc: number) => footprint.some(p => p.r === cell.r + dr && p.c === cell.c + dc);
             const label = terrain ? names[terrain.kind] : piece ? `${names[piece.kind]}${issue?.reasons.length ? `：${issue.reasons.join('；')}` : ''}` : '空地';
-            return <button key={index} data-sound="handled" data-cell={`${cell.r},${cell.c}`} data-piece-id={at?.id} data-rule-hint={ruleHints?.[key(cell)]?.toLowerCase()} className={`tile ${terrain ? `terrain-${terrain.kind}` : ''} ${piece ? `placed placed-${piece.kind} ${piece.shape !== 'single' ? 'placed-multi' : ''}` : ''} ${issue?.status === 'INVALID' ? 'invalid' : ''} ${issue?.status === 'INCOMPLETE' ? 'pending' : ''} ${isGhost ? `ghost ${ghostBlocked ? 'blocked' : ''}` : ''} ${hasNeighbor(-1, 0) ? 'join-top' : ''} ${hasNeighbor(1, 0) ? 'join-bottom' : ''} ${hasNeighbor(0, -1) ? 'join-left' : ''} ${hasNeighbor(0, 1) ? 'join-right' : ''}`} aria-label={t("第 {0} 行第 {1} 列，{2}", cell.r + 1, cell.c + 1, label)} onPointerEnter={e => { if (e.pointerType !== 'touch') setHover(cell); }} onFocus={() => setHover(cell)} onClick={() => clickCell(cell)} onContextMenu={event => { if (at && piece && piece.shape !== 'single') { event.preventDefault(); rotatePlaced(at, cell); } }}>
-              {terrain ? <><Art kind={terrain.kind}/><span className={`terrain-label label-${terrain.kind}`} role="tooltip"><Art kind={terrain.kind}/>{localize(names[terrain.kind])}</span></> : piece ? <>{piece.shape === 'single' && <span className="single-facility-art" data-art-id={at!.id} key={at!.id}><Art kind={piece.kind}/></span>} {showFacilityNames && <span className={`terrain-label label-${piece.kind}`} role="tooltip"><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at!.rotation}/>{localize(names[piece.kind])}</span>}</> : <span className={layer === 'sky' ? `sky-wisp sky-wisp-${index % 5}` : `grass grass-${index % 5}`} aria-hidden="true"/>}
+            return <button key={index} data-sound="handled" data-cell={`${cell.r},${cell.c}`} data-piece-id={at?.id} data-rule-hint={ruleHints?.[key(cell)]?.toLowerCase()} className={`tile ${terrain ? `terrain-${terrain.kind}` : ''} ${piece ? `placed placed-${piece.kind} ${piece.shape !== 'single' ? 'placed-multi' : ''}` : ''} ${issue?.status === 'INVALID' ? 'invalid' : ''} ${issue?.status === 'INCOMPLETE' ? 'pending' : ''} ${isGhost ? `ghost ${invalidPreview ? 'blocked' : ''}` : ''} ${hasNeighbor(-1, 0) ? 'join-top' : ''} ${hasNeighbor(1, 0) ? 'join-bottom' : ''} ${hasNeighbor(0, -1) ? 'join-left' : ''} ${hasNeighbor(0, 1) ? 'join-right' : ''}`} aria-label={t("第 {0} 行第 {1} 列，{2}", cell.r + 1, cell.c + 1, label)} onPointerEnter={e => { if (e.pointerType !== 'touch') setHover(cell); }} onFocus={() => setHover(cell)} onClick={() => clickCell(cell)} onContextMenu={event => { if (at && piece && piece.shape !== 'single') { event.preventDefault(); rotatePlaced(at, cell); } }}>
+              {terrain ? <><Art kind={terrain.kind}/>{showFacilityNames && !is3d && <span className={`terrain-label label-${terrain.kind}`} role="tooltip"><Art kind={terrain.kind}/>{localize(names[terrain.kind])}</span>}</> : piece ? <>{piece.shape === 'single' && <span className="single-facility-art" data-art-id={at!.id} key={at!.id}><Art kind={piece.kind}/></span>} {showFacilityNames && !is3d && <span className={`terrain-label label-${piece.kind}`} role="tooltip"><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at!.rotation}/>{localize(names[piece.kind])}</span>}</> : <span className={layer === 'sky' ? `sky-wisp sky-wisp-${index % 5}` : `grass grass-${index % 5}`} aria-hidden="true"/>}
               {showProjection && projection && <span className="cell-projection" data-projection={projection} aria-label={localize(names[projection])}><Art kind={projection}/></span>}
               {issue?.status === 'INVALID' && isAnchor && <span className="error-mark">!</span>}
               {issue?.status === 'INCOMPLETE' && isAnchor && <span className="pending-mark">·</span>}
               {isGhost && !terrain && !piece && <span className="ghost-dot"/>}
+              {is3d && isGhost && hover?.r===cell.r && hover.c===cell.c && <span className={'model-preview-mark '+(invalidPreview?'denied':ghostStatus==='INCOMPLETE'?'waiting':'allowed')} aria-hidden="true">{invalidPreview?'×':ghostStatus==='INCOMPLETE'?'·':'✓'}</span>}
               {ruleHints?.[key(cell)] && <span className="rule-tint" aria-hidden="true"/>}
             </button>;
           })}<div className="facility-art-layer">{visible.map(at => {
@@ -90,5 +104,6 @@ export function GameBoard({ boardRef, mode, level, placements, result, celebrati
           </div>
         </div>
         <div className="board-legend"><span><i className="yellow-dash"/> {localize(mode === 'sandbox-editor' ? t("自动生成行列目标") : t("待占格数"))}</span><span><span className="legend-dot"/> {localize(mode === 'sandbox-editor' ? t("地形画笔可修改") : t("固定地形不可移动"))}</span><span><MousePointer2 size={13}/>  {t("点击放置 / 拿起")}</span></div>
-      </section>;
+        {display.fallback && <p className="render-status" role="status">{t('已打开平面规划，可在视图设置中重试营地实景。')}</p>}
+      </section></PlanArtwork.Provider>;
 }

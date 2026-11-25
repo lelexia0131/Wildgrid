@@ -103,6 +103,8 @@ flowchart TD
 
 ## 核心模块职责表
 
+实时营地的表现代码集中在 `src/ui/board3d/`。`GameBoard` 把只读关卡、对局反馈和选中的设施传给渲染器，镜头把原有交互格投影到世界坐标。两种视图共享 `useGamePlacement` 和 Session。模型、材质及派生图标在 `src/assets/3d/`，建模与离屏渲染在 `scripts/art-3d/`。改模型、镜头或动效的入口见[三维营地](docs/3d/README.md)。
+
 | 英文名称 / 中文名称 / 文件 | 负责；公开API | 不负责 | 允许依赖；调用者 |
 |---|---|---|---|
 | Engine API / 核心出口 `engine/index.ts` | 本文API表中的核心函数、只读类型和稳定查询数据 | 页面、存档协议、模式结算；不公开内部冲突编译细节 | Engine内部模块；UI、模式、存档、Worker、脚本/测试调用 |

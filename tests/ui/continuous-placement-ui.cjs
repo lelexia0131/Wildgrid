@@ -33,13 +33,16 @@ app.whenReady().then(async () => {
       await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
       await contents.debugger.sendCommand('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     } else await js(`(${element}).click()`);
+    if (text === '继续冒险' || selector === '.local-map-enter' || selector === '.sandbox-size-card:first-child') {
+      await js(`document.querySelector('[data-renderer="3d"] .board-mode')?.click()`);
+    }
     await settle();
   }
   async function load() { await win.loadFile(path.join(root, 'dist', 'index.html')); await settle(); }
   async function prepare(continuousPlacement) {
     const settings = { music: .35, effects: .65, muted: false, facilityTips: true };
     if (continuousPlacement !== undefined) settings.continuousPlacement = continuousPlacement;
-    await js(`localStorage.clear(); localStorage.setItem('wildgrid-tutorial-v1', '{"version":1,"enabled":false}'); localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({version:1,completed:Array.from({length:16},(_,i)=>i+1),current:17,progress:{},settings}))}); localStorage.setItem('wildgrid-local-maps-v1', ${JSON.stringify(JSON.stringify({version:1,maps:[{id:1,code,progress:[]}]}))}); void 0;`);
+    await js(`localStorage.clear(); localStorage.setItem('wildgrid-display-v1','{"mode":"2d","quality":"medium"}'); localStorage.setItem('wildgrid-tutorial-v1', '{"version":1,"enabled":false}'); localStorage.setItem('wildgrid-save-v1', ${JSON.stringify(JSON.stringify({version:1,completed:Array.from({length:16},(_,i)=>i+1),current:17,progress:{},settings}))}); localStorage.setItem('wildgrid-local-maps-v1', ${JSON.stringify(JSON.stringify({version:1,maps:[{id:1,code,progress:[]}]}))}); void 0;`);
     await load();
   }
   const tile = (r, c, size = 8) => click(`.board > .tile:nth-child(${r * size + c + 1})`);

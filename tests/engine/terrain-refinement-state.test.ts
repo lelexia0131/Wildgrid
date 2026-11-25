@@ -47,7 +47,7 @@ test('logical layout refinement stops at the caller acceptance policy instead of
 });
 
 test('incremental terrain domains exactly match full domains after additions, removals, swaps and rollbacks',()=>{
-  const kinds:Terrain['kind'][]=['water','forest','mountain'];
+  const kinds:Terrain['kind'][]=['water','forest','rock'];
   for(let seed=0;seed<8;seed++) {
     const random=seeded(seed),level:Level={id:0,name:'',chapter:'',tip:'',size:8,
       pieces:[...facilityLibrary,{...facilityLibrary[0],id:'another-camp'}],
@@ -115,7 +115,7 @@ test('one terrain repair eliminates several counterexamples while preserving the
 });
 
 test('fixed-solution terrain masks agree with the independent gameplay evaluator',()=>{
-  const random=seeded(729),kinds:Terrain['kind'][]=['water','forest','mountain'];
+  const random=seeded(729),kinds:Terrain['kind'][]=['water','forest','rock'];
   for(const level of levels.filter(l=>l.size===8 && !l.sky)) {
     const placements=getSolution(level.id)!;
     assert.ok(evaluate(level,placements).won);

@@ -13,14 +13,19 @@ app.whenReady().then(async () => {
   wc.on('console-message', event => { if (event.level === 'error' && !event.message.includes('ERR_')) errors.push(event.message); });
   const js = code => wc.executeJavaScript(code, true);
   const wait = (ms = 60) => new Promise(resolve => setTimeout(resolve, ms));
-  const click = async selector => { await js(`document.querySelector(${JSON.stringify(selector)}).click()`); await wait(); };
+  const click = async selector => {
+    await js(`document.querySelector(${JSON.stringify(selector)}).click()`);
+    if (['.mode-adventure','.survival-continue','[data-theme="grass"]'].includes(selector))
+      await js(`document.querySelector('[data-renderer="3d"] .board-mode')?.click()`);
+    await wait();
+  };
   const shot = async name => writeFileSync(path.join(output, `${name}.png`), (await wc.capturePage()).toPNG());
   const load = () => win.loadFile(path.join(root, 'dist/index.html'));
   async function prepare(day, placements = [], language = 'zh', extra = {}) {
     await load();
     const save = { version: 1, current: day, completed: Array.from({length:day-1},(_,i)=>i+1), progress: {[day]:placements}, settings:{muted:true} };
     await js(`localStorage.clear();Object.entries(${JSON.stringify({
-      'wildgrid-save-v1':JSON.stringify(save), 'wildgrid-tutorial-v1':JSON.stringify({version:1,enabled:false,language}), ...extra,
+      'wildgrid-display-v1':JSON.stringify({mode:'2d',quality:'medium'}), 'wildgrid-save-v1':JSON.stringify(save), 'wildgrid-tutorial-v1':JSON.stringify({version:1,enabled:false,language}), ...extra,
     })}).forEach(([key,value])=>localStorage.setItem(key,value))`);
     await load(); await wait(220);
     await click('.menu-adventure');
@@ -41,7 +46,7 @@ app.whenReady().then(async () => {
   async function modal(extra = false, scrollAllowed = false) {
     if (extra) await js(`(()=>{const c=document.querySelector('.win-content');for(const [className,text] of [['','已收藏到本地地图 / Saved to local maps'],['survival-error','收藏记录写入失败，请重试。 / Could not save the map. Please try again.']]){const p=document.createElement('p');p.className=className;p.textContent=text;c.append(p);}})()`);
     await wait(220);
-    const state = await js(`(()=>{const d=document.querySelector('dialog'),r=d.getBoundingClientRect();return {open:d.open,scroll:d.scrollHeight-d.clientHeight,horizontal:d.scrollWidth-d.clientWidth,bounds:[r.left,r.top,r.right,r.bottom],size:[innerWidth,innerHeight],emblem:document.querySelector('.completion-emblem').getBoundingClientRect().height,buttons:[...d.querySelectorAll('.win-content button')].map(b=>({text:b.textContent,rect:[b.getBoundingClientRect().top,b.getBoundingClientRect().bottom],clipped:b.scrollHeight>b.clientHeight+1}))};})()`);
+    const state = await js(`(()=>{const d=document.querySelector('dialog'),r=d.getBoundingClientRect();return {open:d.open,scroll:d.scrollHeight-d.clientHeight,horizontal:d.scrollWidth-d.clientWidth,bounds:[r.left,r.top,r.right,r.bottom],size:[innerWidth,innerHeight],emblem:document.querySelector('.completion-stamp').getBoundingClientRect().height,buttons:[...d.querySelectorAll('.win-content button')].map(b=>({text:b.textContent,rect:[b.getBoundingClientRect().top,b.getBoundingClientRect().bottom],clipped:b.scrollHeight>b.clientHeight+1}))};})()`);
     assert.ok(state.open); assert.ok(state.bounds[0]>=0 && state.bounds[1]>=0 && state.bounds[2]<=state.size[0]+1 && state.bounds[3]<=state.size[1]+1,JSON.stringify(state));
     assert.ok(state.horizontal<=1,JSON.stringify(state)); assert.ok(state.buttons.every(b=>!b.clipped),JSON.stringify(state));
     if (!scrollAllowed) { assert.ok(state.scroll<=1,JSON.stringify(state)); assert.ok(state.buttons.every(b=>b.rect[0]>=state.bounds[1] && b.rect[1]<=state.bounds[3]),JSON.stringify(state)); }
@@ -51,8 +56,14 @@ app.whenReady().then(async () => {
     }
     results.push({type:'modal',extra,...state});
   }
+  async function settledBoardPixels(){
+    await js(`(async()=>{const board=document.querySelector('.board');
+      await Promise.all(board.getAnimations({subtree:true}).filter(a=>a.playState==='running'&&Number.isFinite(a.effect?.getComputedTiming().endTime)).map(a=>a.finished.catch(()=>{})));
+      await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));
+    })()`);
+  }
   async function board() {
-    const state = await js(`(()=>{const b=document.querySelector('.board'),ids=[...b.querySelectorAll('[id]')].map(el=>el.id);return {tiles:b.querySelectorAll(':scope>.tile').length,ids:ids.length===new Set(ids).size,clips:[...b.querySelectorAll('[clip-path]')].every(el=>el.closest('svg').querySelector('clipPath')?.id===el.getAttribute('clip-path').slice(5,-1)),aligned:[...b.querySelectorAll('.placed-facility-art')].every(el=>{const cells=[...b.querySelectorAll('[data-piece-id]')].filter(t=>t.dataset.pieceId===el.dataset.artId).map(t=>t.getBoundingClientRect()),r=el.getBoundingClientRect();return Math.abs(r.left-Math.min(...cells.map(c=>c.left)))<1 && Math.abs(r.right-Math.max(...cells.map(c=>c.right)))<1 && Math.abs(r.top-Math.min(...cells.map(c=>c.top)))<1 && Math.abs(r.bottom-Math.max(...cells.map(c=>c.bottom)))<1}),strokes:[...b.querySelectorAll('.footprint-outline')].every(el=>parseFloat(getComputedStyle(el).strokeWidth)/2===2 && el.hasAttribute('clip-path') && el.getAttribute('vector-effect')==='non-scaling-stroke'),previews:[...document.querySelectorAll('.facility-card .art')].every(el=>{const m=el.getScreenCTM();return Math.abs(m.a-m.d)<.001}),android:document.querySelector('.app').hasAttribute('data-android'),filters:[...b.querySelectorAll('.art')].every(el=>getComputedStyle(el).filter==='none')};})()`);
+    const state = await js(`(()=>{const b=document.querySelector('.board'),ids=[...b.querySelectorAll('[id]')].map(el=>el.id);return {tiles:b.querySelectorAll(':scope>.tile').length,ids:ids.length===new Set(ids).size,clips:[...b.querySelectorAll('[clip-path]')].every(el=>el.closest('svg').querySelector('clipPath')?.id===el.getAttribute('clip-path').slice(5,-1)),aligned:[...b.querySelectorAll('.placed-facility-art')].every(el=>{const cells=[...b.querySelectorAll('[data-piece-id]')].filter(t=>t.dataset.pieceId===el.dataset.artId).map(t=>t.getBoundingClientRect()),r=el.getBoundingClientRect();return Math.abs(r.left-Math.min(...cells.map(c=>c.left)))<1 && Math.abs(r.right-Math.max(...cells.map(c=>c.right)))<1 && Math.abs(r.top-Math.min(...cells.map(c=>c.top)))<1 && Math.abs(r.bottom-Math.max(...cells.map(c=>c.bottom)))<1}),strokes:[...b.querySelectorAll('.footprint-outline')].every(el=>parseFloat(getComputedStyle(el).strokeWidth)/2===2 && el.hasAttribute('clip-path') && el.getAttribute('vector-effect')==='non-scaling-stroke'),previews:[...document.querySelectorAll('.facility-card .art')].every(el=>el instanceof HTMLImageElement && el.complete && el.naturalWidth>0 && getComputedStyle(el).objectFit==='contain'),android:document.querySelector('.app').hasAttribute('data-android'),filters:[...b.querySelectorAll('.art')].every(el=>getComputedStyle(el).filter==='none')};})()`);
     assert.ok(state.ids && state.clips && state.aligned && state.strokes && state.previews,JSON.stringify(state));
     if(state.android) assert.ok(state.filters,JSON.stringify(state));
     results.push({type:'board',...state});
@@ -86,10 +97,12 @@ app.whenReady().then(async () => {
       await js(`document.querySelector('.board').scrollIntoView({block:'center'})`);
       assert.ok(await js(`[...document.querySelectorAll('.board>.tile')].every(el=>{const r=el.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('.tile')===el})`),'Tile hit targets');
       const region=await js(`(()=>{const r=document.querySelector('.board').getBoundingClientRect();return {x:Math.round(r.x),y:Math.round(r.y),width:Math.round(r.width),height:Math.round(r.height)}})()`);
+      await settledBoardPixels();
       const baselineImage=await wc.capturePage(region), baseline=baselineImage.toBitmap();
       for(let i=0;i<12;i++) {
         const at=answer[i%answer.length]; await click(`[data-piece-id="${at.id}"]`);
         await js(`document.querySelector('.tool-undo').click()`); await wait(200); await board();
+        await settledBoardPixels();
         const restoredImage=await wc.capturePage(region), restored=restoredImage.toBitmap();
         let maxDelta=0, changed=0;
         for(let p=0;p<baseline.length;p+=4) {
@@ -119,7 +132,7 @@ app.whenReady().then(async () => {
       await click(card);
       for(let direction=0;direction<4;direction++) {
         await click(card);await wait(160);await board();
-        assert.ok(await js(`(()=>{const svg=document.querySelector('${card} .art'),m=svg.getScreenCTM();return Math.abs(m.a-m.d)<.001})()`));
+        assert.ok(await js(`(()=>{const img=document.querySelector('${card} .model-icon');return img.complete && img.naturalWidth>0 && getComputedStyle(img).objectFit==='contain' && img.src.includes('${kind}_${shape}-')})()`));
       }
       await click('[data-cell="3,3"]');
       for(let i=0;i<4;i++) {
@@ -138,7 +151,7 @@ app.whenReady().then(async () => {
     const scenes=[];
     for(let i=0;i<3;i++) {
       scenes.push(await js(`document.querySelector('.survival-generation-page').dataset.scene`));
-      assert.ok(await js(`!!document.querySelector('.generation-background svg')`));
+      assert.ok(await js(`!!document.querySelector('.generation-background img[src*=\"chapter-\"]')`));
       await wait(1600); await shot(`generation-${i}`); await click('.survival-generation-page button'); assert.ok(await js(`!!document.querySelector('.survival-identity')`));
       if(i<2) await click('.survival-difficulty');
     }

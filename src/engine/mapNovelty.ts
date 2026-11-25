@@ -27,7 +27,7 @@ export function mapFeatures(draft: SandboxDraft, difficulty: number): MapFeature
     const answer = entries.map(e => `${e.piece.kind}_${e.piece.shape}:${e.cells.map(point).map(p => { rows[p.r]++; cols[p.c]++; return p.r * n + p.c; }).sort((a, b) => a - b).join(',')}`).sort();
     return { terrain: level.terrain.map(t => { const p = point(t); return `${t.kind}:${p.r * n + p.c}`; }).sort(), answer, clues: [...rows, ...cols] };
   });
-  return { difficulty, terrainCounts: ['water', 'forest', 'mountain'].map(kind => level.terrain.filter(t => t.kind === kind).length), facilities: kinds.flatMap(kind => shapes.map(shape => level.pieces.filter(p => p.kind === kind && p.shape === shape).length)), links, views };
+  return { difficulty, terrainCounts: ['water', 'forest', 'rock'].map(kind => level.terrain.filter(t => t.kind === kind).length), facilities: kinds.flatMap(kind => shapes.map(shape => level.pieces.filter(p => p.kind === kind && p.shape === shape).length)), links, views };
 }
 const overlap = (a: string[], b: string[]) => { const set = new Set(b); return 2 * a.filter(v => set.has(v)).length / Math.max(1, a.length + b.length); };
 const closeness = (a: number[], b: number[]) => 1 - a.reduce((sum, v, i) => sum + Math.abs(v - b[i]), 0) / Math.max(1, a.reduce((s, v) => s + v, 0) + b.reduce((s, v) => s + v, 0));

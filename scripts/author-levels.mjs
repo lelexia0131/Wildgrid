@@ -21,15 +21,15 @@ level('草地的线索', '溪畔初遇', '黄色短杠代表还需占用的格�
 level('松林来信', '林间烟火', '森林是固定地形。绕过松树，寻找溪流旁的空地。', [['water',1,1],['water',4,3],['forest',0,1],['forest',2,3],['forest',3,1],['forest',4,4]], [['camp','single',1,2],['camp','single',3,3],['camp','single',4,2]]);
 level('第一缕炊烟', '林间烟火', '篝火要上下左右挨着营地。先放篝火也可以，再为它安排营地。', [['water',2,1],['forest',0,4],['forest',5,0]], [['camp','single',2,2],['fire','single',2,3]]);
 level('与森林留白', '林间烟火', '篝火与森林之间要留出距离，斜角相邻也不可以。', [['water',1,1],['water',4,4],['forest',0,3],['forest',3,0],['forest',5,0]], [['camp','single',1,2],['camp','single',4,3],['fire','single',2,2],['fire','single',4,2]]);
-level('山那边', '山野远眺', '山地也不能覆盖。沿着山脚，继续寻找邻水的营地。', [['water',1,2],['water',4,3],['mountain',2,2],['mountain',3,4],['forest',0,4]], [['camp','single',1,1],['camp','single',4,2],['fire','single',2,1]]);
-level('登高望远', '山野远眺', '瞭望塔必须上下左右挨着山地；这次只需安放两座塔。', [['mountain',1,1],['mountain',4,4],['forest',2,3],['water',3,1]], [['tower','single',1,2],['tower','single',4,3]]);
-level('各自的天际线', '山野远眺', '两座瞭望塔不能相邻，斜角也要保持距离。', [['mountain',2,2],['mountain',3,3],['water',0,4],['forest',5,1]], [['tower','single',1,2],['tower','single',3,4],['camp','single',1,4]]);
-level('双人假日', '把营地展开', '这座营地占用两格。点击旋转；任意一格邻水即可。', [['water',2,1],['forest',0,4],['mountain',4,4]], [['camp','domino',2,2]]);
+level('山那边', '山野远眺', '岩石也不能覆盖。沿着岩石边缘，继续寻找邻水的营地。', [['water',1,2],['water',4,3],['rock',2,2],['rock',3,4],['forest',0,4]], [['camp','single',1,1],['camp','single',4,2],['fire','single',2,1]]);
+level('登高望远', '山野远眺', '瞭望塔必须上下左右挨着岩石；这次只需安放两座塔。', [['rock',1,1],['rock',4,4],['forest',2,3],['water',3,1]], [['tower','single',1,2],['tower','single',4,3]]);
+level('各自的天际线', '山野远眺', '两座瞭望塔不能相邻，斜角也要保持距离。', [['rock',2,2],['rock',3,3],['water',0,4],['forest',5,1]], [['tower','single',1,2],['tower','single',3,4],['camp','single',1,4]]);
+level('双人假日', '把营地展开', '这座营地占用两格。点击旋转；任意一格邻水即可。', [['water',2,1],['forest',0,4],['rock',4,4]], [['camp','domino',2,2]]);
 level('沿溪而居', '把营地展开', '点击旋转。黄色短杠统计格子，不是建筑。', [['water',1,1],['water',4,4],['forest',0,4],['forest',3,0]], [['camp','domino',1,2,1],['camp','domino',4,2],['fire','single',3,2]]);
-level('长长的周末', '把营地展开', '这座营地需要更多空地，先看哪一行或列留下了足够的短杠。', [['water',2,1],['water',4,4],['forest',1,3],['mountain',1,5]], [['camp','long',2,2],['camp','single',4,3],['fire','single',3,3]]);
-level('转角的风景', '把营地展开', 'L 形营地占三格。旋转四个方向，试试贴合这片草地。', [['water',1,1],['forest',0,4],['forest',4,1],['mountain',4,4]], [['camp','el',1,2],['fire','single',2,4],['tower','single',4,3]]);
-level('林野协奏', '荒野成章', '把学到的规则串起来。点已放设施可拿起，再放到新的位置。', [['water',1,1],['water',4,5],['mountain',0,4],['mountain',5,1],['forest',2,4],['forest',0,0]], [['camp','domino',1,2],['camp','el',3,3],['fire','single',2,2],['tower','single',1,4],['tower','single',5,2]]);
-level('我们的旷野', '荒野成章', '这片熟悉的营地图。所有设施放完后，仍然可以自由调整。', [['water',1,1],['water',4,5],['mountain',0,2],['mountain',5,1],['forest',0,4],['forest',5,5]], [['camp','long',1,2],['camp','el',3,3],['camp','single',2,1],['fire','single',2,3],['fire','single',4,2],['tower','single',0,3],['tower','single',5,2]]);
+level('长长的周末', '把营地展开', '这座营地需要更多空地，先看哪一行或列留下了足够的短杠。', [['water',2,1],['water',4,4],['forest',1,3],['rock',1,5]], [['camp','long',2,2],['camp','single',4,3],['fire','single',3,3]]);
+level('转角的风景', '把营地展开', 'L 形营地占三格。旋转四个方向，试试贴合这片草地。', [['water',1,1],['forest',0,4],['forest',4,1],['rock',4,4]], [['camp','el',1,2],['fire','single',2,4],['tower','single',4,3]]);
+level('林野协奏', '荒野成章', '把学到的规则串起来。点已放设施可拿起，再放到新的位置。', [['water',1,1],['water',4,5],['rock',0,4],['rock',5,1],['forest',2,4],['forest',0,0]], [['camp','domino',1,2],['camp','el',3,3],['fire','single',2,2],['tower','single',1,4],['tower','single',5,2]]);
+level('我们的旷野', '荒野成章', '这片熟悉的营地图。所有设施放完后，仍然可以自由调整。', [['water',1,1],['water',4,5],['rock',0,2],['rock',5,1],['forest',0,4],['forest',5,5]], [['camp','long',1,2],['camp','el',3,3],['camp','single',2,1],['fire','single',2,3],['fire','single',4,2],['tower','single',0,3],['tower','single',5,2]]);
 mkdirSync('src/game-data', { recursive: true });
 const expansion = JSON.parse(readFileSync('src/game-data/levels.json', 'utf8')).filter(l => l.id > 15);
 const expansionAnswers = Object.fromEntries(Object.entries(JSON.parse(readFileSync('src/game-data/solutions.json', 'utf8'))).filter(([id]) => Number(id) > 15));
@@ -46,7 +46,7 @@ console.log(`Authored ${levels.length} fixed levels.`);
 async function authorCloudsea() {
   const { evaluate, solveLevel, facilityLayer, offsets } = await tsImport('../src/engine/index.ts', import.meta.url);
   const { reasonLevel } = await tsImport('../src/engine/logicalSolver.ts', import.meta.url);
-  const terrain = (water, forest = [], mountain = []) => [water, forest, mountain].flatMap((list, k) => list.map(([r,c]) => ({kind:['water','forest','mountain'][k],r,c})));
+  const terrain = (water, forest = [], rock = []) => [water, forest, rock].flatMap((list, k) => list.map(([r,c]) => ({kind:['water','forest','rock'][k],r,c})));
   const p = (kind, r, c, shape = 'single', rotation = 0) => [kind,shape,r,c,rotation];
   const B = (r,c) => p('balloon',r,c), A = (r,c,rotation=0) => p('airship',r,c,'domino',rotation), K = (r,c,rotation=0) => p('kite',r,c,'long',rotation);
   const plans = [
@@ -57,7 +57,7 @@ async function authorCloudsea() {
     {t:terrain([[1,1],[5,5]],[[3,6]]),a:[[2,4]],c:[[0,3],[4,2]],p:[p('camp',1,2,'domino',1),p('camp',5,4),p('fire',3,2),B(2,3),A(1,2,1)],tip:'先别急着落位。把飞艇转一转，再看看云下的营地，哪个方向能把补给送到大家手里？'},
     {t:terrain([[1,2],[5,4]],[[4,0]],[[6,6]]),a:[[2,5],[6,2]],c:[[0,5],[4,6]],p:[p('camp',2,2,'el'),p('camp',5,3,'domino',1),p('fire',2,3),p('tower',6,5),B(2,4),A(3,2),A(5,3,1)],tip:'这座营地有好几格，每一格都能接补给。把两艘飞艇分开看看，也许另一岸正好留了位置。'},
     {t:terrain([[1,1],[5,5]],[[5,1]],[[1,6]]),a:[[3,4]],c:[[0,4],[4,3]],p:[p('camp',1,2,'long'),p('camp',5,3,'domino'),p('fire',2,2),p('foodTruck',3,3),p('powerTower',6,0),p('pool',4,5),B(2,4),A(5,3)],tip:'前面有电塔，咱们从它上方绕开。餐车的通道留在地面就好，不用替它空出整片天空。'},
-    {t:terrain([[4,1]],[],[[2,4]]),a:[],c:[[5,6]],p:[p('camp',4,2),p('fire',4,3),K(2,3)],tip:'山脊上的风正合适！让风筝至少一格对着山地，再看看四周有没有低云，斜角也别漏掉。'},
+    {t:terrain([[4,1]],[],[[2,4]]),a:[],c:[[5,6]],p:[p('camp',4,2),p('fire',4,3),K(2,3)],tip:'山脊上的风正合适！让风筝至少一格对着岩石，再看看四周有没有低云，斜角也别漏掉。'},
     {t:terrain([[2,1],[6,5]],[[0,5]],[[3,4]]),a:[[1,3]],c:[[5,2],[0,7]],p:[p('camp',2,2,'domino'),p('camp',6,4),p('fire',3,2),B(1,4),A(6,3),K(2,4,1)],tip:'这条云边有点挤。飞艇可以贴着云停，风筝却得离远些；换个方向，看看谁更适合这里。'},
     {t:terrain([[1,1],[5,4]],[[5,0]],[[2,5],[6,6]]),a:[[3,4]],c:[[0,0],[6,2]],p:[p('camp',1,2,'el'),p('camp',5,3,'domino',1),p('fire',3,3),p('tower',7,6),p('picnic',6,4,'domino'),B(2,4),A(5,3,1),K(1,5,1)],tip:'桩、营地、山脊都找到了，咱们把三种飞行器接上。卡住时换层看看，另一边也许正等着你。'},
   ];
@@ -66,17 +66,17 @@ async function authorCloudsea() {
   // Authored finale terrain keeps two sky-only layouts (three on Day 60);
   // movable ground facilities must distinguish the single complete solution.
   const finales = [
-    {t:[...terrain([[0,2],[4,0],[2,6],[7,5]],[[3,3],[7,7]],[[4,7],[7,1]]),{r:3,c:7,kind:'mountain'},{r:2,c:7,kind:'mountain'},{r:1,c:7,kind:'mountain'},{r:1,c:6,kind:'mountain'},{r:1,c:5,kind:'mountain'},{r:5,c:5,kind:'forest'},{r:2,c:3,kind:'forest'},{r:2,c:4,kind:'forest'}],a:[[0,4],[5,4]],c:[[0,7],[7,3]],p:[p('camp',1,1,'long'),p('camp',4,1,'el'),p('camp',2,5,'domino',1),p('camp',6,5),p('fire',2,1),p('fire',6,2),p('tower',4,6),p('tower',7,0),p('picnic',6,6,'domino'),p('foodTruck',6,3),p('pool',7,6),B(1,4),B(5,5),A(0,1,1),K(2,7,1)]},
-    {t:[...terrain([[1,0],[0,5],[5,2],[6,7]],[[4,4],[7,0]],[[2,7],[6,0]]),{r:1,c:7,kind:'mountain'},{r:2,c:0,kind:'water'},{r:4,c:2,kind:'water'},{r:1,c:2,kind:'forest'},{r:6,c:2,kind:'water'},{r:2,c:6,kind:'forest'},{r:7,c:7,kind:'water'}],a:[[0,3],[4,6]],c:[[0,7],[7,4]],p:[p('camp',1,1,'el'),p('camp',1,4,'long'),p('camp',5,3,'domino'),p('camp',6,6),p('fire',3,2),p('fire',2,4),p('tower',3,7),p('tower',5,0),p('picnic',7,5,'domino'),p('foodTruck',4,1),p('powerTower',7,2),p('pool',5,7),B(1,3),B(3,6),A(4,3,1),K(2,7,1)]},
-    {t:[...terrain([[0,1],[2,6],[5,0]],[[3,3],[0,7]],[[0,4],[6,7]]),{r:1,c:6,kind:'water'},{r:1,c:0,kind:'mountain'},{r:2,c:0,kind:'water'},{r:3,c:4,kind:'forest'},{r:7,c:5,kind:'water'},{r:3,c:5,kind:'forest'},{r:3,c:0,kind:'water'},{r:6,c:0,kind:'water'},{r:4,c:4,kind:'forest'},{r:3,c:1,kind:'mountain'},{r:2,c:3,kind:'forest'},{r:0,c:2,kind:'water'},{r:5,c:2,kind:'forest'},{r:2,c:2,kind:'mountain'},{r:1,c:3,kind:'forest'},{kind:'forest',r:7,c:1},{kind:'forest',r:4,c:1}],a:[[3,7],[5,3]],c:[[3,0],[7,6]],p:[p('camp',1,1,'domino'),p('camp',2,4,'domino'),p('camp',5,1,'el'),p('camp',6,4,'long'),p('fire',2,1),p('fire',1,5),p('tower',1,4),p('tower',5,7),p('cabin',3,2,'el'),p('picnic',7,2,'domino'),p('foodTruck',4,5),p('powerTower',7,0),p('pool',3,6),B(3,6),B(4,3),A(5,4,1),K(0,3)]},
-    {t:[...terrain([[1,1],[0,6],[1,6],[4,0],[6,6]],[[3,4],[7,1]],[[1,4],[5,7]]),{r:6,c:2,kind:'mountain'},{r:6,c:4,kind:'forest'},{r:2,c:4,kind:'forest'},{r:2,c:6,kind:'water'},{r:1,c:0,kind:'water'}],a:[[0,4],[2,3]],c:[[0,0],[4,1]],p:[p('camp',1,2,'domino',1),p('camp',1,5,'domino',1),p('camp',4,1,'long'),p('camp',6,5),p('fire',3,2),p('fire',5,2),p('tower',1,3),p('tower',6,7),p('cabin',3,5,'el'),p('picnic',7,4,'domino'),p('foodTruck',6,1),p('powerTower',6,0),p('pool',7,6),B(0,5),B(2,2),A(0,2,1),A(6,5,1),K(3,7,1)]},
-    {t:[...terrain([[0,2],[4,0],[2,6],[7,5],[0,5]],[[3,3],[7,7]],[[4,7],[7,1]]),{r:6,c:1,kind:'mountain'},{r:0,c:1,kind:'water'},{r:7,c:2,kind:'mountain'},{r:2,c:3,kind:'forest'},{r:6,c:0,kind:'mountain'}],a:[[0,4],[5,4]],c:[[0,7],[7,3]],p:[p('camp',1,1,'domino'),p('camp',4,1,'el'),p('camp',2,5),p('camp',6,5),p('camp',0,6),p('fire',2,1),p('fire',6,2),p('tower',4,6),p('tower',7,0),p('cabin',3,2,'el'),p('picnic',6,6,'domino'),p('foodTruck',6,3),p('pool',7,6),B(1,4),B(5,5),A(6,5,1),A(0,6,1),K(3,7,1)]},
+    {t:[...terrain([[0,2],[4,0],[2,6],[7,5]],[[3,3],[7,7]],[[4,7],[7,1]]),{r:3,c:7,kind:'rock'},{r:2,c:7,kind:'rock'},{r:1,c:7,kind:'rock'},{r:1,c:6,kind:'rock'},{r:1,c:5,kind:'rock'},{r:5,c:5,kind:'forest'},{r:2,c:3,kind:'forest'},{r:2,c:4,kind:'forest'}],a:[[0,4],[5,4]],c:[[0,7],[7,3]],p:[p('camp',1,1,'long'),p('camp',4,1,'el'),p('camp',2,5,'domino',1),p('camp',6,5),p('fire',2,1),p('fire',6,2),p('tower',4,6),p('tower',7,0),p('picnic',6,6,'domino'),p('foodTruck',6,3),p('pool',7,6),B(1,4),B(5,5),A(0,1,1),K(2,7,1)]},
+    {t:[...terrain([[1,0],[0,5],[5,2],[6,7]],[[4,4],[7,0]],[[2,7],[6,0]]),{r:1,c:7,kind:'rock'},{r:2,c:0,kind:'water'},{r:4,c:2,kind:'water'},{r:1,c:2,kind:'forest'},{r:6,c:2,kind:'water'},{r:2,c:6,kind:'forest'},{r:7,c:7,kind:'water'}],a:[[0,3],[4,6]],c:[[0,7],[7,4]],p:[p('camp',1,1,'el'),p('camp',1,4,'long'),p('camp',5,3,'domino'),p('camp',6,6),p('fire',3,2),p('fire',2,4),p('tower',3,7),p('tower',5,0),p('picnic',7,5,'domino'),p('foodTruck',4,1),p('powerTower',7,2),p('pool',5,7),B(1,3),B(3,6),A(4,3,1),K(2,7,1)]},
+    {t:[...terrain([[0,1],[2,6],[5,0]],[[3,3],[0,7]],[[0,4],[6,7]]),{r:1,c:6,kind:'water'},{r:1,c:0,kind:'rock'},{r:2,c:0,kind:'water'},{r:3,c:4,kind:'forest'},{r:7,c:5,kind:'water'},{r:3,c:5,kind:'forest'},{r:3,c:0,kind:'water'},{r:6,c:0,kind:'water'},{r:4,c:4,kind:'forest'},{r:3,c:1,kind:'rock'},{r:2,c:3,kind:'forest'},{r:0,c:2,kind:'water'},{r:5,c:2,kind:'forest'},{r:2,c:2,kind:'rock'},{r:1,c:3,kind:'forest'},{kind:'forest',r:7,c:1},{kind:'forest',r:4,c:1}],a:[[3,7],[5,3]],c:[[3,0],[7,6]],p:[p('camp',1,1,'domino'),p('camp',2,4,'domino'),p('camp',5,1,'el'),p('camp',6,4,'long'),p('fire',2,1),p('fire',1,5),p('tower',1,4),p('tower',5,7),p('cabin',3,2,'el'),p('picnic',7,2,'domino'),p('foodTruck',4,5),p('powerTower',7,0),p('pool',3,6),B(3,6),B(4,3),A(5,4,1),K(0,3)]},
+    {t:[...terrain([[1,1],[0,6],[1,6],[4,0],[6,6]],[[3,4],[7,1]],[[1,4],[5,7]]),{r:6,c:2,kind:'rock'},{r:6,c:4,kind:'forest'},{r:2,c:4,kind:'forest'},{r:2,c:6,kind:'water'},{r:1,c:0,kind:'water'}],a:[[0,4],[2,3]],c:[[0,0],[4,1]],p:[p('camp',1,2,'domino',1),p('camp',1,5,'domino',1),p('camp',4,1,'long'),p('camp',6,5),p('fire',3,2),p('fire',5,2),p('tower',1,3),p('tower',6,7),p('cabin',3,5,'el'),p('picnic',7,4,'domino'),p('foodTruck',6,1),p('powerTower',6,0),p('pool',7,6),B(0,5),B(2,2),A(0,2,1),A(6,5,1),K(3,7,1)]},
+    {t:[...terrain([[0,2],[4,0],[2,6],[7,5],[0,5]],[[3,3],[7,7]],[[4,7],[7,1]]),{r:6,c:1,kind:'rock'},{r:0,c:1,kind:'water'},{r:7,c:2,kind:'rock'},{r:2,c:3,kind:'forest'},{r:6,c:0,kind:'rock'}],a:[[0,4],[5,4]],c:[[0,7],[7,3]],p:[p('camp',1,1,'domino'),p('camp',4,1,'el'),p('camp',2,5),p('camp',6,5),p('camp',0,6),p('fire',2,1),p('fire',6,2),p('tower',4,6),p('tower',7,0),p('cabin',3,2,'el'),p('picnic',6,6,'domino'),p('foodTruck',6,3),p('pool',7,6),B(1,4),B(5,5),A(6,5,1),A(0,6,1),K(3,7,1)]},
   ];
   finales.forEach((plan,i) => plans.push({...plan,tip:[
     '先挑一个上下两层都看得准的位置吧。天空少一个选择，地面往往也会跟着明朗起来。',
     '飞艇的方向还没定？看看它下面的营地，试着把两边剩下的格数对一对。',
     '这次留下的空地也在帮咱们指路。别急着填满，想想哪些地方不能留给篝火和电塔。',
-    '同一座山，下面能靠瞭望塔，上面能借风放风筝。咱们沿着这条线索，再往另一层走一步。',
+    '同一片岩石，下面能靠瞭望塔，上面能借风放风筝。咱们沿着这条线索，再往另一层走一步。',
     '最后一片云海了。把营地安顿好，再让补给和风筝各就各位——这幅上下相连的营地图，就交给你啦。',
   ][i]}));
   const existing = JSON.parse(readFileSync('src/game-data/levels.json','utf8')).filter(l => l.id <= 45);
@@ -101,7 +101,7 @@ async function authorCloudsea() {
       const options=[];
       for(let r=0;r<8;r++) for(let c=0;c<8;c++) {
         const cell={r,c};
-        for(const kind of ['cloud','forest','mountain','water']) {
+        for(const kind of ['cloud','forest','rock','water']) {
           const air=kind==='cloud';
           if(footprint(air?'sky':'ground').some(p=>same(p,cell)) || (air?sky.clouds:[...level.terrain,...sky.anchors]).some(p=>same(p,cell))) continue;
           const trial=air?{...level,sky:{...sky,clouds:[...sky.clouds,cell]}}:{...level,terrain:[...level.terrain,{...cell,kind}]};

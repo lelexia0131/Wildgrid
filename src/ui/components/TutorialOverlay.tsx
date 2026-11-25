@@ -1,14 +1,16 @@
-import { useId, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { DICTIONARIES } from '../../localization/index';
 import type { Language } from '../../localization/index';
 import type { TutorialLesson, TutorialStep, TutorialTarget } from '../tutorial/tutorialLessons';
 import '../styles/tutorial.css';
 import { art } from '../../assets/art';
+import { useDisplay } from '../board3d/display';
+import { useI18n } from '../../localization/LanguageContext';
 import { audio } from '../../platform/audio/WildernessAudio';
 
 type Rect = { x: number; y: number; width: number; height: number };
-const UI_SELECTORS = { board: '.board', facilities: '.facility-list', undo: '[data-tutorial="undo"]', feedback: '.rule-dock, .guide-strip', goal: '.board-with-clues', win: '.win-content, .board' };
+const UI_SELECTORS = { board: '.board', boardView: '[data-tutorial="board-view"]', facilities: '.facility-list', undo: '[data-tutorial="undo"]', feedback: '.rule-dock, .guide-strip', goal: '.board-with-clues', win: '.win-content, .board' };
 function targetElements(target: TutorialTarget): Element[] {
   switch (target.type) {
     case 'ui': {
@@ -51,6 +53,23 @@ function placeNarration(targets: Rect[], width: number, height: number, viewport
 }
 type Props = { lesson: TutorialLesson; step: TutorialStep; index: number; language: Language; onNext: () => void; onBack: () => void; onSkip: () => void; portal?: HTMLElement | null };
 export function TutorialOverlay({ lesson, step, index, language, onNext, onBack, onSkip, portal }: Props) {
+  const {mode,preview,fallback}=useDisplay(),miniature=mode==='3d',illustration=art.modelIcon;
+  const [demoReady,setDemoReady]=useState(false),[replay,setReplay]=useState(0);
+  useEffect(()=>{
+    if(step.id!=='viewsDemo'&&step.id!=='cameraHelp')return;
+    if(fallback){setDemoReady(true);return;}
+    if(step.id==='cameraHelp'){preview('3d');return ()=>preview(null);}
+    setDemoReady(false);preview('2d');
+    const change=window.setTimeout(()=>preview('3d'),1250);
+    const ready=window.setInterval(()=>{
+      if(document.querySelector('.camp-canvas[data-ready="true"]')){setDemoReady(true);window.clearInterval(ready);}
+    },150);
+    return ()=>{window.clearTimeout(change);window.clearInterval(ready);preview(null);};
+  },[step.id,replay,preview,fallback]);
+  const showingDemo=step.id==='viewsDemo'&&!demoReady&&!fallback;
+  const planOnly=fallback&&['viewsDemo','viewsTry','cameraHelp'].includes(step.id);
+  const {t}=useI18n();
+  const sceneCopy={clues:'边牌的数字是本行或本列还要占用的格数，✓ 表示刚好，红色差额表示超出。转动镜头时，边牌始终跟随所属行列。',multi:'多格设施的每个占格都计入相应边牌。双格设施占两格，三格设施占三格。',feedback:'红色叹号标出冲突，圆点表示还有条件待满足。核对设施旁的标记和棋盘边牌，再放下一件。'} as const;
   const cardRef = useRef<HTMLDivElement>(null);
   const pointerAdvance = useRef(-Infinity);
   const [layout, setLayout] = useState<{ targets: Rect[]; card: Rect; viewport: Rect } | null>(null);
@@ -120,7 +139,7 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
       if (event.key === 'Tab' || allowed(event.target) && !event.ctrlKey && !event.metaKey && event.key !== 'Escape') return;
       event.preventDefault(); event.stopPropagation();
       if (event.key === 'Escape' && step.allowSkip) { audio.feedback('close'); onSkip(); }
-      else if ((event.key === 'Enter' || event.key === ' ') && step.advance !== 'action') { audio.feedback('confirm'); onNext(); }
+      else if ((event.key === 'Enter' || event.key === ' ') && step.advance !== 'action' && !showingDemo) { audio.feedback('confirm'); onNext(); }
     };
     document.addEventListener('pointerdown', blockPointer, true);
     document.addEventListener('pointerup', pointerup, true);
@@ -131,7 +150,7 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
       document.removeEventListener('pointerdown', blockPointer, true); document.removeEventListener('pointerup', pointerup, true); document.removeEventListener('contextmenu', blockPointer, true);
       document.removeEventListener('click', click, true); window.removeEventListener('keydown', keydown, true);
     };
-  }, [step, layout, onNext, onSkip]);
+  }, [step, layout, onNext, onSkip,showingDemo]);
   const shape = (r: Rect, props: { fill: string; key: number; className?: string; stroke?: string; strokeWidth?: number }) => step.shape === 'circle' || step.target.type === 'clues'
     ? <circle cx={r.x + r.width / 2} cy={r.y + r.height / 2} r={Math.max(r.width, r.height) / 2} {...props}/>
     : <rect x={r.x} y={r.y} width={r.width} height={r.height} rx={18} {...props}/>;
@@ -147,10 +166,10 @@ export function TutorialOverlay({ lesson, step, index, language, onNext, onBack,
     </svg>}
     <div ref={cardRef} className="tutorial-narration" role="region" aria-label={copy.title} lang={language === 'zh' ? 'zh-CN' : 'en'} style={{ left: card?.x ?? 12, top: card?.y ?? 12, visibility: layout ? 'visible' : 'hidden' }}>
       <span className="tutorial-progress">{dictionary.controls.progress} {index + 1}/{lesson.steps.length}</span>
-      <p aria-live="polite">{copy.text}</p>
-      {step.example && <svg className="tutorial-example" viewBox="0 0 156 90" role="img" aria-label={copy.title}><g fill="#d5dfb4" stroke="#a6b78a" strokeWidth="2">{[0,1,2,3].map(i => <rect key={i} x={8+i%2*40} y={5+Math.floor(i/2)*40} width="36" height="36" rx="5"/>)}</g><image x="8" y="5" width="36" height="36" href={art.object('water')}/><image x="48" y={step.example === 'wrong' ? 45 : 5} width="36" height="36" href={art.object('camp')}/><path d={step.example === 'wrong' ? 'M107 30l23 23m0-23-23 23' : 'm101 44 12 12 26-30'} fill="none" stroke={step.example === 'wrong' ? '#bb735b' : '#678c60'} strokeWidth="6" strokeLinecap="round"/></svg>}
-      <small>{step.advance === 'action' ? dictionary.controls.action : dictionary.controls.continue}</small>
-      <div className="tutorial-controls">{step.allowSkip && <button className="tutorial-skip" data-sound="close" onClick={onSkip}>{dictionary.controls.skip}</button>}<button data-sound="close" disabled={index === 0 || step.advance === 'action' || lesson.steps[index - 1]?.advance === 'action'} onClick={onBack}>{dictionary.controls.back}</button><button className="tutorial-next" data-sound="confirm" disabled={step.advance === 'action'} onClick={onNext}>{index + 1 === lesson.steps.length ? lesson.facility ? dictionary.controls.understood : dictionary.controls.finish : dictionary.controls.next}</button></div>
+      <p aria-live="polite">{planOnly ? t('当前设备使用平面规划，仍可以摆放、旋转并完成所有关卡。') : miniature && step.copy==='basics' && step.id in sceneCopy ? t(sceneCopy[step.id as keyof typeof sceneCopy]) : copy.text}</p>
+      {step.example && <svg className="tutorial-example" viewBox="0 0 156 90" role="img" aria-label={copy.title}><g fill="#d5dfb4" stroke="#a6b78a" strokeWidth="2">{[0,1,2,3].map(i => <rect key={i} x={8+i%2*40} y={5+Math.floor(i/2)*40} width="36" height="36" rx="5"/>)}</g><image x="8" y="5" width="36" height="36" href={illustration('water')}/><image x="48" y={step.example === 'wrong' ? 45 : 5} width="36" height="36" href={illustration('camp')}/><path d={step.example === 'wrong' ? 'M107 30l23 23m0-23-23 23' : 'm101 44 12 12 26-30'} fill="none" stroke={step.example === 'wrong' ? '#bb735b' : '#678c60'} strokeWidth="6" strokeLinecap="round"/></svg>}
+      {step.id==='viewsDemo'&&!fallback?<button type="button" className="tutorial-replay" onClick={()=>setReplay(n=>n+1)}>{t('再看一次示范')}</button>:step.advance!=='next'&&<small>{step.advance === 'action' ? dictionary.controls.action : dictionary.controls.continue}</small>}
+      <div className="tutorial-controls">{step.allowSkip && <button className="tutorial-skip" data-sound="close" onClick={onSkip}>{dictionary.controls.skip}</button>}<button data-sound="close" disabled={index === 0 || step.advance === 'action' || lesson.steps[index - 1]?.advance === 'action'} onClick={onBack}>{dictionary.controls.back}</button><button className="tutorial-next" data-sound="confirm" disabled={(step.advance === 'action'&&!planOnly)||showingDemo} onClick={onNext}>{index + 1 === lesson.steps.length ? lesson.facility ? dictionary.controls.understood : dictionary.controls.finish : dictionary.controls.next}</button></div>
     </div>
   </div>;
   return createPortal(content, portal || document.body);

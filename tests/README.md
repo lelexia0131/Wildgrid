@@ -23,6 +23,8 @@ npm run build
 
 `npm test`递归发现五类目录内全部`*.test.ts`，串行执行。生成和提示测试会执行有真实截止时间的 CPU 搜索；串行调度避免测试进程相互争抢 CPU，不修改生产搜索预算或验收阈值。
 
+实时三维棋盘另有 `npm run test:3d`。它用本机 Chrome 的隔离浏览器上下文操作正式游戏，生成截图及动效样本。专项用例实际完成 Day 39，检查平视、原平面图纸、设施栏、名称开关、相连水域、选中遮挡和第一关演示。历史摘要中的山地命名在测试侧单独对齐为岩石，原始哈希保持可复核。详见[三维验收](../docs/3d/validation.md)。
+
 分类或定向运行：
 
 ```sh
@@ -36,7 +38,7 @@ npx tsx --test tests/engine/adventure-hints.test.ts
 npx tsx scripts/check-engine-preservation.ts
 ```
 
-Electron Web UI 检查先运行 `npm run build`；原生 `test:desktop` 会读取 `release/win-unpacked/resources/app.asar`，必须先运行 `npm run package:win` 生成当前包。再按范围选择：
+Electron Web UI 检查先运行 `npm run build`。原生 `test:desktop` 默认读取 `release/camp-world/win-unpacked/resources/app.asar`，需要更新实包时先运行 `npm run package:win`。再按范围选择：
 
 ```sh
 npm run test:desktop

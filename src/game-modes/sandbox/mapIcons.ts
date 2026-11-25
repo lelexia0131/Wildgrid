@@ -9,7 +9,7 @@ export const MAP_ICON_CHOICES = [
   { id: 'tower', name: '瞭望塔' }, { id: 'picnic', name: '野餐桌' },
   { id: 'cabin', name: '林间木屋' }, { id: 'foodTruck', name: '餐车' },
   { id: 'powerTower', name: '电塔' }, { id: 'pool', name: '泳池' },
-  { id: 'water', name: '水源' }, { id: 'forest', name: '森林' }, { id: 'mountain', name: '山地' },
+  { id: 'water', name: '水源' }, { id: 'forest', name: '森林' }, { id: 'rock', name: '岩石' },
 ] as const;
 export type MapIconId = typeof MAP_ICON_CHOICES[number]['id'];
 export const isMapIcon = (value: unknown): value is MapIconId => MAP_ICON_CHOICES.some(icon => icon.id === value);

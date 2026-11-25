@@ -9,7 +9,7 @@ export type BasicLesson = typeof BASIC_LESSONS[number];
 export type TutorialState = {
   version: 1; enabled: boolean; language: Language; basicComplete: boolean;
   basicSeen: BasicLesson[]; facilitiesSeen: FacilityKind[]; skipped: string[];
-  daysSeen: number[]; activeStep?: { day: number; index: number };
+  daysSeen: number[]; activeStep?: { day: number; index: number; stepId?:string };
 };
 const FACILITY_KINDS: FacilityKind[] = ['camp', 'fire', 'tower', 'picnic', 'cabin', 'foodTruck', 'powerTower', 'pool', 'balloon', 'airship', 'kite'];
 let readFailed = false;

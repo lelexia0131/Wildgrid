@@ -15,6 +15,7 @@ import { emptySurvivalProgress, survivalTotals } from '../../src/game-modes/surv
 import { generateSurvival } from '../../src/game-modes/survival/survivalChallenge';
 import type { FacilityKind, Level, Placement, TerrainKind } from '../../src/engine';
 import corrections from '../fixtures/level-corrections.json';
+import { fixtureTerrain, historicalLevel } from '../support/rock-rename';
 
 const values = new Map<string, string>();
 Object.defineProperty(globalThis, 'localStorage', {configurable:true,value:{getItem:(k:string)=>values.get(k)??null,setItem:(k:string,v:string)=>values.set(k,v)}});
@@ -31,7 +32,7 @@ test('new relationships use actual camp cells, work in either placement order an
   assert.equal(evaluate(d.level,[d.placements[1]]).issues.v.status,'INCOMPLETE');
   assert.equal(evaluate(d.level,[...d.placements].reverse()).won,true);
   assert.equal(evaluate(d.level,[d.placements[0],at('v',3,4)]).issues.v.status,'INVALID');
-  assert.equal(evaluate({...d.level,terrain:[...d.level.terrain,{kind:'mountain',r:3,c:4}]},d.placements).issues.v.status,'INVALID');
+  assert.equal(evaluate({...d.level,terrain:[...d.level.terrain,{kind:'rock',r:3,c:4}]},d.placements).issues.v.status,'INVALID');
   const blocked=fixture([...d.level.pieces,single('e','powerTower')],[...d.placements,at('e',3,4)],d.level.terrain);
   assert.equal(evaluate(blocked.level,blocked.placements).issues.v.status,'INVALID');
   const pool=fixture([camp,single('s','pool')],[at('c',2,2),at('s',1,1)],[{kind:'water',r:2,c:1}]);
@@ -55,11 +56,11 @@ test('Days 31–45 are unique, retain all old maps and answers, and stay within 
   const historicalLevels = levels.filter(l=>l.id<=30).map(level => {
     const correction = corrections.corrections.find(item => item.id === level.id);
     if (!correction) return level;
-    assert.deepEqual(level.terrain, correction.after, `Day ${level.id}: approved terrain correction`);
+    assert.deepEqual(level.terrain, fixtureTerrain(correction.after), `Day ${level.id}: approved terrain correction`);
     assert.equal(solveLevel(level).count, 1, `Day ${level.id}: corrected map remains unique`);
-    return { ...level, terrain: correction.before };
+    return { ...level, terrain: fixtureTerrain(correction.before) };
   });
-  assert.equal(digest(historicalLevels),preserved.levels);
+  assert.equal(digest(historicalLevels.map(historicalLevel)),preserved.levels);
   assert.equal(digest(Object.fromEntries(Object.entries(solutions).filter(([id])=>+id<=30))),preserved.solutions);
   for(const level of levels.filter(l=>l.id>=31 && l.id<=45)) {
     const result=solveLevel(level,2,{maxNodes:350000});
@@ -91,7 +92,7 @@ test('manual examples satisfy the stated new rules, including each forbidden rel
       }
       example.map.forEach((row,r)=>[...row].forEach((s,c)=>{
         const kind=symbols[s];if(!kind||s==='C') return;
-        if(kind==='water'||kind==='forest'||kind==='mountain') terrain.push({kind,r,c});
+        if(kind==='water'||kind==='forest'||kind==='rock') terrain.push({kind,r,c});
         else {const id=`${s}-${r}-${c}`;pieces.push(single(id,kind));placements.push(at(id,r,c));}
       }));
       const d=fixture(pieces,placements,terrain), result=evaluate(d.level,d.placements);

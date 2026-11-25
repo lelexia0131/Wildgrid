@@ -8,13 +8,13 @@ import type { FacilityKind, Level, Terrain } from './types';
 
 type TerrainMasks = Record<Terrain['kind'],bigint>;
 const board=boardCells(8),bits=board.map(p=>cellBit(p));
-const emptyMasks=():TerrainMasks=>({water:0n,forest:0n,mountain:0n});
+const emptyMasks=():TerrainMasks=>({water:0n,forest:0n,rock:0n});
 export function terrainMasks(terrain:readonly Terrain[]):TerrainMasks {
   const masks=emptyMasks();
   for(const t of terrain) masks[t.kind]|=bits[t.r*8+t.c];
   return masks;
 }
-const allTerrain=(masks:TerrainMasks)=>masks.water|masks.forest|masks.mountain;
+const allTerrain=(masks:TerrainMasks)=>masks.water|masks.forest|masks.rock;
 
 // Immutable rule geometry, shared across seeds. Unlike legal domains this
 // includes positions that a terrain removal may make legal again.

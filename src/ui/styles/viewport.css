@@ -242,7 +242,7 @@ input[type=range] { height: 22px; }
 @media (pointer: coarse) { .camp-tools .camp-tool { height: 44px; } }
 .label-water { background: #d4eceb; color: #3a737b; }
 .label-forest { background: #dce9d2; color: #4c7052; }
-.label-mountain { background: #e6e0d1; color: #75654e; }
+.label-rock { background: #e6e0d1; color: #75654e; }
 .label-camp, .label-picnic, .label-foodTruck { background: #f2dfb0; color: #856136; }
 .label-fire { background: #f5d6b1; color: #995d36; }
 .label-tower, .label-cabin { background: #dce9d2; color: #4c7052; }

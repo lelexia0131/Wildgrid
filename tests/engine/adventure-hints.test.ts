@@ -75,7 +75,7 @@ test('confirmed violations, joint contradictions, completion and search exhausti
   const joint = analyzeAdventureHint({ level: impossible, placements: [] });
   assert.deepEqual(joint, { status: 'conflict', cells: [], reasons: [] });
   const partial = [{ id: 'a', r: 0, c: 0, rotation: 0 }];
-  const blocked: Level = { ...ambiguous, terrain: [{ kind: 'mountain', r: 1, c: 1 }] };
+  const blocked: Level = { ...ambiguous, terrain: [{ kind: 'rock', r: 1, c: 1 }] };
   assert.notEqual(evaluate(blocked, partial).status, 'INVALID');
   assert.deepEqual(analyzeAdventureHint({ level: blocked, placements: partial }), { status: 'conflict', cells: [{ r: 0, c: 0 }], reasons: [] });
   assert.equal(analyzeAdventureHint({ level: levels[0], placements: getSolution(1)! }).status, 'complete');

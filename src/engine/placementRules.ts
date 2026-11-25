@@ -9,7 +9,7 @@ export const CAMP_REQUIREMENTS: Partial<Record<FacilityKind, string>> = {
 const PICNIC_CONFLICT_MESSAGE = '野餐桌不能邻近篝火，包括斜角';
 const TOWER_CONFLICT_MESSAGE = '瞭望塔之间不能相邻，包括斜角';
 // Shared rule metadata used by legal domains and generation feasibility.
-export const TERRAIN_REQUIREMENTS: Partial<Record<FacilityKind, Terrain['kind']>> = { camp: 'water', pool: 'water', cabin: 'forest', tower: 'mountain' };
+export const TERRAIN_REQUIREMENTS: Partial<Record<FacilityKind, Terrain['kind']>> = { camp: 'water', pool: 'water', cabin: 'forest', tower: 'rock' };
 export const providesConnections = (kind: FacilityKind) => kind === 'camp';
 export function facilityConflict(kind: FacilityKind, cells: readonly Cell[], other: FacilityKind, otherCells: readonly Cell[]): string | null {
   const pair = [kind, other];
@@ -79,7 +79,7 @@ export function evaluate(level: Level, placements: readonly Placement[], options
     if (e.piece.kind === 'camp' && !nearTerrain('water')) reasons.push('营地至少有一格需要上下左右挨着水');
     if (e.piece.kind === 'balloon' && !e.cells.some(p => level.sky?.anchors.some(a => adjacent(p, a)))) reasons.push('系留气球的地面投影需要上下左右挨着系留桩');
     if (e.piece.kind === 'kite') {
-      if (!e.cells.some(p => level.terrain.some(t => t.kind === 'mountain' && key(p) === key(t)))) reasons.push('气象风筝至少一格正下方需要山地');
+      if (!e.cells.some(p => level.terrain.some(t => t.kind === 'rock' && key(p) === key(t)))) reasons.push('气象风筝至少一格正下方需要岩石');
       if (e.cells.some(p => level.sky?.clouds.some(c => adjacent(p, c, true)))) reasons.push('气象风筝不能邻近低云，包括斜角');
     }
     if (CAMP_REQUIREMENTS[e.piece.kind]) {
@@ -121,7 +121,7 @@ export function evaluate(level: Level, placements: readonly Placement[], options
       if (conflict) reasons.push(conflict);
     }
     if (e.piece.kind === 'tower') {
-      if (!nearTerrain('mountain')) reasons.push('瞭望塔需要上下左右挨着山地');
+      if (!nearTerrain('rock')) reasons.push('瞭望塔需要上下左右挨着岩石');
       if (towerBlocked) reasons.push(TOWER_CONFLICT_MESSAGE);
     }
     const sky = facilityLayer(e.piece.kind) === 'sky', clues = layerClues(level, sky ? 'sky' : 'ground');

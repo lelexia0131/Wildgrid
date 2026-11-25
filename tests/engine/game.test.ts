@@ -18,7 +18,7 @@ test('sky rules distinguish tethering, deliveries and updrafts, and count layers
   ];
   const at = (id: string,r: number,c: number,rotation=0) => ({id,r,c,rotation});
   const answer = [at('c',2,2),at('f',3,2),at('b',2,3),at('a',1,2,1),at('k',5,3)];
-  const level: Level = {id:0,name:'',chapter:'',tip:'',size:8,pieces,terrain:[{kind:'water',r:2,c:1},{kind:'mountain',r:5,c:4}],rows:[0,0,2,1,0,0,0,0],cols:[0,0,2,1,0,0,0,0],sky:{anchors:[{r:3,c:3}],clouds:[{r:0,c:6}],rows:[0,1,2,0,0,3,0,0],cols:[0,0,2,2,1,1,0,0]}};
+  const level: Level = {id:0,name:'',chapter:'',tip:'',size:8,pieces,terrain:[{kind:'water',r:2,c:1},{kind:'rock',r:5,c:4}],rows:[0,0,2,1,0,0,0,0],cols:[0,0,2,1,0,0,0,0],sky:{anchors:[{r:3,c:3}],clouds:[{r:0,c:6}],rows:[0,1,2,0,0,3,0,0],cols:[0,0,2,2,1,1,0,0]}};
   const result = evaluate(level, answer);
   assert.equal(result.won,true,JSON.stringify(result.issues));
   assert.deepEqual(result.rows,level.rows); assert.deepEqual(result.skyRows,level.sky!.rows);
@@ -33,7 +33,7 @@ test('sky rules distinguish tethering, deliveries and updrafts, and count layers
   assert.ok(evaluate(level,swapped).issues.a.reasons.includes('空中设施正下方不能有篝火或电塔'));
   assert.ok(evaluate(level,swapped).issues.f.reasons.includes('空中设施正下方不能有篝火或电塔'));
   assert.ok(evaluate({...level,sky:{...level.sky!,clouds:[{r:4,c:2}]}},answer).issues.k.reasons.includes('气象风筝不能邻近低云，包括斜角'));
-  assert.ok(evaluate({...level,terrain:level.terrain.filter(t=>t.kind!=='mountain')},answer).issues.k.reasons.includes('气象风筝至少一格正下方需要山地'));
+  assert.ok(evaluate({...level,terrain:level.terrain.filter(t=>t.kind!=='rock')},answer).issues.k.reasons.includes('气象风筝至少一格正下方需要岩石'));
   assert.ok(evaluate({...level,sky:{...level.sky!,anchors:[{r:3,c:4}]}},answer).issues.b.reasons.includes('系留气球的地面投影需要上下左右挨着系留桩'));
   assert.equal(evaluate(level,answer.filter(p=>p.id!=='b')).won,false);
   const session = createSession({mode:'adventure',present:{level,placements:answer}});
@@ -279,7 +279,7 @@ test('multi-cell camp needs only one water neighbor; row/column counts measure c
   assert.equal(evaluate(level, []).rows[2], 0);
 });
 test('towers may not touch diagonally', () => {
-  const level: Level = { id: 99, name: 'test', chapter: '', tip: '', size: 6, terrain: [{ kind: 'mountain', r: 2, c: 2 }], pieces: [{ id: 't1', kind: 'tower', shape: 'single' }, { id: 't2', kind: 'tower', shape: 'single' }], rows: [0,1,1,0,0,0], cols: [0,0,1,1,0,0] };
+  const level: Level = { id: 99, name: 'test', chapter: '', tip: '', size: 6, terrain: [{ kind: 'rock', r: 2, c: 2 }], pieces: [{ id: 't1', kind: 'tower', shape: 'single' }, { id: 't2', kind: 'tower', shape: 'single' }], rows: [0,1,1,0,0,0], cols: [0,0,1,1,0,0] };
   const result = evaluate(level, [{ id: 't1', r: 1, c: 2, rotation: 0 }, { id: 't2', r: 2, c: 3, rotation: 0 }]);
   assert.equal(result.issues.t1.status, 'INVALID');
   assert.equal(result.issues.t2.status, 'INVALID');

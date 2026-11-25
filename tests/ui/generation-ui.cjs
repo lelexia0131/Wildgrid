@@ -23,7 +23,7 @@ app.whenReady().then(async () => {
     const terrain = [], pieces = [], placements = [], rows = Array(5).fill(0), cols = Array(5).fill(0);
     cells.forEach((kind, i) => {
       const r = Math.floor(i / 5), c = i % 5;
-      if (['water', 'forest', 'mountain'].includes(kind)) terrain.push({ r, c, kind });
+      if (['water', 'forest', 'rock'].includes(kind)) terrain.push({ r, c, kind });
       if (['camp', 'fire', 'picnic', 'powerTower', 'foodTruck', 'tower', 'pool'].includes(kind)) {
         pieces.push({ id: String(i), kind, shape: kind === 'picnic' ? 'domino' : 'single' });
         placements.push({ id: String(i), r, c, rotation: 0 }); rows[r]++; cols[c]++;

@@ -8,6 +8,7 @@ export default defineConfig({
   server: { watch: { ignored: ['**/release/**', '**/build/**', '**/.desktop-smoke/**'] } },
   plugins: [react(), {
     name: 'wildgrid-offline',
+    apply: 'build',
     closeBundle() {
       const assets = readdirSync('dist/assets').map(name => `./assets/${name}`);
       const version = `wildgrid-${Date.now()}`;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { CloudSun, Sprout } from 'lucide-react';
 import { useI18n } from '../../localization/LanguageContext';
-import { Art, FacilityArt, FootprintSurface } from './Art';
+import { Art, FacilityArt, FootprintSurface, PlanArtwork } from './Art';
 import { key, occupied, facilityLayer, layerClues } from '../../engine';
 import type { BoardLayer, Level, Placement } from '../../engine';
 
@@ -13,7 +13,7 @@ export function Blueprint({ level, placements, name = `day ${level.id}` }: { lev
     const piece = level.pieces.find(p => p.id === at.id)!;
     return { at, piece, cells: occupied(piece, at) };
   });
-  return <section className={`blueprint-content ${level.sky ? 'layered-blueprint' : ''}`} data-layer={layer}><div className="blueprint-folio">
+  return <PlanArtwork.Provider value={true}><section className={`blueprint-content ${level.sky ? 'layered-blueprint' : ''}`} data-layer={layer}><div className="blueprint-folio">
     {level.sky && <div className="blueprint-tabs" role="tablist" aria-label={t('切换棋盘')} onKeyDown={event => {
       if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
       event.preventDefault(); const next = layer === 'ground' ? 'sky' : 'ground'; setLayer(next);
@@ -37,9 +37,9 @@ export function Blueprint({ level, placements, name = `day ${level.id}` }: { lev
         <div className="facility-art-layer">{facilities.filter(f => f.piece.shape !== 'single').map(({ at, piece, cells }) => {
           const row = Math.min(...cells.map(p => p.r)), column = Math.min(...cells.map(p => p.c));
           const width = Math.max(...cells.map(p => p.c)) - column + 1, height = Math.max(...cells.map(p => p.r)) - row + 1;
-          return <div className="placed-facility-art valid" key={at.id} data-piece-id={at.id} data-kind={piece.kind} data-rotation={at.rotation} style={{ gridRow: `${row + 1} / span ${height}`, gridColumn: `${column + 1} / span ${width}` }}><FootprintSurface shape={piece.shape} rotation={at.rotation}/><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at.rotation}/></div>;
+          return <div className="placed-facility-art valid" key={at.id} data-piece-id={at.id} data-kind={piece.kind} data-rotation={at.rotation} style={{ gridRow: `${row + 1} / span ${height}`, gridColumn: `${column + 1} / span ${width}` }}><FootprintSurface shape={piece.shape} rotation={at.rotation}/><FacilityArt kind={piece.kind} shape={piece.shape} rotation={at.rotation} plan/></div>;
         })}</div>
       </div>
     </div></div>
-  </section>;
+  </section></PlanArtwork.Provider>;
 }

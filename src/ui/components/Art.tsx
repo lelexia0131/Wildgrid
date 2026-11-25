@@ -1,7 +1,11 @@
 import { art } from '../../assets/art';
-import { useId } from 'react';
+import { createContext, useContext, useId } from 'react';
+
 import { offsets } from '../../engine';
 import type { FacilityKind, Shape, TerrainKind } from '../../engine';
+
+// Only the playable plan and the construction blueprint use the original flat glyphs.
+export const PlanArtwork = createContext(false);
 
 export function FootprintSurface({ shape, rotation }: { shape: Shape; rotation: number }) {
   const clip = `surface-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
@@ -148,7 +152,8 @@ function TentArt({ shape, rotation }: { shape: Shape; rotation: number }) {
   </FootprintArt>;
 }
 
-export function FacilityArt({ kind, shape, rotation = 0 }: { kind: FacilityKind; shape: Shape; rotation?: number }) {
+export function FacilityArt({ kind, shape, rotation = 0, plan = false }: { kind: FacilityKind; shape: Shape; rotation?: number; plan?: boolean }) {
+  if (!useContext(PlanArtwork)) return <img className="art model-icon" src={art.modelIcon(kind,shape,rotation,plan)} data-shape={shape} alt="" draggable={false} aria-hidden="true"/>;
   if (kind === 'airship' || kind === 'kite') return <SkyArt kind={kind} rotation={rotation}/>;
   if (shape === 'single') return <Art kind={kind}/>;
   if (kind === 'picnic') return <PicnicArt shape={shape} rotation={rotation}/>;
@@ -245,6 +250,7 @@ export function SkyArt({ kind, rotation = 0, className = '' }: { kind: 'balloon'
 }
 
 export function Art({ kind, className = '' }: { kind: FacilityKind | TerrainKind | 'anchor' | 'cloud'; className?: string }) {
+  if (!useContext(PlanArtwork)) return <img className={`art model-icon ${className}`} src={art.modelIcon(kind)} alt="" draggable={false} aria-hidden="true"/>;
   if (kind === 'balloon' || kind === 'airship' || kind === 'kite' || kind === 'anchor' || kind === 'cloud') return <SkyArt kind={kind} className={className}/>;
   return <img className={`art ${className}`} src={art.object(kind)} alt="" draggable={false} aria-hidden="true"/>;
 }

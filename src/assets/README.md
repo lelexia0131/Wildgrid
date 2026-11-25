@@ -1,6 +1,6 @@
 # Wildgrid art assets
 
-All art ships locally. Image component references are centralized in `art.ts`; CSS texture and nine-slice references are centralized in `art.css`. Vite's `assetsInlineLimit` is zero, so small SVGs remain separate files in the build.
+Game art is loaded from the local package. The home cover uses the looping 3D render in `3d/scenes/home-motion.webp` and a still frame for reduced motion. The flat board and blueprint use their own glyphs. The journal, manual and facility tray use the model-derived artwork in both board views. Image component references are centralized in `art.ts`; CSS texture and nine-slice references are centralized in `art.css`. Vite's `assetsInlineLimit` is zero, so small SVGs remain separate files in the build.
 
 See [audio credits and playback](audio/README.md), [font sources and licenses](fonts/README.md), and the [survival panel provenance](panels/survival-facilities.md). These records and bundled license files are required resources, not disposable build notes.
 
@@ -8,6 +8,7 @@ Replace an existing image **at the same path**, keeping its viewBox, transparent
 
 | Folder | Use |
 | --- | --- |
+| `3d` | Playable GLB libraries, material textures, transparent model icons and level scenes. Authoring files, sources, controls and QA are documented in [the miniature camp guide](../../docs/3d/README.md). |
 | `branding` | `logo-zh.png` (2079×756), `logo-en.png` (1774×887), and the title flame displacement map |
 | `backgrounds` | Existing home/diary/survival WebPs, three chapter landscapes, quiet washes and vignettes |
 | `illustrations` | 45 `journal-01`–`journal-45` covers, chapter layers, hero island, two mode illustrations |

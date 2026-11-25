@@ -26,9 +26,8 @@ test('all 60 cover briefs use facilities and terrain available in their level', 
     for (const kind of cover.environment) assert.ok(level.terrain.some(t => t.kind === kind), `Level ${level.id}: ${kind}`);
     assert.ok([...cover.subjects, ...cover.environment].includes(cover.main));
     const markup = renderToStaticMarkup(createElement(JournalLevelSceneArt, { id: level.id }));
-    if (level.id <= 45) assert.match(markup, new RegExp(`src="[^"]*journal-${String(level.id).padStart(2, '0')}\\.svg"`));
-    if (level.id <= 45) assert.match(markup, /alt=""/);
-    else assert.match(markup, /cloudscape/);
+    assert.match(markup, new RegExp(`src="[^"]*day-${level.id}\\.webp"`));
+    assert.match(markup, /alt=""/);
     assert.match(markup, /aria-hidden="true"/);
     assert.ok(markup.includes(`data-cover-level="${level.id}"`));
     assert.doesNotMatch(markup, /src="undefined"/);

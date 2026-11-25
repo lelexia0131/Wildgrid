@@ -2,7 +2,7 @@ appId: com.wildgrid.game
 productName: 野格
 copyright: Copyright © 2026 野格
 directories:
-  output: release
+  output: release/camp-world/.packaging
   buildResources: build
 files:
   - dist/**/*

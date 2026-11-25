@@ -49,11 +49,15 @@ npm run package:win
 npm run test:desktop
 ```
 
-`desktop` 构建并启动 Electron；`package:win` 输出 `release/` 下的 NSIS 安装包和 `win-unpacked/`，版本来自 package.json。`test:desktop` 读取该目录内 ASAR，须先完成打包；仅运行 Web build 不会更新此 ASAR。安装器保留目录选择、快捷方式和原窗口行为，当前未配置发行代码签名证书。
+`desktop` 构建并启动 Electron。`package:win` 将通过打包的 x64 程序替换到固定位置 `release/camp-world/win-unpacked/`，可直接运行其中的 `野格.exe`。`test:desktop` 默认读取这个目录的 ASAR。游戏占用文件时先正常退出，再运行同一条打包命令。
+
+Windows 和 Android 的独立安装包统一存放在 `release/installers/`。第一次归档及后续提高 `package.json` 版本号时生成该平台的安装包。同版重新打包只更新运行产物，已归档的安装包保持原始字节。名称含 `-historical-` 的文件保留了整理前同版但内容不同的 Windows 安装包。安装器支持选择目录和创建快捷方式，沿用普通窗口行为。
 
 Electron 加载本地 `wildgrid://game` 资源，不需要 Web 服务。用户数据位置与安装目录分离，不清理真实玩家档案进行回归。
 
 ## Android
+
+Android 同步已暂停，当前约定见[根目录开发约定](../AGENTS.md)。以下命令留作恢复维护后的参考。
 
 需要 JDK 21、Android SDK 36；设置 `JAVA_HOME` 与 `ANDROID_HOME` / `ANDROID_SDK_ROOT`。现有 Windows 脚本也会寻找 Android Studio 附带 JDK。版本与包配置以 `android/app/build.gradle`、`capacitor.config.ts` 为准。
 
@@ -63,7 +67,7 @@ npm run android:open
 npm run android:apk
 ```
 
-`android:sync` 自动构建 Web、生成图标并执行 Capacitor sync。`android:apk` 包含 sync，随后用 Gradle wrapper 构建 debug APK，复制到 `release/`；原始输出为 `android/app/build/outputs/apk/debug/app-debug.apk`。沿用已有 debug 签名，不等于商店正式签名包。
+`android:sync` 自动构建 Web、生成图标并执行 Capacitor sync。恢复 Android 维护后，`android:apk` 会更新 Gradle 的 `android/app/build/outputs/apk/debug/app-debug.apk`，升版时归档到 `release/installers/野格-v<版本号>.apk`。沿用已有 debug 签名。
 
 有真实设备时可在确认目标设备后运行 `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`，并验证触摸、横竖屏、安全区、原生剪贴板/ID、存档和后台音频。没有设备时如实记录未验证。不要清除用户应用数据、变更包名或签名。
 
@@ -73,7 +77,7 @@ Android 使用本地资源，不注册 Web Service Worker；浏览器 PWA 则在
 
 Steam 完整流程只维护在 [scripts/steam/README.md](../scripts/steam/README.md)。`npm run steam:build` 已包含单元、关卡、平台 UI 回归、普通 NSIS、Android APK、Steam 构建和成品校验，输出路径及来源记录见该指南。
 
-`npm run deploy:downloads` 是独立的 VPS 下载站发布动作，不属于 Steam 更新流程，只有用户明确要求更新下载站时执行。它重新构建普通 Windows/Android，经既有 SSH 配置上传到 `/var/www/Wildgrid/`，校验摘要后替换下载文件，并检查 Nginx 与原站点。可用 `WILDGRID_SSH_HOST` 选择已配置的 SSH 别名；不把密钥或凭据写入仓库。相关脚本、服务配置及安装恢复备份不能因 Steam 工作流建立而随意删除。
+`npm run deploy:downloads` 仅在用户明确要求更新 VPS 下载站时执行。它读取当前版本在 `release/installers/` 的正式安装包，缺少时调用对应打包命令。Android 暂停期间跳过涉及 Android 构建的组合命令。上传沿用已有 SSH 配置与 `/var/www/Wildgrid/` 路径，校验下载摘要、Nginx 和原站点。可用 `WILDGRID_SSH_HOST` 选择已配置的 SSH 别名。服务配置和安装恢复备份均需保留。
 
 ## 维护规则
 

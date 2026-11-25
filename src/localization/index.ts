@@ -5,13 +5,16 @@ type LessonCopy = { title: string; text: string };
 type Dictionary = {
   settings: { language: string; tutorials: string; reset: string; resetReady: string; saveError: string };
   controls: { back: string; next: string; skip: string; finish: string; understood: string; continue: string; action: string; progress: string };
-  basics: Record<'welcome' | 'board' | 'clues' | 'select' | 'place' | 'feedback' | 'goal' | 'rotate' | 'pickup' | 'replace' | 'undo' | 'complete' | 'wrong' | 'right' | 'multi' | 'el', LessonCopy>;
+  basics: Record<'welcome' | 'board' | 'viewsDemo' | 'viewsTry' | 'cameraHelp' | 'clues' | 'select' | 'place' | 'feedback' | 'goal' | 'rotate' | 'pickup' | 'replace' | 'undo' | 'complete' | 'wrong' | 'right' | 'multi' | 'el', LessonCopy>;
   facilities: Record<FacilityKind, LessonCopy>;
 };
 const zh: Dictionary = {
   settings: { language: '语言', tutorials: '教程引导', reset: '重新查看教程', resetReady: '教程已重置', saveError: '教程设置暂未保存，浏览器存储不可用。' },
   controls: { back: '上一步', next: '下一步', skip: '跳过', finish: '完成', understood: '我知道了', continue: '点击聚焦处以继续', action: '完成圈出的操作后继续', progress: '指导员' },
   basics: {
+    viewsDemo:{title:'同一片营地，两种看法',text:'看这处水源。我先把棋盘展开成平面规划，再带你回到实景营地。水源和格子的位置始终一一对应。'},
+    viewsTry:{title:'轮到你切换',text:'点一下圈出的视图开关。想仔细数格、摆放设施时可以用平面规划，想看看营地的样子就切回实景。两边共用这盘进度。'},
+    cameraHelp:{title:'绕营地走一圈',text:'在实景里，按住鼠标拖动可以环绕营地。向上拖能一直降到平视，向下拖再抬高。右键拖动可平移，滚轮可拉近或拉远。触屏用单指环绕，双指移动、转动或缩放。你可以现在试试。'},
     welcome: { title: '欢迎来到野格', text: '欢迎来到野格！我是你的营地指导员。第一天我们先一起安顿一座小营地，慢慢来，不用急。准备好了，就点下一步吧。' },
     board: { title: '从这片营地开始', text: '这片草地就是我们的营地。先看看棋盘：设施放在草地上，棋盘已有的地形留在原处。' },
     clues: { title: '读懂行列提示', text: '留意边上的黄色短杠，每条代表这一行或列还要占一格。刚好填满会变成勾；红色差额是在提醒我们放多了。' },
@@ -32,10 +35,10 @@ const zh: Dictionary = {
   facilities: {
     balloon: { title: '系留气球', text: "看，系留气球已经准备好啦！咱们点右上角的「天空」，找找系留桩。让气球的地面投影上下左右挨着桩，绳索才系得住。别停在篝火或电塔上方，也别钻进低云里。两层的格数要分开看哦。" },
     airship: { title: '补给飞艇', text: "补给飞艇来啦！它占两格，再点一次卡片就能转向。让至少一格正对营地，大家才接得到物资。营地还没摆好也没关系，咱们可以先放飞艇；记得避开低云和下方的篝火、电塔。" },
-    kite: { title: '气象风筝', text: "带上气象风筝，去山脊上试试风吧。它连着尾巴一共占三格，至少一格要在山地正上方。为了看清天气，整只风筝都得离低云远一点，斜角也算；篝火和电塔上方也要绕开。" },
+    kite: { title: '气象风筝', text: "带上气象风筝，去山脊上试试风吧。它连着尾巴一共占三格，至少一格要在岩石正上方。为了看清天气，整只风筝都得离低云远一点，斜角也算；篝火和电塔上方也要绕开。" },
     camp: { title: '营地', text: '这是营地，靠着水源安顿下来吧。至少一格要上下左右邻水，多格营地也只需一格；别重叠或盖住固定地形。' },
     fire: { title: '篝火', text: '这是篝火，让营地暖和起来。把它放在营地的上下左右，记得远离森林，斜角也要避开。' },
-    tower: { title: '瞭望塔', text: '瞭望塔能让我们看得更远，把它安排在山地的上下左右。两座塔之间要留点距离，斜角也不能紧挨。' },
+    tower: { title: '瞭望塔', text: '瞭望塔能让我们看得更远，把它安排在岩石的上下左右。两座塔之间要留点距离，斜角也不能紧挨。' },
     picnic: { title: '野餐桌', text: '有了野餐桌，就能在营地旁歇歇脚。它占两格，可以横放或竖放，至少一格上下左右邻营地；两格都要避开篝火，斜角也一样。' },
     cabin: { title: '林间木屋', text: '林间木屋适合靠着树林。它占 L 形三格，可以四向旋转，至少一格上下左右邻森林；每一格都别上下左右挨着水。' },
     foodTruck: { title: '餐车', text: '餐车来了，给营地留条通道吧。沿上下左右方向与营地隔一格空草地，间隔处保持空着，也别直接挨着任何营地。' },
@@ -47,6 +50,9 @@ const en: Dictionary = {
   settings: { language: 'Language', tutorials: 'Tutorials', reset: 'Replay tutorials', resetReady: 'Tutorials reset.', saveError: 'Tutorial settings could not be saved. Browser storage is unavailable.' },
   controls: { back: 'Back', next: 'Next', skip: 'Skip', finish: 'Finish', understood: 'Got it', continue: 'Tap the focus to continue', action: 'Complete the highlighted action to continue', progress: 'Guide' },
   basics: {
+    viewsDemo:{title:'One camp, two views',text:'Watch the water as I unfold the plan and return to the camp. It stays in the same square in both views.'},
+    viewsTry:{title:'Switch the view',text:'Tap the highlighted view switch. The plan makes counting and placing easy. Switch back to see your campsite. Both views share your progress.'},
+    cameraHelp:{title:'Look around camp',text:'Drag to orbit. Drag up to lower your eyes to the horizon, then down to look from above. Right-drag to pan and scroll to zoom. On a touchscreen, drag with one finger to orbit or use two to pan, twist and pinch. Try it now.'},
     welcome: { title: 'Welcome to Wildgrid', text: 'Welcome to Wildgrid! I’ll be your camp guide. On our first day, we’ll settle one small camp together. Take your time—there’s no rush. Tap Next when you’re ready.' },
     board: { title: 'Start with your campsite', text: 'This patch of grass is our campsite. Take a look around: facilities go on grass, while the terrain already on the board stays put.' },
     clues: { title: 'Read the row and column clues', text: 'Watch the yellow dashes along the edges. Each one is a cell that row or column still needs filled. A check means just right; red means we filled too many.' },
@@ -67,10 +73,10 @@ const en: Dictionary = {
   facilities: {
     balloon: { title: 'Tethered balloon', text: "Look, our tethered balloon is ready! Tap Sky at the top right and find an anchor. The balloon’s ground projection needs to share an edge with it so we can tie the rope. Keep clear of clouds and the air above campfires or power towers. Remember, each layer counts its own cells." },
     airship: { title: 'Supply airship', text: "Here comes our supply airship! It fills two cells; tap its card again to turn it. Keep at least one cell directly above camp so everyone can receive their supplies. We can place the airship before the camp. Just avoid low clouds, and campfires or power towers below." },
-    kite: { title: 'Weather kite', text: "Let’s take our weather kite up to the ridge! With its tail it fills three cells, and at least one must be above a mountain. Give the whole kite a clear view away from low clouds, even diagonally. Steer clear of campfires and power towers below, too." },
+    kite: { title: 'Weather kite', text: "Let’s take our weather kite up to the ridge! With its tail it fills three cells, and at least one must be above a rock. Give the whole kite a clear view away from low clouds, even diagonally. Steer clear of campfires and power towers below, too." },
     camp: { title: 'Camp', text: 'Here’s our camp. Let’s settle beside the water: at least one cell must share an edge with it, even for a multi-cell camp. Keep clear of other facilities and fixed terrain.' },
     fire: { title: 'Campfire', text: 'This campfire will warm the campsite. Place it along an edge of a camp cell, and keep it away from forests—even diagonally.' },
-    tower: { title: 'Lookout tower', text: 'A lookout tower gives us a better view. Place it along an edge of a mountain, with space between towers. They cannot touch diagonally either.' },
+    tower: { title: 'Lookout tower', text: 'A lookout tower gives us a better view. Place it along an edge of a rock, with space between towers. They cannot touch diagonally either.' },
     picnic: { title: 'Picnic table', text: 'A picnic table gives us a place to rest beside camp. It fills two cells and rotates. At least one cell must share an edge with camp; keep both away from campfires, even diagonally.' },
     cabin: { title: 'Woodland cabin', text: 'Let’s tuck this woodland cabin beside the trees. Its three-cell L shape rotates four ways. At least one cell must share an edge with a forest; none may share an edge with water.' },
     foodTruck: { title: 'Food truck', text: 'The food truck has arrived. Leave exactly one empty grass cell between it and camp in a straight horizontal or vertical line. Keep that gap empty, and never share an edge with any camp.' },

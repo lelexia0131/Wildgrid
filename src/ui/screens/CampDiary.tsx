@@ -1,8 +1,7 @@
+import {JournalChapterBackground} from '../components/JournalChapterBackground';
 import { ArrowLeft, ArrowRight, Check, LockKeyhole } from 'lucide-react';
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type TouchEvent } from 'react';
 import { ChapterArtwork } from '../components/ChapterArtwork';
-import { JournalChapterBackground } from '../components/JournalChapterBackground';
-import { MenuLandscapeBackground } from '../components/MenuLandscapeBackground';
 import { JOURNAL_CHAPTERS, JOURNAL_LEVEL_COVERS, JOURNAL_PALETTES } from '../components/journalArt';
 import { JournalLevelSceneArt } from '../components/JournalLevelSceneArt';
 import { useI18n } from '../../localization/LanguageContext';
@@ -117,7 +116,7 @@ export function CampDiary({ completed, badges, currentId, chapter, page, onPage,
     overviewTurningTo.current = next;
     setOverviewTransition(next);
   }
-  return <>{chapter === null ? <MenuLandscapeBackground scene="diary"/> : <><JournalChapterBackground chapter={chapter}/>{transition !== null && <div className="journal-chapter-background-incoming"><JournalChapterBackground chapter={transition}/></div>}</>}<main className={`levels-page camp-diary ${chapter === null ? 'chapter-selection' : `chapter-levels diary-${JOURNAL_CHAPTERS[transition ?? chapter].theme}`}`}>
+  return <><JournalChapterBackground chapter={transition??chapter??1}/><main className={`levels-page camp-diary ${chapter === null ? 'chapter-selection' : `chapter-levels diary-${JOURNAL_CHAPTERS[transition ?? chapter].theme}`}`}>
     <button className="back-link" data-sound={chapter === null ? 'close' : 'handled'} onClick={() => chapter === null ? onBack() : turnChapter(null)}><ArrowLeft size={18}/>{chapter === null ? t('返回营地') : t('返回板块选择')}</button>
     {chapter === null ? <><div className="page-heading"><h1>{t('营地日记')}</h1><nav className="chapter-pagination" aria-label={t('营地日记')}>{navigationPage > 0 && <button type="button" className="previous-page" aria-label={t('上一页')} data-sound="handled" onClick={() => turnOverview(navigationPage - 1)}><img src={chapterArrow} alt="" draggable={false}/></button>}{navigationPage < Math.ceil(JOURNAL_CHAPTERS.length / 3) - 1 && <button type="button" data-sound="handled" aria-label={t('下一页')} className="next-page" onClick={() => turnOverview(navigationPage + 1)}><img src={chapterArrow} alt="" draggable={false}/></button>}</nav></div><AdventureBadgeStats badges={badges}/><div className="chapter-overview-viewport" data-direction={direction} aria-busy={overviewTransition !== null} onTouchStart={event => { const touch = event.touches[0]; touchStart.current = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY } : null; }} onTouchEnd={finishSwipe} onTouchCancel={() => { touchStart.current = null; }} onClickCapture={event => { if (performance.now() < suppressClickUntil.current) { event.preventDefault(); event.stopPropagation(); } }}>{(overviewTransition === null ? [page] : [page, overviewTransition]).map(overviewPage => <div key={overviewPage} className={`chapter-grid ${overviewPage > 0 ? 'chapter-grid-second' : ''}${overviewTransition === null ? '' : overviewPage === page ? ' overview-exiting' : ' overview-entering'}`} inert={overviewTransition !== null} aria-hidden={overviewTransition !== null && overviewPage === page} onAnimationEnd={event => {
       if (event.target === event.currentTarget && event.animationName === 'journal-overview-in') finishOverviewTurn();

@@ -9,7 +9,7 @@ export type SandboxDraft = Snapshot;
 export type SandboxTheme = 'grass' | 'sky';
 export type SandboxCheck = { status: 'unique' | 'multiple' | 'none' | 'invalid'; message: string };
 
-const TERRAIN_KINDS: TerrainKind[] = ['water', 'forest', 'mountain'];
+const TERRAIN_KINDS: TerrainKind[] = ['water', 'forest', 'rock'];
 const MAX_CODE_LENGTH = 32768;
 const object = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 const integer = (value: unknown, min: number, max: number): value is number => typeof value === 'number' && Number.isInteger(value) && value >= min && value <= max;

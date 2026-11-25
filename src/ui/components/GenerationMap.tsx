@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Art, FacilityArt } from './Art';
 import type { FacilityKind, TerrainKind } from '../../engine';
 
-const kinds: Record<string, FacilityKind | TerrainKind | undefined> = { W: 'water', F: 'forest', M: 'mountain', C: 'camp', B: 'fire', P: 'picnic', E: 'powerTower', V: 'foodTruck', T: 'tower', S: 'pool' };
+const kinds: Record<string, FacilityKind | TerrainKind | undefined> = { W: 'water', F: 'forest', M: 'rock', C: 'camp', B: 'fire', P: 'picnic', E: 'powerTower', V: 'foodTruck', T: 'tower', S: 'pool' };
 const layouts = [
   ['W.FMF', '.M...', '.WCB.', 'MF.M.', 'FWF.M'],
   ['F.M.F', 'M.WC.', 'F..B.', '.WM..', 'F...M'],

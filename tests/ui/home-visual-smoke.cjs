@@ -62,23 +62,21 @@ app.whenReady().then(async () => {
     }
     await contents.debugger.sendCommand('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
     await settle();
-    const offset = () => js(`getComputedStyle(document.querySelector('.hero-current')).strokeDashoffset`);
-    const before = await offset(); await new Promise(resolve => setTimeout(resolve, 250));
-    assert.notEqual(await offset(), before);
-    // One full dash period must produce the same geometry, without a reset jump.
-    assert.equal(await js(`(() => { const a = document.querySelector('.hero-current').getAnimations()[0]; a.pause(); a.currentTime = 0; const first = getComputedStyle(a.effect.target).strokeDashoffset; a.currentTime = 3800; return first === getComputedStyle(a.effect.target).strokeDashoffset; })()`), true);
+    const cover = () => js(`document.querySelector('img.hero-art').decode().then(()=>document.querySelector('img.hero-art').currentSrc)`);
+    assert.match(await cover(), /home-motion-/);
     await contents.debugger.sendCommand('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
     await settle();
     assert.equal(await js(`document.querySelector('.hero-art').dataset.motion`), 'paused');
+    assert.doesNotMatch(await cover(), /home-motion-/);
     assert.equal(await js(`document.querySelector('.hero-art').getAnimations({ subtree: true }).length`), 0);
     await contents.debugger.sendCommand('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
     // Simulate a visibility event because the smoke-test window stays offscreen.
     await js(`Object.defineProperty(document, 'hidden', { configurable: true, value: true }); document.dispatchEvent(new Event('visibilitychange'))`);
     await settle();
-    assert.equal(await js(`getComputedStyle(document.querySelector('.hero-cloud')).animationPlayState`), 'paused');
+    assert.doesNotMatch(await cover(), /home-motion-/);
     await js(`Object.defineProperty(document, 'hidden', { configurable: true, value: false }); document.dispatchEvent(new Event('visibilitychange'))`);
     await settle();
-    assert.equal(await js(`getComputedStyle(document.querySelector('.hero-cloud')).animationPlayState`), 'running');
+    assert.match(await cover(), /home-motion-/);
     for (const language of ['zh', 'en']) {
       await js(`localStorage.removeItem('wildgrid-save-v1'); localStorage.setItem('wildgrid-tutorial-v1', '{"version":1,"enabled":false,"language":"${language}"}')`);
       await win.loadFile(path.join(root, 'dist', 'index.html'));
@@ -91,7 +89,7 @@ app.whenReady().then(async () => {
       assert.equal(await js(`!!document.querySelector('dialog[open] .win-content')`), true);
       await layout(); await shot(`win-${language}-320`);
     }
-    console.log('PASS: live bilingual titles, four viewports, menu/settings/manual/win typography, seamless stream loop, reduced motion and visibility pause/resume.');
+    console.log('PASS: live bilingual titles, four viewports, menu/settings/manual/win typography, cover motion and visibility pause/resume.');
     clearTimeout(deadline); app.exit(0);
   } catch (error) {
     await shot('failure'); console.error(error); clearTimeout(deadline); app.exit(1);

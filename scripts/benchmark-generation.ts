@@ -54,11 +54,11 @@ for (const difficulty of [1, 6, 10]) {
   for (let i = 0; i < 8; i++) svg += `<text x="${margin + i * size + 26}" y="44">${level.cols[i]}</text><text x="28" y="${margin + i * size + 32}">${level.rows[i]}</text>`;
   for (const p of cells) {
     const terrain = level.terrain.find(t => t.r === p.r && t.c === p.c), entry = entries.find(e => e.cells.some(c => c.r === p.r && c.c === p.c));
-    const fill = entry ? palette[entry.piece.kind] : terrain ? ({ water: '#3c819b', forest: '#356547', mountain: '#777f83' }[terrain.kind]) : '#b3c69a';
-    const label = entry ? `${labels[entry.piece.kind]}${level.pieces.indexOf(entry.piece) + 1}` : terrain ? ({ water: '~', forest: 'Y', mountain: '^' }[terrain.kind]) : '';
+    const fill = entry ? palette[entry.piece.kind] : terrain ? ({ water: '#3c819b', forest: '#356547', rock: '#777f83' }[terrain.kind]) : '#b3c69a';
+    const label = entry ? `${labels[entry.piece.kind]}${level.pieces.indexOf(entry.piece) + 1}` : terrain ? ({ water: '~', forest: 'Y', rock: '^' }[terrain.kind]) : '';
     svg += `<rect x="${margin + p.c * size}" y="${margin + p.r * size}" width="52" height="52" fill="${fill}" stroke="#1c332a"/><text fill="#132b22" x="${margin + p.c * size + 26}" y="${margin + p.r * size + 32}">${label}</text>`;
   }
-  svg += `<text x="256" y="492">C camp / F fire / T tower / P picnic / H cabin</text><text x="256" y="518">V truck / E power / S pool / same ID = one piece</text><text x="256" y="544">~ water / Y forest / ^ mountain / blank = grass</text></g></svg>`;
+  svg += `<text x="256" y="492">C camp / F fire / T tower / P picnic / H cabin</text><text x="256" y="518">V truck / E power / S pool / same ID = one piece</text><text x="256" y="544">~ water / Y forest / ^ rock / blank = grass</text></g></svg>`;
   writeFileSync(`${output}/tier-${difficulty}.svg`, svg);
   await sharp(Buffer.from(svg)).png().toFile(`${output}/tier-${difficulty}.png`);
   writeFileSync(`${output}/tier-${difficulty}-reasoning.json`, JSON.stringify(map.diagnostics.reasoning, null, 2));
