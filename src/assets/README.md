@@ -2,6 +2,8 @@
 
 All art ships locally. Image component references are centralized in `art.ts`; CSS texture and nine-slice references are centralized in `art.css`. Vite's `assetsInlineLimit` is zero, so small SVGs remain separate files in the build.
 
+See [audio credits and playback](audio/README.md), [font sources and licenses](fonts/README.md), and the [survival panel provenance](panels/survival-facilities.md). These records and bundled license files are required resources, not disposable build notes.
+
 Replace an existing image **at the same path**, keeping its viewBox, transparent margins, and layer alignment. Rebuild the game; no business TSX change is needed. Do not add device fonts, linked images, Base64 data, scripts, or remote URLs inside SVGs.
 
 | Folder | Use |

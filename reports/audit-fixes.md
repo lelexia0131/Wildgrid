@@ -126,7 +126,7 @@
 | `tests/`分类目录 | 54文件迁移；修复日记、美术、地图存档、关卡合同及重试模拟测试；新增2项回归 |
 | `package.json` | 递归单元测试和迁移后的Electron入口 |
 | `ARCHITECTURE.md`、`README.md`、`tests/README.md` | 当前实现与测试指南 |
-| `GENERATOR_REWORK.md` | 已迁移测试文件的引用路径 |
+| [生成器历史记录](generator-rework-history.md)（原根目录说明） | 已迁移测试文件的引用路径 |
 
 ## 失败记录与剩余边界
 

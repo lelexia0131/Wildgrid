@@ -2,6 +2,8 @@
 
 所有命令从仓库根目录执行。测试按职责集中组织，文件名保持原样，固定基线不随测试文件移动。
 
+开发环境见[开发指南](../docs/DEVELOPMENT.md)。Steam 完整构建与发行验收只维护在[Steam 流程](../scripts/steam/README.md)；动态结果见[发布状态](../scripts/steam/RELEASE_STATUS.md)。
+
 | 目录 | 职责 |
 | --- | --- |
 | `engine/` | 正式规则、几何、Session、求解与生成、冒险提示、分层边界 |
@@ -34,7 +36,7 @@ npx tsx --test tests/engine/adventure-hints.test.ts
 npx tsx scripts/check-engine-preservation.ts
 ```
 
-Electron UI 检查先运行构建，再使用现有入口或指定脚本：
+Electron Web UI 检查先运行 `npm run build`；原生 `test:desktop` 会读取 `release/win-unpacked/resources/app.asar`，必须先运行 `npm run package:win` 生成当前包。再按范围选择：
 
 ```sh
 npm run test:desktop
@@ -44,6 +46,8 @@ npx electron tests/ui/chapter-navigation-ui.cjs
 ```
 
 TS 单元测试成功不代表全部 Electron 脚本、Android 真机和部署验证均已执行。每次报告应说明实际运行范围。
+
+Steam 窗口适配单元可单独运行 `node --test scripts/steam/tests/window.test.cjs`；完整 Steam 成品检查由 `npm run steam:build` 调度，`npm run steam:preflight` 只复核已经成功的成品，不启动 SteamCMD。未注册到 package.json 的独立 UI 脚本需按当前界面契约逐项复核，不把文件存在或历史结果当作本次通过。
 
 ## 历史基线的含义
 

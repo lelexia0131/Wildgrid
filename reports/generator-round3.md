@@ -124,7 +124,7 @@
 | src/engine/mapQuality.ts | 仅同步候选排序注释，无规则改动 |
 | scripts/check-generation-budget.ts | 补充真实生成耗时、候选、验证、证明和截止统计 |
 | tests/engine/generation-coordination.test.ts | 新增 9 项活动域、调度、预算、截止改良及解集测试 |
-| GENERATOR_REWORK.md | 更新当前说明，保留旧轮次记录 |
+| [生成器历史记录](generator-rework-history.md)（原根目录说明） | 更新当前说明，保留旧轮次记录 |
 
 没有修改 generationConfig 的数量或限制、注册表、关卡、UI、存档、奖励或 Worker 生命周期；已有用户修改保留。公共调用签名不变，新增诊断兼容旧构造参数。未执行 commit、push、reset、clean，也未清理历史文件或安装包。
 

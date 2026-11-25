@@ -18,11 +18,11 @@
 - `src/workers/hint.worker.ts:1`、`:2`
 - `src/workers/workerTasks.ts:5`
 
-`tests/engine-boundaries.test.ts` 在第一条违规导入处失败，后续边界检查因此没有执行完。另行扫描全部 104 个 TS/TSX 文件的静态导入与重导出，未发现模块循环或其他层级反向依赖。应从 `engine/index.ts` 显式公开需要的提示 API 和类型，再统一调用入口，保留边界测试。
+`tests/engine/engine-boundaries.test.ts` 在第一条违规导入处失败，后续边界检查因此没有执行完。另行扫描全部 104 个 TS/TSX 文件的静态导入与重导出，未发现模块循环或其他层级反向依赖。应从 `engine/index.ts` 显式公开需要的提示 API 和类型，再统一调用入口，保留边界测试。
 
 ### 2. [P2] 10 难固定种子仍可能耗尽生成预算
 
-`tests/day31.test.ts:117` 使用的 10 难种子为 `20261019`。完整测试、定向测试和脱离测试并发的单独调用均失败；单独调用 `generateMap(10, 20261019, 'audit-isolated', [])` 用时约 7602ms，返回 `MapGenerationSearchError`，约 60 次主构造后仍未找到可接受地图。
+`tests/modes/day31.test.ts:117` 使用的 10 难种子为 `20261019`。完整测试、定向测试和脱离测试并发的单独调用均失败；单独调用 `generateMap(10, 20261019, 'audit-isolated', [])` 用时约 7602ms，返回 `MapGenerationSearchError`，约 60 次主构造后仍未找到可接受地图。
 
 生产任务在 `src/workers/workerTasks.ts` 内会更换种子继续尝试，因此这不是已证明的 UI 最终生成失败；实际风险是等待时间不可预测，以及当前固定种子回归无法通过。应检查该种子对应的搜索和修复退化，不应只通过删除样本或放宽唯一性验收使测试变绿。
 
@@ -34,9 +34,9 @@
 
 ### 4. [P2] 日记和美术测试没有跟随组件契约更新
 
-- `tests/chapter-navigation.test.ts:17` 创建 `CampDiary` 时遗漏新增的必需参数 `badges`。SSR 加载返回动态模块，绕过了参数类型检查；三个测试均因读取 `badges[id]` 抛错。应补齐测试输入并保留组件 Props 的类型约束。
-- `tests/levelArtwork.test.ts:5` 直接在 Node/tsx 中加载引用 `import.meta.glob` 的组件，运行时抛出 `glob is not a function`。同时 `:22`、`:23` 仍断言旧版内联 SVG 属性，而组件现在返回 `<img>`。应采用已有 Vite SSR 加载方式，并按当前外部图片契约验证资源、替代文本和关卡映射。
-- `tests/localMaps.test.ts:41` 仍要求保存时自动丢弃损坏条目，但 `src/save-system/localMapSaveCodec.ts:33` 明确阻止这种覆盖；与现有存档保护测试的意图冲突。另有两个测试仅因“无法读取本地地图”与“本地地图无法读取”的错误文案语序不同而失败。应按当前防覆盖合同更新测试，不应撤销存档保护。
+- `tests/ui/chapter-navigation.test.ts:17` 创建 `CampDiary` 时遗漏新增的必需参数 `badges`。SSR 加载返回动态模块，绕过了参数类型检查；三个测试均因读取 `badges[id]` 抛错。应补齐测试输入并保留组件 Props 的类型约束。
+- `tests/ui/levelArtwork.test.ts:5` 直接在 Node/tsx 中加载引用 `import.meta.glob` 的组件，运行时抛出 `glob is not a function`。同时 `:22`、`:23` 仍断言旧版内联 SVG 属性，而组件现在返回 `<img>`。应采用已有 Vite SSR 加载方式，并按当前外部图片契约验证资源、替代文本和关卡映射。
+- `tests/storage/localMaps.test.ts:41` 仍要求保存时自动丢弃损坏条目，但 `src/save-system/localMapSaveCodec.ts:33` 明确阻止这种覆盖；与现有存档保护测试的意图冲突。另有两个测试仅因“无法读取本地地图”与“本地地图无法读取”的错误文案语序不同而失败。应按当前防覆盖合同更新测试，不应撤销存档保护。
 
 这些失配会让默认测试长期报错，掩盖新的功能回归。
 
@@ -44,11 +44,11 @@
 
 `src/engine/mapGeneration.ts:123` 对高难生成使用最多 64 次假设、2 层深度、96 个未解决候选阈值，并共享本轮生成截止时间。`:32` 的 `generationDifficulty` 默认重新推理却使用 24 次假设、200ms，并采用 `reasonLevel` 的默认未解决阈值。
 
-`tests/survival-rework.test.ts:82` 使用后者复核，完整测试在 `:83` 的逻辑可解/评分断言失败。因此同一函数目前兼有“根据已完成推理计分”和“另起一个更短预算重新推理”两种语义，复核结果并不保证与生成时一致。这不能直接证明输出地图不合法或不唯一。应明确复核标准并使用一致预算，或者显式区分推理未完成与不满足难度标准。
+`tests/modes/survival-rework.test.ts:82` 使用后者复核，完整测试在 `:83` 的逻辑可解/评分断言失败。因此同一函数目前兼有“根据已完成推理计分”和“另起一个更短预算重新推理”两种语义，复核结果并不保证与生成时一致。这不能直接证明输出地图不合法或不唯一。应明确复核标准并使用一致预算，或者显式区分推理未完成与不满足难度标准。
 
 ### 6. [P2] 历史关卡保持性校验与当前数据不一致
 
-`tests/day31.test.ts:54` 的前 30 关哈希与 `tests/fixtures/day31-preservation.json` 不一致；`scripts/check-engine-preservation.ts:11` 的全部关卡哈希也不一致，脚本直接退出。部分现有测试又明确要求第 12、14、15 关唯一解，而架构文档仍称这些关卡在历史基线中有多解。
+`tests/modes/day31.test.ts:54` 的前 30 关哈希与 `tests/fixtures/day31-preservation.json` 不一致；`scripts/check-engine-preservation.ts:11` 的全部关卡哈希也不一致，脚本直接退出。部分现有测试又明确要求第 12、14、15 关唯一解，而架构文档仍称这些关卡在历史基线中有多解。
 
 这是历史验收合同没有统一的证据，不足以直接判断当前关卡内容错误。应核对关卡调整记录，区分需要保留的旧版基线与新版目标；不要直接刷新所有哈希掩盖可能的非预期数据变更。
 

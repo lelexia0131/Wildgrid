@@ -11,7 +11,7 @@
 - `src/engine/mapGeneration.ts`：优化现有 `planTerrain()`，约束边界细化；对多格需求较高的布局提前设置随机行列容量，缩小无效放置域。
 - `src/engine/mapQuality.ts`：集中 `TERRAIN_LIMITS`；新增 `terrainPlacementScores()`、`terrainDistribution()`；复用 `terrainRegions()`，在 `mapQuality()` 中区分硬限制与软评分。
 - `src/engine/facilityConstruction.ts`：集中 `ACTIVITY_LIMITS`，按实际可用行列及未禁用多格形状的最小面积剪枝，保留内部空草地，不要求铺满。
-- `tests/map-generation.test.ts`：增加合并连通块、边缘窗口、3×3 合格但 4×4 超密、半区偏斜、总量、种子变化及难度解耦验证。
+- `tests/engine/map-generation.test.ts`：增加合并连通块、边缘窗口、3×3 合格但 4×4 超密、半区偏斜、总量、种子变化及难度解耦验证。
 - `scripts/check-generation-rework.ts`：增加 `--terrain` 固定样本与轻量规划统计模式，复用现有验证脚本。
 
 审查了 `workerTasks.ts`、`survival.worker.ts`、`useSurvivalChallenge.ts`、生存挑战入口、设施域、求解与自检调用。Worker、UI、存档、WG1、营地日记、正式放置规则和难度表均未因本次优化修改。保留上一轮已经完成的单格营地硬约束及原工作区变更。
@@ -84,7 +84,7 @@
 ## 验证与复现
 
 - TypeScript：`node node_modules/typescript/bin/tsc --noEmit`，通过。
-- 针对性测试：`node node_modules/tsx/dist/cli.mjs --test tests/map-generation.test.ts tests/worker-tasks.test.ts tests/sandbox.test.ts`，**21 项通过**。
+- 针对性测试：`node node_modules/tsx/dist/cli.mjs --test tests/engine/map-generation.test.ts tests/platform/worker-tasks.test.ts tests/modes/sandbox.test.ts`，**21 项通过**。
 - 完整固定样本：`node node_modules/tsx/dist/cli.mjs scripts/check-generation-rework.ts terrain-after --terrain`。输出逐张设施清单、时间、失败原因、连通块和密度，并验证正式规则、唯一解和必需/禁用设施。
 - 统计脚本也会输出 96 个轻量规划样本、数量直方图、孤立连段及耗时分布；支持在第三个参数传入难度进行小范围复核。
 - [完整原始数据、地图码与统计](terrain-optimization-results.json)。

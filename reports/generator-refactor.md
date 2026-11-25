@@ -50,11 +50,11 @@
 ## 验证与文件
 
 - TypeScript：`node node_modules/typescript/bin/tsc --noEmit`。
-- 针对性回归：`node node_modules/tsx/dist/cli.mjs --test tests/map-generation.test.ts tests/worker-tasks.test.ts tests/sandbox.test.ts`，18 项通过，覆盖候选域与正式规则一致性、缓存连接一致性、单格营地、仅保留单格营地时补充营地来满足多格设施关联、禁用项、设施数量、多格数、逻辑与唯一解、种子确定性、预算失败和 Worker 生命周期。
+- 针对性回归：`node node_modules/tsx/dist/cli.mjs --test tests/engine/map-generation.test.ts tests/platform/worker-tasks.test.ts tests/modes/sandbox.test.ts`，18 项通过，覆盖候选域与正式规则一致性、缓存连接一致性、单格营地、仅保留单格营地时补充营地来满足多格设施关联、禁用项、设施数量、多格数、逻辑与唯一解、种子确定性、预算失败和 Worker 生命周期。
 - 主线兼容检查：`node node_modules/tsx/dist/cli.mjs scripts/check-levels.ts`，脚本覆盖的 33 个关卡全部参考解合法且唯一。
 - 有限固定样本：`node node_modules/tsx/dist/cli.mjs scripts/check-generation-rework.ts after`，无换种子重试；11 个样本逐张独立复核。
 - 修改源码：`src/engine/mapGeneration.ts`、`facilityConstruction.ts`、`placementDomains.ts`、`mapQuality.ts`、`solver.ts`、`src/workers/workerTasks.ts`。
-- 修改/新增验证文件：`tests/map-generation.test.ts`、`tests/worker-tasks.test.ts`、`scripts/check-generation-rework.ts`，以及本报告和原始结果。工作区原有基准脚本修改及旧报告删除保持原样。
+- 修改/新增验证文件：`tests/engine/map-generation.test.ts`、`tests/platform/worker-tasks.test.ts`、`scripts/check-generation-rework.ts`，以及本报告和原始结果。工作区原有基准脚本修改及旧报告删除保持原样。
 
 ## 限制
 

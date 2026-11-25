@@ -1,6 +1,6 @@
 # Wildgrid（野格）实际架构
 
-三平台构建补充（2026-11-15）：`scripts/steam/` 是受 Git 管理的 Steam 变换、窗口适配、构建及发布门禁。它从根目录实际 Git 工作区生成一次性快照；核心引擎、关卡、存档、Worker 和 UI 均来自根目录。仅在候选快照删除设备 ID 并注入 Steam 窗口模块和显示设置，普通 Windows/Android 入口不变。`steam/` 继续全目录忽略，保存 SDK、缓存、临时源码、发行包和证据；不得作为开发分支。流程和边界详见 [三平台构建](scripts/steam/README.md)。
+三平台共享根目录源码，Steam 仅在构建副本中裁剪设备 ID、注入窗口适配。平台规则与命令统一见[开发指南](docs/DEVELOPMENT.md)、[Steam 发布流程](scripts/steam/README.md)和[发布状态](scripts/steam/RELEASE_STATUS.md)；本文件只维护实现架构。
 
 更新日期：2026-10-21（Asia/Shanghai）。本文描述当前实际代码。原始历史基线及经提交记录确认的三项关卡修正保存在 `tests/fixtures/`。
 
@@ -298,7 +298,7 @@ flowchart TD
 | encodeMap | draft | WG1字符串；严格校验后编码，可抛原异常 |
 | decodeMap | string | SandboxDraft；严格解码和蓝图校验，可抛原异常 |
 | generateMap | difficulty,seed,id,recent,spec | {id,difficulty,seed,draft,fingerprint}；原有生成算法。spec={min,max,bases,multi}由模式提供 |
-| MAP_GENERATION_TIMEOUT | 常量，无参数 | 25000；原后台生成超时 |
+| MAP_GENERATION_TIMEOUT | 常量，无参数 | 8000；单轮 Worker 超时上限，另受难度预算与前台会话总预算约束 |
 
 公开类型包括 Cell、Terrain、Piece、Placement、Level、Snapshot、GameMode、FacilityKind、Shape、Status、Issue、Settings、FacilityDefinition、GameSession、GameCommand、GameEvent、CommandResult、PlacementValidationError/Result、SolverResult、SandboxDraft/Check、MapGenerationSpec。Settings暂保留原共享类型契约，Engine不读取设置或管理UI。
 

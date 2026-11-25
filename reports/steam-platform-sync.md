@@ -1,41 +1,8 @@
-# Wildgrid 三平台同步与 Steam 发布验收
+# Steam 构建验收快照（2026-11-15）
 
-更新：2026-11-15（Asia/Shanghai）。App **5595750**，Depot **5595751**。本次本地构建、官方 Preview 与经用户明确授权的 Upload 均通过；新 **Build ID 26683708**，Depot Manifest **8156473827417933700**。已在 Steamworks 页面交叉核实新构建存在，default 仍为 **26683036**。内部测试分支尚未创建/部署，审核和公开发行未变更。
+这是已完成构建的历史证据，不维护当前分支或待办。当前事实以[发布状态](../scripts/steam/RELEASE_STATUS.md)为准；开发、上传、内测与 default 的唯一操作步骤见[Steam 标准流程](../scripts/steam/README.md)。
 
-## 源码与架构
-
-根目录 `D:\Wildgrid` 是唯一 Git 仓库。审查开始时工作区干净，HEAD 为 `936e74b80223686dc2c9fe7968d54531b0039002`。普通 Windows 以 Electron 加载 `wildgrid://game`，Android 以 Capacitor 封装同一份 Web 游戏；Steam 原先依赖忽略目录中的一次性裁剪副本。
-
-对比旧 Steam 副本发现 6 个生成相关模块落后：`facilityConstruction.ts`、`generationBudget.ts`、`generationConfig.ts`、`generationRefinement.ts`、`mapGeneration.ts`、`terrainLayout.ts`。新构建已全部使用根目录版本。旧版本已有 60 关；本次不声称增加了原已存在的关卡。
-
-正式构建入口现在位于受版本管理的 `scripts/steam/`。每次按根 Git 跟踪/非忽略文件清单生成独立快照，用现有 TypeScript AST / PostCSS 裁剪 ID，再注入 Steam 窗口适配。核心玩法、关卡、存档和操作代码没有为本次需求重构。除 5 个预期删除/裁剪的 `src` 文件外，**302 个共享源码文件逐字节相同**。Steam 新增显示组件和窗口模块仅存在于生成副本中。
-
-`steam/` 继续全目录忽略。SDK、SteamCMD、缓存、历史日志、临时源码和成品未加入 Git。旧命令兼容入口转发到根目录脚本，原脚本及旧文档保存于 `steam/logs/architecture-baseline/`。App/Depot、SteamCMD 位置、`../content` 映射及无 `SetLive` 的上传策略保持。
-
-## 实际检查与修改
-
-审查了根 README、ARCHITECTURE、测试说明、Git 状态和历史、package/lock、Vite、TypeScript、Electron Builder、Capacitor、Android Gradle/Manifest/原生插件、Electron main/preload、平台 ID/运行环境、App/设置/语言/视口布局；读取旧 Steam README/状态、全部既有构建/裁剪/验证/打包/上传脚本、VDF、官方 Preview/Upload 日志，并核实本机 Steam 安装记录。
-
-受 Git 管理的修改范围：
-
-| 文件 | 作用 |
-| --- | --- |
-| `README.md`、`ARCHITECTURE.md`、`package.json` | 三平台说明和四个 Steam 命令 |
-| `scripts/steam/README.md` | 构建、验证、认证、上传及后续操作说明 |
-| `build-steam.ps1`、`common.ps1`、`build.mjs` | 排他锁、27 个构建门禁、失败记录及目录切换 |
-| `paths.mjs`、`source-record.mjs` | 工作目录约束、Git/dirty/源文件摘要和工具链版本 |
-| `prepare-source.mjs`、`scan-source.mjs` | 复用既有 AST 裁剪、注入适配、源码一致性与 ID 扫描 |
-| `package-game.mjs`、`electron-builder.cjs` | 普通 NSIS 和 Steam x64 目录包 |
-| `verify-platforms.mjs`、`verify-content.mjs` | APK/普通 ASAR 资源比对、发行 allowlist、PE/DLL/ASAR 检查 |
-| `smoke-packaged.mjs` | 实际 EXE、三个独立启动、保存/恢复、语言和模拟断网 |
-| `preflight.mjs`、`record-steampipe.mjs`、`upload-steam.ps1` | 防止旧产物误用、官方清单解析、Upload 授权门禁 |
-| `steam-config.json`、`write-vdf.mjs` | 保留既有 App/Depot 及 SteamPipe 映射 |
-| `runtime/steam-window.cjs`、`runtime/steam-preload.cjs` | Steam 专属窗口和受校验的 IPC |
-| `runtime/SteamDisplaySettings.tsx`、`runtime/steam-display.css` | Steam 显示模式、退出及窗口拖动区域 |
-| `tests/window.test.cjs`、`tests/window-layout.cjs` | 窗口状态、安全边界及布局回归 |
-| `reports/steam-platform-sync.md` | 本报告 |
-
-表中未写前缀的脚本均位于 `scripts/steam/`。忽略目录内另更新 `steam/README.md`、`steam/STEAM_RELEASE_STATUS.md` 和 3 个兼容 PowerShell 入口，生成 run/logs/content。根 `src/`、`electron/`、Android 原生代码、普通 NSIS 配置、lockfile、ID 后端及 `.gitignore` 无 Git 内容差异。未创建或维护 Steam 独立 Git 分支。
+旧 Steam 副本的 `facilityConstruction.ts`、`generationBudget.ts`、`generationConfig.ts`、`generationRefinement.ts`、`mapGeneration.ts`、`terrainLayout.ts` 与根源码不同，本次已同步。原有 60 关与存档结构保留；Steam 构建仅裁剪设备 ID 和注入窗口适配，未重构共享业务。
 
 ## 三平台一致性与实际验证
 
@@ -52,7 +19,7 @@
 
 APK **198 个 Web 文件**全部与根目录本次 `dist` 比对；普通 Windows ASAR 的资源也与同次普通构建比对。普通版和 Android 的时间戳 Service Worker 内容允许不同，其余 Web 资源完全一致。APK 包名 `com.wildgrid.game`，versionName `1.1.0`，versionCode `5`，target SDK 36，v2 签名验证通过，沿用 debug 签名。
 
-**未验证项目**：Android 真机/真实 WebView 操作、干净 Windows VM 安装/升级、此次线上 ID 服务请求、新版本 Steam 客户端下载、Steam Overlay、Steam 客户端离线模式及多显示器硬件。`adb devices -l` 无设备。触摸模拟和 APK 校验不是 Android 真机验证；本地 SteamLibrary 目录复制不是 Steam 下载。普通 Windows ID 运行检查使用隔离的模拟缓存，不声称重新访问了后端。
+**该构建验收当时未验证的项目**：Android 真机/真实 WebView 操作、干净 Windows VM 安装/升级、此次线上 ID 服务请求、新版本 Steam 客户端下载、Steam Overlay、Steam 客户端离线模式及多显示器硬件。`adb devices -l` 无设备。触摸模拟和 APK 校验不是 Android 真机验证；本地 SteamLibrary 目录复制不是 Steam 下载。普通 Windows ID 运行检查使用隔离的模拟缓存，不声称重新访问了后端。
 
 ## ID 与窗口证据
 
@@ -64,7 +31,7 @@ Steam 源码扫描 **124 个代码/样式/JSON 文件**通过；最终发行 **7
 
 实际窗口和内容边界均为 1280×800 逻辑像素，屏幕缩放 2 倍。1280×720、1366×768、1920×1080、2560×1440、3440×1440、3840×2160 六种模拟桌面视口的菜单、设置和退出可点击。正式 EXE 的设置切换、窗口模式重启、全屏模式重启、退出按钮和退出码 0 均通过。F11/Alt+Enter 另对早期候选做过真实键盘检查；最终 Steam 客户端仍需复验。Windows 的 `isKiosk()` 实现与 `isFullscreen()` 共用状态，因此不把该 getter 当成 kiosk 判据；使用配置检查与真实可切换/可退出行为验证。[Electron 实现](https://github.com/electron/electron/blob/main/shell/browser/native_window_views.cc)
 
-原生截图调用曾触发 Windows 捕获提示的细黄边，随后已停止捕获并重置工具会话；这不是游戏绘制内容或发行资产。最终布局截图由内部渲染截图生成。
+后续工具排查确认：结束残留截图辅助进程后，用户确认整屏黄框消失。它与截图捕获有关，不是游戏资产或边框；这项工具清理没有改变发行包。
 
 ## 本次成品与来源
 
@@ -83,46 +50,10 @@ Steam 源码扫描 **124 个代码/样式/JSON 文件**通过；最终发行 **7
 
 构建只在全部门禁通过后持有排他锁执行同盘目录 rename；失败回滚。Windows 不提供这里所需的双目录原子交换，故有极短切换间隙，但构建与上传共用锁，不读取半成品。失败尝试会使 `current-attempt.json` 标记 failed，并阻止旧 ready 被当作本次成功；该拒绝行为已实际验证。NSIS 最初受沙箱进程限制而失败，后续在获准执行环境中成功；所有失败记录保留，没有据此发布旧包。
 
-## Preview、Upload 与历史版本
+## 官方 Preview 与 Upload 历史
 
-历史 Build **26683036** 已由官方上传日志及本机 Steam `appmanifest` 交叉确认；安装 ASAR 与旧 content 一致。此前状态文件“未上传”的文字已纠正，历史文档已备份。
+官方 Preview 于 23:15:16 成功：72 个文件的路径、大小、SHA-1 全部匹配；74 个条目包含 2 个目录。相对旧 manifest `1526212740176029482`，仅 `resources/app.asar` 和 `Wildgrid.exe` 变更，0 新增/删除，约 4.55 MB 变更块，总大小增加 5,089 字节。
 
-本次官方 Preview 于 **23:15:16** 成功完成。脚本逐个核对 **72 个文件**的路径、大小和官方 SHA-1；官方清单的 74 条目包括 2 个目录。对比既有 manifest `1526212740176029482`，官方日志显示 **2 个文件变更、0 新增、0 删除，约 4.55 MB 变更块**，变更文件为 `resources/app.asar` 和 `Wildgrid.exe`。本地总大小比旧版增加 5,089 字节；核心变化为最新生成器同步、Steam 无边框全屏/显示设置和可靠的构建门禁，原已移除的 ID 未重新引入。
+用户明确授权后，官方日志于 23:18:28 确认上传 **Build 26683708**、Depot Manifest **8156473827417933700**，上传 7 个新块；官方页面也交叉确认此构建。Upload 本身没有指派分支。此前稳定 Build **26683036** 的上传、安装 ASAR 和本地包已核对一致。
 
-| 阶段 | 本次状态 |
-| --- | --- |
-| 本地构建/成品 Preflight | 通过 |
-| 官方 SteamPipe Preview | 通过；`logs/preview-result.json` 与当前成品摘要绑定 |
-| 正式 Upload | 用户明确授权后通过；23:18:28，官方日志和后台页面双重确认 |
-| 新 Steam Build ID / Depot Manifest ID | **26683708 / 8156473827417933700** |
-| 内部测试分支 | 尚未创建/部署；当前后台仅有 default |
-| default / Valve 审核 / 公开发行 | default 已核实仍为 **26683036**；未提交审核/公开发行 |
-
-`ready-to-upload.json` 的发布布尔字段是打包时快照；后续真实发布状态以同 run 的 `preview-result.json` / `upload-result.json` 和官方日志为准。Preview 不等于上传；本次没有用静态 VDF 校验替代官方 Preview。[SteamPipe 官方说明](https://partner.steamgames.com/doc/sdk/uploading?l=english)
-
-## 后续最少命令与人工环节
-
-```powershell
-cd D:\Wildgrid
-npm run steam:build
-npm run steam:preview
-# Preview 通过、报告结果、获得本次正式 Upload 授权后：
-npm run steam:upload -- -UploadAuthorized
-```
-
-单独普通 Windows / Android 仍用 `npm run package:win`、`npm run android:apk`；仅复核当前 Steam 包用 `npm run steam:preflight`。完整说明见 `scripts/steam/README.md`。
-
-用户已明确授权本次 Upload，并自行完成 SteamCMD 操作；官方日志在 **23:18:28** 确认 Build 26683708 成功，创建 manifest 8156473827417933700，上传 7 个新块。`logs/upload-result.json` 将成功记录与本次成品 SHA-256 绑定；Steamworks 构建页面也显示相同 Build 与 Depot/Manifest。上传没有指派分支。
-
-浏览器标签读取两次超时；原生窗口文字读取随后成功，确认新 Build 和旧 default，以及仅有 1 个分支。继续定位“创建新应用分支”时，Computer Use 返回：`could not determine the current browser URL on Windows with enough confidence to enforce policy`，并强制停止本轮操作。没有用其他界面技术绕过该停止，没有创建分支或提交分支变更。
-
-当前所需人工操作：
-
-1. 打开 [Wildgrid 构建页面](https://partner.steamgames.com/apps/builds/5595750)，刷新并确认 **26683708**。创建 `internal-test` 分支；用于私密测试的访问密码由本人在官方页面设置，不发到聊天或报告。
-2. 在 **26683708** 这一行选择 `internal-test`，点击“预览更改”，核对目标分支和 Build 后确认该分支的变更。不要选择 default。
-3. 正常退出当前旧版游戏。在 Steam 库 → Wildgrid → 属性 → 测试版选择 `internal-test`，按需输入分支密码，等待 Steam 下载并验证游戏文件完整性。
-4. 回复完成后继续核验本机 Build/Manifest/72 个文件摘要，验证从 Steam 启动、默认全屏、F11/Alt+Enter、标题栏、退出、Overlay、焦点切换、存档、中英文及 Steam 离线模式。此轮尚未对新 Build 执行这些真实客户端下载测试。
-
-只有客户端验收成功后才另行请求是否更新 default。当前未请求或取得 default 变更、Valve 审核或公开发行授权。密码、Guard、令牌和认证缓存不写入报告或脚本。
-
-本报告在构建完成后编写，不参与发行包；构建来源以当时的源码清单为准。未提交 Git commit。
+后续 internal-test/default 状态和客户端验收进度只更新[发布状态](../scripts/steam/RELEASE_STATUS.md)，不改写本次构建来源或冒烟证据。部分已确认重复的搬迁测试目录随后清理，日志保留，替代位置见[清理记录](documentation-cleanup.md)。

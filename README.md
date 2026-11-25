@@ -1,180 +1,84 @@
-# 野格 v1.1.0
+# Wildgrid（野格）
 
-三平台开发以本仓库为唯一源码。Steam 的可复用流程见 [Steam 构建与上传](scripts/steam/README.md)：`npm run steam:build` 完成普通 Windows、Android debug APK 和 Steam Windows x64 构建及自动回归；`npm run steam:preview` 执行官方 Preview。Steam 物理裁剪原设备 ID，并独立提供无边框全屏、显示模式和退出设置。普通 Windows / Android 保留原设备 ID 与平台操作。正式上传须另外明确授权。
+原创露营主题逻辑益智游戏，使用 React、TypeScript 与 Vite。包含 60 个固定冒险关卡、云海双层地图、10 档荒野求生挑战，以及沙盒创造、地图导入/导出和本地收藏；支持中英文、教程、撤销/重做和离线资源。版本以 [package.json](package.json) 为准。
 
-原创露营主题逻辑益智游戏。React + TypeScript + Vite，无账户、无外部媒体请求；Windows 和 Android 使用独立的匿名玩家 ID 服务。冒险模式有 60 个固定关卡，1–15 关为 6×6，16–60 关为 8×8（46–60 关增加同坐标的天空层）；荒野求生提供 10 档难度的随机挑战，沙盒模式支持创造、导入与保存本地地图。支持电脑鼠标和手机点击。当前版本 v1.1.0，更新日期 2026-10-21。
+## 平台支持
 
-## 运行
+| 平台 | 构建形式 | 平台行为 |
+| --- | --- | --- |
+| 普通 Windows | Electron Windows x64 / NSIS | 保留原窗口、系统标题栏、鼠标键盘和原设备 ID |
+| Android | Capacitor / debug APK | 保留触摸、横竖屏、安全区、剪贴板和原设备 ID |
+| Steam Windows | Electron Windows x64 完整目录 | 物理移除原设备 ID；默认无边框全屏，可切换显示模式并正常退出 |
 
-需要 Node.js 22 或更新的受支持版本。
+浏览器预览和 PWA 也使用相同核心源码。测试覆盖、当前 Steam 分支和待验收项目只记录在[发布状态](scripts/steam/RELEASE_STATUS.md)；构建成功不等于真机或 Steam 客户端功能验收通过。
 
-```sh
-npm install
+## 本地开发
+
+需要 Node.js 22+。从仓库根目录执行：
+
+```powershell
+npm ci
 npm run dev
 ```
 
-打开终端显示的本地地址。手机与电脑连接同一网络时，可以打开终端显示的 Network 地址；系统防火墙需允许该端口。
+常用检查和构建：
 
-```sh
-npm test          # 关键规则及全部固定关卡解法验证
-npm run build    # TypeScript 检查及生产构建，输出 dist/
-npm run preview  # 本地预览生产版（默认 4173 端口）
-npm run levels:check # Solver 验证 16–60 关唯一解
-npm run test:ui  # 多格插画、实时提示开关和手机触摸回归
+```powershell
+npm test
+npm run build
+npm run package:win
+npm run android:apk
 ```
 
-## 操作
+普通 Windows 产物输出到 `release/`；Android 需要 JDK 21、Android SDK 36 和对应环境配置，当前输出为 debug 签名 APK。运行入口、UI/关卡检查和平台限制见[开发指南](docs/DEVELOPMENT.md)与[测试说明](tests/README.md)。
 
-- 选择右侧设施，再点草地放置。「连续放置」默认开启，放置后保留同类型、同形状设施的选择和方向，数量用完后取消；可在设置中关闭。多格设施以所点格作为外接矩形的左上角；绿色预览显示实际占格。
-- 点击已放设施可拿起。点新位置移动；点待放区的 × 结束选择，设施已回到库存。
-- 多格营地、野餐桌和林间木屋使用完整的连体图案，内部不画格线。选中设施后再次点击同一张设施卡片旋转；插画按当前占格重绘，门窗、入口和桌腿保持正向。手机无需键盘或右键。
-- 已放置的多格营地可右键顺时针旋转，以当前鼠标所在占用格为支点。遇到地形或其他设施时保留原位置并显示“已经被占用”；旋转支持撤销、重做。
-- Ctrl/Cmd+Z 撤销；Ctrl/Cmd+Shift+Z 或 Ctrl/Cmd+Y 重做。Esc 取消选择。
-- 行、列黄色短杠表示尚需占用的格数。完成显示勾；超出显示红色差额。
-- 重叠、越界、覆盖地形会阻止放置。其他规则错误保留在棋盘，显示红框与原因，可以继续调整。
-- 篝火缺少营地且仍能补放时显示待满足。营地不要求相邻篝火。瞭望塔之间禁止八方向相邻。
-- 重开清空当前棋盘，可以撤销；已完成关卡和解锁进度保留。
-
-## 文件结构
+## 目录
 
 ```text
-src/ui/App.tsx              页面组装、展示与事件绑定
-src/ui/components/          棋盘渲染、插画、图纸、手册与教学覆盖层
-src/ui/screens/             日记、沙盒和求生菜单页面
-src/ui/hooks/               Engine Session、输入反馈、导航及任务/存储协调
-src/engine/index.ts         Wildgrid Engine 唯一公共入口
-src/engine/gameSession.ts   棋盘命令、80步历史与操作结果
-src/engine/{boardGeometry,placementRules}.ts 唯一几何、规则、三态与通关
-src/engine/{solver,mapGeneration,mapBlueprint}.ts 求解、生成与地图蓝图/WG1
-src/game-modes/             冒险进度、沙盒地图业务、求生难度及生命周期
-src/save-system/            四种v1存档的解析、恢复、防覆盖及持久化
-src/platform/              音频、剪贴板、匿名设备身份及运行环境适配
-src/workers/               后台任务创建、消息、取消、超时和过期保护
-src/localization/          中英文、日期和翻译上下文
-src/game-data/             60关与参考答案JSON
-src/assets/、src/ui/styles/ 原有资源、布局与样式
-electron/、android/、server/ 原生容器与玩家ID服务
-scripts/、tests/            维护脚本与回归验证
-tests/fixtures/            回归测试与引擎校验使用的历史基线
-ARCHITECTURE.md             API、状态所有权、依赖方向和扩展约定
+src/                 共享引擎、模式、关卡、存档、语言、UI、资源和平台适配
+public/              本地静态资源、PWA 文件和许可证
+electron/            普通 Windows 原生入口与 preload
+android/             Android 原生工程与插件
+server/              普通 Windows / Android 的原 ID 服务
+build/               图标与普通 Windows 安装器资源
+scripts/             正式维护、测试和构建脚本
+scripts/steam/       Steam 裁剪、窗口适配、构建/上传说明及发布状态
+tests/               测试、固定历史基线和视口夹具
+docs/                开发与游戏操作说明
+reports/             历史审计、测试数据和版本溯源
+steam/               忽略的 SDK、SteamCMD、临时源码、发行包和日志
+dist/、release/      忽略的本机构建产物
 ```
 
-关卡 JSON 包含地形、设施清单、行列目标。编辑前15关时可修改 author-levels.mjs 中的固定布局及参考解（16–45关保留现有JSON），再执行 `node scripts/author-levels.mjs`、`npm test` 和 `npm run levels:check`。16–45 关由 Solver 验证唯一解，等价的设施编号和旋转不重复计数。模块职责与扩展约定见 [ARCHITECTURE.md](ARCHITECTURE.md)。
+## 三平台统一源码规则
 
-## 音频与存档
+`D:\Wildgrid` 根 Git 仓库是唯一可信源码。共同玩法、关卡、生成器、存档和语言只在正式 `src/` 中维护；Windows、Android 和 Steam 从这里构建。平台差异留在配置或适配层，保留各平台原有操作方式。
 
-旋律、和声及音效均由项目代码原创合成，无商业采样或旧项目素材。菜单与关卡共享主题旋律，节奏不同。浏览器需要首次用户操作才能启用声音。后台标签页暂停音频。
+不要直接修改 `steam/work/`、`steam/runs/` 的临时源码，也不要长期复制三份项目。Steam 构建在一次性副本中裁剪原设备 ID 的读取/生成、请求、缓存/重试、IPC、bridge 和设置入口，并注入专属窗口模块；不能只隐藏 UI，也不能改掉普通 Windows/Android 的 ID。
 
-冒险存档位于当前站点 localStorage 的 `wildgrid-save-v1`，包括已完成/解锁进度、各关棋盘、当前关卡、音量及“设施提示”“连续放置”开关。本地地图使用 `wildgrid-local-maps-v1`，荒野求生使用 `wildgrid-survival-v1`，三者分别保存。v1.1.0 沿用这些存档格式。“连续放置”默认开启，关闭后每次放置会取消选择。“设施提示”开关实时控制游玩界面的动态规则卡，关闭时完全移除并把空间还给设施列表；首页说明书不受影响，旧存档默认开启。不同域名和端口不共享存档。清除站点数据会删除存档；存储被禁用时会显示提示。
+`steam/` 始终被 Git 忽略；无凭据、可复用脚本在 `scripts/steam/`。不提交 SDK、成品、密码、登录令牌或认证缓存。开发与清理规则见 [AGENTS.md](AGENTS.md)。
 
-## 教程引导
+## Steam 更新流程
 
-首次冒险会逐步介绍棋盘、行列提示、选择与放置；后续关卡已有设施可调整时介绍取回和撤销，首次选择多格设施时介绍再次点击卡片旋转。柔和聚焦、箭头和“指导员”旁白叠加在现有界面，操作步骤支持实际操作后自动推进，也可直接继续或跳过。每种设施在冒险、本地地图或荒野求生中首次遇到时依次介绍，包括餐车、电塔和泳池；创造地图不主动弹出教程。
+**修改根源码 → 自动测试 → Steam 专用构建与安全检查 → 官方 Preview → 授权 Upload → internal-test → Steam 客户端验收 → 批准 default**
 
-设置新增教程开关、“重新查看教程”和中英文选择。语言切换覆盖设置、设施、模式菜单、手册、规则反馈及固定关卡提示。短标签和标题使用本地打包的站酷快乐体及 Lilita One，手册与旁白正文保留易读字体。教程独立保存到 `wildgrid-tutorial-v1`，保存语言、开关、基础阶段、看过的设施和主动跳过记录；“重新查看教程”开启并重置教学，短暂提示“教程已重置”，不修改三套游戏存档。已有通关、摆放或其他模式记录的玩家默认免基础教学；旧冒险进度中已遇到的设施会迁移为已看记录，其余介绍仍按首次遇到触发。测试入口：`node --import tsx --test tests/storage/tutorial.test.ts`、`node_modules/.bin/electron tests/ui/tutorial-ui.cjs`（先构建）。
-
-## 玩家 ID
-
-Windows 和 Android 启动时异步读取独立的玩家 ID 缓存；没有缓存时，由原生层在本机计算 `SHA256("wildgrid-player-id-v1:" + 设备标识)`，仅将哈希发送给 ID 服务。Windows 使用 64 位注册表的 MachineGuid，缓存位于 Electron 用户数据目录的 `player-id.json`；Android 使用 ANDROID_ID，缓存位于独立 SharedPreferences。更新与覆盖安装保留缓存；卸载重装后，在设备标识未变且 Android 包名、签名和用户保持一致时，可从服务恢复原 ID。系统重装或恢复出厂设置可能获得新 ID。
-
-设置的第一项只读显示玩家 ID；获取期间显示“获取中…”，请求失败显示“暂未获取”，重新进入设置会重试。ID 请求不阻止启动和游玩，不修改冒险存档、地图或设置。浏览器预览不申请设备身份。
-
-API 地址集中在 `src/platform/playerId.ts`。正式 HTTPS API 已部署，与现有 REALITY 节点通过 Nginx stream 共用公网 443；Windows 和 Android 均已验证真实申请、缓存读取及删除独立 ID 缓存后的服务器恢复。网络不可用时仍显示“暂未获取”，游戏继续正常运行。部署结构见 `server/README.md`。
-
-## Day 31–45
-
-通关 Day 15 即可进入 Day 31；Day 31–45 顺序解锁，独立于 Day 16–30。旧关卡和答案保持不变。餐车、电塔、泳池均为单格设施，统一支持冒险、沙盒、本地地图和荒野求生；WG1 编码与三套 v1 存档保持兼容。餐车与营地正交间隔一格空草地，不能直接正交邻营地；电塔禁止八方向邻篝火、正交邻营地；泳池正交邻水且八方向邻营地。
-
-Day 31–40 教学，Day 41–45 对照 26–30 的占格与多格规模设计。回归测试使用的设计基准见 `tests/fixtures/day31-baseline.json`。新增固定数据保存在 `levels.json` 和 `solutions.json` 中。
-
-## Day 46–60：云海驻营
-
-通关 Day45 后解锁 Day46，随后顺序解锁。营地日记每个版面最多三个主题，第四主题在第二版面，使用徽章区右上方的图形箭头翻页。关卡继续只显示编号，Day1–45 的数据与参考答案保留。
-
-地面和天空共用 8×8 坐标，但分别计算行列目标与库存。系留桩只占地面、低云只占天空；两者固定且不计占格。上下层默认可以重叠，所有空中物品的每个占格正下方都不能有篝火或电塔。
-
-- 系留气球：天空单格，地面投影必须上下左右邻系留桩；一个桩可服务多个气球。
-- 补给飞艇：天空双格，可旋转，至少一格正对营地实际占格；可先放飞艇再补营地。
-- 气象风筝：天空直三格，可旋转，至少一格正对山地；任何一格都不能八方向邻低云。
-
-Day46–48 引入气球，49–52 引入飞艇，53–55 引入风筝，56–60 综合。后五关分别为 15、16、17、18、18 件设施，总占格 24、25、29、29、28，天空只占 7–9 格，对照 Day41–45 的组合规模。难度结合可推导候选、跨层依赖与唯一解复核，搜索节点数不等同于玩家耗时。
-
-Day56–59 在只考虑天空行列提示、固定桩、山地和低云时，各保留 2 种完整天空布局，Day60 保留 3 种；相同设施交换编号或等价旋转不重复计数。每种布局的飞艇都有地形与行列提示允许的营地候选。两层都需要借助另一层排除替代布局，合并全部规则后仍各有唯一解；Day46–55 保留原有教学布局。
-
-切层控件位于营地规划图右侧，不改变棋盘尺寸。投影默认开启，图标开关独立于选物，投影不计提示使用。撤销会显示受影响的层，智能提示定位对应层，通关图纸可切换两层。原 v1 存档新增可选 `layers` 字段，旧存档默认地面；两层物品按既有实例 ID 保存，不改旧存档键。天空物品也可用于 8×8 沙盒的天空主题，不进入草地主题和求生随机池。
-
-手工布局与航线集中在现有 `scripts/author-levels.mjs`。`node scripts/author-levels.mjs --sky --dry-run` 检查设计并输出规模／唯一解指标，去掉 `--dry-run` 后更新新章 JSON，保留前45关。区分多解时只补充玩家可见的固定地形，所有结果仍由正式规则与同一个求解器验证。
-
-浏览器测试可在独立测试端口打开 `tests/support/viewport.html?day=60&partial=1&layer=sky`（会设置该端口的测试存档），追加 `&language=en` 查看英文；`&tutorial=1` 开启首次教学。现有 Electron 检查增加 `node_modules/.bin/electron tests/ui/chapter-navigation-ui.cjs --sky`，覆盖第二版面、切层、投影、撤销与横竖屏布局。
-
-## 沙盒模式
-
-首页「开始冒险」进入模式选择：「继续冒险」恢复原来的冒险进度，「荒野求生」进入随机挑战，「沙盒模式」可以创造或导入地图，「本地地图」管理保存的地图。
-
-- 创造地图先选择尺寸：6×6 直接进入，8×8 再选择草地或天空主题。草地沿用原有设施和地形；天空支持地面、天空切层，新增系留桩、低云、系留气球、补给飞艇和气象风筝。选择地形后点击空格放置，再次点击同格移除；当前层的设施可以重复取用。
-- 摆放设施会自动生成行列占格目标。点击设施拿起后可移动、旋转；切换地形画笔可收回。撤销包含地形、添加、收回、移动和旋转，最多保留 80 步。
-- 点击「保存」或「导出地图」会自动进行营地质检，先检查完整布局，再用正式规则检查唯一解。仅通过质检后才能保存或导出；修改地图后再次保存或导出会重新质检。
-- 导出会自动复制 `WG1:` 开头的地图代码。它是带 `v:1` 的 UTF-8 JSON 经无填充 Base64URL 编码，保存尺寸、地形、稳定设施类型 ID、位置、旋转和行列目标，仅作为数据解析。天空地图通过可选 `sky` 字段保存天空行列目标、系留桩和低云；旧单层地图代码保持兼容。
-- 导入后从空棋盘游玩，不写入冒险进度。「保存」可将地图和当前游玩进度存入本地地图。编辑草稿暂不自动保存；返回时会确认丢弃修改，请先保存或导出保留作品。
-
-Windows 可运行 `npm run dev` 或 `npm run desktop`，按「开始冒险 → 沙盒模式 → 创造地图」进入。最小示例：6×6 第一行第一格设水源、第二格放单格营地，点击保存或导出地图，质检通过后从本地地图进入，或从「导入地图」粘贴代码并游玩。
-
-Android 需要执行 `npm run android:apk` 重新生成 APK；新增剪贴板使用内置原生插件，无新增 npm 依赖。自检在 Web Worker 中执行，可通过编辑地图或返回取消；复杂地图可能需要较长时间，程序不会将未完成搜索当作唯一解。浏览器读取剪贴板需要系统许可，被拒绝时可直接在输入框粘贴。
-
-## 本地地图
-
-模式选择中的「本地地图」显示固定地形预览和待放设施。创造地图保存后从空棋盘求解；导入游玩时保存的进度可以继续，重新进入后保存会更新同一存档。所有本地地图独立游玩，不计入荒野求生挑战或经验，不提供放弃选项；游玩、编辑及保存后的返回均回到本地地图。地图可以重命名、删除或编辑；名称留空时恢复默认名称。编辑按钮统一显示，仍在荒野求生中挑战的地图暂不可编辑或查看图纸，通关或放弃后解锁；修改图纸后保存为普通沙盒地图。
-
-## 荒野求生
-
-- 选择 1难至10难，生成通过规则和唯一解验证的 8×8 随机地图。生成过程中可以取消；失败或取消保留旧挑战。
-- 只有一个未完成挑战。操作后自动保存棋盘、历史和方向，关闭后可以「继续挑战」；开始新挑战会先确认是否放弃旧进度。返回保留进度，「放弃」清除当前进度，已有经验和收藏保留；放弃后本关无法再作为荒野求生挑战，只能在本地独立游玩、查看图纸或编辑。
-- 「重新游玩」清空棋盘并保留原地图；「保存」收藏原始关卡。挑战中不提供图纸，通关、放弃或被新挑战替代后，同一挑战 ID 的收藏解锁图纸和编辑。
-- 每张地图仅首次通关奖励经验并增加通关次数，重复游玩不重复奖励。1–10 难分别奖励 1、3、6、10、15、25、36、50、70、100 经验，经验永久累计。
-- 身份按累计经验升级，共15档：荒野新人、露营学徒、荒野探索者、荒野专家、荒野传奇各含Ⅰ/Ⅱ/Ⅲ三阶及铜/银/金徽章。经验阈值依次为0、10、50、100、300、500、1000、3000、5000、10000、20000、30000、40000、60000、80000；最高阶之后仍继续累计经验。难度页面可以查看通关记录。
-
-## PWA 与后续平台
-
-生产构建生成 manifest 和 Service Worker，首次成功加载并缓存后可离线启动。PWA 需要 HTTPS 或 localhost，开发服务器不注册 Service Worker；安装入口由浏览器提供。首次安装后刷新一次即可由 Service Worker 控制。更新在旧标签页关闭后启用，避免游玩中切换版本。
-
-Windows 桌面版使用 Electron 加载本地 `wildgrid://game` 资源，无需启动 Web 服务。执行 `npm run package:win` 生成 `release/Wildgrid-Setup-1.1.0-x64.exe`；向导支持选择安装目录，并在快捷方式页面勾选或取消桌面快捷方式。开始菜单入口会保留。安装包未配置代码签名证书。
-
-`npm run desktop` 可启动桌面开发构建；`npm run icons` 从 `public/icon.svg` 导出暖色 PNG 与包含 16–256px 尺寸的 `build/icon.ico`。桌面存档保存在 Electron 的用户数据目录，与浏览器存档分别保存。安装位置改变不影响桌面存档。
-
-## Android 测试 APK
-
-Android 使用 Capacitor 8 封装同一份 `dist`，应用名“野格”，包名 `com.wildgrid.game`，versionName `1.1.0`、versionCode `5`。需要 Node.js 22+、JDK 21 和 Android SDK 36；设置 `ANDROID_HOME` / `ANDROID_SDK_ROOT`，`JAVA_HOME` 指向 JDK 21。Windows 构建脚本也会查找 SDK 同级 AndroidStudio 或标准安装目录中的 JDK。
-
-```sh
-npm run android:sync # 构建 Web、生成游戏图标、同步 Android
-npm run android:open # 在 Android Studio 打开原生容器
-npm run android:apk  # 使用 Gradle wrapper 生成签名的 debug APK
+```powershell
+npm run steam:build
+npm run steam:preview
+# 同一成品 Preview 通过，且本人明确授权本次正式上传后：
+npm run steam:upload -- -UploadAuthorized
 ```
 
-APK 输出：`release/野格-v1.1.0.apk`，Gradle 原始输出仍位于 `android/app/build/outputs/apk/debug/app-debug.apk`。可以直接安装测试，或执行 `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`。Android 源码保留在仓库，APK、Gradle 缓存和同步的 Web 构建产物均忽略。
+`steam:build` 已包含三平台构建及自动化回归。单独复核已验证成品可用 `npm run steam:preflight`。Upload 只生成 Steam Build；内测通过并另获批准后，将同一个 Build ID 指派到 default，不必重建或重新上传。首次公开发行是独立流程。
 
-手机竖屏采用大棋盘与下方固定高度设施区，横屏采用棋盘与工具并排；列表、关卡选择和说明书各自可滚动。安全区使用 `env(safe-area-inset-*)` 和 Capacitor 的 inset 变量兼容旧 WebView。沿用 localStorage 保存进度和设置，强制退出再启动仍可恢复；清除应用数据或卸载会删除存档。音频仅在第一次用户交互时启动，后台暂停。Android 使用本地打包资源，不注册 Web Service Worker，避免旧缓存覆盖新版 APK。
+详细步骤、验收清单、回滚和首次发售要求集中在 [Steam 标准流程](scripts/steam/README.md)，动态结果集中在[发布状态](scripts/steam/RELEASE_STATUS.md)。
 
-## 安装包下载部署
+## 详细文档
 
-在配置好现有 VPS SSH 别名的 Windows 构建机执行：
-
-```sh
-npm run deploy:downloads
-```
-
-脚本沿用 `package:win` 和 `android:apk`，自动定位本次构建的非空安装包，不依赖版本号。Android 当前没有正式签名配置，沿用已有 debug 签名，不生成新的正式签名密钥。
-
-默认使用已有 `DMIT-root-179.255.156.84` SSH 别名；需要使用其他已配置别名时，可设置环境变量 `WILDGRID_SSH_HOST`。认证由用户的 OpenSSH 配置和密钥提供，仓库不存放密码或密钥。VPS 使用已有 Python 3、Nginx 和 systemd，无需安装新依赖。
-
-安装包先上传到 `/var/www/Wildgrid/` 内的临时文件，核对 SHA-256 后以原子替换发布为 `Wildgrid.exe` 和 `Wildgrid.apk`，目录权限为 755、文件权限为 644。下载地址始终为 `http://<SSH HostName>:8080/Wildgrid.exe` 和 `http://<SSH HostName>:8080/Wildgrid.apk`。
-
-首次部署在现有 `/etc/nginx/sites-available/fiverealms-download` 的 8080 server 内添加两个精确路径，配置修改前备份到 `/var/backups/wildgrid-download/`；`nginx -t` 通过后才 reload，失败恢复原配置。后续配置未变时仅替换安装包。保留原 `/FiveRealms` 路径及其他服务器文件，不修改 443 stream、HTTPS 或玩家 ID 服务及数据库。
-
-部署完成后脚本实际下载两个公网文件并对比本地 SHA-256、文件大小和下载响应头，同时检查原 FiveRealms 链接返回 200；连接或校验失败会以非零状态退出，构建完成的本地安装包仍保留在 `release/`。
-
-## 验证范围
-
-核心自动验证覆盖：60 关参考解法、旋转面积、取回后未完成状态、防火斜角距离、塔间斜角距离、边界/地形/重叠、多格行列计数、新设施规则，以及已通关布局重新进入时重置、未完成进度继续恢复。`levels:check` 检查 16–60 关唯一解；`test:ui` 在隔离存档中检查桌面与手机横竖屏、多格四向图案、提示即时关闭与恢复、固定棋盘/工具尺寸及触摸拿起/放置。棋盘上的规则错误持续显示，修正后恢复关卡提示。
-
-测试按职责集中在`tests/engine`、`tests/modes`、`tests/storage`、`tests/platform`和`tests/ui`，固定数据在`tests/fixtures`，共享测试页面在`tests/support`。分类入口及历史关卡修正说明见[测试指南](tests/README.md)。`npm test`串行执行全部TS测试，避免多个有实际时间预算的CPU搜索争用资源；Electron UI脚本使用`npm run test:ui`或按指南单独运行。
+- [开发指南](docs/DEVELOPMENT.md)：平台入口、环境、构建、存档与部署边界。
+- [游戏功能与操作](docs/GAMEPLAY.md)：操作、章节、求生、沙盒、存档和语言。
+- [架构说明](ARCHITECTURE.md)：模块边界、状态所有权与 Engine API。
+- [测试说明](tests/README.md)：按变更范围选择检查及保护历史基线。
+- [资源说明](src/assets/README.md)、[音频与许可](src/assets/audio/README.md)、[字体与许可](src/assets/fonts/README.md)。
+- [ID 服务说明](server/README.md)：普通 Windows/Android 原有服务。
+- [历史报告索引](reports/README.md)：过去结果、失败、来源哈希及整理记录。
